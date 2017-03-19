@@ -84,8 +84,7 @@ before_script:
 
 script:
   - if [ "$STATIC_CHECKS" = "yes" ]; then
-      ls -l /usr/bin/;
-      ls -l /usr/local/bin/;
+      sh ./misc/travis/clang-format.sh;
     else
       scons platform=$GODOT_TARGET CXX=$CXX openssl=builtin;
     fi

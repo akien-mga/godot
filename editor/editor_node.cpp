@@ -29,8 +29,8 @@
 #include "editor_node.h"
 
 #include "animation_editor.h"
-#include "bind/core_bind.h"
 #include "class_db.h"
+#include "bind/core_bind.h"
 #include "core/io/resource_loader.h"
 #include "core/io/resource_saver.h"
 #include "editor_file_system.h"
