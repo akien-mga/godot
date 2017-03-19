@@ -28,10 +28,10 @@
 /*************************************************************************/
 #include "main.h"
 #include "core/register_core_types.h"
-#include "drivers/register_driver_types.h"
 #include "global_config.h"
 #include "message_queue.h"
 #include "modules/register_module_types.h"
+#include "drivers/register_driver_types.h"
 #include "os/os.h"
 #include "scene/register_scene_types.h"
 #include "script_debugger_local.h"
