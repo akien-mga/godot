@@ -410,6 +410,9 @@ void CanvasItem::_enter_canvas() {
 			if (canvas_layer) {
 				break;
 			}
+			if (n->cast_to<Viewport>()) {
+				break;
+			}
 			n = n->get_parent();
 		}
 
