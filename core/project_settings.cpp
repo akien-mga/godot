@@ -271,9 +271,9 @@ bool ProjectSettings::_load_resource_pack(const String &p_pack) {
 	return true;
 }
 
-void ProjectSettings::_convert_to_last_version() {
-	if (!has_setting("config_version") || (int)get_setting("config_version") <= 3) {
+void ProjectSettings::_convert_to_last_version(int p_from_version) {
 
+	if (p_from_version <= 3) {
 		// Converts the actions from array to dictionary (array of events to dictionary with deadzone + events)
 		for (Map<StringName, ProjectSettings::VariantContainer>::Element *E = props.front(); E; E = E->next()) {
 			Variant value = E->get().variant;
@@ -396,7 +396,6 @@ Error ProjectSettings::_setup(const String &p_path, const String &p_main_pack, b
 			// Optional, we don't mind if it fails
 			_load_settings_text("res://override.cfg");
 		}
-
 		return err;
 	}
 
@@ -442,10 +441,6 @@ Error ProjectSettings::_setup(const String &p_path, const String &p_main_pack, b
 
 	if (resource_path.length() && resource_path[resource_path.length() - 1] == '/')
 		resource_path = resource_path.substr(0, resource_path.length() - 1); // chop end
-
-	// If we're loading a project.godot from source code, we can operate some
-	// ProjectSettings conversions if need be.
-	_convert_to_last_version();
 
 	return OK;
 }
@@ -517,7 +512,7 @@ Error ProjectSettings::_load_settings_binary(const String p_path) {
 	return OK;
 }
 
-Error ProjectSettings::_load_settings_text(const String p_path) {
+Error ProjectSettings::_load_settings_text(const String p_path, int *p_retrieve_version) {
 
 	Error err;
 	FileAccess *f = FileAccess::open(p_path, FileAccess::READ, &err);
@@ -540,6 +535,7 @@ Error ProjectSettings::_load_settings_text(const String p_path) {
 
 	String section;
 
+	int config_version = FORMAT_VERSION;
 	while (true) {
 
 		assign = Variant();
@@ -549,21 +545,30 @@ Error ProjectSettings::_load_settings_text(const String p_path) {
 		err = VariantParser::parse_tag_assign_eof(&stream, lines, error_text, next_tag, assign, value, NULL, true);
 		if (err == ERR_FILE_EOF) {
 			memdelete(f);
+
+			if (p_retrieve_version != NULL)
+				*p_retrieve_version = config_version;
+			else
+				_convert_to_last_version(config_version);
 			return OK;
 		} else if (err != OK) {
 			ERR_PRINTS("Error parsing " + p_path + " at line " + itos(lines) + ": " + error_text + " File might be corrupted.");
 			memdelete(f);
+			if (p_retrieve_version != NULL)
+				*p_retrieve_version = config_version;
 			return err;
 		}
 
 		if (assign != String()) {
 			if (section == String() && assign == "config_version") {
-				int config_version = value;
+				config_version = value;
 				if (config_version > FORMAT_VERSION) {
 					memdelete(f);
+					if (p_retrieve_version != NULL)
+						*p_retrieve_version = config_version;
 					ERR_FAIL_COND_V(config_version > FORMAT_VERSION, ERR_FILE_CANT_OPEN);
 				}
-			} else {
+			} else if (p_retrieve_version == NULL) { // We update the values only if p_retrieve_version is NULL !
 				// config_version is checked and dropped
 				if (section == String()) {
 					set(assign, value);
@@ -578,6 +583,10 @@ Error ProjectSettings::_load_settings_text(const String p_path) {
 
 	memdelete(f);
 
+	if (p_retrieve_version != NULL)
+		*p_retrieve_version = config_version;
+	else
+		_convert_to_last_version(config_version);
 	return OK;
 }
 
@@ -627,6 +636,10 @@ void ProjectSettings::clear(const String &p_name) {
 Error ProjectSettings::save() {
 
 	return save_custom(get_resource_path().plus_file("project.godot"));
+}
+
+bool ProjectSettings::is_settings_text_up_to_date() {
+	return is_settings_text_up_to_date_custom(get_resource_path().plus_file("project.godot"));
 }
 
 Error ProjectSettings::_save_settings_binary(const String &p_file, const Map<String, List<String> > &props, const CustomMap &p_custom, const String &p_custom_features) {
@@ -782,6 +795,18 @@ Error ProjectSettings::_save_custom_bnd(const String &p_file) { // add other par
 
 	return save_custom(p_file);
 };
+
+bool ProjectSettings::is_settings_text_up_to_date_custom(const String &p_path) {
+
+	int version;
+	Error err = _load_settings_text(p_path, &version);
+	if (err != OK) {
+		ERR_EXPLAIN(String("Could not load project settings text file: ") + p_path);
+		ERR_FAIL_V(true);
+	}
+
+	return version == FORMAT_VERSION;
+}
 
 Error ProjectSettings::save_custom(const String &p_path, const CustomMap &p_custom, const Vector<String> &p_custom_features, bool p_merge_with_current) {
 
