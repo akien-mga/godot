@@ -29,6 +29,7 @@
 /*************************************************************************/
 
 #include "editor_properties.h"
+#include "core/math/expression.h"
 #include "editor/editor_resource_preview.h"
 #include "editor_node.h"
 #include "editor_properties_array_dict.h"
@@ -918,12 +919,28 @@ EditorPropertyFloat::EditorPropertyFloat() {
 
 ///////////////////// EASING /////////////////////////
 
+void EditorPropertyEasing::_focus_entered() {
+	Rect2 gr = easing_draw->get_global_rect();
+	value_input->set_text("1");
+	value_input->set_position(gr.position);
+	value_input->set_size(gr.size);
+	value_input->call_deferred("show_modal");
+	value_input->call_deferred("grab_focus");
+	value_input->call_deferred("select_all");
+	value_input->set_focus_next(find_next_valid_focus()->get_path());
+	value_input->set_focus_previous(find_prev_valid_focus()->get_path());
+}
+
 void EditorPropertyEasing::_drag_easing(const Ref<InputEvent> &p_ev) {
 
 	Ref<InputEventMouseButton> mb = p_ev;
 	if (mb.is_valid() && mb->is_pressed() && mb->get_button_index() == BUTTON_RIGHT) {
 		preset->set_global_position(easing_draw->get_global_transform().xform(mb->get_position()));
 		preset->popup();
+	}
+	if (mb.is_valid() && mb->is_doubleclick() && mb->get_button_index() == BUTTON_LEFT) {
+		value_input->show();
+		_focus_entered();
 	}
 
 	Ref<InputEventMouseMotion> mm = p_ev;
@@ -1034,11 +1051,36 @@ void EditorPropertyEasing::_notification(int p_what) {
 	}
 }
 
+void EditorPropertyEasing::_value_input_entered(const String &p_text) {
+	value_input->hide();
+}
+
+void EditorPropertyEasing::_evaluate_input_text() {
+	String text = value_input->get_text();
+	Ref<Expression> expr;
+	expr.instance();
+	Error err = expr->parse(text);
+	if (err != OK) {
+		return;
+	}
+
+	Variant v = expr->execute(Array(), NULL, false);
+	if (v.get_type() == Variant::NIL)
+		return;
+
+	emit_signal("property_changed", get_edited_property(), v);
+	easing_draw->update();
+}
+
 void EditorPropertyEasing::_bind_methods() {
 
 	ClassDB::bind_method("_draw_easing", &EditorPropertyEasing::_draw_easing);
 	ClassDB::bind_method("_drag_easing", &EditorPropertyEasing::_drag_easing);
 	ClassDB::bind_method("_set_preset", &EditorPropertyEasing::_set_preset);
+
+	ClassDB::bind_method("_value_input_entered", &EditorPropertyEasing::_value_input_entered);
+	ClassDB::bind_method("_evaluate_input_text", &EditorPropertyEasing::_evaluate_input_text);
+	ClassDB::bind_method("_focus_entered", &EditorPropertyEasing::_focus_entered);
 }
 
 EditorPropertyEasing::EditorPropertyEasing() {
@@ -1052,6 +1094,14 @@ EditorPropertyEasing::EditorPropertyEasing() {
 	preset = memnew(PopupMenu);
 	add_child(preset);
 	preset->connect("id_pressed", this, "_set_preset");
+
+	value_input = memnew(LineEdit);
+	value_input->set_as_toplevel(true);
+	value_input->hide();
+	value_input->connect("modal_closed", this, "_evaluate_input_text");
+	value_input->connect("text_entered", this, "_value_input_entered");
+	value_input->connect("focus_exited", this, "_evaluate_input_text");
+	add_child(value_input);
 
 	flip = false;
 	full = false;
