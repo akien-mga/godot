@@ -29,8 +29,9 @@
 /*************************************************************************/
 
 #include "video_stream_gdnative.h"
-#include <project_settings.h>
-#include <servers/audio_server.h>
+
+#include "core/project_settings.h"
+#include "servers/audio_server.h"
 
 VideoDecoderServer *VideoDecoderServer::instance = NULL;
 

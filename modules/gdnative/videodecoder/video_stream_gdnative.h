@@ -31,10 +31,10 @@
 #ifndef VIDEO_STREAM_GDNATIVE_H
 #define VIDEO_STREAM_GDNATIVE_H
 
-#include <modules/gdnative/gdnative.h>
-#include <os/file_access.h>
-#include <scene/resources/texture.h>
-#include <scene/resources/video_stream.h>
+#include "../gdnative.h"
+#include "core/os/file_access.h"
+#include "scene/resources/texture.h"
+#include "scene/resources/video_stream.h"
 
 struct VideoDecoderGDNative {
 	String plugin_name;
@@ -42,8 +42,8 @@ struct VideoDecoderGDNative {
 	const godot_videodecoder_interface_gdnative *interface;
 
 	VideoDecoderGDNative() :
-			interface(NULL),
-			plugin_name("none") {}
+			plugin_name("none"),
+			interface(NULL) {}
 
 	VideoDecoderGDNative(const godot_videodecoder_interface_gdnative *p_interface) :
 			interface(p_interface),
