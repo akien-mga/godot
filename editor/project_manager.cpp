@@ -91,7 +91,6 @@ private:
 	TextureRect *install_status_rect;
 	FileDialog *fdialog;
 	FileDialog *fdialog_install;
-	ConfirmationDialog *ask_update_settings;
 	String zip_path;
 	String zip_title;
 	AcceptDialog *dialog_error;
@@ -427,27 +426,6 @@ private:
 			set_message(TTR("It would be a good idea to name your project."), MESSAGE_WARNING);
 	}
 
-	struct {
-		ProjectSettings *project_settings;
-		String path;
-		ProjectSettings::CustomMap map;
-	} confirm_update_settings_args;
-
-	void _confirm_update_settings() {
-		switch (mode) {
-			case MODE_RENAME:
-				if (confirm_update_settings_args.project_settings->save_custom(confirm_update_settings_args.path, confirm_update_settings_args.map, Vector<String>(), true) != OK) {
-					set_message(TTR("Couldn't edit project.godot in project path."), MESSAGE_ERROR);
-				}
-				hide();
-				emit_signal("project_renamed");
-				break;
-
-			default:
-				break;
-		}
-	}
-
 	void ok_pressed() {
 
 		String dir = project_path->get_text();
@@ -465,26 +443,17 @@ private:
 			int err = current->setup(dir, "");
 			if (err != OK) {
 				set_message(vformat(TTR("Couldn't load project.godot in project path (error %d). It may be missing or corrupted."), err), MESSAGE_ERROR);
-				hide();
-				emit_signal("project_renamed");
 			} else {
 				ProjectSettings::CustomMap edited_settings;
 				edited_settings["application/config/name"] = project_name->get_text();
 
-				if (!current->is_settings_text_up_to_date_custom(dir.plus_file("project.godot"))) {
-					confirm_update_settings_args.project_settings = current;
-					confirm_update_settings_args.path = dir.plus_file("project.godot");
-					confirm_update_settings_args.map = edited_settings;
-					ask_update_settings->set_text(vformat(TTR("Do you want to update the project settings file : %s ?\nWarning : you will not be able to open the project with previous versions of Godot anymore."), confirm_update_settings_args.path));
-					ask_update_settings->popup_centered_minsize();
-				} else {
-					if (current->save_custom(dir.plus_file("project.godot"), edited_settings, Vector<String>(), true) != OK) {
-						set_message(TTR("Couldn't edit project.godot in project path."), MESSAGE_ERROR);
-					}
-					hide();
-					emit_signal("project_renamed");
+				if (current->save_custom(dir.plus_file("project.godot"), edited_settings, Vector<String>(), true) != OK) {
+					set_message(TTR("Couldn't edit project.godot in project path."), MESSAGE_ERROR);
 				}
 			}
+
+			hide();
+			emit_signal("projects_updated");
 
 		} else {
 
@@ -619,7 +588,7 @@ private:
 						dialog_error->popup_centered_minsize();
 
 					} else if (!project_path->get_text().ends_with(".zip")) {
-						dialog_error->set_text(TTR("Package Installed Successfully!"));
+						dialog_error->set_text(TTR("Package installed successfully!"));
 						dialog_error->popup_centered_minsize();
 					}
 				}
@@ -682,9 +651,8 @@ protected:
 		ClassDB::bind_method("_file_selected", &ProjectDialog::_file_selected);
 		ClassDB::bind_method("_install_path_selected", &ProjectDialog::_install_path_selected);
 		ClassDB::bind_method("_browse_install_path", &ProjectDialog::_browse_install_path);
-		ClassDB::bind_method("_confirm_update_settings", &ProjectDialog::_confirm_update_settings);
 		ADD_SIGNAL(MethodInfo("project_created"));
-		ADD_SIGNAL(MethodInfo("project_renamed"));
+		ADD_SIGNAL(MethodInfo("projects_updated"));
 	}
 
 public:
@@ -886,10 +854,6 @@ public:
 		fdialog_install->connect("dir_selected", this, "_install_path_selected");
 		fdialog_install->connect("file_selected", this, "_install_path_selected");
 
-		ask_update_settings = memnew(ConfirmationDialog);
-		ask_update_settings->get_ok()->connect("pressed", this, "_confirm_update_settings");
-		add_child(ask_update_settings);
-
 		set_hide_on_ok(false);
 		mode = MODE_NEW;
 
@@ -902,15 +866,17 @@ struct ProjectItem {
 	String project;
 	String path;
 	String conf;
+	int config_version;
 	uint64_t last_modified;
 	bool favorite;
 	bool grayed;
 	bool ordered_latest_modification;
 	ProjectItem() {}
-	ProjectItem(const String &p_project, const String &p_path, const String &p_conf, uint64_t p_last_modified, bool p_favorite = false, bool p_grayed = false, const bool p_ordered_latest_modification = true) {
+	ProjectItem(const String &p_project, const String &p_path, const String &p_conf, int p_config_version, uint64_t p_last_modified, bool p_favorite = false, bool p_grayed = false, const bool p_ordered_latest_modification = true) {
 		project = p_project;
 		path = p_path;
 		conf = p_conf;
+		config_version = p_config_version;
 		last_modified = p_last_modified;
 		favorite = p_favorite;
 		grayed = p_grayed;
@@ -1225,6 +1191,7 @@ void ProjectManager::_load_recent_projects() {
 
 		String project = _name.get_slice("/", 1);
 		String conf = path.plus_file("project.godot");
+		int config_version = 0; // Assume 0 until we know better
 		bool favorite = (_name.begins_with("favorite_projects/")) ? true : false;
 		bool grayed = false;
 
@@ -1242,7 +1209,7 @@ void ProjectManager::_load_recent_projects() {
 			grayed = true;
 		}
 
-		ProjectItem item(project, path, conf, last_modified, favorite, grayed, set_ordered_latest_modification);
+		ProjectItem item(project, path, conf, config_version, last_modified, favorite, grayed, set_ordered_latest_modification);
 		if (favorite)
 			favorite_projects.push_back(item);
 		else
@@ -1269,14 +1236,11 @@ void ProjectManager::_load_recent_projects() {
 		String project = item.project;
 		String path = item.path;
 		String conf = item.conf;
-		bool is_favorite = item.favorite;
-		bool is_grayed = item.grayed;
 
 		Ref<ConfigFile> cf = memnew(ConfigFile);
 		Error cf_err = cf->load(conf);
 
 		String project_name = TTR("Unnamed Project");
-
 		if (cf_err == OK && cf->has_section_key("application", "config/name")) {
 			project_name = static_cast<String>(cf->get_value("application", "config/name")).xml_unescape();
 		}
@@ -1285,8 +1249,16 @@ void ProjectManager::_load_recent_projects() {
 			continue;
 
 		Ref<Texture> icon;
-		if (cf_err == OK && cf->has_section_key("application", "config/icon")) {
-			String appicon = cf->get_value("application", "config/icon");
+		String main_scene;
+
+		if (cf_err == OK) {
+			item.config_version = (int)cf->get_value("", "config_version", 0);
+			if (item.config_version > ProjectSettings::CONFIG_VERSION) {
+				// Comes from an incompatible (more recent) Godot version, grey it out
+				item.grayed = true;
+			}
+
+			String appicon = cf->get_value("application", "config/icon", "");
 			if (appicon != "") {
 				Ref<Image> img;
 				img.instance();
@@ -1300,20 +1272,18 @@ void ProjectManager::_load_recent_projects() {
 					icon = it;
 				}
 			}
+
+			main_scene = cf->get_value("application", "run/main_scene", "");
 		}
 
 		if (icon.is_null()) {
 			icon = get_icon("DefaultProjectIcon", "EditorIcons");
 		}
 
-		String main_scene;
-		if (cf_err == OK && cf->has_section_key("application", "run/main_scene")) {
-			main_scene = cf->get_value("application", "run/main_scene");
-		} else {
-			main_scene = "";
-		}
-
 		selected_list_copy.erase(project);
+
+		bool is_favorite = item.favorite;
+		bool is_grayed = item.grayed;
 
 		HBoxContainer *hb = memnew(HBoxContainer);
 		hb->set_meta("name", project);
@@ -1392,7 +1362,7 @@ void ProjectManager::_load_recent_projects() {
 	tabs->set_current_tab(0);
 }
 
-void ProjectManager::_on_project_renamed() {
+void ProjectManager::_on_projects_updated() {
 	_load_recent_projects();
 }
 
@@ -1435,9 +1405,6 @@ void ProjectManager::_update_scroll_position(const String &dir) {
 }
 
 void ProjectManager::_confirm_update_settings() {
-	if (confirm_update_settings_args.project_settings->save_custom(confirm_update_settings_args.path) != OK) {
-		ERR_PRINTS(vformat(TTR("Couldn't edit %s."), confirm_update_settings_args.path));
-	}
 	_open_selected_projects();
 }
 
@@ -1446,17 +1413,9 @@ void ProjectManager::_open_selected_projects() {
 	for (const Map<String, String>::Element *E = selected_list.front(); E; E = E->next()) {
 		const String &selected = E->key();
 		String path = EditorSettings::get_singleton()->get("projects/" + selected);
-		String conf = path + "/project.godot";
-
-		ProjectSettings *current = memnew(ProjectSettings);
-		if (current->setup(path, "") != OK) {
-			dialog_error->set_text(TTR("Can't open project"));
-			dialog_error->popup_centered_minsize();
-			return;
-		}
-
-		if (!current->is_settings_text_up_to_date_custom(conf)) {
-			dialog_error->set_text(TTR("Can't open project : project settings out of date"));
+		String conf = path.plus_file("project.godot");
+		if (!FileAccess::exists(conf)) {
+			dialog_error->set_text(vformat(TTR("Can't open project at '%s'."), path));
 			dialog_error->popup_centered_minsize();
 			return;
 		}
@@ -1493,30 +1452,40 @@ void ProjectManager::_open_selected_projects_ask() {
 	if (selected_list.size() > 1) {
 		multi_open_ask->set_text(TTR("Are you sure to open more than one project?"));
 		multi_open_ask->popup_centered_minsize();
-	} else {
-
-		// Update the project settings or don't open
-		String path = EditorSettings::get_singleton()->get("projects/" + selected_list.front()->key());
-		String conf = path + "/project.godot";
-
-		ProjectSettings *current = memnew(ProjectSettings);
-		if (current->setup(path, "") != OK) {
-			dialog_error->set_text(TTR("Can't open project"));
-			dialog_error->popup_centered_minsize();
-			return;
-		}
-
-		if (!current->is_settings_text_up_to_date_custom(conf)) {
-			confirm_update_settings_args.project_settings = current;
-			confirm_update_settings_args.path = conf;
-			ask_update_settings->set_text(vformat(TTR("Do you want to update the project settings file : %s ?\nWarning : you will not be able to open the project with previous versions of Godot anymore."), conf));
-			ask_update_settings->popup_centered_minsize();
-			return;
-		}
-
-		// Open if the project is up-to-date
-		_open_selected_projects();
+		return;
 	}
+
+	// Update the project settings or don't open
+	String path = EditorSettings::get_singleton()->get("projects/" + selected_list.front()->key());
+	String conf = path.plus_file("project.godot");
+
+	// FIXME: We already parse those in _load_recent_projects, we could instead make
+	// its `projects` list global and reuse its parsed metadata here.
+	Ref<ConfigFile> cf = memnew(ConfigFile);
+	Error cf_err = cf->load(conf);
+
+	if (cf_err != OK) {
+		dialog_error->set_text(vformat(TTR("Can't open project at '%s'."), path));
+		dialog_error->popup_centered_minsize();
+		return;
+	}
+
+	int config_version = (int)cf->get_value("", "config_version", 0);
+	// Check if we need to convert project settings from an earlier engine version
+	if (config_version < ProjectSettings::CONFIG_VERSION) {
+		ask_update_settings->set_text(vformat(TTR("The following project settings file was generated by an older engine version, and needs to be converted for this version:\n\n%s\n\nDo you want to convert it?\nWarning: You will not be able to open the project with previous versions of the engine anymore."), conf));
+		ask_update_settings->popup_centered_minsize();
+		return;
+	}
+	// Check if the file was generated by a newer, incompatible engine version
+	if (config_version > ProjectSettings::CONFIG_VERSION) {
+		dialog_error->set_text(vformat(TTR("Can't open project at '%s'.") + "\n" + TTR("The project settings were created by a newer engine version, whose settings are not compatible with this version."), path));
+		dialog_error->popup_centered_minsize();
+		return;
+	}
+
+	// Open if the project is up-to-date
+	_open_selected_projects();
 }
 
 void ProjectManager::_run_project_confirm() {
@@ -1777,7 +1746,7 @@ void ProjectManager::_bind_methods() {
 	ClassDB::bind_method("_restart_confirm", &ProjectManager::_restart_confirm);
 	ClassDB::bind_method("_exit_dialog", &ProjectManager::_exit_dialog);
 	ClassDB::bind_method("_load_recent_projects", &ProjectManager::_load_recent_projects);
-	ClassDB::bind_method("_on_project_renamed", &ProjectManager::_on_project_renamed);
+	ClassDB::bind_method("_on_projects_updated", &ProjectManager::_on_projects_updated);
 	ClassDB::bind_method("_on_project_created", &ProjectManager::_on_project_created);
 	ClassDB::bind_method("_update_scroll_position", &ProjectManager::_update_scroll_position);
 	ClassDB::bind_method("_panel_draw", &ProjectManager::_panel_draw);
@@ -2102,7 +2071,7 @@ ProjectManager::ProjectManager() {
 	npdialog = memnew(ProjectDialog);
 	gui_base->add_child(npdialog);
 
-	npdialog->connect("project_renamed", this, "_on_project_renamed");
+	npdialog->connect("projects_updated", this, "_on_projects_updated");
 	npdialog->connect("project_created", this, "_on_project_created");
 	_load_recent_projects();
 
