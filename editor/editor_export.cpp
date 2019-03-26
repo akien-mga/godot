@@ -1029,12 +1029,12 @@ Error EditorExportPlatform::save_pack(const Ref<EditorExportPreset> &p_preset, c
 	int header_padding = _get_pad(PCK_PADDING, header_size);
 
 	for (int i = 0; i < pd.file_ofs.size(); i++) {
-		int string_len = pd.file_ofs[i].path_utf8.length();
-		int pad = _get_pad(4, string_len);
+		uint32_t string_len = pd.file_ofs[i].path_utf8.length();
+		uint32_t pad = _get_pad(4, string_len);
 
 		f->store_32(string_len + pad);
 		f->store_buffer((const uint8_t *)pd.file_ofs[i].path_utf8.get_data(), string_len);
-		for (int j = 0; j < pad; j++) {
+		for (uint32_t j = 0; j < pad; j++) {
 			f->store_8(0);
 		}
 
@@ -1060,7 +1060,7 @@ Error EditorExportPlatform::save_pack(const Ref<EditorExportPreset> &p_preset, c
 	uint8_t buf[bufsize];
 
 	while (true) {
-		int got = ftmp->get_buffer(buf, bufsize);
+		int64_t got = ftmp->get_buffer(buf, bufsize);
 		if (got <= 0) {
 			break;
 		}

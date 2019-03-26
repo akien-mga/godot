@@ -1951,7 +1951,7 @@ real_t _File::get_real() const {
 	return f->get_real();
 }
 
-PoolVector<uint8_t> _File::get_buffer(int p_length) const {
+PoolVector<uint8_t> _File::get_buffer(int64_t p_length) const {
 	PoolVector<uint8_t> data;
 	ERR_FAIL_COND_V_MSG(!f, data, "File must be opened before use.");
 
@@ -1964,7 +1964,7 @@ PoolVector<uint8_t> _File::get_buffer(int p_length) const {
 	ERR_FAIL_COND_V_MSG(err != OK, data, "Can't resize data to " + itos(p_length) + " elements.");
 
 	PoolVector<uint8_t>::Write w = data.write();
-	int len = f->get_buffer(&w[0], p_length);
+	int64_t len = f->get_buffer(&w[0], p_length);
 	ERR_FAIL_COND_V(len < 0, PoolVector<uint8_t>());
 
 	w.release();
@@ -1980,7 +1980,7 @@ String _File::get_as_text() const {
 	ERR_FAIL_COND_V_MSG(!f, String(), "File must be opened before use.");
 
 	String text;
-	size_t original_pos = f->get_position();
+	int64_t original_pos = f->get_position();
 	f->seek(0);
 
 	String l = get_line();
@@ -2341,9 +2341,9 @@ bool _Directory::dir_exists(String p_dir) {
 	}
 }
 
-int _Directory::get_space_left() {
+int64_t _Directory::get_space_left() {
 	ERR_FAIL_COND_V_MSG(!d, 0, "Directory must be opened before use.");
-	return d->get_space_left() / 1024 * 1024; //return value in megabytes, given binding is int
+	return d->get_space_left();
 }
 
 Error _Directory::copy(String p_from, String p_to) {

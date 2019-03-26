@@ -44,7 +44,7 @@ Error PackedData::add_pack(const String &p_path, bool p_replace_files, size_t p_
 	return ERR_FILE_UNRECOGNIZED;
 };
 
-void PackedData::add_path(const String &pkg_path, const String &path, uint64_t ofs, uint64_t size, const uint8_t *p_md5, PackSource *p_src, bool p_replace_files) {
+void PackedData::add_path(const String &pkg_path, const String &path, int64_t ofs, int64_t size, const uint8_t *p_md5, PackSource *p_src, bool p_replace_files) {
 	PathMD5 pmd5(path.md5_buffer());
 	//printf("adding path %ls, %lli, %lli\n", path.c_str(), pmd5.a, pmd5.b);
 
@@ -154,7 +154,7 @@ bool PackedSourcePCK::try_open_pack(const String &p_path, bool p_replace_files, 
 		}
 		f->seek(f->get_position() - 12);
 
-		uint64_t ds = f->get_64();
+		int64_t ds = f->get_64();
 		f->seek(f->get_position() - ds - 8);
 
 		magic = f->get_32();
@@ -198,8 +198,8 @@ bool PackedSourcePCK::try_open_pack(const String &p_path, bool p_replace_files, 
 		String path;
 		path.parse_utf8(cs.ptr());
 
-		uint64_t ofs = f->get_64();
-		uint64_t size = f->get_64();
+		int64_t ofs = f->get_64();
+		int64_t size = f->get_64();
 		uint8_t md5[16];
 		f->get_buffer(md5, 16);
 		PackedData::get_singleton()->add_path(p_path, path, ofs + p_offset, size, md5, this, p_replace_files);
@@ -229,7 +229,9 @@ bool FileAccessPack::is_open() const {
 	return f->is_open();
 }
 
-void FileAccessPack::seek(size_t p_position) {
+void FileAccessPack::seek(int64_t p_position) {
+	ERR_FAIL_COND(p_position < 0);
+
 	if (p_position > pf.size) {
 		eof = true;
 	} else {
@@ -239,13 +241,16 @@ void FileAccessPack::seek(size_t p_position) {
 	f->seek(pf.offset + p_position);
 	pos = p_position;
 }
+
 void FileAccessPack::seek_end(int64_t p_position) {
 	seek(pf.size + p_position);
 }
-size_t FileAccessPack::get_position() const {
+
+int64_t FileAccessPack::get_position() const {
 	return pos;
 }
-size_t FileAccessPack::get_len() const {
+
+int64_t FileAccessPack::get_len() const {
 	return pf.size;
 }
 
@@ -263,7 +268,7 @@ uint8_t FileAccessPack::get_8() const {
 	return f->get_8();
 }
 
-int FileAccessPack::get_buffer(uint8_t *p_dst, int p_length) const {
+int64_t FileAccessPack::get_buffer(uint8_t *p_dst, int64_t p_length) const {
 	ERR_FAIL_COND_V(!p_dst && p_length > 0, -1);
 	ERR_FAIL_COND_V(p_length < 0, -1);
 
@@ -271,10 +276,10 @@ int FileAccessPack::get_buffer(uint8_t *p_dst, int p_length) const {
 		return 0;
 	}
 
-	uint64_t to_read = p_length;
+	int64_t to_read = p_length;
 	if (to_read + pos > pf.size) {
 		eof = true;
-		to_read = int64_t(pf.size) - int64_t(pos);
+		to_read = pf.size - pos;
 	}
 
 	pos += p_length;
@@ -307,7 +312,7 @@ void FileAccessPack::store_8(uint8_t p_dest) {
 	ERR_FAIL();
 }
 
-void FileAccessPack::store_buffer(const uint8_t *p_src, int p_length) {
+void FileAccessPack::store_buffer(const uint8_t *p_src, int64_t p_length) {
 	ERR_FAIL();
 }
 
@@ -486,7 +491,7 @@ Error DirAccessPack::remove(String p_name) {
 	return ERR_UNAVAILABLE;
 }
 
-size_t DirAccessPack::get_space_left() {
+int64_t DirAccessPack::get_space_left() {
 	return 0;
 }
 

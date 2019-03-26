@@ -62,7 +62,7 @@ public:
 
 	virtual int Read(long long pos, long len, unsigned char *buf) {
 		if (file) {
-			if (file->get_position() != (size_t)pos) {
+			if (file->get_position() != pos) {
 				file->seek(pos);
 			}
 			if (file->get_buffer(buf, len) == len) {
@@ -74,7 +74,7 @@ public:
 
 	virtual int Length(long long *total, long long *available) {
 		if (file) {
-			const size_t len = file->get_len();
+			const int64_t len = file->get_len();
 			if (total) {
 				*total = len;
 			}

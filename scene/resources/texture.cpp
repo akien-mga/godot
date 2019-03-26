@@ -648,7 +648,7 @@ Error StreamTexture::_load_data(const String &p_path, int &tw, int &th, int &tw_
 
 			{
 				PoolVector<uint8_t>::Write w = img_data.write();
-				int bytes = f->get_buffer(w.ptr(), total_size - ofs);
+				int64_t bytes = f->get_buffer(w.ptr(), total_size - ofs);
 				//print_line("requested read: " + itos(total_size - ofs) + " but got: " + itos(bytes));
 
 				memdelete(f);
@@ -2232,7 +2232,7 @@ Error TextureLayered::load(const String &p_path) {
 
 			{
 				PoolVector<uint8_t>::Write w = img_data.write();
-				int bytes = f->get_buffer(w.ptr(), total_size);
+				int64_t bytes = f->get_buffer(w.ptr(), total_size);
 				if (bytes != total_size) {
 					f->close();
 					memdelete(f);
