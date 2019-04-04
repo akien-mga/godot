@@ -2517,8 +2517,7 @@ void TextEdit::_gui_input(const Ref<InputEvent> &p_gui_input) {
 					scancode_handled = false;
 					break;
 				}
-				// numlock disabled. fallthrough to key_left
-			}
+			} // intentional fallthrough to KEY_LEFT (numlock off)
 			case KEY_LEFT: {
 
 				if (k->get_shift())
@@ -2580,8 +2579,7 @@ void TextEdit::_gui_input(const Ref<InputEvent> &p_gui_input) {
 					scancode_handled = false;
 					break;
 				}
-				// numlock disabled. fallthrough to key_right
-			}
+			} // intentional fallthrough to KEY_RIGHT (numlock off)
 			case KEY_RIGHT: {
 
 				if (k->get_shift())
@@ -2641,8 +2639,7 @@ void TextEdit::_gui_input(const Ref<InputEvent> &p_gui_input) {
 					scancode_handled = false;
 					break;
 				}
-				// numlock disabled. fallthrough to key_up
-			}
+			} // intentional fallthrough to KEY_UP (numlock off)
 			case KEY_UP: {
 
 				if (k->get_alt()) {
@@ -2694,8 +2691,7 @@ void TextEdit::_gui_input(const Ref<InputEvent> &p_gui_input) {
 					scancode_handled = false;
 					break;
 				}
-				// numlock disabled. fallthrough to key_down
-			}
+			} // intentional fallthrough to KEY_DOWN (numlock off)
 			case KEY_DOWN: {
 
 				if (k->get_alt()) {
@@ -2817,11 +2813,9 @@ void TextEdit::_gui_input(const Ref<InputEvent> &p_gui_input) {
 					scancode_handled = false;
 					break;
 				}
-				// numlock disabled. fallthrough to key_home
-			}
-#ifdef APPLE_STYLE_KEYS
+			} // intentional fallthrough to KEY_HOME (numlock off)
 			case KEY_HOME: {
-
+#ifdef APPLE_STYLE_KEYS
 				if (k->get_shift())
 					_pre_shift_selection();
 
@@ -2831,11 +2825,7 @@ void TextEdit::_gui_input(const Ref<InputEvent> &p_gui_input) {
 					_post_shift_selection();
 				else if (k->get_command() || k->get_control())
 					deselect();
-
-			} break;
 #else
-			case KEY_HOME: {
-
 				if (k->get_shift())
 					_pre_shift_selection();
 
@@ -2876,19 +2866,16 @@ void TextEdit::_gui_input(const Ref<InputEvent> &p_gui_input) {
 					deselect();
 				_cancel_completion();
 				completion_hint = "";
-
-			} break;
 #endif
+			} break;
 			case KEY_KP_1: {
 				if (k->get_unicode() != 0) {
 					scancode_handled = false;
 					break;
 				}
-				// numlock disabled. fallthrough to key_end
-			}
-#ifdef APPLE_STYLE_KEYS
+			} // intentional fallthrough to KEY_END (numlock off)
 			case KEY_END: {
-
+#ifdef APPLE_STYLE_KEYS
 				if (k->get_shift())
 					_pre_shift_selection();
 
@@ -2898,11 +2885,7 @@ void TextEdit::_gui_input(const Ref<InputEvent> &p_gui_input) {
 					_post_shift_selection();
 				else if (k->get_command() || k->get_control())
 					deselect();
-
-			} break;
 #else
-			case KEY_END: {
-
 				if (k->get_shift())
 					_pre_shift_selection();
 
@@ -2929,16 +2912,14 @@ void TextEdit::_gui_input(const Ref<InputEvent> &p_gui_input) {
 
 				_cancel_completion();
 				completion_hint = "";
-
-			} break;
 #endif
+			} break;
 			case KEY_KP_9: {
 				if (k->get_unicode() != 0) {
 					scancode_handled = false;
 					break;
 				}
-				// numlock disabled. fallthrough to key_pageup
-			}
+			} // intentional fallthrough to KEY_PAGEUP (numlock off)
 			case KEY_PAGEUP: {
 
 				if (k->get_shift())
@@ -2960,8 +2941,7 @@ void TextEdit::_gui_input(const Ref<InputEvent> &p_gui_input) {
 					scancode_handled = false;
 					break;
 				}
-				// numlock disabled. fallthrough to key_pagedown
-			}
+			} // intentional fallthrough to KEY_PAGEDOWN (numlock off)
 			case KEY_PAGEDOWN: {
 
 				if (k->get_shift())
@@ -3139,21 +3119,7 @@ void TextEdit::_gui_input(const Ref<InputEvent> &p_gui_input) {
 
 		if (scancode_handled)
 			accept_event();
-		/*
-	if (!scancode_handled && !k->get_command() && !k->get_alt()) {
 
-	if (k->get_unicode()>=32) {
-
-		if (readonly)
-		break;
-
-		accept_event();
-	} else {
-
-		break;
-	}
-	}
-*/
 		if (k->get_scancode() == KEY_INSERT) {
 			set_insert_mode(!insert_mode);
 			accept_event();
@@ -3196,7 +3162,6 @@ void TextEdit::_gui_input(const Ref<InputEvent> &p_gui_input) {
 					end_complex_operation();
 				}
 				accept_event();
-			} else {
 			}
 		}
 

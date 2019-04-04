@@ -29,6 +29,7 @@
 /*************************************************************************/
 
 #include "line_edit.h"
+
 #include "core/message_queue.h"
 #include "core/os/keyboard.h"
 #include "core/os/os.h"
@@ -320,8 +321,7 @@ void LineEdit::_gui_input(Ref<InputEvent> p_event) {
 						handled = false;
 						break;
 					}
-					// numlock disabled. fallthrough to key_left
-				}
+				} // intentional fallthrough to KEY_LEFT (numlock off)
 				case KEY_LEFT: {
 
 #ifndef APPLE_STYLE_KEYS
@@ -367,8 +367,7 @@ void LineEdit::_gui_input(Ref<InputEvent> p_event) {
 						handled = false;
 						break;
 					}
-					// numlock disabled. fallthrough to key_right
-				}
+				} // intentional fallthrough to KEY_RIGHT (numlock off)
 				case KEY_RIGHT: {
 
 					shift_selection_check_pre(k->get_shift());
@@ -474,8 +473,7 @@ void LineEdit::_gui_input(Ref<InputEvent> p_event) {
 						handled = false;
 						break;
 					}
-					// numlock disabled. fallthrough to key_home
-				}
+				} // intentional fallthrough to KEY_HOME (numlock off)
 				case KEY_HOME: {
 
 					shift_selection_check_pre(k->get_shift());
@@ -487,8 +485,7 @@ void LineEdit::_gui_input(Ref<InputEvent> p_event) {
 						handled = false;
 						break;
 					}
-					// numlock disabled. fallthrough to key_end
-				}
+				} // intentional fallthrough to KEY_END (numlock off)
 				case KEY_END: {
 
 					shift_selection_check_pre(k->get_shift());

@@ -849,9 +849,7 @@ void ScriptEditor::_file_dialog_action(String p_file) {
 			}
 			file->close();
 			memdelete(file);
-
-			// fallthrough to open the file.
-		}
+		} // intentional fallthrough to open the file
 		case FILE_OPEN: {
 
 			List<String> extensions;

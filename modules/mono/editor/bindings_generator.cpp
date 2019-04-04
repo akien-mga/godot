@@ -2405,7 +2405,7 @@ void BindingsGenerator::_default_argument_from_variant(const Variant &p_val, Arg
 			if (p_val.is_zero()) {
 				r_iarg.default_argument = "null";
 				break;
-			}
+			} // intentional fallthrough
 		case Variant::DICTIONARY:
 		case Variant::_RID:
 			r_iarg.default_argument = "new %s()";

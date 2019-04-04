@@ -1136,8 +1136,7 @@ void ProjectManager::_unhandled_input(const Ref<InputEvent> &p_ev) {
 
 					break;
 				}
-				// else fallthrough to key_down
-			}
+			} // intentional fallthrough to KEY_DOWN
 			case KEY_DOWN: {
 
 				if (k->get_shift())
