@@ -351,7 +351,7 @@ if selected_platform in platform_list:
             env.Append(CCFLAGS=['-Wall', '-Wextra', '-Wno-unused-parameter'] + all_plus_warnings + shadow_local_warning)
             if methods.use_gcc(env):
                 # Overriding -Wextra's -Wimplicit-fallthrough=3 as it's too strict and its documented regex doesn't work
-                env['CCFLAGS'] += ['-Wimplicit-fallthrough=2', '-Wno-clobbered']
+                env['CCFLAGS'] += ['-Wimplicit-fallthrough=3', '-Wno-clobbered']
 
         elif (env["warnings"] == 'all'):
             env.Append(CCFLAGS=['-Wall'] + shadow_local_warning)
