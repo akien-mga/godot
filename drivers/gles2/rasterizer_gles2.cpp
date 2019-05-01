@@ -71,14 +71,21 @@
 #define CAN_DEBUG
 #endif
 
-#if !defined(GLES_OVER_GL) && defined(CAN_DEBUG)
+#if !defined(GLES_OVER_GL)
+#ifndef IPHONE_ENABLED
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 #include <GLES2/gl2platform.h>
+#else
+#include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/glext.h>
+#endif
 
+#if defined(CAN_DEBUG)
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
-#endif
+#endif // CAN_DEBUG
+#endif // !GLES_OVER_GL
 
 #if defined(MINGW_ENABLED) || defined(_MSC_VER)
 #define strcpy strcpy_s
@@ -166,6 +173,7 @@ Error RasterizerGLES2::is_viable() {
 		ERR_PRINT("Error initializing GLAD");
 		return ERR_UNAVAILABLE;
 	}
+#endif // GLAD_ENABLED
 
 // GLVersion seems to be used for both GL and GL ES, so we need different version checks for them
 #ifdef OPENGL_ENABLED // OpenGL 2.1 Profile required
@@ -177,6 +185,7 @@ Error RasterizerGLES2::is_viable() {
 	}
 
 #ifdef GLES_OVER_GL
+#ifdef GLAD_ENABLED
 	//Test GL_ARB_framebuffer_object extension
 	if (!GLAD_GL_ARB_framebuffer_object) {
 		//Try older GL_EXT_framebuffer_object extension
@@ -205,10 +214,11 @@ Error RasterizerGLES2::is_viable() {
 
 	if (GLAD_GL_EXT_framebuffer_multisample) {
 		glRenderbufferStorageMultisample = glRenderbufferStorageMultisampleEXT;
-	} 
-#endif // GLES_OVER_GL
-
+	}
 #endif // GLAD_ENABLED
+#else
+	glRenderbufferStorageMultisample = glRenderbufferStorageMultisampleEXT;
+#endif // GLES_OVER_GL
 
 	return OK;
 }
