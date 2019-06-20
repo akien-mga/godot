@@ -308,8 +308,11 @@ class EditorPropertyEasing : public EditorProperty {
 	GDCLASS(EditorPropertyEasing, EditorProperty);
 	Control *easing_draw;
 	PopupMenu *preset;
-	LineEdit *value_input;
+	EditorSpinSlider *spin;
+	bool setting;
+
 	bool full;
+	bool flip;
 
 	enum {
 		EASING_ZERO,
@@ -322,15 +325,15 @@ class EditorPropertyEasing : public EditorProperty {
 
 	};
 
-	bool flip;
-
 	void _drag_easing(const Ref<InputEvent> &p_ev);
 	void _draw_easing();
-	void _notification(int p_what);
 	void _set_preset(int);
-	void _value_input_entered(const String &p_text);
-	void _evaluate_input_text();
-	void _focus_entered();
+
+	void _setup_spin();
+	void _spin_value_changed(double p_value);
+	void _spin_focus_exited();
+
+	void _notification(int p_what);
 
 protected:
 	static void _bind_methods();
