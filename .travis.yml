@@ -18,6 +18,9 @@ cache:
   directories:
     - $SCONS_CACHE
 
+services:
+  - docker
+
 matrix:
   include:
     - name: Static checks (clang-format)
@@ -79,6 +82,12 @@ matrix:
       os: osx
       compiler: clang
 
+    - name: JavaScript export template (release, Emscripten)
+      stage: build
+      env: PLATFORM=javascript TOOLS=no TARGET=release CACHE_NAME=${PLATFORM}-emscripten
+      os: linux
+      compiler: clang
+
     - name: Linux headless editor (release_debug, GCC 9, testing project exporting and script running)
       stage: build
       env: PLATFORM=server TOOLS=yes TARGET=release_debug CACHE_NAME=${PLATFORM}-tools-gcc-9 MATRIX_EVAL="CC=gcc-9 && CXX=g++-9" EXTRA_ARGS="warnings=extra werror=yes" TEST_PROJECT=yes
@@ -125,12 +134,18 @@ before_script:
       export ANDROID_HOME=$TRAVIS_BUILD_DIR/godot-dev/build-tools/android-sdk;
       export ANDROID_NDK_ROOT=$TRAVIS_BUILD_DIR/godot-dev/build-tools/android-ndk;
     fi
+  - if [ "$PLATFORM" = "javascript" ]; then
+      docker run -dit --name emscripten -v $(pwd)/godot:/src trzeci/emscripten-slim bash;
+      docker exec -it emscripten apt-get update -qq;
+      docker exec -it emscripten apt-get install -y scons;
+      export CMD_PREFIX="docker exec -u `id -u` -it emscripten";
+    fi
 
 script:
   - if [ "$STATIC_CHECKS" = "yes" ]; then
       sh ./misc/travis/clang-format.sh;
     else
-      scons -j2 CC=$CC CXX=$CXX platform=$PLATFORM tools=$TOOLS target=$TARGET $OPTIONS $EXTRA_ARGS &&
+      $CMD_PREFIX scons -j2 CC=$CC CXX=$CXX platform=$PLATFORM tools=$TOOLS target=$TARGET $OPTIONS $EXTRA_ARGS &&
       if [ "$TEST_PROJECT" = "yes" ]; then
         git clone --depth 1 "https://github.com/godotengine/godot-tests.git";
         sed -i "s:custom_template/release=\"\":custom_template/release=\"$(readlink -e bin/godot_server.x11.opt.tools.64)\":" godot-tests/tests/project_export/export_presets.cfg;
