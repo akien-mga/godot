@@ -970,11 +970,12 @@ Error EditorExportPlatform::save_pack(const Ref<EditorExportPreset> &p_preset, c
 
 	int64_t pck_start_pos = f->get_position();
 
-	f->store_32(0x43504447); //GDPC
-	f->store_32(1); //pack version
+	f->store_32(PACK_HEADER_MAGIC);
+	f->store_32(PACK_FORMAT_VERSION);
 	f->store_32(VERSION_MAJOR);
 	f->store_32(VERSION_MINOR);
-	f->store_32(0); //hmph
+	f->store_32(VERSION_PATCH);
+
 	for (int i = 0; i < 16; i++) {
 		//reserved
 		f->store_32(0);

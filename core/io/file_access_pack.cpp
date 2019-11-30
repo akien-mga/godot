@@ -34,8 +34,6 @@
 
 #include <stdio.h>
 
-#define PACK_VERSION 1
-
 Error PackedData::add_pack(const String &p_path, bool p_replace_files) {
 
 	for (int i = 0; i < sources.size(); i++) {
@@ -144,12 +142,12 @@ bool PackedSourcePCK::try_open_pack(const String &p_path, bool p_replace_files) 
 
 	uint32_t magic = f->get_32();
 
-	if (magic != 0x43504447) {
+	if (magic != PACK_HEADER_MAGIC) {
 		//maybe at the end.... self contained exe
 		f->seek_end();
 		f->seek(f->get_position() - 4);
 		magic = f->get_32();
-		if (magic != 0x43504447) {
+		if (magic != PACK_HEADER_MAGIC) {
 
 			f->close();
 			memdelete(f);
@@ -161,7 +159,7 @@ bool PackedSourcePCK::try_open_pack(const String &p_path, bool p_replace_files) 
 		f->seek(f->get_position() - ds - 8);
 
 		magic = f->get_32();
-		if (magic != 0x43504447) {
+		if (magic != PACK_HEADER_MAGIC) {
 
 			f->close();
 			memdelete(f);
@@ -174,7 +172,7 @@ bool PackedSourcePCK::try_open_pack(const String &p_path, bool p_replace_files) 
 	uint32_t ver_minor = f->get_32();
 	f->get_32(); // ver_rev
 
-	if (version != PACK_VERSION) {
+	if (version != PACK_FORMAT_VERSION) {
 		f->close();
 		memdelete(f);
 		ERR_FAIL_V_MSG(false, "Pack version unsupported: " + itos(version) + ".");

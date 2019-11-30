@@ -28,6 +28,9 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
+#ifndef VERSION_H
+#define VERSION_H
+
 #include "core/version_generated.gen.h"
 
 // Godot versions are of the form <major>.<minor> for the initial release,
@@ -49,6 +52,8 @@
 // Example: "3.1"
 #define VERSION_NUMBER "" VERSION_BRANCH
 #define VERSION_HEX 0x10000 * VERSION_MAJOR + 0x100 * VERSION_MINOR
+// VERSION_PATCH isn't defined, so set it to zero to ensure pack files don't error on a missing define
+#define VERSION_PATCH 0
 #endif // VERSION_PATCH
 
 // Describes the full configuration of that Godot version, including the version number,
@@ -64,3 +69,10 @@
 // Same as above, but prepended with Godot's name and a cosmetic "v" for "version".
 // Example: "Godot v3.1.4.stable.official.mono"
 #define VERSION_FULL_NAME "" VERSION_NAME " v" VERSION_FULL_BUILD
+
+// Godot's packed file magic header ("GDPC" in ASCII)
+#define PACK_HEADER_MAGIC 0x43504447
+// The current packed file format version number
+#define PACK_FORMAT_VERSION 1
+
+#endif
