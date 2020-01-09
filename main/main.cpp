@@ -1615,7 +1615,7 @@ bool Main::start() {
 		ResourceLoader::add_custom_loaders();
 		ResourceSaver::add_custom_savers();
 
-		if (!project_manager && !editor) { // game
+		if (!project_manager && !editor) { // Run the game.
 			if (game_path != "" || script != "") {
 				if (script_debugger && script_debugger->is_remote()) {
 					ScriptDebuggerRemote *remote_debugger = static_cast<ScriptDebuggerRemote *>(script_debugger);
@@ -1623,22 +1623,34 @@ bool Main::start() {
 					remote_debugger->set_scene_tree(sml);
 				}
 
-				//autoload
+				// Autoloads.
 				List<PropertyInfo> props;
 				ProjectSettings::get_singleton()->get_property_list(&props);
 
-				//first pass, add the constants so they exist before any script is loaded
+				// First pass, add the constants so they exist before any script is loaded.
+				// Also check for overridden autoloads.
+				Vector<String> overridden;
 				for (List<PropertyInfo>::Element *E = props.front(); E; E = E->next()) {
-
-					String s = E->get().name;
-					if (!s.begins_with("autoload/"))
+					const String s = E->get().name;
+					if (!s.begins_with("autoload/")) {
 						continue;
-					String name = s.get_slicec('/', 1);
-					String path = ProjectSettings::get_singleton()->get(s);
-					bool global_var = false;
-					if (path.begins_with("*")) {
-						global_var = true;
 					}
+					const String name = s.get_slicec('/', 1);
+
+					int dot_pos = name.find(".");
+					if (dot_pos != -1) { // Autoload override.
+						// Save non-overridden property name to know which one to skip in step 2,
+						// if they are meant to be active (has relevant feature).
+						const String base_autoload = name.left(dot_pos);
+						const String feature = name.right(dot_pos + 1);
+						if (OS::get_singleton()->has_feature(feature)) {
+							overridden.push_back(base_autoload);
+						}
+						continue; // Don't register it as global var.
+					}
+
+					String path = ProjectSettings::get_singleton()->get(s);
+					bool global_var = path.begins_with("*");
 
 					if (global_var) {
 						for (int i = 0; i < ScriptServer::get_language_count(); i++) {
@@ -1647,23 +1659,41 @@ bool Main::start() {
 					}
 				}
 
-				//second pass, load into global constants
+				// Second pass, load into global constants.
+				// If we have any overridden autoload found in the previous step, we don't load
+				// the original ones if the override is active.
 				List<Node *> to_add;
 				for (List<PropertyInfo>::Element *E = props.front(); E; E = E->next()) {
-
-					String s = E->get().name;
-					if (!s.begins_with("autoload/"))
+					const String s = E->get().name;
+					if (!s.begins_with("autoload/")) {
 						continue;
+					}
 					String name = s.get_slicec('/', 1);
+
+					// Handle possible overridden autoloads.
+					int dot_pos = name.find(".");
+					if (dot_pos != -1) { // Autoload override.
+						const String base_autoload = name.left(dot_pos);
+						const String feature = name.right(dot_pos + 1);
+						if (!OS::get_singleton()->has_feature(feature)) {
+							continue; // Not enabled, skip.
+						}
+						// Keep original name (but overridden path).
+						name = base_autoload;
+					} else if (overridden.find(name) != -1) {
+						// Original autoload with valid override, so we skip it.
+						continue;
+					}
+
 					String path = ProjectSettings::get_singleton()->get(s);
-					bool global_var = false;
-					if (path.begins_with("*")) {
-						global_var = true;
-						path = path.substr(1, path.length() - 1);
+					bool global_var = path.begins_with("*");
+					if (global_var) {
+						path = path.right(1);
 					}
 
 					RES res = ResourceLoader::load(path);
-					ERR_CONTINUE_MSG(res.is_null(), "Can't autoload: " + path);
+					ERR_CONTINUE_MSG(res.is_null(), vformat("Can't load AutoLoad '%s' from: %s.", name, path));
+
 					Node *n = NULL;
 					if (res->is_class("PackedScene")) {
 						Ref<PackedScene> ps = res;
@@ -1672,20 +1702,20 @@ bool Main::start() {
 						Ref<Script> script_res = res;
 						StringName ibt = script_res->get_instance_base_type();
 						bool valid_type = ClassDB::is_parent_class(ibt, "Node");
-						ERR_CONTINUE_MSG(!valid_type, "Script does not inherit a Node: " + path);
+						ERR_CONTINUE_MSG(!valid_type,
+								vformat("Script of base type '%s' does not inherit Node and can't be used for AutoLoad '%s': %s.", ibt, name, path));
 
 						Object *obj = ClassDB::instance(ibt);
-
-						ERR_CONTINUE_MSG(obj == NULL, "Cannot instance script for autoload, expected 'Node' inheritance, got: " + String(ibt));
+						ERR_CONTINUE_MSG(obj == NULL,
+								vformat("Cannot instantiate script of base type '%s' for AutoLoad '%s': %s.", ibt, name, path));
 
 						n = Object::cast_to<Node>(obj);
 						n->set_script(script_res.get_ref_ptr());
 					}
+					ERR_CONTINUE_MSG(!n, vformat("Given path for AutoLoad '%s' is neither a Node nor a Script: %s.", name, path));
 
-					ERR_CONTINUE_MSG(!n, "Path in autoload not a node or script: " + path);
 					n->set_name(name);
-
-					//defer so references are all valid on _ready()
+					// Defer so references are all valid on _ready().
 					to_add.push_back(n);
 
 					if (global_var) {
@@ -1695,8 +1725,8 @@ bool Main::start() {
 					}
 				}
 
+				// Third pass, actually add the autoloads to the tree.
 				for (List<Node *>::Element *E = to_add.front(); E; E = E->next()) {
-
 					sml->get_root()->add_child(E->get());
 				}
 			}
