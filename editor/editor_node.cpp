@@ -173,6 +173,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+
 EditorNode *EditorNode::singleton = NULL;
 
 void EditorNode::_update_scene_tabs() {
