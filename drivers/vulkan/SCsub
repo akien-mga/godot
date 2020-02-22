@@ -49,6 +49,8 @@ if env['builtin_vulkan']:
             'FALLBACK_DATA_DIRS=\\"%s\\"' % '/usr/local/share:/usr/share',
             'FALLBACK_CONFIG_DIRS=\\"%s\\"' % '/etc/xdg'
         ])
+        # VMA's std::shared_mutex usage requires macOS 10.12+
+        env_thirdparty.AppendUnique(CPPDEFINES=['VMA_USE_STL_SHARED_MUTEX=0'])
     elif env['platform'] == "iphone":
         env_thirdparty.AppendUnique(CPPDEFINES=[
             'VK_USE_PLATFORM_IOS_MVK',
