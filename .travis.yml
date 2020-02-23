@@ -29,11 +29,11 @@ matrix:
           packages:
             - clang-format-8
 
-    - name: Linux editor (debug, GCC 9, with Mono)
+    - name: Linux editor (debug, GCC 8, with Mono)
       stage: build
-      env: PLATFORM=x11 TOOLS=yes TARGET=debug CACHE_NAME=${PLATFORM}-tools-mono-gcc-9 MATRIX_EVAL="CC=gcc-9 && CXX=g++-9" EXTRA_ARGS="module_mono_enabled=yes mono_glue=no warnings=extra werror=yes"
+      env: PLATFORM=x11 TOOLS=yes TARGET=debug CACHE_NAME=${PLATFORM}-tools-mono-gcc-8 MATRIX_EVAL="CC=gcc-8 && CXX=g++-8" EXTRA_ARGS="module_mono_enabled=yes mono_glue=no warnings=extra werror=yes"
       os: linux
-      compiler: gcc-9
+      compiler: gcc-8
       addons:
         apt:
           sources:
@@ -41,7 +41,7 @@ matrix:
               key_url: "https://raw.githubusercontent.com/travis-ci/apt-source-safelist/master/keys/mono.asc"
             - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
-            - &gcc9_deps [gcc-9, g++-9]
+            - &gcc8_deps [gcc-8, g++-8]
             - &linux_deps [libasound2-dev, libgl1-mesa-dev, libglu1-mesa-dev, libx11-dev, libxcursor-dev, libxi-dev, libxinerama-dev, libxrandr-dev]
             - &linux_mono_deps [mono-devel, msbuild, nuget]
 
