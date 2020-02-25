@@ -80,10 +80,10 @@ void ResourcePreloaderEditor::_files_load_request(const Vector<String> &p_paths)
 		}
 
 		undo_redo->create_action(TTR("Add Resource"));
-		undo_redo->add_do_method(preloader, "add_resource", name, resource);
-		undo_redo->add_undo_method(preloader, "remove_resource", name);
-		undo_redo->add_do_method(this, "_update_library");
-		undo_redo->add_undo_method(this, "_update_library");
+		undo_redo->add_do_method_compat(preloader, "add_resource", name, resource);
+		undo_redo->add_undo_method_compat(preloader, "remove_resource", name);
+		undo_redo->add_do_method_compat(this, "_update_library");
+		undo_redo->add_undo_method_compat(this, "_update_library");
 		undo_redo->commit_action();
 	}
 }
@@ -125,12 +125,12 @@ void ResourcePreloaderEditor::_item_edited() {
 
 		RES samp = preloader->get_resource(old_name);
 		undo_redo->create_action(TTR("Rename Resource"));
-		undo_redo->add_do_method(preloader, "remove_resource", old_name);
-		undo_redo->add_do_method(preloader, "add_resource", new_name, samp);
-		undo_redo->add_undo_method(preloader, "remove_resource", new_name);
-		undo_redo->add_undo_method(preloader, "add_resource", old_name, samp);
-		undo_redo->add_do_method(this, "_update_library");
-		undo_redo->add_undo_method(this, "_update_library");
+		undo_redo->add_do_method_compat(preloader, "remove_resource", old_name);
+		undo_redo->add_do_method_compat(preloader, "add_resource", new_name, samp);
+		undo_redo->add_undo_method_compat(preloader, "remove_resource", new_name);
+		undo_redo->add_undo_method_compat(preloader, "add_resource", old_name, samp);
+		undo_redo->add_do_method_compat(this, "_update_library");
+		undo_redo->add_undo_method_compat(this, "_update_library");
 		undo_redo->commit_action();
 	}
 }
@@ -138,10 +138,10 @@ void ResourcePreloaderEditor::_item_edited() {
 void ResourcePreloaderEditor::_remove_resource(const String &p_to_remove) {
 
 	undo_redo->create_action(TTR("Delete Resource"));
-	undo_redo->add_do_method(preloader, "remove_resource", p_to_remove);
-	undo_redo->add_undo_method(preloader, "add_resource", p_to_remove, preloader->get_resource(p_to_remove));
-	undo_redo->add_do_method(this, "_update_library");
-	undo_redo->add_undo_method(this, "_update_library");
+	undo_redo->add_do_method_compat(preloader, "remove_resource", p_to_remove);
+	undo_redo->add_undo_method_compat(preloader, "add_resource", p_to_remove, preloader->get_resource(p_to_remove));
+	undo_redo->add_do_method_compat(this, "_update_library");
+	undo_redo->add_undo_method_compat(this, "_update_library");
 	undo_redo->commit_action();
 }
 
@@ -170,10 +170,10 @@ void ResourcePreloaderEditor::_paste_pressed() {
 	}
 
 	undo_redo->create_action(TTR("Paste Resource"));
-	undo_redo->add_do_method(preloader, "add_resource", name, r);
-	undo_redo->add_undo_method(preloader, "remove_resource", name);
-	undo_redo->add_do_method(this, "_update_library");
-	undo_redo->add_undo_method(this, "_update_library");
+	undo_redo->add_do_method_compat(preloader, "add_resource", name, r);
+	undo_redo->add_undo_method_compat(preloader, "remove_resource", name);
+	undo_redo->add_do_method_compat(this, "_update_library");
+	undo_redo->add_undo_method_compat(this, "_update_library");
 	undo_redo->commit_action();
 }
 
@@ -328,10 +328,10 @@ void ResourcePreloaderEditor::drop_data_fw(const Point2 &p_point, const Variant 
 			}
 
 			undo_redo->create_action(TTR("Add Resource"));
-			undo_redo->add_do_method(preloader, "add_resource", name, r);
-			undo_redo->add_undo_method(preloader, "remove_resource", name);
-			undo_redo->add_do_method(this, "_update_library");
-			undo_redo->add_undo_method(this, "_update_library");
+			undo_redo->add_do_method_compat(preloader, "add_resource", name, r);
+			undo_redo->add_undo_method_compat(preloader, "remove_resource", name);
+			undo_redo->add_do_method_compat(this, "_update_library");
+			undo_redo->add_undo_method_compat(this, "_update_library");
 			undo_redo->commit_action();
 		}
 	}

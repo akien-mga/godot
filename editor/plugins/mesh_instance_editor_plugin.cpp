@@ -83,11 +83,11 @@ void MeshInstanceEditor::_menu_option(int p_option) {
 				Node *owner = node == get_tree()->get_edited_scene_root() ? node : node->get_owner();
 
 				ur->create_action(TTR("Create Static Trimesh Body"));
-				ur->add_do_method(node, "add_child", body);
-				ur->add_do_method(body, "set_owner", owner);
-				ur->add_do_method(cshape, "set_owner", owner);
+				ur->add_do_method_compat(node, "add_child", body);
+				ur->add_do_method_compat(body, "set_owner", owner);
+				ur->add_do_method_compat(cshape, "set_owner", owner);
 				ur->add_do_reference(body);
-				ur->add_undo_method(node, "remove_child", body);
+				ur->add_undo_method_compat(node, "remove_child", body);
 				ur->commit_action();
 				return;
 			}
@@ -115,11 +115,11 @@ void MeshInstanceEditor::_menu_option(int p_option) {
 
 				Node *owner = instance == get_tree()->get_edited_scene_root() ? instance : instance->get_owner();
 
-				ur->add_do_method(instance, "add_child", body);
-				ur->add_do_method(body, "set_owner", owner);
-				ur->add_do_method(cshape, "set_owner", owner);
+				ur->add_do_method_compat(instance, "add_child", body);
+				ur->add_do_method_compat(body, "set_owner", owner);
+				ur->add_do_method_compat(cshape, "set_owner", owner);
 				ur->add_do_reference(body);
-				ur->add_undo_method(instance, "remove_child", body);
+				ur->add_undo_method_compat(instance, "remove_child", body);
 			}
 
 			ur->commit_action();
@@ -147,11 +147,11 @@ void MeshInstanceEditor::_menu_option(int p_option) {
 
 			ur->create_action(TTR("Create Trimesh Static Shape"));
 
-			ur->add_do_method(node->get_parent(), "add_child", cshape);
-			ur->add_do_method(node->get_parent(), "move_child", cshape, node->get_index() + 1);
-			ur->add_do_method(cshape, "set_owner", owner);
+			ur->add_do_method_compat(node->get_parent(), "add_child", cshape);
+			ur->add_do_method_compat(node->get_parent(), "move_child", cshape, node->get_index() + 1);
+			ur->add_do_method_compat(cshape, "set_owner", owner);
 			ur->add_do_reference(cshape);
-			ur->add_undo_method(node->get_parent(), "remove_child", cshape);
+			ur->add_undo_method_compat(node->get_parent(), "remove_child", cshape);
 			ur->commit_action();
 		} break;
 		case MENU_OPTION_CREATE_SINGLE_CONVEX_COLLISION_SHAPE: {
@@ -179,11 +179,11 @@ void MeshInstanceEditor::_menu_option(int p_option) {
 
 			Node *owner = node->get_owner();
 
-			ur->add_do_method(node->get_parent(), "add_child", cshape);
-			ur->add_do_method(node->get_parent(), "move_child", cshape, node->get_index() + 1);
-			ur->add_do_method(cshape, "set_owner", owner);
+			ur->add_do_method_compat(node->get_parent(), "add_child", cshape);
+			ur->add_do_method_compat(node->get_parent(), "move_child", cshape, node->get_index() + 1);
+			ur->add_do_method_compat(cshape, "set_owner", owner);
 			ur->add_do_reference(cshape);
-			ur->add_undo_method(node->get_parent(), "remove_child", cshape);
+			ur->add_undo_method_compat(node->get_parent(), "remove_child", cshape);
 
 			ur->commit_action();
 
@@ -215,11 +215,11 @@ void MeshInstanceEditor::_menu_option(int p_option) {
 
 				Node *owner = node->get_owner();
 
-				ur->add_do_method(node->get_parent(), "add_child", cshape);
-				ur->add_do_method(node->get_parent(), "move_child", cshape, node->get_index() + 1);
-				ur->add_do_method(cshape, "set_owner", owner);
+				ur->add_do_method_compat(node->get_parent(), "add_child", cshape);
+				ur->add_do_method_compat(node->get_parent(), "move_child", cshape, node->get_index() + 1);
+				ur->add_do_method_compat(cshape, "set_owner", owner);
 				ur->add_do_reference(cshape);
-				ur->add_undo_method(node->get_parent(), "remove_child", cshape);
+				ur->add_undo_method_compat(node->get_parent(), "remove_child", cshape);
 			}
 			ur->commit_action();
 
@@ -241,11 +241,11 @@ void MeshInstanceEditor::_menu_option(int p_option) {
 			UndoRedo *ur = EditorNode::get_singleton()->get_undo_redo();
 			ur->create_action(TTR("Create Navigation Mesh"));
 
-			ur->add_do_method(node, "add_child", nmi);
-			ur->add_do_method(nmi, "set_owner", owner);
+			ur->add_do_method_compat(node, "add_child", nmi);
+			ur->add_do_method_compat(nmi, "set_owner", owner);
 
 			ur->add_do_reference(nmi);
-			ur->add_undo_method(node, "remove_child", nmi);
+			ur->add_undo_method_compat(node, "remove_child", nmi);
 			ur->commit_action();
 		} break;
 
@@ -426,11 +426,11 @@ void MeshInstanceEditor::_create_outline_mesh() {
 
 	ur->create_action(TTR("Create Outline"));
 
-	ur->add_do_method(node, "add_child", mi);
-	ur->add_do_method(mi, "set_owner", owner);
+	ur->add_do_method_compat(node, "add_child", mi);
+	ur->add_do_method_compat(mi, "set_owner", owner);
 
 	ur->add_do_reference(mi);
-	ur->add_undo_method(node, "remove_child", mi);
+	ur->add_undo_method_compat(node, "remove_child", mi);
 	ur->commit_action();
 }
 

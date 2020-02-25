@@ -105,49 +105,48 @@ void UndoRedo::create_action(const String &p_name, MergeMode p_mode) {
 	action_level++;
 }
 
-void UndoRedo::add_do_method(Object *p_object, const StringName &p_method, VARIANT_ARG_DECLARE) {
-
+Error UndoRedo::add_do_method(const Callable& p_callable, VARIANT_ARG_DECLARE) {
 	VARIANT_ARGPTRS
-	ERR_FAIL_COND(p_object == NULL);
-	ERR_FAIL_COND(action_level <= 0);
-	ERR_FAIL_COND((current_action + 1) >= actions.size());
+	ERR_FAIL_COND_V(p_callable.is_null(), ERR_INVALID_PARAMETER);
+
 	Operation do_op;
-	do_op.object = p_object->get_instance_id();
-	if (Object::cast_to<Resource>(p_object))
-		do_op.resref = Ref<Resource>(Object::cast_to<Resource>(p_object));
 
 	do_op.type = Operation::TYPE_METHOD;
-	do_op.name = p_method;
+	do_op.object = p_callable.get_object_id();
+	do_op.callable = p_callable;
 
 	for (int i = 0; i < VARIANT_ARG_MAX; i++) {
 		do_op.args[i] = *argptr[i];
 	}
+
 	actions.write[current_action + 1].do_ops.push_back(do_op);
+
+	return OK;
 }
-
-void UndoRedo::add_undo_method(Object *p_object, const StringName &p_method, VARIANT_ARG_DECLARE) {
-
+Error UndoRedo::add_undo_method(const Callable& p_callable, VARIANT_ARG_DECLARE) {
 	VARIANT_ARGPTRS
-	ERR_FAIL_COND(p_object == NULL);
-	ERR_FAIL_COND(action_level <= 0);
-	ERR_FAIL_COND((current_action + 1) >= actions.size());
-
-	// No undo if the merge mode is MERGE_ENDS
-	if (merge_mode == MERGE_ENDS)
-		return;
+	ERR_FAIL_COND_V(p_callable.is_null(), ERR_INVALID_PARAMETER);
 
 	Operation undo_op;
-	undo_op.object = p_object->get_instance_id();
-	if (Object::cast_to<Resource>(p_object))
-		undo_op.resref = Ref<Resource>(Object::cast_to<Resource>(p_object));
 
 	undo_op.type = Operation::TYPE_METHOD;
-	undo_op.name = p_method;
+	undo_op.object = p_callable.get_object_id();
+	undo_op.callable = p_callable;
 
 	for (int i = 0; i < VARIANT_ARG_MAX; i++) {
 		undo_op.args[i] = *argptr[i];
 	}
+
 	actions.write[current_action + 1].undo_ops.push_back(undo_op);
+
+	return OK;
+}
+void UndoRedo::add_do_method_compat(Object *p_object, const StringName &p_method, VARIANT_ARG_DECLARE) {
+	add_do_method(Callable(p_object, p_method), VARIANT_ARG_PASS);
+}
+
+void UndoRedo::add_undo_method_compat(Object *p_object, const StringName &p_method, VARIANT_ARG_DECLARE) {
+	add_undo_method(Callable(p_object, p_method), VARIANT_ARG_PASS);
 }
 void UndoRedo::add_do_property(Object *p_object, const StringName &p_property, const Variant &p_value) {
 
@@ -291,9 +290,10 @@ void UndoRedo::_process_operation_list(List<Operation>::Element *E) {
 				argptrs.resize(argc);
 
 				Callable::CallError ce;
-				obj->call(op.name, (const Variant **)argptrs.ptr(), argc, ce);
+				Variant ret;
+				op.callable.call((const Variant **)argptrs.ptr(), argc, ret, ce);
 				if (ce.error != Callable::CallError::CALL_OK) {
-					ERR_PRINT("Error calling method from signal '" + String(op.name) + "': " + Variant::get_call_error_text(obj, op.name, (const Variant **)argptrs.ptr(), argc, ce));
+					ERR_PRINT("Error calling method: " + Variant::get_callable_error_text(op.callable, (const Variant **)argptrs.ptr(), argc, ce) + ".");
 				}
 #ifdef TOOLS_ENABLED
 				Resource *res = Object::cast_to<Resource>(obj);
@@ -465,7 +465,7 @@ Variant UndoRedo::_add_do_method(const Variant **p_args, int p_argcount, Callabl
 		v[i] = *p_args[i + 2];
 	}
 
-	add_do_method(object, method, v[0], v[1], v[2], v[3], v[4]);
+	add_do_method_compat(object, method, v[0], v[1], v[2], v[3], v[4]);
 	return Variant();
 }
 
@@ -503,7 +503,7 @@ Variant UndoRedo::_add_undo_method(const Variant **p_args, int p_argcount, Calla
 		v[i] = *p_args[i + 2];
 	}
 
-	add_undo_method(object, method, v[0], v[1], v[2], v[3], v[4]);
+	add_undo_method_compat(object, method, v[0], v[1], v[2], v[3], v[4]);
 	return Variant();
 }
 

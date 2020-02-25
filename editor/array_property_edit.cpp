@@ -95,11 +95,11 @@ bool ArrayPropertyEdit::_set(const StringName &p_name, const Variant &p_value) {
 
 			UndoRedo *ur = EditorNode::get_undo_redo();
 			ur->create_action(TTR("Resize Array"));
-			ur->add_do_method(this, "_set_size", newsize);
-			ur->add_undo_method(this, "_set_size", size);
+			ur->add_do_method_compat(this, "_set_size", newsize);
+			ur->add_undo_method_compat(this, "_set_size", size);
 			if (newsize < size) {
 				for (int i = newsize; i < size; i++) {
-					ur->add_undo_method(this, "_set_value", i, arr.get(i));
+					ur->add_undo_method_compat(this, "_set_value", i, arr.get(i));
 				}
 			} else if (newsize > size) {
 
@@ -112,12 +112,12 @@ bool ArrayPropertyEdit::_set(const StringName &p_name, const Variant &p_value) {
 				if (new_type != Variant::NIL) {
 					init = Variant::construct(new_type, NULL, 0, ce);
 					for (int i = size; i < newsize; i++) {
-						ur->add_do_method(this, "_set_value", i, init);
+						ur->add_do_method_compat(this, "_set_value", i, init);
 					}
 				}
 			}
-			ur->add_do_method(this, "_notif_change");
-			ur->add_undo_method(this, "_notif_change");
+			ur->add_do_method_compat(this, "_notif_change");
+			ur->add_undo_method_compat(this, "_notif_change");
 			ur->commit_action();
 			return true;
 		}
@@ -144,10 +144,10 @@ bool ArrayPropertyEdit::_set(const StringName &p_name, const Variant &p_value) {
 				UndoRedo *ur = EditorNode::get_undo_redo();
 
 				ur->create_action(TTR("Change Array Value Type"));
-				ur->add_do_method(this, "_set_value", idx, new_value);
-				ur->add_undo_method(this, "_set_value", idx, value);
-				ur->add_do_method(this, "_notif_change");
-				ur->add_undo_method(this, "_notif_change");
+				ur->add_do_method_compat(this, "_set_value", idx, new_value);
+				ur->add_undo_method_compat(this, "_set_value", idx, value);
+				ur->add_do_method_compat(this, "_notif_change");
+				ur->add_undo_method_compat(this, "_notif_change");
 				ur->commit_action();
 			}
 			return true;
@@ -160,10 +160,10 @@ bool ArrayPropertyEdit::_set(const StringName &p_name, const Variant &p_value) {
 			UndoRedo *ur = EditorNode::get_undo_redo();
 
 			ur->create_action(TTR("Change Array Value"));
-			ur->add_do_method(this, "_set_value", idx, p_value);
-			ur->add_undo_method(this, "_set_value", idx, value);
-			ur->add_do_method(this, "_notif_changev", p_name);
-			ur->add_undo_method(this, "_notif_changev", p_name);
+			ur->add_do_method_compat(this, "_set_value", idx, p_value);
+			ur->add_undo_method_compat(this, "_set_value", idx, value);
+			ur->add_do_method_compat(this, "_notif_changev", p_name);
+			ur->add_undo_method_compat(this, "_notif_changev", p_name);
 			ur->commit_action();
 			return true;
 		}

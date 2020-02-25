@@ -930,15 +930,15 @@ void LightSpatialGizmoPlugin::commit_handle(EditorSpatialGizmo *p_gizmo, int p_i
 
 		UndoRedo *ur = SpatialEditor::get_singleton()->get_undo_redo();
 		ur->create_action(TTR("Change Light Radius"));
-		ur->add_do_method(light, "set_param", Light::PARAM_RANGE, light->get_param(Light::PARAM_RANGE));
-		ur->add_undo_method(light, "set_param", Light::PARAM_RANGE, p_restore);
+		ur->add_do_method_compat(light, "set_param", Light::PARAM_RANGE, light->get_param(Light::PARAM_RANGE));
+		ur->add_undo_method_compat(light, "set_param", Light::PARAM_RANGE, p_restore);
 		ur->commit_action();
 	} else if (p_idx == 1) {
 
 		UndoRedo *ur = SpatialEditor::get_singleton()->get_undo_redo();
 		ur->create_action(TTR("Change Light Radius"));
-		ur->add_do_method(light, "set_param", Light::PARAM_SPOT_ANGLE, light->get_param(Light::PARAM_SPOT_ANGLE));
-		ur->add_undo_method(light, "set_param", Light::PARAM_SPOT_ANGLE, p_restore);
+		ur->add_do_method_compat(light, "set_param", Light::PARAM_SPOT_ANGLE, light->get_param(Light::PARAM_SPOT_ANGLE));
+		ur->add_undo_method_compat(light, "set_param", Light::PARAM_SPOT_ANGLE, p_restore);
 		ur->commit_action();
 	}
 }
@@ -1169,8 +1169,8 @@ void AudioStreamPlayer3DSpatialGizmoPlugin::commit_handle(EditorSpatialGizmo *p_
 
 		UndoRedo *ur = SpatialEditor::get_singleton()->get_undo_redo();
 		ur->create_action(TTR("Change AudioStreamPlayer3D Emission Angle"));
-		ur->add_do_method(player, "set_emission_angle", player->get_emission_angle());
-		ur->add_undo_method(player, "set_emission_angle", p_restore);
+		ur->add_do_method_compat(player, "set_emission_angle", player->get_emission_angle());
+		ur->add_undo_method_compat(player, "set_emission_angle", p_restore);
 		ur->commit_action();
 	}
 }
@@ -2285,8 +2285,8 @@ void VisibilityNotifierGizmoPlugin::commit_handle(EditorSpatialGizmo *p_gizmo, i
 
 	UndoRedo *ur = SpatialEditor::get_singleton()->get_undo_redo();
 	ur->create_action(TTR("Change Notifier AABB"));
-	ur->add_do_method(notifier, "set_aabb", notifier->get_aabb());
-	ur->add_undo_method(notifier, "set_aabb", p_restore);
+	ur->add_do_method_compat(notifier, "set_aabb", notifier->get_aabb());
+	ur->add_undo_method_compat(notifier, "set_aabb", p_restore);
 	ur->commit_action();
 }
 
@@ -2475,8 +2475,8 @@ void ParticlesGizmoPlugin::commit_handle(EditorSpatialGizmo *p_gizmo, int p_idx,
 
 	UndoRedo *ur = SpatialEditor::get_singleton()->get_undo_redo();
 	ur->create_action(TTR("Change Particles AABB"));
-	ur->add_do_method(particles, "set_visibility_aabb", particles->get_visibility_aabb());
-	ur->add_undo_method(particles, "set_visibility_aabb", p_restore);
+	ur->add_do_method_compat(particles, "set_visibility_aabb", particles->get_visibility_aabb());
+	ur->add_undo_method_compat(particles, "set_visibility_aabb", p_restore);
 	ur->commit_action();
 }
 
@@ -2649,10 +2649,10 @@ void ReflectionProbeGizmoPlugin::commit_handle(EditorSpatialGizmo *p_gizmo, int 
 
 	UndoRedo *ur = SpatialEditor::get_singleton()->get_undo_redo();
 	ur->create_action(TTR("Change Probe Extents"));
-	ur->add_do_method(probe, "set_extents", probe->get_extents());
-	ur->add_do_method(probe, "set_origin_offset", probe->get_origin_offset());
-	ur->add_undo_method(probe, "set_extents", restore.position);
-	ur->add_undo_method(probe, "set_origin_offset", restore.size);
+	ur->add_do_method_compat(probe, "set_extents", probe->get_extents());
+	ur->add_do_method_compat(probe, "set_origin_offset", probe->get_origin_offset());
+	ur->add_undo_method_compat(probe, "set_extents", restore.position);
+	ur->add_undo_method_compat(probe, "set_origin_offset", restore.size);
 	ur->commit_action();
 }
 
@@ -2805,8 +2805,8 @@ void GIProbeGizmoPlugin::commit_handle(EditorSpatialGizmo *p_gizmo, int p_idx, c
 
 	UndoRedo *ur = SpatialEditor::get_singleton()->get_undo_redo();
 	ur->create_action(TTR("Change Probe Extents"));
-	ur->add_do_method(probe, "set_extents", probe->get_extents());
-	ur->add_undo_method(probe, "set_extents", restore);
+	ur->add_do_method_compat(probe, "set_extents", probe->get_extents());
+	ur->add_undo_method_compat(probe, "set_extents", restore);
 	ur->commit_action();
 }
 
@@ -2973,8 +2973,8 @@ void BakedIndirectLightGizmoPlugin::commit_handle(EditorSpatialGizmo *p_gizmo, i
 
 	UndoRedo *ur = SpatialEditor::get_singleton()->get_undo_redo();
 	ur->create_action(TTR("Change Probe Extents"));
-	ur->add_do_method(baker, "set_extents", baker->get_extents());
-	ur->add_undo_method(baker, "set_extents", restore);
+	ur->add_do_method_compat(baker, "set_extents", baker->get_extents());
+	ur->add_undo_method_compat(baker, "set_extents", restore);
 	ur->commit_action();
 }
 
@@ -3261,8 +3261,8 @@ void CollisionShapeSpatialGizmoPlugin::commit_handle(EditorSpatialGizmo *p_gizmo
 
 		UndoRedo *ur = SpatialEditor::get_singleton()->get_undo_redo();
 		ur->create_action(TTR("Change Sphere Shape Radius"));
-		ur->add_do_method(ss.ptr(), "set_radius", ss->get_radius());
-		ur->add_undo_method(ss.ptr(), "set_radius", p_restore);
+		ur->add_do_method_compat(ss.ptr(), "set_radius", ss->get_radius());
+		ur->add_undo_method_compat(ss.ptr(), "set_radius", p_restore);
 		ur->commit_action();
 	}
 
@@ -3276,8 +3276,8 @@ void CollisionShapeSpatialGizmoPlugin::commit_handle(EditorSpatialGizmo *p_gizmo
 
 		UndoRedo *ur = SpatialEditor::get_singleton()->get_undo_redo();
 		ur->create_action(TTR("Change Box Shape Extents"));
-		ur->add_do_method(ss.ptr(), "set_extents", ss->get_extents());
-		ur->add_undo_method(ss.ptr(), "set_extents", p_restore);
+		ur->add_do_method_compat(ss.ptr(), "set_extents", ss->get_extents());
+		ur->add_undo_method_compat(ss.ptr(), "set_extents", p_restore);
 		ur->commit_action();
 	}
 
@@ -3295,12 +3295,12 @@ void CollisionShapeSpatialGizmoPlugin::commit_handle(EditorSpatialGizmo *p_gizmo
 		UndoRedo *ur = SpatialEditor::get_singleton()->get_undo_redo();
 		if (p_idx == 0) {
 			ur->create_action(TTR("Change Capsule Shape Radius"));
-			ur->add_do_method(ss.ptr(), "set_radius", ss->get_radius());
-			ur->add_undo_method(ss.ptr(), "set_radius", p_restore);
+			ur->add_do_method_compat(ss.ptr(), "set_radius", ss->get_radius());
+			ur->add_undo_method_compat(ss.ptr(), "set_radius", p_restore);
 		} else {
 			ur->create_action(TTR("Change Capsule Shape Height"));
-			ur->add_do_method(ss.ptr(), "set_height", ss->get_height());
-			ur->add_undo_method(ss.ptr(), "set_height", p_restore);
+			ur->add_do_method_compat(ss.ptr(), "set_height", ss->get_height());
+			ur->add_undo_method_compat(ss.ptr(), "set_height", p_restore);
 		}
 
 		ur->commit_action();
@@ -3320,16 +3320,16 @@ void CollisionShapeSpatialGizmoPlugin::commit_handle(EditorSpatialGizmo *p_gizmo
 		UndoRedo *ur = SpatialEditor::get_singleton()->get_undo_redo();
 		if (p_idx == 0) {
 			ur->create_action(TTR("Change Cylinder Shape Radius"));
-			ur->add_do_method(ss.ptr(), "set_radius", ss->get_radius());
-			ur->add_undo_method(ss.ptr(), "set_radius", p_restore);
+			ur->add_do_method_compat(ss.ptr(), "set_radius", ss->get_radius());
+			ur->add_undo_method_compat(ss.ptr(), "set_radius", p_restore);
 		} else {
 			ur->create_action(
 					///
 
 					////////
 					TTR("Change Cylinder Shape Height"));
-			ur->add_do_method(ss.ptr(), "set_height", ss->get_height());
-			ur->add_undo_method(ss.ptr(), "set_height", p_restore);
+			ur->add_do_method_compat(ss.ptr(), "set_height", ss->get_height());
+			ur->add_undo_method_compat(ss.ptr(), "set_height", p_restore);
 		}
 
 		ur->commit_action();
@@ -3345,8 +3345,8 @@ void CollisionShapeSpatialGizmoPlugin::commit_handle(EditorSpatialGizmo *p_gizmo
 
 		UndoRedo *ur = SpatialEditor::get_singleton()->get_undo_redo();
 		ur->create_action(TTR("Change Ray Shape Length"));
-		ur->add_do_method(ss.ptr(), "set_length", ss->get_length());
-		ur->add_undo_method(ss.ptr(), "set_length", p_restore);
+		ur->add_do_method_compat(ss.ptr(), "set_length", ss->get_length());
+		ur->add_undo_method_compat(ss.ptr(), "set_length", p_restore);
 		ur->commit_action();
 	}
 }

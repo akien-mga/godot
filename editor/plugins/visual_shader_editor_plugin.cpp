@@ -859,12 +859,12 @@ void VisualShaderEditor::_add_input_port(int p_node, int p_port, int p_port_type
 	}
 
 	undo_redo->create_action(TTR("Add input port"));
-	undo_redo->add_do_method(node.ptr(), "add_input_port", p_port, p_port_type, p_name);
-	undo_redo->add_undo_method(node.ptr(), "remove_input_port", p_port);
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
-	undo_redo->add_do_method(this, "_rebuild");
-	undo_redo->add_undo_method(this, "_rebuild");
+	undo_redo->add_do_method_compat(node.ptr(), "add_input_port", p_port, p_port_type, p_name);
+	undo_redo->add_undo_method_compat(node.ptr(), "remove_input_port", p_port);
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
+	undo_redo->add_do_method_compat(this, "_rebuild");
+	undo_redo->add_undo_method_compat(this, "_rebuild");
 	undo_redo->commit_action();
 }
 
@@ -877,12 +877,12 @@ void VisualShaderEditor::_add_output_port(int p_node, int p_port, int p_port_typ
 	}
 
 	undo_redo->create_action(TTR("Add output port"));
-	undo_redo->add_do_method(node.ptr(), "add_output_port", p_port, p_port_type, p_name);
-	undo_redo->add_undo_method(node.ptr(), "remove_output_port", p_port);
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
-	undo_redo->add_do_method(this, "_rebuild");
-	undo_redo->add_undo_method(this, "_rebuild");
+	undo_redo->add_do_method_compat(node.ptr(), "add_output_port", p_port, p_port_type, p_name);
+	undo_redo->add_undo_method_compat(node.ptr(), "remove_output_port", p_port);
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
+	undo_redo->add_do_method_compat(this, "_rebuild");
+	undo_redo->add_undo_method_compat(this, "_rebuild");
 	undo_redo->commit_action();
 }
 
@@ -895,12 +895,12 @@ void VisualShaderEditor::_change_input_port_type(int p_type, int p_node, int p_p
 	}
 
 	undo_redo->create_action(TTR("Change input port type"));
-	undo_redo->add_do_method(node.ptr(), "set_input_port_type", p_port, p_type);
-	undo_redo->add_undo_method(node.ptr(), "set_input_port_type", p_port, node->get_input_port_type(p_port));
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
-	undo_redo->add_do_method(this, "_rebuild");
-	undo_redo->add_undo_method(this, "_rebuild");
+	undo_redo->add_do_method_compat(node.ptr(), "set_input_port_type", p_port, p_type);
+	undo_redo->add_undo_method_compat(node.ptr(), "set_input_port_type", p_port, node->get_input_port_type(p_port));
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
+	undo_redo->add_do_method_compat(this, "_rebuild");
+	undo_redo->add_undo_method_compat(this, "_rebuild");
 	undo_redo->commit_action();
 }
 
@@ -913,12 +913,12 @@ void VisualShaderEditor::_change_output_port_type(int p_type, int p_node, int p_
 	}
 
 	undo_redo->create_action(TTR("Change output port type"));
-	undo_redo->add_do_method(node.ptr(), "set_output_port_type", p_port, p_type);
-	undo_redo->add_undo_method(node.ptr(), "set_output_port_type", p_port, node->get_output_port_type(p_port));
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
-	undo_redo->add_do_method(this, "_rebuild");
-	undo_redo->add_undo_method(this, "_rebuild");
+	undo_redo->add_do_method_compat(node.ptr(), "set_output_port_type", p_port, p_type);
+	undo_redo->add_undo_method_compat(node.ptr(), "set_output_port_type", p_port, node->get_output_port_type(p_port));
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
+	undo_redo->add_do_method_compat(this, "_rebuild");
+	undo_redo->add_undo_method_compat(this, "_rebuild");
 	undo_redo->commit_action();
 }
 
@@ -930,10 +930,10 @@ void VisualShaderEditor::_change_input_port_name(const String &p_text, Object *l
 	ERR_FAIL_COND(!node.is_valid());
 
 	undo_redo->create_action(TTR("Change input port name"));
-	undo_redo->add_do_method(node.ptr(), "set_input_port_name", p_port_id, p_text);
-	undo_redo->add_undo_method(node.ptr(), "set_input_port_name", p_port_id, node->get_input_port_name(p_port_id));
-	undo_redo->add_do_method(this, "_rebuild");
-	undo_redo->add_undo_method(this, "_rebuild");
+	undo_redo->add_do_method_compat(node.ptr(), "set_input_port_name", p_port_id, p_text);
+	undo_redo->add_undo_method_compat(node.ptr(), "set_input_port_name", p_port_id, node->get_input_port_name(p_port_id));
+	undo_redo->add_do_method_compat(this, "_rebuild");
+	undo_redo->add_undo_method_compat(this, "_rebuild");
 	undo_redo->commit_action();
 }
 
@@ -945,10 +945,10 @@ void VisualShaderEditor::_change_output_port_name(const String &p_text, Object *
 	ERR_FAIL_COND(!node.is_valid());
 
 	undo_redo->create_action(TTR("Change output port name"));
-	undo_redo->add_do_method(node.ptr(), "set_output_port_name", p_port_id, p_text);
-	undo_redo->add_undo_method(node.ptr(), "set_output_port_name", p_port_id, node->get_output_port_name(p_port_id));
-	undo_redo->add_do_method(this, "_rebuild");
-	undo_redo->add_undo_method(this, "_rebuild");
+	undo_redo->add_do_method_compat(node.ptr(), "set_output_port_name", p_port_id, p_text);
+	undo_redo->add_undo_method_compat(node.ptr(), "set_output_port_name", p_port_id, node->get_output_port_name(p_port_id));
+	undo_redo->add_do_method_compat(this, "_rebuild");
+	undo_redo->add_undo_method_compat(this, "_rebuild");
 	undo_redo->commit_action();
 }
 
@@ -973,26 +973,26 @@ void VisualShaderEditor::_remove_input_port(int p_node, int p_port) {
 
 		if (to_node == p_node) {
 			if (to_port == p_port) {
-				undo_redo->add_do_method(visual_shader.ptr(), "disconnect_nodes", type, from_node, from_port, to_node, to_port);
-				undo_redo->add_undo_method(visual_shader.ptr(), "connect_nodes_forced", type, from_node, from_port, to_node, to_port);
+				undo_redo->add_do_method_compat(visual_shader.ptr(), "disconnect_nodes", type, from_node, from_port, to_node, to_port);
+				undo_redo->add_undo_method_compat(visual_shader.ptr(), "connect_nodes_forced", type, from_node, from_port, to_node, to_port);
 			} else if (to_port > p_port) {
-				undo_redo->add_do_method(visual_shader.ptr(), "disconnect_nodes", type, from_node, from_port, to_node, to_port);
-				undo_redo->add_undo_method(visual_shader.ptr(), "connect_nodes_forced", type, from_node, from_port, to_node, to_port);
+				undo_redo->add_do_method_compat(visual_shader.ptr(), "disconnect_nodes", type, from_node, from_port, to_node, to_port);
+				undo_redo->add_undo_method_compat(visual_shader.ptr(), "connect_nodes_forced", type, from_node, from_port, to_node, to_port);
 
-				undo_redo->add_do_method(visual_shader.ptr(), "connect_nodes_forced", type, from_node, from_port, to_node, to_port - 1);
-				undo_redo->add_undo_method(visual_shader.ptr(), "disconnect_nodes", type, from_node, from_port, to_node, to_port - 1);
+				undo_redo->add_do_method_compat(visual_shader.ptr(), "connect_nodes_forced", type, from_node, from_port, to_node, to_port - 1);
+				undo_redo->add_undo_method_compat(visual_shader.ptr(), "disconnect_nodes", type, from_node, from_port, to_node, to_port - 1);
 			}
 		}
 	}
 
-	undo_redo->add_do_method(node.ptr(), "remove_input_port", p_port);
-	undo_redo->add_undo_method(node.ptr(), "add_input_port", p_port, (int)node->get_input_port_type(p_port), node->get_input_port_name(p_port));
+	undo_redo->add_do_method_compat(node.ptr(), "remove_input_port", p_port);
+	undo_redo->add_undo_method_compat(node.ptr(), "add_input_port", p_port, (int)node->get_input_port_type(p_port), node->get_input_port_name(p_port));
 
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 
-	undo_redo->add_do_method(this, "_rebuild");
-	undo_redo->add_undo_method(this, "_rebuild");
+	undo_redo->add_do_method_compat(this, "_rebuild");
+	undo_redo->add_undo_method_compat(this, "_rebuild");
 
 	undo_redo->commit_action();
 }
@@ -1018,26 +1018,26 @@ void VisualShaderEditor::_remove_output_port(int p_node, int p_port) {
 
 		if (from_node == p_node) {
 			if (from_port == p_port) {
-				undo_redo->add_do_method(visual_shader.ptr(), "disconnect_nodes", type, from_node, from_port, to_node, to_port);
-				undo_redo->add_undo_method(visual_shader.ptr(), "connect_nodes_forced", type, from_node, from_port, to_node, to_port);
+				undo_redo->add_do_method_compat(visual_shader.ptr(), "disconnect_nodes", type, from_node, from_port, to_node, to_port);
+				undo_redo->add_undo_method_compat(visual_shader.ptr(), "connect_nodes_forced", type, from_node, from_port, to_node, to_port);
 			} else if (from_port > p_port) {
-				undo_redo->add_do_method(visual_shader.ptr(), "disconnect_nodes", type, from_node, from_port, to_node, to_port);
-				undo_redo->add_undo_method(visual_shader.ptr(), "connect_nodes_forced", type, from_node, from_port, to_node, to_port);
+				undo_redo->add_do_method_compat(visual_shader.ptr(), "disconnect_nodes", type, from_node, from_port, to_node, to_port);
+				undo_redo->add_undo_method_compat(visual_shader.ptr(), "connect_nodes_forced", type, from_node, from_port, to_node, to_port);
 
-				undo_redo->add_do_method(visual_shader.ptr(), "connect_nodes_forced", type, from_node, from_port - 1, to_node, to_port);
-				undo_redo->add_undo_method(visual_shader.ptr(), "disconnect_nodes", type, from_node, from_port - 1, to_node, to_port);
+				undo_redo->add_do_method_compat(visual_shader.ptr(), "connect_nodes_forced", type, from_node, from_port - 1, to_node, to_port);
+				undo_redo->add_undo_method_compat(visual_shader.ptr(), "disconnect_nodes", type, from_node, from_port - 1, to_node, to_port);
 			}
 		}
 	}
 
-	undo_redo->add_do_method(node.ptr(), "remove_output_port", p_port);
-	undo_redo->add_undo_method(node.ptr(), "add_output_port", p_port, (int)node->get_output_port_type(p_port), node->get_output_port_name(p_port));
+	undo_redo->add_do_method_compat(node.ptr(), "remove_output_port", p_port);
+	undo_redo->add_undo_method_compat(node.ptr(), "add_output_port", p_port, (int)node->get_output_port_type(p_port), node->get_output_port_name(p_port));
 
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 
-	undo_redo->add_do_method(this, "_rebuild");
-	undo_redo->add_undo_method(this, "_rebuild");
+	undo_redo->add_do_method_compat(this, "_rebuild");
+	undo_redo->add_undo_method_compat(this, "_rebuild");
 
 	undo_redo->commit_action();
 }
@@ -1056,10 +1056,10 @@ void VisualShaderEditor::_expression_focus_out(Object *text_edit, int p_node) {
 		return;
 
 	undo_redo->create_action(TTR("Set expression"));
-	undo_redo->add_do_method(node.ptr(), "set_expression", expression_box->get_text());
-	undo_redo->add_undo_method(node.ptr(), "set_expression", node->get_expression());
-	undo_redo->add_do_method(this, "_rebuild");
-	undo_redo->add_undo_method(this, "_rebuild");
+	undo_redo->add_do_method_compat(node.ptr(), "set_expression", expression_box->get_text());
+	undo_redo->add_undo_method_compat(node.ptr(), "set_expression", node->get_expression());
+	undo_redo->add_do_method_compat(this, "_rebuild");
+	undo_redo->add_undo_method_compat(this, "_rebuild");
 	undo_redo->commit_action();
 }
 
@@ -1126,8 +1126,8 @@ void VisualShaderEditor::_node_resized(const Vector2 &p_new_size, int p_type, in
 	}
 
 	undo_redo->create_action(TTR("Resize VisualShader node"), UndoRedo::MERGE_ENDS);
-	undo_redo->add_do_method(this, "_set_node_size", p_type, p_node, p_new_size);
-	undo_redo->add_undo_method(this, "_set_node_size", p_type, p_node, node->get_size());
+	undo_redo->add_do_method_compat(this, "_set_node_size", p_type, p_node, p_new_size);
+	undo_redo->add_undo_method_compat(this, "_set_node_size", p_type, p_node, node->get_size());
 	undo_redo->commit_action();
 }
 
@@ -1143,10 +1143,10 @@ void VisualShaderEditor::_preview_select_port(int p_node, int p_port) {
 		p_port = -1; //toggle it
 	}
 	undo_redo->create_action(TTR("Set Uniform Name"));
-	undo_redo->add_do_method(node.ptr(), "set_output_port_for_preview", p_port);
-	undo_redo->add_undo_method(node.ptr(), "set_output_port_for_preview", node->get_output_port_for_preview());
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method_compat(node.ptr(), "set_output_port_for_preview", p_port);
+	undo_redo->add_undo_method_compat(node.ptr(), "set_output_port_for_preview", node->get_output_port_for_preview());
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 	undo_redo->commit_action();
 }
 
@@ -1161,10 +1161,10 @@ void VisualShaderEditor::_line_edit_changed(const String &p_text, Object *line_e
 
 	updating = true;
 	undo_redo->create_action(TTR("Set Uniform Name"));
-	undo_redo->add_do_method(node.ptr(), "set_uniform_name", validated_name);
-	undo_redo->add_undo_method(node.ptr(), "set_uniform_name", node->get_uniform_name());
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method_compat(node.ptr(), "set_uniform_name", validated_name);
+	undo_redo->add_undo_method_compat(node.ptr(), "set_uniform_name", node->get_uniform_name());
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 	undo_redo->commit_action();
 	updating = false;
 
@@ -1232,10 +1232,10 @@ void VisualShaderEditor::_port_edited() {
 	ERR_FAIL_COND(!vsn.is_valid());
 
 	undo_redo->create_action(TTR("Set Input Default Port"));
-	undo_redo->add_do_method(vsn.ptr(), "set_input_port_default_value", editing_port, value);
-	undo_redo->add_undo_method(vsn.ptr(), "set_input_port_default_value", editing_port, vsn->get_input_port_default_value(editing_port));
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method_compat(vsn.ptr(), "set_input_port_default_value", editing_port, value);
+	undo_redo->add_undo_method_compat(vsn.ptr(), "set_input_port_default_value", editing_port, vsn->get_input_port_default_value(editing_port));
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 	undo_redo->commit_action();
 
 	property_editor->hide();
@@ -1398,12 +1398,12 @@ VisualShaderNode *VisualShaderEditor::_add_node(int p_idx, int p_op_idx) {
 	int id_to_use = visual_shader->get_valid_node_id(type);
 
 	undo_redo->create_action(TTR("Add Node to Visual Shader"));
-	undo_redo->add_do_method(visual_shader.ptr(), "add_node", type, vsnode, position, id_to_use);
-	undo_redo->add_undo_method(visual_shader.ptr(), "remove_node", type, id_to_use);
+	undo_redo->add_do_method_compat(visual_shader.ptr(), "add_node", type, vsnode, position, id_to_use);
+	undo_redo->add_undo_method_compat(visual_shader.ptr(), "remove_node", type, id_to_use);
 
 	VisualShaderNodeExpression *expr = Object::cast_to<VisualShaderNodeExpression>(vsnode.ptr());
 	if (expr) {
-		undo_redo->add_do_method(expr, "set_size", Size2(250 * EDSCALE, 150 * EDSCALE));
+		undo_redo->add_do_method_compat(expr, "set_size", Size2(250 * EDSCALE, 150 * EDSCALE));
 	}
 
 	if (to_node != -1 && to_slot != -1) {
@@ -1413,8 +1413,8 @@ VisualShaderNode *VisualShaderEditor::_add_node(int p_idx, int p_op_idx) {
 			int _from_slot = 0;
 
 			if (visual_shader->is_port_types_compatible(vsnode->get_output_port_type(_from_slot), visual_shader->get_node(type, to_node)->get_input_port_type(to_slot))) {
-				undo_redo->add_do_method(visual_shader.ptr(), "connect_nodes", type, _from_node, _from_slot, to_node, to_slot);
-				undo_redo->add_undo_method(visual_shader.ptr(), "disconnect_nodes", type, _from_node, _from_slot, to_node, to_slot);
+				undo_redo->add_do_method_compat(visual_shader.ptr(), "connect_nodes", type, _from_node, _from_slot, to_node, to_slot);
+				undo_redo->add_undo_method_compat(visual_shader.ptr(), "disconnect_nodes", type, _from_node, _from_slot, to_node, to_slot);
 			}
 		}
 	} else if (from_node != -1 && from_slot != -1) {
@@ -1424,14 +1424,14 @@ VisualShaderNode *VisualShaderEditor::_add_node(int p_idx, int p_op_idx) {
 			int _to_slot = 0;
 
 			if (visual_shader->is_port_types_compatible(visual_shader->get_node(type, from_node)->get_output_port_type(from_slot), vsnode->get_input_port_type(_to_slot))) {
-				undo_redo->add_do_method(visual_shader.ptr(), "connect_nodes", type, from_node, from_slot, _to_node, _to_slot);
-				undo_redo->add_undo_method(visual_shader.ptr(), "disconnect_nodes", type, from_node, from_slot, _to_node, _to_slot);
+				undo_redo->add_do_method_compat(visual_shader.ptr(), "connect_nodes", type, from_node, from_slot, _to_node, _to_slot);
+				undo_redo->add_undo_method_compat(visual_shader.ptr(), "disconnect_nodes", type, from_node, from_slot, _to_node, _to_slot);
 			}
 		}
 	}
 
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 	undo_redo->commit_action();
 	return vsnode.ptr();
 }
@@ -1442,10 +1442,10 @@ void VisualShaderEditor::_node_dragged(const Vector2 &p_from, const Vector2 &p_t
 
 	updating = true;
 	undo_redo->create_action(TTR("Node Moved"));
-	undo_redo->add_do_method(visual_shader.ptr(), "set_node_position", type, p_node, p_to);
-	undo_redo->add_undo_method(visual_shader.ptr(), "set_node_position", type, p_node, p_from);
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method_compat(visual_shader.ptr(), "set_node_position", type, p_node, p_to);
+	undo_redo->add_undo_method_compat(visual_shader.ptr(), "set_node_position", type, p_node, p_from);
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 	undo_redo->commit_action();
 	updating = false;
 }
@@ -1468,15 +1468,15 @@ void VisualShaderEditor::_connection_request(const String &p_from, int p_from_in
 
 	for (List<VisualShader::Connection>::Element *E = conns.front(); E; E = E->next()) {
 		if (E->get().to_node == to && E->get().to_port == p_to_index) {
-			undo_redo->add_do_method(visual_shader.ptr(), "disconnect_nodes", type, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
-			undo_redo->add_undo_method(visual_shader.ptr(), "connect_nodes", type, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+			undo_redo->add_do_method_compat(visual_shader.ptr(), "disconnect_nodes", type, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+			undo_redo->add_undo_method_compat(visual_shader.ptr(), "connect_nodes", type, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
 		}
 	}
 
-	undo_redo->add_do_method(visual_shader.ptr(), "connect_nodes", type, from, p_from_index, to, p_to_index);
-	undo_redo->add_undo_method(visual_shader.ptr(), "disconnect_nodes", type, from, p_from_index, to, p_to_index);
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method_compat(visual_shader.ptr(), "connect_nodes", type, from, p_from_index, to, p_to_index);
+	undo_redo->add_undo_method_compat(visual_shader.ptr(), "disconnect_nodes", type, from, p_from_index, to, p_to_index);
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 	undo_redo->commit_action();
 }
 
@@ -1491,10 +1491,10 @@ void VisualShaderEditor::_disconnection_request(const String &p_from, int p_from
 
 	//updating = true; seems graph edit can handle this, no need to protect
 	undo_redo->create_action(TTR("Nodes Disconnected"));
-	undo_redo->add_do_method(visual_shader.ptr(), "disconnect_nodes", type, from, p_from_index, to, p_to_index);
-	undo_redo->add_undo_method(visual_shader.ptr(), "connect_nodes", type, from, p_from_index, to, p_to_index);
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method_compat(visual_shader.ptr(), "disconnect_nodes", type, from, p_from_index, to, p_to_index);
+	undo_redo->add_undo_method_compat(visual_shader.ptr(), "connect_nodes", type, from, p_from_index, to, p_to_index);
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 	undo_redo->commit_action();
 	//updating = false;
 }
@@ -1517,24 +1517,24 @@ void VisualShaderEditor::_delete_request(int which) {
 	Ref<VisualShaderNode> node = Ref<VisualShaderNode>(visual_shader->get_node(type, which));
 
 	undo_redo->create_action(TTR("Delete Node"));
-	undo_redo->add_do_method(visual_shader.ptr(), "remove_node", type, which);
-	undo_redo->add_undo_method(visual_shader.ptr(), "add_node", type, node, visual_shader->get_node_position(type, which), which);
+	undo_redo->add_do_method_compat(visual_shader.ptr(), "remove_node", type, which);
+	undo_redo->add_undo_method_compat(visual_shader.ptr(), "add_node", type, node, visual_shader->get_node_position(type, which), which);
 
-	undo_redo->add_do_method(this, "_clear_buffer");
-	undo_redo->add_undo_method(this, "_clear_buffer");
+	undo_redo->add_do_method_compat(this, "_clear_buffer");
+	undo_redo->add_undo_method_compat(this, "_clear_buffer");
 
 	// restore size, inputs and outputs if node is group
 	VisualShaderNodeGroupBase *group = Object::cast_to<VisualShaderNodeGroupBase>(node.ptr());
 	if (group) {
-		undo_redo->add_undo_method(group, "set_size", group->get_size());
-		undo_redo->add_undo_method(group, "set_inputs", group->get_inputs());
-		undo_redo->add_undo_method(group, "set_outputs", group->get_outputs());
+		undo_redo->add_undo_method_compat(group, "set_size", group->get_size());
+		undo_redo->add_undo_method_compat(group, "set_inputs", group->get_inputs());
+		undo_redo->add_undo_method_compat(group, "set_outputs", group->get_outputs());
 	}
 
 	// restore expression text if node is expression
 	VisualShaderNodeExpression *expression = Object::cast_to<VisualShaderNodeExpression>(node.ptr());
 	if (expression) {
-		undo_redo->add_undo_method(expression, "set_expression", expression->get_expression());
+		undo_redo->add_undo_method_compat(expression, "set_expression", expression->get_expression());
 	}
 
 	List<VisualShader::Connection> conns;
@@ -1542,12 +1542,12 @@ void VisualShaderEditor::_delete_request(int which) {
 
 	for (List<VisualShader::Connection>::Element *E = conns.front(); E; E = E->next()) {
 		if (E->get().from_node == which || E->get().to_node == which) {
-			undo_redo->add_undo_method(visual_shader.ptr(), "connect_nodes", type, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+			undo_redo->add_undo_method_compat(visual_shader.ptr(), "connect_nodes", type, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
 		}
 	}
 
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 	undo_redo->commit_action();
 }
 
@@ -1786,20 +1786,20 @@ void VisualShaderEditor::_dup_paste_nodes(int p_type, int p_pasted_type, List<in
 
 		Ref<VisualShaderNode> dupli = node->duplicate();
 
-		undo_redo->add_do_method(visual_shader.ptr(), "add_node", type, dupli, visual_shader->get_node_position(pasted_type, E->get()) + p_offset, id_from);
-		undo_redo->add_undo_method(visual_shader.ptr(), "remove_node", type, id_from);
+		undo_redo->add_do_method_compat(visual_shader.ptr(), "add_node", type, dupli, visual_shader->get_node_position(pasted_type, E->get()) + p_offset, id_from);
+		undo_redo->add_undo_method_compat(visual_shader.ptr(), "remove_node", type, id_from);
 
 		// duplicate size, inputs and outputs if node is group
 		Ref<VisualShaderNodeGroupBase> group = Object::cast_to<VisualShaderNodeGroupBase>(node.ptr());
 		if (!group.is_null()) {
-			undo_redo->add_do_method(dupli.ptr(), "set_size", group->get_size());
-			undo_redo->add_do_method(dupli.ptr(), "set_inputs", group->get_inputs());
-			undo_redo->add_do_method(dupli.ptr(), "set_outputs", group->get_outputs());
+			undo_redo->add_do_method_compat(dupli.ptr(), "set_size", group->get_size());
+			undo_redo->add_do_method_compat(dupli.ptr(), "set_inputs", group->get_inputs());
+			undo_redo->add_do_method_compat(dupli.ptr(), "set_outputs", group->get_outputs());
 		}
 		// duplicate expression text if node is expression
 		Ref<VisualShaderNodeExpression> expression = Object::cast_to<VisualShaderNodeExpression>(node.ptr());
 		if (!expression.is_null()) {
-			undo_redo->add_do_method(dupli.ptr(), "set_expression", expression->get_expression());
+			undo_redo->add_do_method_compat(dupli.ptr(), "set_expression", expression->get_expression());
 		}
 
 		id_from++;
@@ -1813,12 +1813,12 @@ void VisualShaderEditor::_dup_paste_nodes(int p_type, int p_pasted_type, List<in
 			continue;
 		}
 		if (connection_remap.has(E->get().from_node) && connection_remap.has(E->get().to_node)) {
-			undo_redo->add_do_method(visual_shader.ptr(), "connect_nodes_forced", type, connection_remap[E->get().from_node], E->get().from_port, connection_remap[E->get().to_node], E->get().to_port);
+			undo_redo->add_do_method_compat(visual_shader.ptr(), "connect_nodes_forced", type, connection_remap[E->get().from_node], E->get().from_port, connection_remap[E->get().to_node], E->get().to_port);
 		}
 	}
 
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 	undo_redo->commit_action();
 
 	if (p_select) {
@@ -1909,24 +1909,24 @@ void VisualShaderEditor::_on_nodes_delete() {
 
 		Ref<VisualShaderNode> node = visual_shader->get_node(type, F->get());
 
-		undo_redo->add_do_method(visual_shader.ptr(), "remove_node", type, F->get());
-		undo_redo->add_undo_method(visual_shader.ptr(), "add_node", type, node, visual_shader->get_node_position(type, F->get()), F->get());
+		undo_redo->add_do_method_compat(visual_shader.ptr(), "remove_node", type, F->get());
+		undo_redo->add_undo_method_compat(visual_shader.ptr(), "add_node", type, node, visual_shader->get_node_position(type, F->get()), F->get());
 
-		undo_redo->add_do_method(this, "_clear_buffer");
-		undo_redo->add_undo_method(this, "_clear_buffer");
+		undo_redo->add_do_method_compat(this, "_clear_buffer");
+		undo_redo->add_undo_method_compat(this, "_clear_buffer");
 
 		// restore size, inputs and outputs if node is group
 		VisualShaderNodeGroupBase *group = Object::cast_to<VisualShaderNodeGroupBase>(node.ptr());
 		if (group) {
-			undo_redo->add_undo_method(group, "set_size", group->get_size());
-			undo_redo->add_undo_method(group, "set_inputs", group->get_inputs());
-			undo_redo->add_undo_method(group, "set_outputs", group->get_outputs());
+			undo_redo->add_undo_method_compat(group, "set_size", group->get_size());
+			undo_redo->add_undo_method_compat(group, "set_inputs", group->get_inputs());
+			undo_redo->add_undo_method_compat(group, "set_outputs", group->get_outputs());
 		}
 
 		// restore expression text if node is expression
 		VisualShaderNodeExpression *expression = Object::cast_to<VisualShaderNodeExpression>(node.ptr());
 		if (expression) {
-			undo_redo->add_undo_method(expression, "set_expression", expression->get_expression());
+			undo_redo->add_undo_method_compat(expression, "set_expression", expression->get_expression());
 		}
 	}
 
@@ -1946,15 +1946,15 @@ void VisualShaderEditor::_on_nodes_delete() {
 					}
 				}
 				if (!cancel) {
-					undo_redo->add_undo_method(visual_shader.ptr(), "connect_nodes", type, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+					undo_redo->add_undo_method_compat(visual_shader.ptr(), "connect_nodes", type, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
 					used_conns.push_back(E->get());
 				}
 			}
 		}
 	}
 
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 	undo_redo->commit_action();
 }
 
@@ -1976,8 +1976,8 @@ void VisualShaderEditor::_input_select_item(Ref<VisualShaderNodeInput> input, St
 	UndoRedo *undo_redo = EditorNode::get_singleton()->get_undo_redo();
 	undo_redo->create_action(TTR("Visual Shader Input Type Changed"));
 
-	undo_redo->add_do_method(input.ptr(), "set_input_name", name);
-	undo_redo->add_undo_method(input.ptr(), "set_input_name", prev_name);
+	undo_redo->add_do_method_compat(input.ptr(), "set_input_name", name);
+	undo_redo->add_undo_method_compat(input.ptr(), "set_input_name", prev_name);
 
 	if (type_changed) {
 		//restore connections if type changed
@@ -1987,13 +1987,13 @@ void VisualShaderEditor::_input_select_item(Ref<VisualShaderNodeInput> input, St
 		visual_shader->get_node_connections(type, &conns);
 		for (List<VisualShader::Connection>::Element *E = conns.front(); E; E = E->next()) {
 			if (E->get().from_node == id) {
-				undo_redo->add_undo_method(visual_shader.ptr(), "connect_nodes", type, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+				undo_redo->add_undo_method_compat(visual_shader.ptr(), "connect_nodes", type, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
 			}
 		}
 	}
 
-	undo_redo->add_do_method(VisualShaderEditor::get_singleton(), "_update_graph");
-	undo_redo->add_undo_method(VisualShaderEditor::get_singleton(), "_update_graph");
+	undo_redo->add_do_method_compat(VisualShaderEditor::get_singleton(), "_update_graph");
+	undo_redo->add_undo_method_compat(VisualShaderEditor::get_singleton(), "_update_graph");
 
 	undo_redo->commit_action();
 }
@@ -2878,17 +2878,17 @@ public:
 			RES curr_res = p_value;
 
 			if (curr_res.is_null()) {
-				undo_redo->add_do_method(this, "_open_inspector", (RES)parent_resource.ptr());
+				undo_redo->add_do_method_compat(this, "_open_inspector", (RES)parent_resource.ptr());
 			} else {
-				undo_redo->add_do_method(this, "_open_inspector", (RES)curr_res.ptr());
+				undo_redo->add_do_method_compat(this, "_open_inspector", (RES)curr_res.ptr());
 			}
 			if (!prev_res.is_null()) {
-				undo_redo->add_undo_method(this, "_open_inspector", (RES)prev_res.ptr());
+				undo_redo->add_undo_method_compat(this, "_open_inspector", (RES)prev_res.ptr());
 			} else {
-				undo_redo->add_undo_method(this, "_open_inspector", (RES)parent_resource.ptr());
+				undo_redo->add_undo_method_compat(this, "_open_inspector", (RES)parent_resource.ptr());
 			}
-			undo_redo->add_do_method(this, "_refresh_request");
-			undo_redo->add_undo_method(this, "_refresh_request");
+			undo_redo->add_do_method_compat(this, "_refresh_request");
+			undo_redo->add_undo_method_compat(this, "_refresh_request");
 		}
 		undo_redo->commit_action();
 
@@ -3045,8 +3045,8 @@ void EditorPropertyShaderMode::_option_selected(int p_which) {
 	UndoRedo *undo_redo = EditorNode::get_singleton()->get_undo_redo();
 	undo_redo->create_action(TTR("Visual Shader Mode Changed"));
 	//do is easy
-	undo_redo->add_do_method(visual_shader.ptr(), "set_mode", p_which);
-	undo_redo->add_undo_method(visual_shader.ptr(), "set_mode", visual_shader->get_mode());
+	undo_redo->add_do_method_compat(visual_shader.ptr(), "set_mode", p_which);
+	undo_redo->add_undo_method_compat(visual_shader.ptr(), "set_mode", visual_shader->get_mode());
 	//now undo is hell
 
 	//1. restore connections to output
@@ -3057,7 +3057,7 @@ void EditorPropertyShaderMode::_option_selected(int p_which) {
 		visual_shader->get_node_connections(type, &conns);
 		for (List<VisualShader::Connection>::Element *E = conns.front(); E; E = E->next()) {
 			if (E->get().to_node == VisualShader::NODE_ID_OUTPUT) {
-				undo_redo->add_undo_method(visual_shader.ptr(), "connect_nodes", type, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+				undo_redo->add_undo_method_compat(visual_shader.ptr(), "connect_nodes", type, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
 			}
 		}
 	}
@@ -3072,7 +3072,7 @@ void EditorPropertyShaderMode::_option_selected(int p_which) {
 				continue;
 			}
 
-			undo_redo->add_undo_method(input.ptr(), "set_input_name", input->get_input_name());
+			undo_redo->add_undo_method_compat(input.ptr(), "set_input_name", input->get_input_name());
 		}
 	}
 
@@ -3087,12 +3087,12 @@ void EditorPropertyShaderMode::_option_selected(int p_which) {
 		}
 	}
 
-	undo_redo->add_do_method(VisualShaderEditor::get_singleton(), "_update_options_menu");
-	undo_redo->add_undo_method(VisualShaderEditor::get_singleton(), "_update_options_menu");
+	undo_redo->add_do_method_compat(VisualShaderEditor::get_singleton(), "_update_options_menu");
+	undo_redo->add_undo_method_compat(VisualShaderEditor::get_singleton(), "_update_options_menu");
 
 	//update graph
-	undo_redo->add_do_method(VisualShaderEditor::get_singleton(), "_update_graph");
-	undo_redo->add_undo_method(VisualShaderEditor::get_singleton(), "_update_graph");
+	undo_redo->add_do_method_compat(VisualShaderEditor::get_singleton(), "_update_graph");
+	undo_redo->add_undo_method_compat(VisualShaderEditor::get_singleton(), "_update_graph");
 
 	undo_redo->commit_action();
 }

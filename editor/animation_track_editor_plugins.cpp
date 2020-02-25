@@ -1010,8 +1010,8 @@ void AnimationTrackEditTypeAudio::drop_data(const Point2 &p_point, const Variant
 			}
 
 			get_undo_redo()->create_action(TTR("Add Audio Track Clip"));
-			get_undo_redo()->add_do_method(get_animation().ptr(), "audio_track_insert_key", get_track(), ofs, stream);
-			get_undo_redo()->add_undo_method(get_animation().ptr(), "track_remove_key_at_position", get_track(), ofs);
+			get_undo_redo()->add_do_method(callable_mp(get_animation().ptr(), &Animation::audio_track_insert_key), get_track(), ofs, stream);
+			get_undo_redo()->add_undo_method(callable_mp(get_animation().ptr(), &Animation::track_remove_key_at_position), get_track(), ofs);
 			get_undo_redo()->commit_action();
 
 			update();
@@ -1102,15 +1102,15 @@ void AnimationTrackEditTypeAudio::_gui_input(const Ref<InputEvent> &p_event) {
 		if (len_resizing_start) {
 			float prev_ofs = get_animation()->audio_track_get_key_start_offset(get_track(), len_resizing_index);
 			get_undo_redo()->create_action(TTR("Change Audio Track Clip Start Offset"));
-			get_undo_redo()->add_do_method(get_animation().ptr(), "audio_track_set_key_start_offset", get_track(), len_resizing_index, prev_ofs + ofs_local);
-			get_undo_redo()->add_undo_method(get_animation().ptr(), "audio_track_set_key_start_offset", get_track(), len_resizing_index, prev_ofs);
+			get_undo_redo()->add_do_method(callable_mp(get_animation().ptr(), &Animation::audio_track_set_key_start_offset), get_track(), len_resizing_index, prev_ofs + ofs_local);
+			get_undo_redo()->add_undo_method(callable_mp(get_animation().ptr(), &Animation::audio_track_set_key_start_offset), get_track(), len_resizing_index, prev_ofs);
 			get_undo_redo()->commit_action();
 
 		} else {
 			float prev_ofs = get_animation()->audio_track_get_key_end_offset(get_track(), len_resizing_index);
 			get_undo_redo()->create_action(TTR("Change Audio Track Clip End Offset"));
-			get_undo_redo()->add_do_method(get_animation().ptr(), "audio_track_set_key_end_offset", get_track(), len_resizing_index, prev_ofs + ofs_local);
-			get_undo_redo()->add_undo_method(get_animation().ptr(), "audio_track_set_key_end_offset", get_track(), len_resizing_index, prev_ofs);
+			get_undo_redo()->add_do_method(callable_mp(get_animation().ptr(), &Animation::audio_track_set_key_end_offset), get_track(), len_resizing_index, prev_ofs + ofs_local);
+			get_undo_redo()->add_undo_method(callable_mp(get_animation().ptr(), &Animation::audio_track_set_key_end_offset), get_track(), len_resizing_index, prev_ofs);
 			get_undo_redo()->commit_action();
 		}
 

@@ -214,16 +214,16 @@ void ProjectSettingsEditor::_action_edited() {
 
 		setting = true;
 		undo_redo->create_action(TTR("Rename Input Action Event"));
-		undo_redo->add_do_method(ProjectSettings::get_singleton(), "clear", add_at);
-		undo_redo->add_do_method(ProjectSettings::get_singleton(), "set", action_prop, action);
-		undo_redo->add_do_method(ProjectSettings::get_singleton(), "set_order", action_prop, order);
-		undo_redo->add_undo_method(ProjectSettings::get_singleton(), "clear", action_prop);
-		undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set", add_at, action);
-		undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", add_at, order);
-		undo_redo->add_do_method(this, "_update_actions");
-		undo_redo->add_undo_method(this, "_update_actions");
-		undo_redo->add_do_method(this, "_settings_changed");
-		undo_redo->add_undo_method(this, "_settings_changed");
+		undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "clear", add_at);
+		undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "set", action_prop, action);
+		undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "set_order", action_prop, order);
+		undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "clear", action_prop);
+		undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set", add_at, action);
+		undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set_order", add_at, order);
+		undo_redo->add_do_method_compat(this, "_update_actions");
+		undo_redo->add_undo_method_compat(this, "_update_actions");
+		undo_redo->add_do_method_compat(this, "_settings_changed");
+		undo_redo->add_undo_method_compat(this, "_settings_changed");
 		undo_redo->commit_action();
 		setting = false;
 
@@ -236,10 +236,10 @@ void ProjectSettingsEditor::_action_edited() {
 		new_action["deadzone"] = ti->get_range(1);
 
 		undo_redo->create_action(TTR("Change Action deadzone"));
-		undo_redo->add_do_method(ProjectSettings::get_singleton(), "set", name, new_action);
-		undo_redo->add_do_method(this, "_settings_changed");
-		undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set", name, old_action);
-		undo_redo->add_undo_method(this, "_settings_changed");
+		undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "set", name, new_action);
+		undo_redo->add_do_method_compat(this, "_settings_changed");
+		undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set", name, old_action);
+		undo_redo->add_undo_method_compat(this, "_settings_changed");
 		undo_redo->commit_action();
 	}
 }
@@ -329,12 +329,12 @@ void ProjectSettingsEditor::_device_input_add() {
 	action["events"] = events;
 
 	undo_redo->create_action(TTR("Add Input Action Event"));
-	undo_redo->add_do_method(ProjectSettings::get_singleton(), "set", name, action);
-	undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set", name, old_val);
-	undo_redo->add_do_method(this, "_update_actions");
-	undo_redo->add_undo_method(this, "_update_actions");
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
+	undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "set", name, action);
+	undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set", name, old_val);
+	undo_redo->add_do_method_compat(this, "_update_actions");
+	undo_redo->add_undo_method_compat(this, "_update_actions");
+	undo_redo->add_do_method_compat(this, "_settings_changed");
+	undo_redo->add_undo_method_compat(this, "_settings_changed");
 	undo_redo->commit_action();
 
 	_show_last_added(ie, name);
@@ -392,12 +392,12 @@ void ProjectSettingsEditor::_press_a_key_confirm() {
 	action["events"] = events;
 
 	undo_redo->create_action(TTR("Add Input Action Event"));
-	undo_redo->add_do_method(ProjectSettings::get_singleton(), "set", name, action);
-	undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set", name, old_val);
-	undo_redo->add_do_method(this, "_update_actions");
-	undo_redo->add_undo_method(this, "_update_actions");
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
+	undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "set", name, action);
+	undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set", name, old_val);
+	undo_redo->add_do_method_compat(this, "_update_actions");
+	undo_redo->add_undo_method_compat(this, "_update_actions");
+	undo_redo->add_do_method_compat(this, "_settings_changed");
+	undo_redo->add_undo_method_compat(this, "_settings_changed");
 	undo_redo->commit_action();
 
 	_show_last_added(ie, name);
@@ -614,13 +614,13 @@ void ProjectSettingsEditor::_action_button_pressed(Object *p_obj, int p_column, 
 			int order = ProjectSettings::get_singleton()->get_order(name);
 
 			undo_redo->create_action(TTR("Erase Input Action"));
-			undo_redo->add_do_method(ProjectSettings::get_singleton(), "clear", name);
-			undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set", name, old_val);
-			undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", name, order);
-			undo_redo->add_do_method(this, "_update_actions");
-			undo_redo->add_undo_method(this, "_update_actions");
-			undo_redo->add_do_method(this, "_settings_changed");
-			undo_redo->add_undo_method(this, "_settings_changed");
+			undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "clear", name);
+			undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set", name, old_val);
+			undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set_order", name, order);
+			undo_redo->add_do_method_compat(this, "_update_actions");
+			undo_redo->add_undo_method_compat(this, "_update_actions");
+			undo_redo->add_do_method_compat(this, "_settings_changed");
+			undo_redo->add_undo_method_compat(this, "_settings_changed");
 			undo_redo->commit_action();
 
 		} else {
@@ -636,12 +636,12 @@ void ProjectSettingsEditor::_action_button_pressed(Object *p_obj, int p_column, 
 			action["events"] = events;
 
 			undo_redo->create_action(TTR("Erase Input Action Event"));
-			undo_redo->add_do_method(ProjectSettings::get_singleton(), "set", name, action);
-			undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set", name, old_val);
-			undo_redo->add_do_method(this, "_update_actions");
-			undo_redo->add_undo_method(this, "_update_actions");
-			undo_redo->add_do_method(this, "_settings_changed");
-			undo_redo->add_undo_method(this, "_settings_changed");
+			undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "set", name, action);
+			undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set", name, old_val);
+			undo_redo->add_do_method_compat(this, "_update_actions");
+			undo_redo->add_undo_method_compat(this, "_update_actions");
+			undo_redo->add_do_method_compat(this, "_settings_changed");
+			undo_redo->add_undo_method_compat(this, "_settings_changed");
 			undo_redo->commit_action();
 		}
 	} else if (p_id == 3) {
@@ -873,11 +873,11 @@ void ProjectSettingsEditor::_item_add() {
 		undo_redo->add_undo_property(ProjectSettings::get_singleton(), name, Variant());
 	}
 
-	undo_redo->add_do_method(globals_editor, "update_category_list");
-	undo_redo->add_undo_method(globals_editor, "update_category_list");
+	undo_redo->add_do_method_compat(globals_editor, "update_category_list");
+	undo_redo->add_undo_method_compat(globals_editor, "update_category_list");
 
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
+	undo_redo->add_do_method_compat(this, "_settings_changed");
+	undo_redo->add_undo_method_compat(this, "_settings_changed");
 
 	undo_redo->commit_action();
 
@@ -911,15 +911,15 @@ void ProjectSettingsEditor::_item_del() {
 	Variant value = ProjectSettings::get_singleton()->get(property);
 	int order = ProjectSettings::get_singleton()->get_order(property);
 
-	undo_redo->add_do_method(ProjectSettings::get_singleton(), "clear", property);
-	undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set", property, value);
-	undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", property, order);
+	undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "clear", property);
+	undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set", property, value);
+	undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set_order", property, order);
 
-	undo_redo->add_do_method(globals_editor, "update_category_list");
-	undo_redo->add_undo_method(globals_editor, "update_category_list");
+	undo_redo->add_do_method_compat(globals_editor, "update_category_list");
+	undo_redo->add_undo_method_compat(globals_editor, "update_category_list");
 
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
+	undo_redo->add_do_method_compat(this, "_settings_changed");
+	undo_redo->add_undo_method_compat(this, "_settings_changed");
 
 	undo_redo->commit_action();
 }
@@ -966,12 +966,12 @@ void ProjectSettingsEditor::_action_add() {
 	action["deadzone"] = 0.5f;
 	String name = "input/" + action_name->get_text();
 	undo_redo->create_action(TTR("Add Input Action"));
-	undo_redo->add_do_method(ProjectSettings::get_singleton(), "set", name, action);
-	undo_redo->add_undo_method(ProjectSettings::get_singleton(), "clear", name);
-	undo_redo->add_do_method(this, "_update_actions");
-	undo_redo->add_undo_method(this, "_update_actions");
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
+	undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "set", name, action);
+	undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "clear", name);
+	undo_redo->add_do_method_compat(this, "_update_actions");
+	undo_redo->add_undo_method_compat(this, "_update_actions");
+	undo_redo->add_do_method_compat(this, "_settings_changed");
+	undo_redo->add_undo_method_compat(this, "_settings_changed");
 	undo_redo->commit_action();
 
 	TreeItem *r = input_editor->get_root();
@@ -1128,21 +1128,21 @@ void ProjectSettingsEditor::drop_data_fw(const Point2 &p_point, const Variant &p
 
 		String iterator_name = "input/" + iterator->get_text(0);
 		int iterator_order = ProjectSettings::get_singleton()->get_order(iterator_name);
-		undo_redo->add_do_method(ProjectSettings::get_singleton(), "set_order", iterator_name, order);
-		undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", iterator_name, iterator_order);
+		undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "set_order", iterator_name, order);
+		undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set_order", iterator_name, iterator_order);
 		order = iterator_order;
 		iterator = is_below ? iterator->get_next() : iterator->get_prev();
 	}
 
-	undo_redo->add_do_method(ProjectSettings::get_singleton(), "set_order", target_name, order);
-	undo_redo->add_do_method(ProjectSettings::get_singleton(), "set_order", selected_name, target_order);
-	undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", target_name, target_order);
-	undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", selected_name, old_order);
+	undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "set_order", target_name, order);
+	undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "set_order", selected_name, target_order);
+	undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set_order", target_name, target_order);
+	undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set_order", selected_name, old_order);
 
-	undo_redo->add_do_method(this, "_update_actions");
-	undo_redo->add_undo_method(this, "_update_actions");
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
+	undo_redo->add_do_method_compat(this, "_update_actions");
+	undo_redo->add_undo_method_compat(this, "_update_actions");
+	undo_redo->add_do_method_compat(this, "_settings_changed");
+	undo_redo->add_undo_method_compat(this, "_settings_changed");
 	undo_redo->commit_action();
 }
 
@@ -1160,23 +1160,23 @@ void ProjectSettingsEditor::_copy_to_platform(int p_which) {
 
 	Variant value = ProjectSettings::get_singleton()->get(property);
 	if (property.find(".") != -1) { //overwriting overwrite, keep overwrite
-		undo_redo->add_do_method(ProjectSettings::get_singleton(), "clear", property);
-		undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set", property, value);
+		undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "clear", property);
+		undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set", property, value);
 	}
 
 	String feature = popup_copy_to_feature->get_popup()->get_item_text(p_which);
 	String new_path = property + "." + feature;
 
-	undo_redo->add_do_method(ProjectSettings::get_singleton(), "set", new_path, value);
+	undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "set", new_path, value);
 	if (ProjectSettings::get_singleton()->has_setting(new_path)) {
-		undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set", new_path, ProjectSettings::get_singleton()->get(new_path));
+		undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set", new_path, ProjectSettings::get_singleton()->get(new_path));
 	}
 
-	undo_redo->add_do_method(globals_editor, "update_category_list");
-	undo_redo->add_undo_method(globals_editor, "update_category_list");
+	undo_redo->add_do_method_compat(globals_editor, "update_category_list");
+	undo_redo->add_undo_method_compat(globals_editor, "update_category_list");
 
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
+	undo_redo->add_do_method_compat(this, "_settings_changed");
+	undo_redo->add_undo_method_compat(this, "_settings_changed");
 
 	undo_redo->commit_action();
 }
@@ -1200,10 +1200,10 @@ void ProjectSettingsEditor::_translation_add(const String &p_path) {
 	undo_redo->create_action(TTR("Add Translation"));
 	undo_redo->add_do_property(ProjectSettings::get_singleton(), "locale/translations", translations);
 	undo_redo->add_undo_property(ProjectSettings::get_singleton(), "locale/translations", ProjectSettings::get_singleton()->get("locale/translations"));
-	undo_redo->add_do_method(this, "_update_translations");
-	undo_redo->add_undo_method(this, "_update_translations");
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
+	undo_redo->add_do_method_compat(this, "_update_translations");
+	undo_redo->add_undo_method_compat(this, "_update_translations");
+	undo_redo->add_do_method_compat(this, "_settings_changed");
+	undo_redo->add_undo_method_compat(this, "_settings_changed");
 	undo_redo->commit_action();
 }
 
@@ -1228,10 +1228,10 @@ void ProjectSettingsEditor::_translation_delete(Object *p_item, int p_column, in
 	undo_redo->create_action(TTR("Remove Translation"));
 	undo_redo->add_do_property(ProjectSettings::get_singleton(), "locale/translations", translations);
 	undo_redo->add_undo_property(ProjectSettings::get_singleton(), "locale/translations", ProjectSettings::get_singleton()->get("locale/translations"));
-	undo_redo->add_do_method(this, "_update_translations");
-	undo_redo->add_undo_method(this, "_update_translations");
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
+	undo_redo->add_do_method_compat(this, "_update_translations");
+	undo_redo->add_undo_method_compat(this, "_update_translations");
+	undo_redo->add_do_method_compat(this, "_settings_changed");
+	undo_redo->add_undo_method_compat(this, "_settings_changed");
 	undo_redo->commit_action();
 }
 
@@ -1258,10 +1258,10 @@ void ProjectSettingsEditor::_translation_res_add(const String &p_path) {
 	undo_redo->create_action(TTR("Add Remapped Path"));
 	undo_redo->add_do_property(ProjectSettings::get_singleton(), "locale/translation_remaps", remaps);
 	undo_redo->add_undo_property(ProjectSettings::get_singleton(), "locale/translation_remaps", prev);
-	undo_redo->add_do_method(this, "_update_translations");
-	undo_redo->add_undo_method(this, "_update_translations");
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
+	undo_redo->add_do_method_compat(this, "_update_translations");
+	undo_redo->add_undo_method_compat(this, "_update_translations");
+	undo_redo->add_do_method_compat(this, "_settings_changed");
+	undo_redo->add_undo_method_compat(this, "_settings_changed");
 	undo_redo->commit_action();
 }
 
@@ -1288,10 +1288,10 @@ void ProjectSettingsEditor::_translation_res_option_add(const String &p_path) {
 	undo_redo->create_action(TTR("Resource Remap Add Remap"));
 	undo_redo->add_do_property(ProjectSettings::get_singleton(), "locale/translation_remaps", remaps);
 	undo_redo->add_undo_property(ProjectSettings::get_singleton(), "locale/translation_remaps", ProjectSettings::get_singleton()->get("locale/translation_remaps"));
-	undo_redo->add_do_method(this, "_update_translations");
-	undo_redo->add_undo_method(this, "_update_translations");
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
+	undo_redo->add_do_method_compat(this, "_update_translations");
+	undo_redo->add_undo_method_compat(this, "_update_translations");
+	undo_redo->add_do_method_compat(this, "_settings_changed");
+	undo_redo->add_undo_method_compat(this, "_settings_changed");
 	undo_redo->commit_action();
 }
 
@@ -1341,10 +1341,10 @@ void ProjectSettingsEditor::_translation_res_option_changed() {
 	undo_redo->create_action(TTR("Change Resource Remap Language"));
 	undo_redo->add_do_property(ProjectSettings::get_singleton(), "locale/translation_remaps", remaps);
 	undo_redo->add_undo_property(ProjectSettings::get_singleton(), "locale/translation_remaps", ProjectSettings::get_singleton()->get("locale/translation_remaps"));
-	undo_redo->add_do_method(this, "_update_translations");
-	undo_redo->add_undo_method(this, "_update_translations");
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
+	undo_redo->add_do_method_compat(this, "_update_translations");
+	undo_redo->add_undo_method_compat(this, "_update_translations");
+	undo_redo->add_do_method_compat(this, "_settings_changed");
+	undo_redo->add_undo_method_compat(this, "_settings_changed");
 	undo_redo->commit_action();
 	updating_translations = false;
 }
@@ -1369,10 +1369,10 @@ void ProjectSettingsEditor::_translation_res_delete(Object *p_item, int p_column
 	undo_redo->create_action(TTR("Remove Resource Remap"));
 	undo_redo->add_do_property(ProjectSettings::get_singleton(), "locale/translation_remaps", remaps);
 	undo_redo->add_undo_property(ProjectSettings::get_singleton(), "locale/translation_remaps", ProjectSettings::get_singleton()->get("locale/translation_remaps"));
-	undo_redo->add_do_method(this, "_update_translations");
-	undo_redo->add_undo_method(this, "_update_translations");
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
+	undo_redo->add_do_method_compat(this, "_update_translations");
+	undo_redo->add_undo_method_compat(this, "_update_translations");
+	undo_redo->add_do_method_compat(this, "_settings_changed");
+	undo_redo->add_undo_method_compat(this, "_settings_changed");
 	undo_redo->commit_action();
 }
 
@@ -1403,10 +1403,10 @@ void ProjectSettingsEditor::_translation_res_option_delete(Object *p_item, int p
 	undo_redo->create_action(TTR("Remove Resource Remap Option"));
 	undo_redo->add_do_property(ProjectSettings::get_singleton(), "locale/translation_remaps", remaps);
 	undo_redo->add_undo_property(ProjectSettings::get_singleton(), "locale/translation_remaps", ProjectSettings::get_singleton()->get("locale/translation_remaps"));
-	undo_redo->add_do_method(this, "_update_translations");
-	undo_redo->add_undo_method(this, "_update_translations");
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
+	undo_redo->add_do_method_compat(this, "_update_translations");
+	undo_redo->add_undo_method_compat(this, "_update_translations");
+	undo_redo->add_do_method_compat(this, "_settings_changed");
+	undo_redo->add_undo_method_compat(this, "_settings_changed");
 	undo_redo->commit_action();
 }
 
@@ -1452,10 +1452,10 @@ void ProjectSettingsEditor::_translation_filter_option_changed() {
 	undo_redo->create_action(TTR("Changed Locale Filter"));
 	undo_redo->add_do_property(ProjectSettings::get_singleton(), "locale/locale_filter", f_locales_all);
 	undo_redo->add_undo_property(ProjectSettings::get_singleton(), "locale/locale_filter", prev);
-	undo_redo->add_do_method(this, "_update_translations");
-	undo_redo->add_undo_method(this, "_update_translations");
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
+	undo_redo->add_do_method_compat(this, "_update_translations");
+	undo_redo->add_undo_method_compat(this, "_update_translations");
+	undo_redo->add_do_method_compat(this, "_settings_changed");
+	undo_redo->add_undo_method_compat(this, "_settings_changed");
 	undo_redo->commit_action();
 }
 
@@ -1485,10 +1485,10 @@ void ProjectSettingsEditor::_translation_filter_mode_changed(int p_mode) {
 	undo_redo->create_action(TTR("Changed Locale Filter Mode"));
 	undo_redo->add_do_property(ProjectSettings::get_singleton(), "locale/locale_filter", f_locales_all);
 	undo_redo->add_undo_property(ProjectSettings::get_singleton(), "locale/locale_filter", prev);
-	undo_redo->add_do_method(this, "_update_translations");
-	undo_redo->add_undo_method(this, "_update_translations");
-	undo_redo->add_do_method(this, "_settings_changed");
-	undo_redo->add_undo_method(this, "_settings_changed");
+	undo_redo->add_do_method_compat(this, "_update_translations");
+	undo_redo->add_undo_method_compat(this, "_update_translations");
+	undo_redo->add_do_method_compat(this, "_settings_changed");
+	undo_redo->add_undo_method_compat(this, "_settings_changed");
 	undo_redo->commit_action();
 }
 

@@ -173,18 +173,18 @@ void EditorAutoloadSettings::_autoload_edited() {
 		undo_redo->create_action(TTR("Rename Autoload"));
 
 		undo_redo->add_do_property(ProjectSettings::get_singleton(), name, path);
-		undo_redo->add_do_method(ProjectSettings::get_singleton(), "set_order", name, order);
-		undo_redo->add_do_method(ProjectSettings::get_singleton(), "clear", selected_autoload);
+		undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "set_order", name, order);
+		undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "clear", selected_autoload);
 
 		undo_redo->add_undo_property(ProjectSettings::get_singleton(), selected_autoload, path);
-		undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", selected_autoload, order);
-		undo_redo->add_undo_method(ProjectSettings::get_singleton(), "clear", name);
+		undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set_order", selected_autoload, order);
+		undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "clear", name);
 
-		undo_redo->add_do_method(this, "call_deferred", "update_autoload");
-		undo_redo->add_undo_method(this, "call_deferred", "update_autoload");
+		undo_redo->add_do_method_compat(this, "call_deferred", "update_autoload");
+		undo_redo->add_undo_method_compat(this, "call_deferred", "update_autoload");
 
-		undo_redo->add_do_method(this, "emit_signal", autoload_changed);
-		undo_redo->add_undo_method(this, "emit_signal", autoload_changed);
+		undo_redo->add_do_method_compat(this, "emit_signal", autoload_changed);
+		undo_redo->add_undo_method_compat(this, "emit_signal", autoload_changed);
 
 		undo_redo->commit_action();
 
@@ -210,14 +210,14 @@ void EditorAutoloadSettings::_autoload_edited() {
 		undo_redo->add_do_property(ProjectSettings::get_singleton(), base, path);
 		undo_redo->add_undo_property(ProjectSettings::get_singleton(), base, ProjectSettings::get_singleton()->get(base));
 
-		undo_redo->add_do_method(ProjectSettings::get_singleton(), "set_order", base, order);
-		undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", base, order);
+		undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "set_order", base, order);
+		undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set_order", base, order);
 
-		undo_redo->add_do_method(this, "call_deferred", "update_autoload");
-		undo_redo->add_undo_method(this, "call_deferred", "update_autoload");
+		undo_redo->add_do_method_compat(this, "call_deferred", "update_autoload");
+		undo_redo->add_undo_method_compat(this, "call_deferred", "update_autoload");
 
-		undo_redo->add_do_method(this, "emit_signal", autoload_changed);
-		undo_redo->add_undo_method(this, "emit_signal", autoload_changed);
+		undo_redo->add_do_method_compat(this, "emit_signal", autoload_changed);
+		undo_redo->add_undo_method_compat(this, "emit_signal", autoload_changed);
 
 		undo_redo->commit_action();
 	}
@@ -258,17 +258,17 @@ void EditorAutoloadSettings::_autoload_button_pressed(Object *p_item, int p_colu
 
 			undo_redo->create_action(TTR("Move Autoload"));
 
-			undo_redo->add_do_method(ProjectSettings::get_singleton(), "set_order", name, swap_order);
-			undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", name, order);
+			undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "set_order", name, swap_order);
+			undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set_order", name, order);
 
-			undo_redo->add_do_method(ProjectSettings::get_singleton(), "set_order", swap_name, order);
-			undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", swap_name, swap_order);
+			undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "set_order", swap_name, order);
+			undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set_order", swap_name, swap_order);
 
-			undo_redo->add_do_method(this, "update_autoload");
-			undo_redo->add_undo_method(this, "update_autoload");
+			undo_redo->add_do_method_compat(this, "update_autoload");
+			undo_redo->add_undo_method_compat(this, "update_autoload");
 
-			undo_redo->add_do_method(this, "emit_signal", autoload_changed);
-			undo_redo->add_undo_method(this, "emit_signal", autoload_changed);
+			undo_redo->add_do_method_compat(this, "emit_signal", autoload_changed);
+			undo_redo->add_undo_method_compat(this, "emit_signal", autoload_changed);
 
 			undo_redo->commit_action();
 		} break;
@@ -281,14 +281,14 @@ void EditorAutoloadSettings::_autoload_button_pressed(Object *p_item, int p_colu
 			undo_redo->add_do_property(ProjectSettings::get_singleton(), name, Variant());
 
 			undo_redo->add_undo_property(ProjectSettings::get_singleton(), name, ProjectSettings::get_singleton()->get(name));
-			undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_persisting", name, true);
-			undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", order);
+			undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set_persisting", name, true);
+			undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set_order", order);
 
-			undo_redo->add_do_method(this, "update_autoload");
-			undo_redo->add_undo_method(this, "update_autoload");
+			undo_redo->add_do_method_compat(this, "update_autoload");
+			undo_redo->add_undo_method_compat(this, "update_autoload");
 
-			undo_redo->add_do_method(this, "emit_signal", autoload_changed);
-			undo_redo->add_undo_method(this, "emit_signal", autoload_changed);
+			undo_redo->add_do_method_compat(this, "emit_signal", autoload_changed);
+			undo_redo->add_undo_method_compat(this, "emit_signal", autoload_changed);
 
 			undo_redo->commit_action();
 		} break;
@@ -648,17 +648,17 @@ void EditorAutoloadSettings::drop_data_fw(const Point2 &p_point, const Variant &
 	i = 0;
 
 	for (List<AutoLoadInfo>::Element *F = autoload_cache.front(); F; F = F->next()) {
-		undo_redo->add_do_method(ProjectSettings::get_singleton(), "set_order", "autoload/" + F->get().name, orders[i++]);
-		undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", "autoload/" + F->get().name, F->get().order);
+		undo_redo->add_do_method_compat(ProjectSettings::get_singleton(), "set_order", "autoload/" + F->get().name, orders[i++]);
+		undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set_order", "autoload/" + F->get().name, F->get().order);
 	}
 
 	orders.clear();
 
-	undo_redo->add_do_method(this, "update_autoload");
-	undo_redo->add_undo_method(this, "update_autoload");
+	undo_redo->add_do_method_compat(this, "update_autoload");
+	undo_redo->add_undo_method_compat(this, "update_autoload");
 
-	undo_redo->add_do_method(this, "emit_signal", autoload_changed);
-	undo_redo->add_undo_method(this, "emit_signal", autoload_changed);
+	undo_redo->add_do_method_compat(this, "emit_signal", autoload_changed);
+	undo_redo->add_undo_method_compat(this, "emit_signal", autoload_changed);
 
 	undo_redo->commit_action();
 }
@@ -698,11 +698,11 @@ bool EditorAutoloadSettings::autoload_add(const String &p_name, const String &p_
 		undo_redo->add_undo_property(ProjectSettings::get_singleton(), name, Variant());
 	}
 
-	undo_redo->add_do_method(this, "update_autoload");
-	undo_redo->add_undo_method(this, "update_autoload");
+	undo_redo->add_do_method_compat(this, "update_autoload");
+	undo_redo->add_undo_method_compat(this, "update_autoload");
 
-	undo_redo->add_do_method(this, "emit_signal", autoload_changed);
-	undo_redo->add_undo_method(this, "emit_signal", autoload_changed);
+	undo_redo->add_do_method_compat(this, "emit_signal", autoload_changed);
+	undo_redo->add_undo_method_compat(this, "emit_signal", autoload_changed);
 
 	undo_redo->commit_action();
 
@@ -722,14 +722,14 @@ void EditorAutoloadSettings::autoload_remove(const String &p_name) {
 	undo_redo->add_do_property(ProjectSettings::get_singleton(), name, Variant());
 
 	undo_redo->add_undo_property(ProjectSettings::get_singleton(), name, ProjectSettings::get_singleton()->get(name));
-	undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_persisting", name, true);
-	undo_redo->add_undo_method(ProjectSettings::get_singleton(), "set_order", order);
+	undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set_persisting", name, true);
+	undo_redo->add_undo_method_compat(ProjectSettings::get_singleton(), "set_order", order);
 
-	undo_redo->add_do_method(this, "update_autoload");
-	undo_redo->add_undo_method(this, "update_autoload");
+	undo_redo->add_do_method_compat(this, "update_autoload");
+	undo_redo->add_undo_method_compat(this, "update_autoload");
 
-	undo_redo->add_do_method(this, "emit_signal", autoload_changed);
-	undo_redo->add_undo_method(this, "emit_signal", autoload_changed);
+	undo_redo->add_do_method_compat(this, "emit_signal", autoload_changed);
+	undo_redo->add_undo_method_compat(this, "emit_signal", autoload_changed);
 
 	undo_redo->commit_action();
 }

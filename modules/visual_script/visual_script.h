@@ -259,7 +259,6 @@ private:
 	void _update_placeholders();
 #endif
 
-	void _set_variable_info(const StringName &p_name, const Dictionary &p_info);
 	Dictionary _get_variable_info(const StringName &p_name) const;
 
 	void _set_data(const Dictionary &p_data);
@@ -270,6 +269,7 @@ protected:
 	static void _bind_methods();
 
 public:
+	void _set_variable_info(const StringName &p_name, const Dictionary &p_info); // TODO: Review, I think set_variable_info can be private, and _set_variable_info can be public (switch private with the public)
 	// TODO: Remove it in future when breaking changes are acceptable
 	StringName get_default_func() const;
 	void add_function(const StringName &p_name);

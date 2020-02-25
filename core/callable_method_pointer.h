@@ -151,11 +151,11 @@ void call_with_variant_args(T *p_instance, void (T::*p_method)(P...), const Vari
 		return;
 	}
 
-	if ((size_t)p_argcount < sizeof...(P)) {
+	/*if ((size_t)p_argcount < sizeof...(P)) { // TODO: Some trick to replace sizeof...(P) to get "minimum arguments"?
 		r_error.error = Callable::CallError::CALL_ERROR_TOO_FEW_ARGUMENTS;
 		r_error.argument = sizeof...(P);
 		return;
-	}
+	}*/
 #endif
 	call_with_variant_args_helper<T, P...>(p_instance, p_method, p_args, r_error, BuildIndexSequence<sizeof...(P)>{});
 }

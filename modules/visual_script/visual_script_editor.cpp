@@ -83,20 +83,20 @@ protected:
 
 			if (new_argc < argc) {
 				for (int i = new_argc; i < argc; i++) {
-					undo_redo->add_do_method(script.ptr(), "custom_signal_remove_argument", sig, new_argc);
-					undo_redo->add_undo_method(script.ptr(), "custom_signal_add_argument", sig, script->custom_signal_get_argument_name(sig, i), script->custom_signal_get_argument_type(sig, i), -1);
+					undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::custom_signal_remove_argument), sig, new_argc);
+					undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::custom_signal_add_argument), sig, script->custom_signal_get_argument_name(sig, i), script->custom_signal_get_argument_type(sig, i), -1);
 				}
 			} else if (new_argc > argc) {
 
 				for (int i = argc; i < new_argc; i++) {
 
-					undo_redo->add_do_method(script.ptr(), "custom_signal_add_argument", sig, Variant::NIL, "arg" + itos(i + 1), -1);
-					undo_redo->add_undo_method(script.ptr(), "custom_signal_remove_argument", sig, argc);
+					undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::custom_signal_add_argument), sig, Variant::NIL, "arg" + itos(i + 1), -1);
+					undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::custom_signal_remove_argument), sig, argc);
 				}
 			}
 
-			undo_redo->add_do_method(this, "_sig_changed");
-			undo_redo->add_undo_method(this, "_sig_changed");
+			undo_redo->add_do_method_compat(this, "_sig_changed");
+			undo_redo->add_undo_method_compat(this, "_sig_changed");
 
 			undo_redo->commit_action();
 
@@ -111,8 +111,8 @@ protected:
 				int old_type = script->custom_signal_get_argument_type(sig, idx);
 				int new_type = p_value;
 				undo_redo->create_action(TTR("Change Argument Type"));
-				undo_redo->add_do_method(script.ptr(), "custom_signal_set_argument_type", sig, idx, new_type);
-				undo_redo->add_undo_method(script.ptr(), "custom_signal_set_argument_type", sig, idx, old_type);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::custom_signal_set_argument_type), sig, idx, new_type);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::custom_signal_set_argument_type), sig, idx, old_type);
 				undo_redo->commit_action();
 
 				return true;
@@ -123,8 +123,8 @@ protected:
 				String old_name = script->custom_signal_get_argument_name(sig, idx);
 				String new_name = p_value;
 				undo_redo->create_action(TTR("Change Argument name"));
-				undo_redo->add_do_method(script.ptr(), "custom_signal_set_argument_name", sig, idx, new_name);
-				undo_redo->add_undo_method(script.ptr(), "custom_signal_set_argument_name", sig, idx, old_name);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::custom_signal_set_argument_name), sig, idx, new_name);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::custom_signal_set_argument_name), sig, idx, old_name);
 				undo_redo->commit_action();
 				return true;
 			}
@@ -221,10 +221,10 @@ protected:
 		if (String(p_name) == "value") {
 			undo_redo->create_action(TTR("Set Variable Default Value"));
 			Variant current = script->get_variable_default_value(var);
-			undo_redo->add_do_method(script.ptr(), "set_variable_default_value", var, p_value);
-			undo_redo->add_undo_method(script.ptr(), "set_variable_default_value", var, current);
-			undo_redo->add_do_method(this, "_var_value_changed");
-			undo_redo->add_undo_method(this, "_var_value_changed");
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::set_variable_default_value), var, p_value);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::set_variable_default_value), var, current);
+			undo_redo->add_do_method_compat(this, "_var_value_changed");
+			undo_redo->add_undo_method_compat(this, "_var_value_changed");
 			undo_redo->commit_action();
 			return true;
 		}
@@ -236,10 +236,10 @@ protected:
 			Dictionary dc = d.duplicate();
 			dc["type"] = p_value;
 			undo_redo->create_action(TTR("Set Variable Type"));
-			undo_redo->add_do_method(script.ptr(), "set_variable_info", var, dc);
-			undo_redo->add_undo_method(script.ptr(), "set_variable_info", var, d);
-			undo_redo->add_do_method(this, "_var_changed");
-			undo_redo->add_undo_method(this, "_var_changed");
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::_set_variable_info), var, dc);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::_set_variable_info), var, d);
+			undo_redo->add_do_method_compat(this, "_var_changed");
+			undo_redo->add_undo_method_compat(this, "_var_changed");
 			undo_redo->commit_action();
 			return true;
 		}
@@ -249,10 +249,10 @@ protected:
 			Dictionary dc = d.duplicate();
 			dc["hint"] = p_value;
 			undo_redo->create_action(TTR("Set Variable Type"));
-			undo_redo->add_do_method(script.ptr(), "set_variable_info", var, dc);
-			undo_redo->add_undo_method(script.ptr(), "set_variable_info", var, d);
-			undo_redo->add_do_method(this, "_var_changed");
-			undo_redo->add_undo_method(this, "_var_changed");
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::_set_variable_info), var, dc);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::_set_variable_info), var, d);
+			undo_redo->add_do_method_compat(this, "_var_changed");
+			undo_redo->add_undo_method_compat(this, "_var_changed");
 			undo_redo->commit_action();
 			return true;
 		}
@@ -262,10 +262,10 @@ protected:
 			Dictionary dc = d.duplicate();
 			dc["hint_string"] = p_value;
 			undo_redo->create_action(TTR("Set Variable Type"));
-			undo_redo->add_do_method(script.ptr(), "set_variable_info", var, dc);
-			undo_redo->add_undo_method(script.ptr(), "set_variable_info", var, d);
-			undo_redo->add_do_method(this, "_var_changed");
-			undo_redo->add_undo_method(this, "_var_changed");
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::_set_variable_info), var, dc);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::_set_variable_info), var, d);
+			undo_redo->add_do_method_compat(this, "_var_changed");
+			undo_redo->add_undo_method_compat(this, "_var_changed");
 			undo_redo->commit_action();
 			return true;
 		}
@@ -881,11 +881,11 @@ void VisualScriptEditor::_change_port_type(int p_select, int p_id, int p_port, b
 
 	undo_redo->create_action("Change Port Type");
 	if (is_input) {
-		undo_redo->add_do_method(vsn.ptr(), "set_input_data_port_type", p_port, Variant::Type(p_select));
-		undo_redo->add_undo_method(vsn.ptr(), "set_input_data_port_type", p_port, vsn->get_input_value_port_info(p_port).type);
+		undo_redo->add_do_method_compat(vsn.ptr(), "set_input_data_port_type", p_port, Variant::Type(p_select));
+		undo_redo->add_undo_method_compat(vsn.ptr(), "set_input_data_port_type", p_port, vsn->get_input_value_port_info(p_port).type);
 	} else {
-		undo_redo->add_do_method(vsn.ptr(), "set_output_data_port_type", p_port, Variant::Type(p_select));
-		undo_redo->add_undo_method(vsn.ptr(), "set_output_data_port_type", p_port, vsn->get_output_value_port_info(p_port).type);
+		undo_redo->add_do_method_compat(vsn.ptr(), "set_output_data_port_type", p_port, Variant::Type(p_select));
+		undo_redo->add_undo_method_compat(vsn.ptr(), "set_output_data_port_type", p_port, vsn->get_output_value_port_info(p_port).type);
 	}
 	undo_redo->commit_action();
 }
@@ -912,11 +912,11 @@ void VisualScriptEditor::_port_name_focus_out(const Node *p_name_box, int p_id, 
 
 	undo_redo->create_action("Change Port Name");
 	if (is_input) {
-		undo_redo->add_do_method(vsn.ptr(), "set_input_data_port_name", p_port, text);
-		undo_redo->add_undo_method(vsn.ptr(), "set_input_data_port_name", p_port, vsn->get_input_value_port_info(p_port).name);
+		undo_redo->add_do_method_compat(vsn.ptr(), "set_input_data_port_name", p_port, text);
+		undo_redo->add_undo_method_compat(vsn.ptr(), "set_input_data_port_name", p_port, vsn->get_input_value_port_info(p_port).name);
 	} else {
-		undo_redo->add_do_method(vsn.ptr(), "set_output_data_port_name", p_port, text);
-		undo_redo->add_undo_method(vsn.ptr(), "set_output_data_port_name", p_port, vsn->get_output_value_port_info(p_port).name);
+		undo_redo->add_do_method_compat(vsn.ptr(), "set_output_data_port_name", p_port, text);
+		undo_redo->add_undo_method_compat(vsn.ptr(), "set_output_data_port_name", p_port, vsn->get_output_value_port_info(p_port).name);
 	}
 	undo_redo->commit_action();
 }
@@ -1104,11 +1104,11 @@ void VisualScriptEditor::_member_edited() {
 			func = script->get_node(name, node_id);
 		}
 		undo_redo->create_action(TTR("Rename Function"));
-		undo_redo->add_do_method(script.ptr(), "rename_function", name, new_name);
-		undo_redo->add_undo_method(script.ptr(), "rename_function", new_name, name);
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::rename_function), name, new_name);
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::rename_function), new_name, name);
 		if (func.is_valid()) {
-			undo_redo->add_do_method(func.ptr(), "set_name", new_name);
-			undo_redo->add_undo_method(func.ptr(), "set_name", name);
+			undo_redo->add_do_method_compat(func.ptr(), "set_name", new_name);
+			undo_redo->add_undo_method_compat(func.ptr(), "set_name", name);
 		}
 
 		// also fix all function calls
@@ -1122,18 +1122,18 @@ void VisualScriptEditor::_member_edited() {
 				if (!fncall.is_valid())
 					continue;
 				if (fncall->get_function() == name) {
-					undo_redo->add_do_method(fncall.ptr(), "set_function", new_name);
-					undo_redo->add_undo_method(fncall.ptr(), "set_function", name);
+					undo_redo->add_do_method_compat(fncall.ptr(), "set_function", new_name);
+					undo_redo->add_undo_method_compat(fncall.ptr(), "set_function", name);
 				}
 			}
 		}
 
-		undo_redo->add_do_method(this, "_update_members");
-		undo_redo->add_undo_method(this, "_update_members");
-		undo_redo->add_do_method(this, "_update_graph");
-		undo_redo->add_undo_method(this, "_update_graph");
-		undo_redo->add_do_method(this, "emit_signal", "edited_script_changed");
-		undo_redo->add_undo_method(this, "emit_signal", "edited_script_changed");
+		undo_redo->add_do_method_compat(this, "_update_members");
+		undo_redo->add_undo_method_compat(this, "_update_members");
+		undo_redo->add_do_method_compat(this, "_update_graph");
+		undo_redo->add_undo_method_compat(this, "_update_graph");
+		undo_redo->add_do_method_compat(this, "emit_signal", "edited_script_changed");
+		undo_redo->add_undo_method_compat(this, "emit_signal", "edited_script_changed");
 		undo_redo->commit_action();
 
 		return; //or crash because it will become invalid
@@ -1143,12 +1143,12 @@ void VisualScriptEditor::_member_edited() {
 
 		selected = new_name;
 		undo_redo->create_action(TTR("Rename Variable"));
-		undo_redo->add_do_method(script.ptr(), "rename_variable", name, new_name);
-		undo_redo->add_undo_method(script.ptr(), "rename_variable", new_name, name);
-		undo_redo->add_do_method(this, "_update_members");
-		undo_redo->add_undo_method(this, "_update_members");
-		undo_redo->add_do_method(this, "emit_signal", "edited_script_changed");
-		undo_redo->add_undo_method(this, "emit_signal", "edited_script_changed");
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::rename_variable), name, new_name);
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::rename_variable), new_name, name);
+		undo_redo->add_do_method_compat(this, "_update_members");
+		undo_redo->add_undo_method_compat(this, "_update_members");
+		undo_redo->add_do_method_compat(this, "emit_signal", "edited_script_changed");
+		undo_redo->add_undo_method_compat(this, "emit_signal", "edited_script_changed");
 		undo_redo->commit_action();
 
 		return; //or crash because it will become invalid
@@ -1158,12 +1158,12 @@ void VisualScriptEditor::_member_edited() {
 
 		selected = new_name;
 		undo_redo->create_action(TTR("Rename Signal"));
-		undo_redo->add_do_method(script.ptr(), "rename_custom_signal", name, new_name);
-		undo_redo->add_undo_method(script.ptr(), "rename_custom_signal", new_name, name);
-		undo_redo->add_do_method(this, "_update_members");
-		undo_redo->add_undo_method(this, "_update_members");
-		undo_redo->add_do_method(this, "emit_signal", "edited_script_changed");
-		undo_redo->add_undo_method(this, "emit_signal", "edited_script_changed");
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::rename_custom_signal), name, new_name);
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::rename_custom_signal), new_name, name);
+		undo_redo->add_do_method_compat(this, "_update_members");
+		undo_redo->add_undo_method_compat(this, "_update_members");
+		undo_redo->add_do_method_compat(this, "emit_signal", "edited_script_changed");
+		undo_redo->add_undo_method_compat(this, "emit_signal", "edited_script_changed");
 		undo_redo->commit_action();
 
 		return; //or crash because it will become invalid
@@ -1200,15 +1200,15 @@ void VisualScriptEditor::_create_function() {
 	}
 
 	undo_redo->create_action(TTR("Add Function"));
-	undo_redo->add_do_method(script.ptr(), "add_function", name);
-	undo_redo->add_do_method(script.ptr(), "add_node", name, script->get_available_id(), func_node, ofs);
-	undo_redo->add_undo_method(script.ptr(), "remove_function", name);
-	undo_redo->add_do_method(this, "_update_members");
-	undo_redo->add_undo_method(this, "_update_members");
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
-	undo_redo->add_do_method(this, "emit_signal", "edited_script_changed");
-	undo_redo->add_undo_method(this, "emit_signal", "edited_script_changed");
+	undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_function), name);
+	undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), name, script->get_available_id(), func_node, ofs);
+	undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_function), name);
+	undo_redo->add_do_method_compat(this, "_update_members");
+	undo_redo->add_undo_method_compat(this, "_update_members");
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
+	undo_redo->add_do_method_compat(this, "emit_signal", "edited_script_changed");
+	undo_redo->add_undo_method_compat(this, "emit_signal", "edited_script_changed");
 	undo_redo->commit_action();
 
 	_update_graph();
@@ -1302,15 +1302,15 @@ void VisualScriptEditor::_member_button(Object *p_item, int p_column, int p_butt
 				func_node->set_name(name);
 
 				undo_redo->create_action(TTR("Add Function"));
-				undo_redo->add_do_method(script.ptr(), "add_function", name);
-				undo_redo->add_do_method(script.ptr(), "add_node", name, script->get_available_id(), func_node, ofs);
-				undo_redo->add_undo_method(script.ptr(), "remove_function", name);
-				undo_redo->add_do_method(this, "_update_members");
-				undo_redo->add_undo_method(this, "_update_members");
-				undo_redo->add_do_method(this, "_update_graph");
-				undo_redo->add_undo_method(this, "_update_graph");
-				undo_redo->add_do_method(this, "emit_signal", "edited_script_changed");
-				undo_redo->add_undo_method(this, "emit_signal", "edited_script_changed");
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_function), name);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), name, script->get_available_id(), func_node, ofs);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_function), name);
+				undo_redo->add_do_method_compat(this, "_update_members");
+				undo_redo->add_undo_method_compat(this, "_update_members");
+				undo_redo->add_do_method_compat(this, "_update_graph");
+				undo_redo->add_undo_method_compat(this, "_update_graph");
+				undo_redo->add_do_method_compat(this, "emit_signal", "edited_script_changed");
+				undo_redo->add_undo_method_compat(this, "emit_signal", "edited_script_changed");
 				undo_redo->commit_action();
 
 				_update_graph();
@@ -1325,12 +1325,12 @@ void VisualScriptEditor::_member_button(Object *p_item, int p_column, int p_butt
 			selected = name;
 
 			undo_redo->create_action(TTR("Add Variable"));
-			undo_redo->add_do_method(script.ptr(), "add_variable", name);
-			undo_redo->add_undo_method(script.ptr(), "remove_variable", name);
-			undo_redo->add_do_method(this, "_update_members");
-			undo_redo->add_undo_method(this, "_update_members");
-			undo_redo->add_do_method(this, "emit_signal", "edited_script_changed");
-			undo_redo->add_undo_method(this, "emit_signal", "edited_script_changed");
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_variable), name);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_variable), name);
+			undo_redo->add_do_method_compat(this, "_update_members");
+			undo_redo->add_undo_method_compat(this, "_update_members");
+			undo_redo->add_do_method_compat(this, "emit_signal", "edited_script_changed");
+			undo_redo->add_undo_method_compat(this, "emit_signal", "edited_script_changed");
 			undo_redo->commit_action();
 			return; //or crash because it will become invalid
 		}
@@ -1341,12 +1341,12 @@ void VisualScriptEditor::_member_button(Object *p_item, int p_column, int p_butt
 			selected = name;
 
 			undo_redo->create_action(TTR("Add Signal"));
-			undo_redo->add_do_method(script.ptr(), "add_custom_signal", name);
-			undo_redo->add_undo_method(script.ptr(), "remove_custom_signal", name);
-			undo_redo->add_do_method(this, "_update_members");
-			undo_redo->add_undo_method(this, "_update_members");
-			undo_redo->add_do_method(this, "emit_signal", "edited_script_changed");
-			undo_redo->add_undo_method(this, "emit_signal", "edited_script_changed");
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_custom_signal), name);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_custom_signal), name);
+			undo_redo->add_do_method_compat(this, "_update_members");
+			undo_redo->add_undo_method_compat(this, "_update_members");
+			undo_redo->add_do_method_compat(this, "emit_signal", "edited_script_changed");
+			undo_redo->add_undo_method_compat(this, "emit_signal", "edited_script_changed");
 			undo_redo->commit_action();
 			return; //or crash because it will become invalid
 		}
@@ -1370,11 +1370,11 @@ void VisualScriptEditor::_add_input_port(int p_id) {
 	updating_graph = true;
 
 	undo_redo->create_action(TTR("Add Input Port"), UndoRedo::MERGE_ENDS);
-	undo_redo->add_do_method(vsn.ptr(), "add_input_data_port", Variant::NIL, "arg", -1);
-	undo_redo->add_do_method(this, "_update_graph", p_id);
+	undo_redo->add_do_method_compat(vsn.ptr(), "add_input_data_port", Variant::NIL, "arg", -1);
+	undo_redo->add_do_method_compat(this, "_update_graph", p_id);
 
-	undo_redo->add_undo_method(vsn.ptr(), "remove_input_data_port", vsn->get_input_value_port_count());
-	undo_redo->add_undo_method(this, "_update_graph", p_id);
+	undo_redo->add_undo_method_compat(vsn.ptr(), "remove_input_data_port", vsn->get_input_value_port_count());
+	undo_redo->add_undo_method_compat(this, "_update_graph", p_id);
 
 	updating_graph = false;
 
@@ -1392,11 +1392,11 @@ void VisualScriptEditor::_add_output_port(int p_id) {
 	updating_graph = true;
 
 	undo_redo->create_action(TTR("Add Output Port"), UndoRedo::MERGE_ENDS);
-	undo_redo->add_do_method(vsn.ptr(), "add_output_data_port", Variant::NIL, "arg", -1);
-	undo_redo->add_do_method(this, "_update_graph", p_id);
+	undo_redo->add_do_method_compat(vsn.ptr(), "add_output_data_port", Variant::NIL, "arg", -1);
+	undo_redo->add_do_method_compat(this, "_update_graph", p_id);
 
-	undo_redo->add_undo_method(vsn.ptr(), "remove_output_data_port", vsn->get_output_value_port_count());
-	undo_redo->add_undo_method(this, "_update_graph", p_id);
+	undo_redo->add_undo_method_compat(vsn.ptr(), "remove_output_data_port", vsn->get_output_value_port_count());
+	undo_redo->add_undo_method_compat(this, "_update_graph", p_id);
 
 	updating_graph = false;
 
@@ -1419,16 +1419,16 @@ void VisualScriptEditor::_remove_input_port(int p_id, int p_port) {
 	script->get_input_value_port_connection_source(func, p_id, p_port, &conn_from, &conn_port);
 
 	if (conn_from != -1)
-		undo_redo->add_do_method(script.ptr(), "data_disconnect", func, conn_from, conn_port, p_id, p_port);
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::data_disconnect), func, conn_from, conn_port, p_id, p_port);
 
-	undo_redo->add_do_method(vsn.ptr(), "remove_input_data_port", p_port);
-	undo_redo->add_do_method(this, "_update_graph", p_id);
+	undo_redo->add_do_method_compat(vsn.ptr(), "remove_input_data_port", p_port);
+	undo_redo->add_do_method_compat(this, "_update_graph", p_id);
 
 	if (conn_from != -1)
-		undo_redo->add_undo_method(script.ptr(), "data_connect", func, conn_from, conn_port, p_id, p_port);
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_connect), func, conn_from, conn_port, p_id, p_port);
 
-	undo_redo->add_undo_method(vsn.ptr(), "add_input_data_port", vsn->get_input_value_port_info(p_port).type, vsn->get_input_value_port_info(p_port).name, p_port);
-	undo_redo->add_undo_method(this, "_update_graph", p_id);
+	undo_redo->add_undo_method_compat(vsn.ptr(), "add_input_data_port", vsn->get_input_value_port_info(p_port).type, vsn->get_input_value_port_info(p_port).name, p_port);
+	undo_redo->add_undo_method_compat(this, "_update_graph", p_id);
 
 	updating_graph = false;
 
@@ -1460,19 +1460,19 @@ void VisualScriptEditor::_remove_output_port(int p_id, int p_port) {
 		}
 	}
 
-	undo_redo->add_do_method(vsn.ptr(), "remove_output_data_port", p_port);
-	undo_redo->add_do_method(this, "_update_graph", p_id);
+	undo_redo->add_do_method_compat(vsn.ptr(), "remove_output_data_port", p_port);
+	undo_redo->add_do_method_compat(this, "_update_graph", p_id);
 
 	List<int> keys;
 	conn_map.get_key_list(&keys);
 	for (const List<int>::Element *E = keys.front(); E; E = E->next()) {
 		for (const Set<int>::Element *F = conn_map[E->get()].front(); F; F = F->next()) {
-			undo_redo->add_undo_method(script.ptr(), "data_connect", func, p_id, p_port, E->get(), F->get());
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_connect), func, p_id, p_port, E->get(), F->get());
 		}
 	}
 
-	undo_redo->add_undo_method(vsn.ptr(), "add_output_data_port", vsn->get_output_value_port_info(p_port).type, vsn->get_output_value_port_info(p_port).name, p_port);
-	undo_redo->add_undo_method(this, "_update_graph", p_id);
+	undo_redo->add_undo_method_compat(vsn.ptr(), "add_output_data_port", vsn->get_output_value_port_info(p_port).type, vsn->get_output_value_port_info(p_port).name, p_port);
+	undo_redo->add_undo_method_compat(this, "_update_graph", p_id);
 
 	updating_graph = false;
 
@@ -1492,8 +1492,8 @@ void VisualScriptEditor::_expression_text_changed(const String &p_text, int p_id
 	undo_redo->create_action(TTR("Change Expression"), UndoRedo::MERGE_ENDS);
 	undo_redo->add_do_property(vse.ptr(), "expression", p_text);
 	undo_redo->add_undo_property(vse.ptr(), "expression", vse->get("expression"));
-	undo_redo->add_do_method(this, "_update_graph", p_id);
-	undo_redo->add_undo_method(this, "_update_graph", p_id);
+	undo_redo->add_do_method_compat(this, "_update_graph", p_id);
+	undo_redo->add_undo_method_compat(this, "_update_graph", p_id);
 	undo_redo->commit_action();
 
 	Node *node = graph->get_node(itos(p_id));
@@ -1586,8 +1586,8 @@ void VisualScriptEditor::_on_nodes_delete() {
 
 		StringName func = _get_function_of_node(cr_node);
 
-		undo_redo->add_do_method(script.ptr(), "remove_node", func, cr_node);
-		undo_redo->add_undo_method(script.ptr(), "add_node", func, cr_node, script->get_node(func, cr_node), script->get_node_position(func, cr_node));
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::remove_node), func, cr_node);
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::add_node), func, cr_node, script->get_node(func, cr_node), script->get_node_position(func, cr_node));
 
 		List<VisualScript::SequenceConnection> sequence_conns;
 		script->get_sequence_connection_list(func, &sequence_conns);
@@ -1595,7 +1595,7 @@ void VisualScriptEditor::_on_nodes_delete() {
 		for (List<VisualScript::SequenceConnection>::Element *E = sequence_conns.front(); E; E = E->next()) {
 
 			if (E->get().from_node == cr_node || E->get().to_node == cr_node) {
-				undo_redo->add_undo_method(script.ptr(), "sequence_connect", func, E->get().from_node, E->get().from_output, E->get().to_node);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), func, E->get().from_node, E->get().from_output, E->get().to_node);
 			}
 		}
 
@@ -1605,12 +1605,12 @@ void VisualScriptEditor::_on_nodes_delete() {
 		for (List<VisualScript::DataConnection>::Element *E = data_conns.front(); E; E = E->next()) {
 
 			if (E->get().from_node == F->get() || E->get().to_node == F->get()) {
-				undo_redo->add_undo_method(script.ptr(), "data_connect", func, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_connect), func, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
 			}
 		}
 	}
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 
 	undo_redo->commit_action();
 }
@@ -1652,8 +1652,8 @@ void VisualScriptEditor::_on_nodes_duplicate() {
 		remap.set(F->get(), new_id);
 
 		to_select.insert(new_id);
-		undo_redo->add_do_method(script.ptr(), "add_node", default_func, new_id, dupe, script->get_node_position(func, F->get()) + Vector2(20, 20));
-		undo_redo->add_undo_method(script.ptr(), "remove_node", default_func, new_id);
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), default_func, new_id, dupe, script->get_node_position(func, F->get()) + Vector2(20, 20));
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), default_func, new_id);
 	}
 
 	for (List<StringName>::Element *F = funcs.front(); F; F = F->next()) {
@@ -1661,7 +1661,7 @@ void VisualScriptEditor::_on_nodes_duplicate() {
 		script->get_sequence_connection_list(F->get(), &seqs);
 		for (List<VisualScript::SequenceConnection>::Element *E = seqs.front(); E; E = E->next()) {
 			if (to_duplicate.has(E->get().from_node) && to_duplicate.has(E->get().to_node)) {
-				undo_redo->add_do_method(script.ptr(), "sequence_connect", default_func, remap[E->get().from_node], E->get().from_output, remap[E->get().to_node]);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), default_func, remap[E->get().from_node], E->get().from_output, remap[E->get().to_node]);
 			}
 		}
 
@@ -1669,13 +1669,13 @@ void VisualScriptEditor::_on_nodes_duplicate() {
 		script->get_data_connection_list(F->get(), &data);
 		for (List<VisualScript::DataConnection>::Element *E = data.front(); E; E = E->next()) {
 			if (to_duplicate.has(E->get().from_node) && to_duplicate.has(E->get().to_node)) {
-				undo_redo->add_do_method(script.ptr(), "data_connect", default_func, remap[E->get().from_node], E->get().from_port, remap[E->get().to_node], E->get().to_port);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::data_connect), default_func, remap[E->get().from_node], E->get().from_port, remap[E->get().to_node], E->get().to_port);
 			}
 		}
 	}
 
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 
 	undo_redo->commit_action();
 
@@ -1785,11 +1785,11 @@ void VisualScriptEditor::_rename_function(const String &name, const String &new_
 		func = script->get_node(name, node_id);
 	}
 	undo_redo->create_action(TTR("Rename Function"));
-	undo_redo->add_do_method(script.ptr(), "rename_function", name, new_name);
-	undo_redo->add_undo_method(script.ptr(), "rename_function", new_name, name);
+	undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::rename_function), name, new_name);
+	undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::rename_function), new_name, name);
 	if (func.is_valid()) {
-		undo_redo->add_do_method(func.ptr(), "set_name", new_name);
-		undo_redo->add_undo_method(func.ptr(), "set_name", name);
+		undo_redo->add_do_method_compat(func.ptr(), "set_name", new_name);
+		undo_redo->add_undo_method_compat(func.ptr(), "set_name", name);
 	}
 
 	// also fix all function calls
@@ -1803,18 +1803,18 @@ void VisualScriptEditor::_rename_function(const String &name, const String &new_
 			if (!fncall.is_valid())
 				continue;
 			if (fncall->get_function() == name) {
-				undo_redo->add_do_method(fncall.ptr(), "set_function", new_name);
-				undo_redo->add_undo_method(fncall.ptr(), "set_function", name);
+				undo_redo->add_do_method_compat(fncall.ptr(), "set_function", new_name);
+				undo_redo->add_undo_method_compat(fncall.ptr(), "set_function", name);
 			}
 		}
 	}
 
-	undo_redo->add_do_method(this, "_update_members");
-	undo_redo->add_undo_method(this, "_update_members");
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
-	undo_redo->add_do_method(this, "emit_signal", "edited_script_changed");
-	undo_redo->add_undo_method(this, "emit_signal", "edited_script_changed");
+	undo_redo->add_do_method_compat(this, "_update_members");
+	undo_redo->add_undo_method_compat(this, "_update_members");
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
+	undo_redo->add_do_method_compat(this, "emit_signal", "edited_script_changed");
+	undo_redo->add_undo_method_compat(this, "emit_signal", "edited_script_changed");
 	undo_redo->commit_action();
 }
 
@@ -2007,10 +2007,10 @@ void VisualScriptEditor::drop_data_fw(const Point2 &p_point, const Variant &p_da
 		int new_id = script->get_available_id();
 
 		undo_redo->create_action(TTR("Add Node"));
-		undo_redo->add_do_method(script.ptr(), "add_node", default_func, new_id, vnode, ofs);
-		undo_redo->add_undo_method(script.ptr(), "remove_node", default_func, new_id);
-		undo_redo->add_do_method(this, "_update_graph");
-		undo_redo->add_undo_method(this, "_update_graph");
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), default_func, new_id, vnode, ofs);
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), default_func, new_id);
+		undo_redo->add_do_method_compat(this, "_update_graph");
+		undo_redo->add_undo_method_compat(this, "_update_graph");
 		undo_redo->commit_action();
 
 		Node *node = graph->get_node(itos(new_id));
@@ -2037,13 +2037,13 @@ void VisualScriptEditor::drop_data_fw(const Point2 &p_point, const Variant &p_da
 		int new_id = script->get_available_id();
 
 		undo_redo->create_action(TTR("Add Node"));
-		undo_redo->add_do_method(script.ptr(), "add_node", default_func, new_id, vnode, ofs);
-		undo_redo->add_do_method(vnode.ptr(), "set_base_type", script->get_instance_base_type());
-		undo_redo->add_do_method(vnode.ptr(), "set_function", d["function"]);
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), default_func, new_id, vnode, ofs);
+		undo_redo->add_do_method_compat(vnode.ptr(), "set_base_type", script->get_instance_base_type());
+		undo_redo->add_do_method_compat(vnode.ptr(), "set_function", d["function"]);
 
-		undo_redo->add_undo_method(script.ptr(), "remove_node", default_func, new_id);
-		undo_redo->add_do_method(this, "_update_graph");
-		undo_redo->add_undo_method(this, "_update_graph");
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), default_func, new_id);
+		undo_redo->add_do_method_compat(this, "_update_graph");
+		undo_redo->add_undo_method_compat(this, "_update_graph");
 		undo_redo->commit_action();
 
 		Node *node = graph->get_node(itos(new_id));
@@ -2070,10 +2070,10 @@ void VisualScriptEditor::drop_data_fw(const Point2 &p_point, const Variant &p_da
 		int new_id = script->get_available_id();
 
 		undo_redo->create_action(TTR("Add Node"));
-		undo_redo->add_do_method(script.ptr(), "add_node", default_func, new_id, vnode, ofs);
-		undo_redo->add_undo_method(script.ptr(), "remove_node", default_func, new_id);
-		undo_redo->add_do_method(this, "_update_graph");
-		undo_redo->add_undo_method(this, "_update_graph");
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), default_func, new_id, vnode, ofs);
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), default_func, new_id);
+		undo_redo->add_do_method_compat(this, "_update_graph");
+		undo_redo->add_undo_method_compat(this, "_update_graph");
 		undo_redo->commit_action();
 
 		Node *node = graph->get_node(itos(new_id));
@@ -2100,10 +2100,10 @@ void VisualScriptEditor::drop_data_fw(const Point2 &p_point, const Variant &p_da
 		int new_id = script->get_available_id();
 
 		undo_redo->create_action(TTR("Add Preload Node"));
-		undo_redo->add_do_method(script.ptr(), "add_node", default_func, new_id, prnode, ofs);
-		undo_redo->add_undo_method(script.ptr(), "remove_node", default_func, new_id);
-		undo_redo->add_do_method(this, "_update_graph");
-		undo_redo->add_undo_method(this, "_update_graph");
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), default_func, new_id, prnode, ofs);
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), default_func, new_id);
+		undo_redo->add_do_method_compat(this, "_update_graph");
+		undo_redo->add_undo_method_compat(this, "_update_graph");
 		undo_redo->commit_action();
 
 		Node *node = graph->get_node(itos(new_id));
@@ -2141,15 +2141,15 @@ void VisualScriptEditor::drop_data_fw(const Point2 &p_point, const Variant &p_da
 				prnode.instance();
 				prnode->set_preload(res);
 
-				undo_redo->add_do_method(script.ptr(), "add_node", default_func, new_id, prnode, ofs);
-				undo_redo->add_undo_method(script.ptr(), "remove_node", default_func, new_id);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), default_func, new_id, prnode, ofs);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), default_func, new_id);
 				new_ids.push_back(new_id);
 				new_id++;
 				ofs += Vector2(20, 20) * EDSCALE;
 			}
 
-			undo_redo->add_do_method(this, "_update_graph");
-			undo_redo->add_undo_method(this, "_update_graph");
+			undo_redo->add_do_method_compat(this, "_update_graph");
+			undo_redo->add_undo_method_compat(this, "_update_graph");
 			undo_redo->commit_action();
 		}
 
@@ -2222,14 +2222,14 @@ void VisualScriptEditor::drop_data_fw(const Point2 &p_point, const Variant &p_da
 				selecting_method_id = base_id;
 			}
 
-			undo_redo->add_do_method(script.ptr(), "add_node", default_func, base_id, n, ofs);
-			undo_redo->add_undo_method(script.ptr(), "remove_node", default_func, base_id);
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), default_func, base_id, n, ofs);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), default_func, base_id);
 
 			base_id++;
 			ofs += Vector2(25, 25);
 		}
-		undo_redo->add_do_method(this, "_update_graph");
-		undo_redo->add_undo_method(this, "_update_graph");
+		undo_redo->add_do_method_compat(this, "_update_graph");
+		undo_redo->add_undo_method_compat(this, "_update_graph");
 		undo_redo->commit_action();
 	}
 
@@ -2294,16 +2294,16 @@ void VisualScriptEditor::drop_data_fw(const Point2 &p_point, const Variant &p_da
 				vnode = pget;
 			}
 
-			undo_redo->add_do_method(script.ptr(), "add_node", default_func, base_id, vnode, ofs);
-			undo_redo->add_do_method(vnode.ptr(), "set_property", d["property"]);
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), default_func, base_id, vnode, ofs);
+			undo_redo->add_do_method_compat(vnode.ptr(), "set_property", d["property"]);
 			if (!use_get) {
-				undo_redo->add_do_method(vnode.ptr(), "set_default_input_value", 0, d["value"]);
+				undo_redo->add_do_method_compat(vnode.ptr(), "set_default_input_value", 0, d["value"]);
 			}
 
-			undo_redo->add_undo_method(script.ptr(), "remove_node", default_func, base_id);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), default_func, base_id);
 
-			undo_redo->add_do_method(this, "_update_graph");
-			undo_redo->add_undo_method(this, "_update_graph");
+			undo_redo->add_do_method_compat(this, "_update_graph");
+			undo_redo->add_undo_method_compat(this, "_update_graph");
 			undo_redo->commit_action();
 
 		} else {
@@ -2341,15 +2341,15 @@ void VisualScriptEditor::drop_data_fw(const Point2 &p_point, const Variant &p_da
 				}
 				vnode = pget;
 			}
-			undo_redo->add_do_method(script.ptr(), "add_node", default_func, base_id, vnode, ofs);
-			undo_redo->add_do_method(vnode.ptr(), "set_property", d["property"]);
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), default_func, base_id, vnode, ofs);
+			undo_redo->add_do_method_compat(vnode.ptr(), "set_property", d["property"]);
 			if (!use_get) {
-				undo_redo->add_do_method(vnode.ptr(), "set_default_input_value", 0, d["value"]);
+				undo_redo->add_do_method_compat(vnode.ptr(), "set_default_input_value", 0, d["value"]);
 			}
-			undo_redo->add_undo_method(script.ptr(), "remove_node", default_func, base_id);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), default_func, base_id);
 
-			undo_redo->add_do_method(this, "_update_graph");
-			undo_redo->add_undo_method(this, "_update_graph");
+			undo_redo->add_do_method_compat(this, "_update_graph");
+			undo_redo->add_undo_method_compat(this, "_update_graph");
 			undo_redo->commit_action();
 		}
 	}
@@ -2675,10 +2675,10 @@ void VisualScriptEditor::_change_base_type_callback() {
 
 	ERR_FAIL_COND(bt == String());
 	undo_redo->create_action(TTR("Change Base Type"));
-	undo_redo->add_do_method(script.ptr(), "set_instance_base_type", bt);
-	undo_redo->add_undo_method(script.ptr(), "set_instance_base_type", script->get_instance_base_type());
-	undo_redo->add_do_method(this, "_update_members");
-	undo_redo->add_undo_method(this, "_update_members");
+	undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::set_instance_base_type), bt);
+	undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::set_instance_base_type), script->get_instance_base_type());
+	undo_redo->add_do_method_compat(this, "_update_members");
+	undo_redo->add_undo_method_compat(this, "_update_members");
 	undo_redo->commit_action();
 }
 
@@ -2760,8 +2760,8 @@ void VisualScriptEditor::_node_moved(Vector2 p_from, Vector2 p_to, int p_id) {
 
 	StringName func = _get_function_of_node(p_id);
 
-	undo_redo->add_do_method(this, "_move_node", func, p_id, p_to);
-	undo_redo->add_undo_method(this, "_move_node", func, p_id, p_from);
+	undo_redo->add_do_method_compat(this, "_move_node", func, p_id, p_to);
+	undo_redo->add_undo_method_compat(this, "_move_node", func, p_id, p_from);
 }
 
 void VisualScriptEditor::_remove_node(int p_id) {
@@ -2770,8 +2770,8 @@ void VisualScriptEditor::_remove_node(int p_id) {
 
 	StringName func = _get_function_of_node(p_id);
 
-	undo_redo->add_do_method(script.ptr(), "remove_node", func, p_id);
-	undo_redo->add_undo_method(script.ptr(), "add_node", func, p_id, script->get_node(func, p_id), script->get_node_position(func, p_id));
+	undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::remove_node), func, p_id);
+	undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::add_node), func, p_id, script->get_node(func, p_id), script->get_node_position(func, p_id));
 
 	List<VisualScript::SequenceConnection> sequence_conns;
 	script->get_sequence_connection_list(func, &sequence_conns);
@@ -2779,7 +2779,7 @@ void VisualScriptEditor::_remove_node(int p_id) {
 	for (List<VisualScript::SequenceConnection>::Element *E = sequence_conns.front(); E; E = E->next()) {
 
 		if (E->get().from_node == p_id || E->get().to_node == p_id) {
-			undo_redo->add_undo_method(script.ptr(), "sequence_connect", func, E->get().from_node, E->get().from_output, E->get().to_node);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), func, E->get().from_node, E->get().from_output, E->get().to_node);
 		}
 	}
 
@@ -2789,12 +2789,12 @@ void VisualScriptEditor::_remove_node(int p_id) {
 	for (List<VisualScript::DataConnection>::Element *E = data_conns.front(); E; E = E->next()) {
 
 		if (E->get().from_node == p_id || E->get().to_node == p_id) {
-			undo_redo->add_undo_method(script.ptr(), "data_connect", func, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_connect), func, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
 		}
 	}
 
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 
 	undo_redo->commit_action();
 }
@@ -2885,9 +2885,9 @@ void VisualScriptEditor::_graph_connected(const String &p_from, int p_from_slot,
 	}
 
 	if (from_seq) {
-		undo_redo->add_do_method(script.ptr(), "sequence_connect", func, p_from.to_int(), from_port, p_to.to_int());
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), func, p_from.to_int(), from_port, p_to.to_int());
 		// this undo error on undo after move can't be removed without painful gymnastics
-		undo_redo->add_undo_method(script.ptr(), "sequence_disconnect", func, p_from.to_int(), from_port, p_to.to_int());
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::sequence_disconnect), func, p_from.to_int(), from_port, p_to.to_int());
 	} else {
 		bool converted = false;
 		int conv_node = -1;
@@ -2959,11 +2959,11 @@ void VisualScriptEditor::_graph_connected(const String &p_from, int p_from_slot,
 						constructor_pos.x = from_node_size.x + from_node_pos.x + 10;
 						constructor_pos.y = to_node_pos.y;
 					}
-					undo_redo->add_do_method(this, "_move_node", func, p_to.to_int(), new_to_node_pos);
-					undo_redo->add_undo_method(this, "_move_node", func, p_to.to_int(), to_node_pos);
+					undo_redo->add_do_method_compat(this, "_move_node", func, p_to.to_int(), new_to_node_pos);
+					undo_redo->add_undo_method_compat(this, "_move_node", func, p_to.to_int(), to_node_pos);
 					conv_node = script->get_available_id();
-					undo_redo->add_do_method(script.ptr(), "add_node", func, conv_node, constructor, _get_available_pos(false, constructor_pos));
-					undo_redo->add_undo_method(script.ptr(), "remove_node", func, conv_node);
+					undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), func, conv_node, constructor, _get_available_pos(false, constructor_pos));
+					undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), func, conv_node);
 					converted = true;
 				}
 			}
@@ -2975,44 +2975,44 @@ void VisualScriptEditor::_graph_connected(const String &p_from, int p_from_slot,
 				int conn_from;
 				int conn_port;
 				script->get_input_value_port_connection_source(func, p_to.to_int(), to_port, &conn_from, &conn_port);
-				undo_redo->add_do_method(script.ptr(), "data_disconnect", func, conn_from, conn_port, p_to.to_int(), to_port);
-				undo_redo->add_do_method(script.ptr(), "data_connect", func, conn_from, conn_port, data_disconnect_node, data_disconnect_port);
-				undo_redo->add_undo_method(script.ptr(), "data_disconnect", func, conn_from, conn_port, data_disconnect_node, data_disconnect_port);
-				undo_redo->add_undo_method(script.ptr(), "data_connect", func, conn_from, conn_port, p_to.to_int(), to_port);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::data_disconnect), func, conn_from, conn_port, p_to.to_int(), to_port);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::data_connect), func, conn_from, conn_port, data_disconnect_node, data_disconnect_port);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_disconnect), func, conn_from, conn_port, data_disconnect_node, data_disconnect_port);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_connect), func, conn_from, conn_port, p_to.to_int(), to_port);
 				can_swap = false; // swapped
 			} else {
 				int conn_from;
 				int conn_port;
 				script->get_input_value_port_connection_source(func, p_to.to_int(), to_port, &conn_from, &conn_port);
-				undo_redo->add_do_method(script.ptr(), "data_disconnect", func, conn_from, conn_port, p_to.to_int(), to_port);
-				undo_redo->add_undo_method(script.ptr(), "data_connect", func, conn_from, conn_port, p_to.to_int(), to_port);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::data_disconnect), func, conn_from, conn_port, p_to.to_int(), to_port);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_connect), func, conn_from, conn_port, p_to.to_int(), to_port);
 			}
 		}
 		if (!converted) {
-			undo_redo->add_do_method(script.ptr(), "data_connect", func, p_from.to_int(), from_port, p_to.to_int(), to_port);
-			undo_redo->add_undo_method(script.ptr(), "data_disconnect", func, p_from.to_int(), from_port, p_to.to_int(), to_port);
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::data_connect), func, p_from.to_int(), from_port, p_to.to_int(), to_port);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_disconnect), func, p_from.to_int(), from_port, p_to.to_int(), to_port);
 		} else {
 			// this is noice
-			undo_redo->add_do_method(script.ptr(), "data_connect", func, p_from.to_int(), from_port, conv_node, 0);
-			undo_redo->add_do_method(script.ptr(), "data_connect", func, conv_node, 0, p_to.to_int(), to_port);
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::data_connect), func, p_from.to_int(), from_port, conv_node, 0);
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::data_connect), func, conv_node, 0, p_to.to_int(), to_port);
 			// I don't think this is needed but gonna leave it here for now... until I need to finalise it all
-			undo_redo->add_undo_method(script.ptr(), "data_disconnect", func, p_from.to_int(), from_port, conv_node, 0);
-			undo_redo->add_undo_method(script.ptr(), "data_disconnect", func, conv_node, 0, p_to.to_int(), to_port);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_disconnect), func, p_from.to_int(), from_port, conv_node, 0);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_disconnect), func, conv_node, 0, p_to.to_int(), to_port);
 		}
 		//update nodes in graph
 		if (!converted) {
-			undo_redo->add_do_method(this, "_update_graph", p_from.to_int());
-			undo_redo->add_do_method(this, "_update_graph", p_to.to_int());
-			undo_redo->add_undo_method(this, "_update_graph", p_from.to_int());
-			undo_redo->add_undo_method(this, "_update_graph", p_to.to_int());
+			undo_redo->add_do_method_compat(this, "_update_graph", p_from.to_int());
+			undo_redo->add_do_method_compat(this, "_update_graph", p_to.to_int());
+			undo_redo->add_undo_method_compat(this, "_update_graph", p_from.to_int());
+			undo_redo->add_undo_method_compat(this, "_update_graph", p_to.to_int());
 		} else {
-			undo_redo->add_do_method(this, "_update_graph");
-			undo_redo->add_undo_method(this, "_update_graph");
+			undo_redo->add_do_method_compat(this, "_update_graph");
+			undo_redo->add_undo_method_compat(this, "_update_graph");
 		}
 	}
 
-	undo_redo->add_do_method(this, "_update_graph_connections");
-	undo_redo->add_undo_method(this, "_update_graph_connections");
+	undo_redo->add_do_method_compat(this, "_update_graph_connections");
+	undo_redo->add_undo_method_compat(this, "_update_graph_connections");
 
 	undo_redo->commit_action();
 }
@@ -3045,24 +3045,24 @@ void VisualScriptEditor::_graph_disconnected(const String &p_from, int p_from_sl
 	undo_redo->create_action(TTR("Disconnect Nodes"));
 
 	if (from_seq) {
-		undo_redo->add_do_method(script.ptr(), "sequence_disconnect", func, p_from.to_int(), from_port, p_to.to_int());
-		undo_redo->add_undo_method(script.ptr(), "sequence_connect", func, p_from.to_int(), from_port, p_to.to_int());
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::sequence_disconnect), func, p_from.to_int(), from_port, p_to.to_int());
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), func, p_from.to_int(), from_port, p_to.to_int());
 	} else {
 
 		can_swap = true;
 		data_disconnect_node = p_to.to_int();
 		data_disconnect_port = to_port;
 
-		undo_redo->add_do_method(script.ptr(), "data_disconnect", func, p_from.to_int(), from_port, p_to.to_int(), to_port);
-		undo_redo->add_undo_method(script.ptr(), "data_connect", func, p_from.to_int(), from_port, p_to.to_int(), to_port);
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::data_disconnect), func, p_from.to_int(), from_port, p_to.to_int(), to_port);
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_connect), func, p_from.to_int(), from_port, p_to.to_int(), to_port);
 		//update relevant nodes in the graph
-		undo_redo->add_do_method(this, "_update_graph", p_from.to_int());
-		undo_redo->add_do_method(this, "_update_graph", p_to.to_int());
-		undo_redo->add_undo_method(this, "_update_graph", p_from.to_int());
-		undo_redo->add_undo_method(this, "_update_graph", p_to.to_int());
+		undo_redo->add_do_method_compat(this, "_update_graph", p_from.to_int());
+		undo_redo->add_do_method_compat(this, "_update_graph", p_to.to_int());
+		undo_redo->add_undo_method_compat(this, "_update_graph", p_from.to_int());
+		undo_redo->add_undo_method_compat(this, "_update_graph", p_to.to_int());
 	}
-	undo_redo->add_do_method(this, "_update_graph_connections");
-	undo_redo->add_undo_method(this, "_update_graph_connections");
+	undo_redo->add_do_method_compat(this, "_update_graph_connections");
+	undo_redo->add_undo_method_compat(this, "_update_graph_connections");
 
 	undo_redo->commit_action();
 }
@@ -3230,11 +3230,11 @@ void VisualScriptEditor::_move_nodes_with_rescan(const StringName &p_func_from, 
 	for (Set<int>::Element *E = nodes_to_move.front(); E; E = E->next()) {
 		int id = E->get();
 
-		undo_redo->add_do_method(script.ptr(), "remove_node", p_func_from, id);
-		undo_redo->add_do_method(script.ptr(), "add_node", p_func_to, id, script->get_node(p_func_from, id), script->get_node_position(p_func_from, id));
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::remove_node), p_func_from, id);
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), p_func_to, id, script->get_node(p_func_from, id), script->get_node_position(p_func_from, id));
 
-		undo_redo->add_undo_method(script.ptr(), "remove_node", p_func_to, id);
-		undo_redo->add_undo_method(script.ptr(), "add_node", p_func_from, id, script->get_node(p_func_from, id), script->get_node_position(p_func_from, id));
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), p_func_to, id);
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::add_node), p_func_from, id, script->get_node(p_func_from, id), script->get_node_position(p_func_from, id));
 	}
 
 	List<int> skeys;
@@ -3244,8 +3244,8 @@ void VisualScriptEditor::_move_nodes_with_rescan(const StringName &p_func_from, 
 		for (Map<int, int>::Element *F = seqconns_to_move[from_node].front(); F; F = F->next()) {
 			int from_port = F->key();
 			int to_node = F->get();
-			undo_redo->add_do_method(script.ptr(), "sequence_connect", p_func_to, from_node, from_port, to_node);
-			undo_redo->add_undo_method(script.ptr(), "sequence_connect", p_func_from, from_node, from_port, to_node);
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), p_func_to, from_node, from_port, to_node);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), p_func_from, from_node, from_port, to_node);
 		}
 	}
 
@@ -3257,22 +3257,22 @@ void VisualScriptEditor::_move_nodes_with_rescan(const StringName &p_func_from, 
 			int inp_p = F->key();
 			Pair<int, int> fro = F->get();
 
-			undo_redo->add_do_method(script.ptr(), "data_connect", p_func_to, fro.first, fro.second, to_node, inp_p);
-			undo_redo->add_undo_method(script.ptr(), "data_connect", p_func_from, fro.first, fro.second, to_node, inp_p);
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::data_connect), p_func_to, fro.first, fro.second, to_node, inp_p);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_connect), p_func_from, fro.first, fro.second, to_node, inp_p);
 		}
 	}
 
 	// this to have proper undo operations
 	for (List<VisualScript::SequenceConnection>::Element *E = seqext.front(); E; E = E->next()) {
-		undo_redo->add_undo_method(script.ptr(), "sequence_connect", p_func_from, E->get().from_node, E->get().from_output, E->get().to_node);
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), p_func_from, E->get().from_node, E->get().from_output, E->get().to_node);
 	}
 	for (List<VisualScript::DataConnection>::Element *E = dataext.front(); E; E = E->next()) {
-		undo_redo->add_undo_method(script.ptr(), "data_connect", p_func_from, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_connect), p_func_from, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
 	}
 	// this doesn't need do methods as they are handled by the subsequent do calls implicitly
 
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 
 	// undo_redo->commit_action();
 }
@@ -3456,8 +3456,8 @@ void VisualScriptEditor::connect_data(Ref<VisualScriptNode> vnode_old, Ref<Visua
 		port = 0;
 	}
 	StringName func = _get_function_of_node(port_action_node);
-	undo_redo->add_do_method(script.ptr(), "data_connect", func, port_action_node, port, new_id, 0);
-	undo_redo->add_undo_method(script.ptr(), "data_disconnect", func, port_action_node, port, new_id, 0);
+	undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::data_connect), func, port_action_node, port, new_id, 0);
+	undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_disconnect), func, port_action_node, port, new_id, 0);
 	undo_redo->commit_action();
 }
 
@@ -3507,15 +3507,15 @@ void VisualScriptEditor::_selected_connect_node(const String &p_text, const Stri
 		}
 
 		undo_redo->create_action(TTR("Add Node"));
-		undo_redo->add_do_method(script.ptr(), "add_node", func, new_id, vnode_new, ofs);
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), func, new_id, vnode_new, ofs);
 		if (vnode_old.is_valid() && p_connecting) {
 			connect_seq(vnode_old, vnode_new, new_id);
 			connect_data(vnode_old, vnode_new, new_id);
 		}
 
-		undo_redo->add_undo_method(script.ptr(), "remove_node", func, new_id);
-		undo_redo->add_do_method(this, "_update_graph");
-		undo_redo->add_undo_method(this, "_update_graph");
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), func, new_id);
+		undo_redo->add_do_method_compat(this, "_update_graph");
+		undo_redo->add_undo_method_compat(this, "_update_graph");
 		undo_redo->commit_action();
 		return;
 	}
@@ -3579,10 +3579,10 @@ void VisualScriptEditor::_selected_connect_node(const String &p_text, const Stri
 
 	int new_id = script->get_available_id();
 	undo_redo->create_action(TTR("Add Node"));
-	undo_redo->add_do_method(script.ptr(), "add_node", func, new_id, vnode, ofs);
-	undo_redo->add_undo_method(script.ptr(), "remove_node", func, new_id);
-	undo_redo->add_do_method(this, "_update_graph", new_id);
-	undo_redo->add_undo_method(this, "_update_graph", new_id);
+	undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), func, new_id, vnode, ofs);
+	undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), func, new_id);
+	undo_redo->add_do_method_compat(this, "_update_graph", new_id);
+	undo_redo->add_undo_method_compat(this, "_update_graph", new_id);
 	undo_redo->commit_action();
 
 	if (script_prop_set.is_valid())
@@ -3726,22 +3726,22 @@ void VisualScriptEditor::connect_seq(Ref<VisualScriptNode> vnode_old, Ref<Visual
 	int return_port = port_action_output - 1;
 	if (vnode_old->get_output_value_port_info(port_action_output).name == String("pass") &&
 			!script->get_output_sequence_ports_connected(func, port_action_node).has(pass_port)) {
-		undo_redo->add_do_method(script.ptr(), "sequence_connect", func, port_action_node, pass_port, new_id);
-		undo_redo->add_undo_method(script.ptr(), "sequence_disconnect", func, port_action_node, pass_port, new_id);
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), func, port_action_node, pass_port, new_id);
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::sequence_disconnect), func, port_action_node, pass_port, new_id);
 	} else if (vnode_old->get_output_value_port_info(port_action_output).name == String("return") &&
 			   !script->get_output_sequence_ports_connected(func, port_action_node).has(return_port)) {
-		undo_redo->add_do_method(script.ptr(), "sequence_connect", func, port_action_node, return_port, new_id);
-		undo_redo->add_undo_method(script.ptr(), "sequence_disconnect", func, port_action_node, return_port, new_id);
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), func, port_action_node, return_port, new_id);
+		undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::sequence_disconnect), func, port_action_node, return_port, new_id);
 	} else {
 		for (int port = 0; port < vnode_old->get_output_sequence_port_count(); port++) {
 			int count = vnode_old->get_output_sequence_port_count();
 			if (port_action_output < count && !script->get_output_sequence_ports_connected(func, port_action_node).has(port_action_output)) {
-				undo_redo->add_do_method(script.ptr(), "sequence_connect", func, port_action_node, port_action_output, new_id);
-				undo_redo->add_undo_method(script.ptr(), "sequence_disconnect", func, port_action_node, port_action_output, new_id);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), func, port_action_node, port_action_output, new_id);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::sequence_disconnect), func, port_action_node, port_action_output, new_id);
 				break;
 			} else if (!script->get_output_sequence_ports_connected(func, port_action_node).has(port)) {
-				undo_redo->add_do_method(script.ptr(), "sequence_connect", func, port_action_node, port, new_id);
-				undo_redo->add_undo_method(script.ptr(), "sequence_disconnect", func, port_action_node, port, new_id);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), func, port_action_node, port, new_id);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::sequence_disconnect), func, port_action_node, port, new_id);
 				break;
 			}
 		}
@@ -3779,7 +3779,7 @@ void VisualScriptEditor::_selected_new_virtual_method(const String &p_text, cons
 	func_node->set_name(name);
 
 	undo_redo->create_action(TTR("Add Function"));
-	undo_redo->add_do_method(script.ptr(), "add_function", name);
+	undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_function), name);
 
 	for (int i = 0; i < minfo.arguments.size(); i++) {
 		func_node->add_argument(minfo.arguments[i].type, minfo.arguments[i].name, -1, minfo.arguments[i].hint, minfo.arguments[i].hint_string);
@@ -3787,21 +3787,21 @@ void VisualScriptEditor::_selected_new_virtual_method(const String &p_text, cons
 
 	Vector2 ofs = _get_available_pos();
 
-	undo_redo->add_do_method(script.ptr(), "add_node", name, script->get_available_id(), func_node, ofs);
+	undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), name, script->get_available_id(), func_node, ofs);
 	if (minfo.return_val.type != Variant::NIL || minfo.return_val.usage & PROPERTY_USAGE_NIL_IS_VARIANT) {
 		Ref<VisualScriptReturn> ret_node;
 		ret_node.instance();
 		ret_node->set_return_type(minfo.return_val.type);
 		ret_node->set_enable_return_value(true);
 		ret_node->set_name(name);
-		undo_redo->add_do_method(script.ptr(), "add_node", name, script->get_available_id() + 1, ret_node, _get_available_pos(false, ofs + Vector2(500, 0)));
+		undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), name, script->get_available_id() + 1, ret_node, _get_available_pos(false, ofs + Vector2(500, 0)));
 	}
 
-	undo_redo->add_undo_method(script.ptr(), "remove_function", name);
-	undo_redo->add_do_method(this, "_update_members");
-	undo_redo->add_undo_method(this, "_update_members");
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_function), name);
+	undo_redo->add_do_method_compat(this, "_update_members");
+	undo_redo->add_undo_method_compat(this, "_update_members");
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 
 	undo_redo->commit_action();
 
@@ -3822,10 +3822,10 @@ int VisualScriptEditor::_create_new_node_from_name(const String &p_text, const V
 	Ref<VisualScriptNode> vnode = VisualScriptLanguage::singleton->create_node_from_name(p_text);
 	int new_id = script->get_available_id();
 	undo_redo->create_action(TTR("Add Node"));
-	undo_redo->add_do_method(script.ptr(), "add_node", func, new_id, vnode, p_point);
-	undo_redo->add_undo_method(script.ptr(), "remove_node", func, new_id);
-	undo_redo->add_do_method(this, "_update_graph");
-	undo_redo->add_undo_method(this, "_update_graph");
+	undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), func, new_id, vnode, p_point);
+	undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), func, new_id);
+	undo_redo->add_do_method_compat(this, "_update_graph");
+	undo_redo->add_undo_method_compat(this, "_update_graph");
 	undo_redo->commit_action();
 	return new_id;
 }
@@ -3837,11 +3837,11 @@ void VisualScriptEditor::_default_value_changed() {
 		return;
 
 	undo_redo->create_action(TTR("Change Input Value"));
-	undo_redo->add_do_method(vsn.ptr(), "set_default_input_value", editing_input, default_value_edit->get_variant());
-	undo_redo->add_undo_method(vsn.ptr(), "set_default_input_value", editing_input, vsn->get_default_input_value(editing_input));
+	undo_redo->add_do_method_compat(vsn.ptr(), "set_default_input_value", editing_input, default_value_edit->get_variant());
+	undo_redo->add_undo_method_compat(vsn.ptr(), "set_default_input_value", editing_input, vsn->get_default_input_value(editing_input));
 
-	undo_redo->add_do_method(this, "_update_graph", editing_id);
-	undo_redo->add_undo_method(this, "_update_graph", editing_id);
+	undo_redo->add_do_method_compat(this, "_update_graph", editing_id);
+	undo_redo->add_undo_method_compat(this, "_update_graph", editing_id);
 	undo_redo->commit_action();
 }
 
@@ -4001,8 +4001,8 @@ void VisualScriptEditor::_comment_node_resized(const Vector2 &p_new_size, int p_
 	graph->set_block_minimum_size_adjust(true); //faster resize
 
 	undo_redo->create_action(TTR("Resize Comment"), UndoRedo::MERGE_ENDS);
-	undo_redo->add_do_method(vsc.ptr(), "set_size", p_new_size / EDSCALE);
-	undo_redo->add_undo_method(vsc.ptr(), "set_size", vsc->get_size());
+	undo_redo->add_do_method_compat(vsc.ptr(), "set_size", p_new_size / EDSCALE);
+	undo_redo->add_undo_method_compat(vsc.ptr(), "set_size", vsc->get_size());
 	undo_redo->commit_action();
 
 	gn->set_custom_minimum_size(p_new_size);
@@ -4156,24 +4156,24 @@ void VisualScriptEditor::_menu_option(int p_what) {
 					paste_pos += Vector2(20, 20) * EDSCALE;
 				}
 
-				undo_redo->add_do_method(script.ptr(), "add_node", default_func, new_id, node, paste_pos);
-				undo_redo->add_undo_method(script.ptr(), "remove_node", default_func, new_id);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), default_func, new_id, node, paste_pos);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), default_func, new_id);
 			}
 
 			for (Set<VisualScript::SequenceConnection>::Element *E = clipboard->sequence_connections.front(); E; E = E->next()) {
 
-				undo_redo->add_do_method(script.ptr(), "sequence_connect", default_func, remap[E->get().from_node], E->get().from_output, remap[E->get().to_node]);
-				undo_redo->add_undo_method(script.ptr(), "sequence_disconnect", default_func, remap[E->get().from_node], E->get().from_output, remap[E->get().to_node]);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), default_func, remap[E->get().from_node], E->get().from_output, remap[E->get().to_node]);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::sequence_disconnect), default_func, remap[E->get().from_node], E->get().from_output, remap[E->get().to_node]);
 			}
 
 			for (Set<VisualScript::DataConnection>::Element *E = clipboard->data_connections.front(); E; E = E->next()) {
 
-				undo_redo->add_do_method(script.ptr(), "data_connect", default_func, remap[E->get().from_node], E->get().from_port, remap[E->get().to_node], E->get().to_port);
-				undo_redo->add_undo_method(script.ptr(), "data_disconnect", default_func, remap[E->get().from_node], E->get().from_port, remap[E->get().to_node], E->get().to_port);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::data_connect), default_func, remap[E->get().from_node], E->get().from_port, remap[E->get().to_node], E->get().to_port);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_disconnect), default_func, remap[E->get().from_node], E->get().from_port, remap[E->get().to_node], E->get().to_port);
 			}
 
-			undo_redo->add_do_method(this, "_update_graph");
-			undo_redo->add_undo_method(this, "_update_graph");
+			undo_redo->add_do_method_compat(this, "_update_graph");
+			undo_redo->add_undo_method_compat(this, "_update_graph");
 
 			undo_redo->commit_action();
 
@@ -4340,46 +4340,46 @@ void VisualScriptEditor::_menu_option(int p_what) {
 
 			undo_redo->create_action(TTR("Create Function"));
 
-			undo_redo->add_do_method(script.ptr(), "add_function", new_fn);
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_function), new_fn);
 			int fn_id = script->get_available_id();
-			undo_redo->add_do_method(script.ptr(), "add_node", new_fn, fn_id, func_node, ofs);
-			undo_redo->add_undo_method(script.ptr(), "remove_function", new_fn);
-			undo_redo->add_do_method(this, "_update_members");
-			undo_redo->add_undo_method(this, "_update_members");
-			undo_redo->add_do_method(this, "emit_signal", "edited_script_changed");
-			undo_redo->add_undo_method(this, "emit_signal", "edited_script_changed");
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), new_fn, fn_id, func_node, ofs);
+			undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_function), new_fn);
+			undo_redo->add_do_method_compat(this, "_update_members");
+			undo_redo->add_undo_method_compat(this, "_update_members");
+			undo_redo->add_do_method_compat(this, "emit_signal", "edited_script_changed");
+			undo_redo->add_undo_method_compat(this, "emit_signal", "edited_script_changed");
 
 			// Move the nodes
 
 			for (Map<int, Ref<VisualScriptNode> >::Element *E = nodes.front(); E; E = E->next()) {
-				undo_redo->add_do_method(script.ptr(), "remove_node", function, E->key());
-				undo_redo->add_do_method(script.ptr(), "add_node", new_fn, E->key(), E->get(), script->get_node_position(function, E->key()));
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::remove_node), function, E->key());
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), new_fn, E->key(), E->get(), script->get_node_position(function, E->key()));
 
-				// undo_redo->add_undo_method(script.ptr(), "remove_node", new_fn, E->key()); not needed cause we already remove the function :P
-				undo_redo->add_undo_method(script.ptr(), "add_node", function, E->key(), E->get(), script->get_node_position(function, E->key()));
+				// undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), new_fn, E->key()); not needed cause we already remove the function :P
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::add_node), function, E->key(), E->get(), script->get_node_position(function, E->key()));
 			}
 
 			for (Set<VisualScript::SequenceConnection>::Element *E = seqmove.front(); E; E = E->next()) {
-				undo_redo->add_do_method(script.ptr(), "sequence_connect", new_fn, E->get().from_node, E->get().from_output, E->get().to_node);
-				undo_redo->add_undo_method(script.ptr(), "sequence_connect", function, E->get().from_node, E->get().from_output, E->get().to_node);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), new_fn, E->get().from_node, E->get().from_output, E->get().to_node);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), function, E->get().from_node, E->get().from_output, E->get().to_node);
 			}
 
 			for (Set<VisualScript::DataConnection>::Element *E = datamove.front(); E; E = E->next()) {
-				undo_redo->add_do_method(script.ptr(), "data_connect", new_fn, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
-				undo_redo->add_undo_method(script.ptr(), "data_connect", function, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::data_connect), new_fn, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_connect), function, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
 			}
 
 			// Add undo for external connections as well so that it's easier to revert back and forth
 			// these didn't require do methods as it's already handled internally by other do calls
 			for (Set<VisualScript::SequenceConnection>::Element *E = seqext.front(); E; E = E->next()) {
-				undo_redo->add_undo_method(script.ptr(), "sequence_connect", function, E->get().from_node, E->get().from_output, E->get().to_node);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), function, E->get().from_node, E->get().from_output, E->get().to_node);
 			}
 			for (Set<VisualScript::DataConnection>::Element *E = dataext.front(); E; E = E->next()) {
-				undo_redo->add_undo_method(script.ptr(), "data_connect", function, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_connect), function, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
 			}
 
 			// I don't really think we need support for non sequenced functions at this moment
-			undo_redo->add_do_method(script.ptr(), "sequence_connect", new_fn, fn_id, 0, start_node);
+			undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), new_fn, fn_id, 0, start_node);
 
 			// end nodes are mapped to the return nodes with data connections if possible
 			int m = 1;
@@ -4390,17 +4390,17 @@ void VisualScriptEditor::_menu_option(int p_what) {
 				int ret_id = fn_id + (m++);
 				selections.insert(ret_id);
 				Vector2 ofsi = _get_available_pos(false, script->get_node_position(function, G->get()) + Vector2(80, -100));
-				undo_redo->add_do_method(script.ptr(), "add_node", new_fn, ret_id, ret_node, ofsi);
-				undo_redo->add_undo_method(script.ptr(), "remove_node", new_fn, ret_id);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::add_node), new_fn, ret_id, ret_node, ofsi);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::remove_node), new_fn, ret_id);
 
-				undo_redo->add_do_method(script.ptr(), "sequence_connect", new_fn, G->get(), 0, ret_id);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), new_fn, G->get(), 0, ret_id);
 				// add data outputs from each of the end_nodes
 				Ref<VisualScriptNode> vsn = script->get_node(function, G->get());
 				if (vsn.is_valid() && vsn->get_output_value_port_count() > 0) {
 					ret_node->set_enable_return_value(true);
 					// use the zeroth data port cause that's the likely one that is planned to be used
 					ret_node->set_return_type(vsn->get_output_value_port_info(0).type);
-					undo_redo->add_do_method(script.ptr(), "data_connect", new_fn, G->get(), 0, ret_id, 0);
+					undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::data_connect), new_fn, G->get(), 0, ret_id, 0);
 				}
 			}
 
@@ -4409,12 +4409,12 @@ void VisualScriptEditor::_menu_option(int p_what) {
 			List<Pair<int, int> >::Element *F = input_connections.front();
 			for (List<Variant::Type>::Element *E = inputs.front(); E && F; E = E->next(), F = F->next()) {
 				func_node->add_argument(E->get(), "arg_" + String::num_int64(i), i);
-				undo_redo->add_do_method(script.ptr(), "data_connect", new_fn, fn_id, i, F->get().first, F->get().second);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::data_connect), new_fn, fn_id, i, F->get().first, F->get().second);
 				i++; // increment i
 			}
 
-			undo_redo->add_do_method(this, "_update_graph");
-			undo_redo->add_undo_method(this, "_update_graph");
+			undo_redo->add_do_method_compat(this, "_update_graph");
+			undo_redo->add_undo_method_compat(this, "_update_graph");
 
 			undo_redo->commit_action();
 
@@ -4519,12 +4519,12 @@ void VisualScriptEditor::_member_option(int p_option) {
 				String name = member_name;
 
 				undo_redo->create_action(TTR("Remove Function"));
-				undo_redo->add_do_method(script.ptr(), "remove_function", name);
-				undo_redo->add_undo_method(script.ptr(), "add_function", name);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::remove_function), name);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::add_function), name);
 				List<int> nodes;
 				script->get_node_list(name, &nodes);
 				for (List<int>::Element *E = nodes.front(); E; E = E->next()) {
-					undo_redo->add_undo_method(script.ptr(), "add_node", name, E->get(), script->get_node(name, E->get()), script->get_node_position(name, E->get()));
+					undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::add_node), name, E->get(), script->get_node(name, E->get()), script->get_node_position(name, E->get()));
 				}
 
 				List<VisualScript::SequenceConnection> seq_connections;
@@ -4532,7 +4532,7 @@ void VisualScriptEditor::_member_option(int p_option) {
 				script->get_sequence_connection_list(name, &seq_connections);
 
 				for (List<VisualScript::SequenceConnection>::Element *E = seq_connections.front(); E; E = E->next()) {
-					undo_redo->add_undo_method(script.ptr(), "sequence_connect", name, E->get().from_node, E->get().from_output, E->get().to_node);
+					undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::sequence_connect), name, E->get().from_node, E->get().from_output, E->get().to_node);
 				}
 
 				List<VisualScript::DataConnection> data_connections;
@@ -4540,13 +4540,13 @@ void VisualScriptEditor::_member_option(int p_option) {
 				script->get_data_connection_list(name, &data_connections);
 
 				for (List<VisualScript::DataConnection>::Element *E = data_connections.front(); E; E = E->next()) {
-					undo_redo->add_undo_method(script.ptr(), "data_connect", name, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
+					undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::data_connect), name, E->get().from_node, E->get().from_port, E->get().to_node, E->get().to_port);
 				}
 
-				undo_redo->add_do_method(this, "_update_members");
-				undo_redo->add_undo_method(this, "_update_members");
-				undo_redo->add_do_method(this, "_update_graph");
-				undo_redo->add_undo_method(this, "_update_graph");
+				undo_redo->add_do_method_compat(this, "_update_members");
+				undo_redo->add_undo_method_compat(this, "_update_members");
+				undo_redo->add_do_method_compat(this, "_update_graph");
+				undo_redo->add_undo_method_compat(this, "_update_graph");
 				undo_redo->commit_action();
 			} else if (p_option == MEMBER_EDIT) {
 				selected = members->get_selected()->get_text(0);
@@ -4561,11 +4561,11 @@ void VisualScriptEditor::_member_option(int p_option) {
 
 			if (p_option == MEMBER_REMOVE) {
 				undo_redo->create_action(TTR("Remove Variable"));
-				undo_redo->add_do_method(script.ptr(), "remove_variable", name);
-				undo_redo->add_undo_method(script.ptr(), "add_variable", name, script->get_variable_default_value(name));
-				undo_redo->add_undo_method(script.ptr(), "set_variable_info", name, script->call("get_variable_info", name)); //return as dict
-				undo_redo->add_do_method(this, "_update_members");
-				undo_redo->add_undo_method(this, "_update_members");
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::remove_variable), name);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::add_variable), name, script->get_variable_default_value(name));
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::_set_variable_info), name, script->call("get_variable_info", name)); //return as dict
+				undo_redo->add_do_method_compat(this, "_update_members");
+				undo_redo->add_undo_method_compat(this, "_update_members");
 				undo_redo->commit_action();
 			} else if (p_option == MEMBER_EDIT) {
 				variable_editor->edit(name);
@@ -4578,15 +4578,15 @@ void VisualScriptEditor::_member_option(int p_option) {
 
 			if (p_option == MEMBER_REMOVE) {
 				undo_redo->create_action(TTR("Remove Signal"));
-				undo_redo->add_do_method(script.ptr(), "remove_custom_signal", name);
-				undo_redo->add_undo_method(script.ptr(), "add_custom_signal", name);
+				undo_redo->add_do_method(callable_mp(script.ptr(), &VisualScript::remove_custom_signal), name);
+				undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::add_custom_signal), name);
 
 				for (int i = 0; i < script->custom_signal_get_argument_count(name); i++) {
-					undo_redo->add_undo_method(script.ptr(), "custom_signal_add_argument", name, script->custom_signal_get_argument_name(name, i), script->custom_signal_get_argument_type(name, i));
+					undo_redo->add_undo_method(callable_mp(script.ptr(), &VisualScript::custom_signal_add_argument), name, script->custom_signal_get_argument_name(name, i), script->custom_signal_get_argument_type(name, i));
 				}
 
-				undo_redo->add_do_method(this, "_update_members");
-				undo_redo->add_undo_method(this, "_update_members");
+				undo_redo->add_do_method_compat(this, "_update_members");
+				undo_redo->add_undo_method_compat(this, "_update_members");
 				undo_redo->commit_action();
 			} else if (p_option == MEMBER_EDIT) {
 				signal_editor->edit(name);
@@ -4619,6 +4619,7 @@ void VisualScriptEditor::_bind_methods() {
 	ClassDB::bind_method("drop_data_fw", &VisualScriptEditor::drop_data_fw);
 
 	ClassDB::bind_method("_input", &VisualScriptEditor::_input);
+	ClassDB::bind_method("_update_members", &VisualScriptEditor::_update_members);
 
 	ClassDB::bind_method("_update_graph_connections", &VisualScriptEditor::_update_graph_connections);
 
@@ -4944,5 +4945,6 @@ void _VisualScriptEditor::_bind_methods() {
 }
 
 void VisualScriptEditor::validate() {
+	
 }
 #endif
