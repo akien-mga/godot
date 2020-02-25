@@ -83,7 +83,7 @@ void EditorDirDialog::reload(const String &p_path) {
 void EditorDirDialog::_notification(int p_what) {
 
 	if (p_what == NOTIFICATION_ENTER_TREE) {
-		EditorFileSystem::get_singleton()->connect("filesystem_changed", callable_mp(this, &EditorDirDialog::reload));
+		EditorFileSystem::get_singleton()->connect("filesystem_changed", callable_mp(this, &EditorDirDialog::reload), make_binds(""));
 		reload();
 
 		if (!tree->is_connected("item_collapsed", callable_mp(this, &EditorDirDialog::_item_collapsed))) {
@@ -91,7 +91,7 @@ void EditorDirDialog::_notification(int p_what) {
 		}
 
 		if (!EditorFileSystem::get_singleton()->is_connected("filesystem_changed", callable_mp(this, &EditorDirDialog::reload))) {
-			EditorFileSystem::get_singleton()->connect("filesystem_changed", callable_mp(this, &EditorDirDialog::reload));
+			EditorFileSystem::get_singleton()->connect("filesystem_changed", callable_mp(this, &EditorDirDialog::reload), make_binds(""));
 		}
 	}
 
