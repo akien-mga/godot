@@ -147,6 +147,7 @@ script:
       sh ./misc/travis/clang-format.sh &&
       doc/tools/makerst.py --dry-run doc/classes modules;
     else
+      $CXX --version && $CXX -dumpversion &&
       scons -j2 CC=$CC CXX=$CXX platform=$PLATFORM tools=$TOOLS target=$TARGET $OPTIONS $EXTRA_ARGS &&
       if [ "$TEST_PROJECT" = "yes" ]; then
         git clone --depth 1 "https://github.com/godotengine/godot-tests.git";
