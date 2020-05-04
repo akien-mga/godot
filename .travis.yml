@@ -152,5 +152,7 @@ script:
         git clone --depth 1 "https://github.com/godotengine/godot-tests.git";
         sed -i "s:custom_template/release=\"\":custom_template/release=\"$(readlink -e bin/godot_server.linuxbsd.opt.tools.64)\":" godot-tests/tests/project_export/export_presets.cfg;
         godot-tests/tests/project_export/test_project.sh "bin/godot_server.linuxbsd.opt.tools.64";
+        bin/godot_server.linuxbsd.opt.tools.64 --doctool .;
+        git diff --exit-code;
       fi
     fi
