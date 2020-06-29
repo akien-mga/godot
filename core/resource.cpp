@@ -30,14 +30,20 @@
 
 #include "resource.h"
 
-#include "core/core_string_names.h"
-#include "core/io/resource_loader.h"
-#include "core/os/file_access.h"
-#include "core/os/os.h"
-#include "core/script_language.h"
-#include "scene/main/node.h" //only so casting works
+#include "core/core_string_names.h"   // for CoreStringNames
+#include "core/io/resource_loader.h"  // for ResourceLoader, ResourceLoader:...
+#include "core/os/file_access.h"      // for FileAccess, FileAccess::WRITE
+#include "core/os/os.h"               // for OS
+#include "core/script_language.h"     // for ScriptInstance
+#include "core/error_macros.h"        // for ERR_FAIL_COND_MSG, ERR_FAIL_COND_V
+#include "core/hashfuncs.h"           // for hash_djb2_one_32
+#include "core/os/memory.h"           // for memdelete
+#include "core/os/rw_lock.h"          // for RWLock
+#include "core/print_string.h"        // for print_line
+#include "core/typedefs.h"            // for Comparator
+#include "core/variant.h"             // for Variant, Variant::OBJECT, vformat
 
-#include <stdio.h>
+class Node;
 
 void Resource::emit_changed() {
 	emit_signal(CoreStringNames::get_singleton()->changed);

@@ -31,10 +31,18 @@
 #ifndef QUICK_HULL_H
 #define QUICK_HULL_H
 
-#include "core/list.h"
+#include <stdint.h>                 // for uint32_t, uint64_t
+
+#include "core/list.h"              // for List
 #include "core/math/aabb.h"
-#include "core/math/geometry_3d.h"
+#include "core/math/geometry_3d.h"  // for Geometry3D, Geometry3D::MeshData:...
 #include "core/set.h"
+#include "core/error_list.h"        // for Error
+#include "core/math/plane.h"        // for Plane
+#include "core/typedefs.h"          // for SWAP
+#include "core/vector.h"            // for Vector
+
+struct Vector3;
 
 class QuickHull {
 public:

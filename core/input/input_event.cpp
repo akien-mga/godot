@@ -30,8 +30,13 @@
 
 #include "input_event.h"
 
-#include "core/input/input_map.h"
-#include "core/os/keyboard.h"
+#include "core/input/input_map.h"    // for InputMap
+#include "core/os/keyboard.h"        // for find_keycode_name, keycode_get_s...
+#include "core/class_db.h"           // for D_METHOD, ClassDB, MethodDefinition
+#include "core/math/math_funcs.h"    // for Math
+#include "core/math/transform_2d.h"  // for Transform2D
+#include "core/typedefs.h"           // for CLAMP
+#include "core/variant.h"            // for Variant, Variant::INT, Variant::...
 
 const int InputEvent::DEVICE_ID_TOUCH_MOUSE = -1;
 const int InputEvent::DEVICE_ID_INTERNAL = -2;

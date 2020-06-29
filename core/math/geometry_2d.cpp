@@ -30,10 +30,17 @@
 
 #include "geometry_2d.h"
 
-#include "thirdparty/misc/clipper.hpp"
-#include "thirdparty/misc/triangulator.h"
+#include <stdint.h>                         // for int64_t
+#include <memory>                           // for allocator_traits<>::value...
+
+#include "thirdparty/misc/clipper.hpp"      // for Path, Paths, operator<<
+#include "thirdparty/misc/triangulator.h"   // for TriangulatorPoly, Triangu...
+#include "core/list.h"                      // for List, List<>::Element
+#include "core/math/vector3i.h"             // for Vector3i
+#include "core/os/copymem.h"                // for zeromem
+
 #define STB_RECT_PACK_IMPLEMENTATION
-#include "thirdparty/misc/stb_rect_pack.h"
+#include "thirdparty/misc/stb_rect_pack.h"  // for stbrp_rect, stbrp_node
 
 #define SCALE_FACTOR 100000.0 // Based on CMP_EPSILON.
 

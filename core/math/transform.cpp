@@ -30,9 +30,8 @@
 
 #include "transform.h"
 
-#include "core/math/math_funcs.h"
-#include "core/os/copymem.h"
-#include "core/print_string.h"
+#include "core/error_macros.h"  // for ERR_FAIL_COND
+#include "core/math/quat.h"     // for Quat
 
 void Transform::affine_invert() {
 	basis.invert();

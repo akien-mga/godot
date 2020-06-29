@@ -30,7 +30,10 @@
 
 #include "json.h"
 
-#include "core/print_string.h"
+#include "core/array.h"         // for Array
+#include "core/dictionary.h"    // for Dictionary
+#include "core/error_macros.h"  // for ERR_PRINT
+#include "core/list.h"          // for List, List<>::Element
 
 const char *JSON::tk_name[TK_MAX] = {
 	"'{'",

@@ -30,9 +30,8 @@
 
 #include "crypto.h"
 
-#include "core/engine.h"
-#include "core/io/certs_compressed.gen.h"
-#include "core/io/compression.h"
+#include "core/class_db.h"      // for D_METHOD, ClassDB, MethodDefinition
+#include "core/error_macros.h"  // for ERR_FAIL_COND_V_MSG, ERR_FAIL_V, ERR_...
 
 /// Resources
 

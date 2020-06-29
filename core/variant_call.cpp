@@ -28,15 +28,43 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
-#include "variant.h"
+#include <stddef.h>                         // for size_t
+#include <stdint.h>                         // for uint8_t, int64_t, int32_t
 
-#include "core/color_names.inc"
-#include "core/core_string_names.h"
-#include "core/crypto/crypto_core.h"
-#include "core/debugger/engine_debugger.h"
-#include "core/io/compression.h"
-#include "core/object.h"
-#include "core/os/os.h"
+#include "variant.h"                        // for Variant, varray, Variant:...
+#include "core/color_names.inc"             // for _populate_named_colors
+#include "core/core_string_names.h"         // for CoreStringNames
+#include "core/debugger/engine_debugger.h"  // for EngineDebugger
+#include "core/io/compression.h"            // for Compression, Compression:...
+#include "core/object.h"                    // for MethodInfo, PropertyInfo
+#include "core/array.h"                     // for Array
+#include "core/callable.h"                  // for Callable, Callable::CallE...
+#include "core/color.h"                     // for Color
+#include "core/dictionary.h"                // for Dictionary
+#include "core/error_macros.h"              // for ERR_PRINT, ERR_FAIL_INDEX_V
+#include "core/list.h"                      // for List, List<>::Element
+#include "core/map.h"                       // for Map, Map<>::Element
+#include "core/math/aabb.h"                 // for AABB
+#include "core/math/basis.h"                // for Basis
+#include "core/math/math_defs.h"            // for Math_INF, real_t, CMP_EPS...
+#include "core/math/plane.h"                // for Plane
+#include "core/math/quat.h"                 // for Quat
+#include "core/math/rect2.h"                // for Rect2, Rect2i
+#include "core/math/transform.h"            // for Transform
+#include "core/math/transform_2d.h"         // for Transform2D
+#include "core/math/vector2.h"              // for Vector2, Vector2i, Vector...
+#include "core/math/vector3.h"              // for Vector3, Vector3::AXIS_X
+#include "core/math/vector3i.h"             // for Vector3i
+#include "core/method_bind.h"               // for METHOD_FLAG_VARARG, METHO...
+#include "core/node_path.h"                 // for NodePath
+#include "core/object_id.h"                 // for ObjectID
+#include "core/os/copymem.h"                // for copymem
+#include "core/os/memory.h"                 // for memdelete_arr, memnew_arr
+#include "core/rid.h"                       // for RID
+#include "core/string_name.h"               // for _scs_create, StringName
+#include "core/typedefs.h"                  // for Comparator, _FORCE_INLINE_
+#include "core/ustring.h"                   // for String, CharString, CharP...
+#include "core/vector.h"                    // for Vector
 
 typedef void (*VariantFunc)(Variant &r_ret, Variant &p_self, const Variant **p_args);
 typedef void (*VariantConstructFunc)(Variant &r_ret, const Variant **p_args);

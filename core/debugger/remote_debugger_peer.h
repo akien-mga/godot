@@ -31,11 +31,19 @@
 #ifndef REMOTE_DEBUGGER_PEER_H
 #define REMOTE_DEBUGGER_PEER_H
 
-#include "core/io/stream_peer_tcp.h"
-#include "core/os/mutex.h"
+#include <stdint.h>                   // for uint8_t, uint16_t
+
+#include "core/io/stream_peer_tcp.h"  // for StreamPeerTCP
+#include "core/os/mutex.h"            // for Mutex
 #include "core/os/thread.h"
-#include "core/reference.h"
-#include "core/ustring.h"
+#include "core/reference.h"           // for Ref, Reference
+#include "core/ustring.h"             // for String
+#include "core/array.h"               // for Array
+#include "core/error_list.h"          // for Error
+#include "core/list.h"                // for List
+#include "core/vector.h"              // for Vector
+
+class Thread;
 
 class RemoteDebuggerPeer : public Reference {
 protected:

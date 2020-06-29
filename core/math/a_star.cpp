@@ -30,9 +30,15 @@
 
 #include "a_star.h"
 
-#include "core/math/geometry_3d.h"
-#include "core/script_language.h"
-#include "scene/scene_string_names.h"
+#include "core/math/geometry_3d.h"     // for Geometry3D
+#include "core/script_language.h"      // for ScriptInstance
+#include "scene/scene_string_names.h"  // for SceneStringNames
+#include "core/class_db.h"             // for D_METHOD, ClassDB, MethodDefin...
+#include "core/error_macros.h"         // for ERR_FAIL_COND_V, ERR_FAIL_COND
+#include "core/os/memory.h"            // for memdelete, memnew
+#include "core/sort_array.h"           // for SortArray
+#include "core/ustring.h"              // for itos, String, operator+
+#include "core/variant.h"              // for Variant, Variant::INT, Variant...
 
 int AStar::get_available_point_id() const {
 	if (points.empty()) {

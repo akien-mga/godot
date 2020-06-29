@@ -31,8 +31,19 @@
 #ifndef UNDO_REDO_H
 #define UNDO_REDO_H
 
-#include "core/object.h"
-#include "core/resource.h"
+#include <stdint.h>            // for uint64_t
+
+#include "core/object.h"       // for Object, VARIANT_ARG_LIST, GDCLASS, OBJ...
+#include "core/resource.h"     // for Resource
+#include "core/callable.h"     // for Callable
+#include "core/list.h"         // for List
+#include "core/method_bind.h"  // for VARIANT_ENUM_CAST
+#include "core/object_id.h"    // for ObjectID
+#include "core/reference.h"    // for Ref
+#include "core/string_name.h"  // for StringName
+#include "core/ustring.h"      // for String
+#include "core/variant.h"      // for Variant
+#include "core/vector.h"       // for Vector
 
 class UndoRedo : public Object {
 	GDCLASS(UndoRedo, Object);

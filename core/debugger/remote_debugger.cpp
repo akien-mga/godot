@@ -30,15 +30,33 @@
 
 #include "remote_debugger.h"
 
-#include "core/debugger/debugger_marshalls.h"
-#include "core/debugger/engine_debugger.h"
-#include "core/debugger/script_debugger.h"
-#include "core/input/input.h"
-#include "core/os/os.h"
-#include "core/project_settings.h"
-#include "core/script_language.h"
-#include "scene/main/node.h"
-#include "servers/display_server.h"
+#include <stdint.h>                            // for uint64_t, uint32_t
+
+#include "core/debugger/debugger_marshalls.h"  // for DebuggerMarshalls::Mul...
+#include "core/debugger/engine_debugger.h"     // for EngineDebugger, Engine...
+#include "core/debugger/script_debugger.h"     // for ScriptDebugger
+#include "core/input/input.h"                  // for Input, Input::MOUSE_MO...
+#include "core/os/os.h"                        // for OS
+#include "core/project_settings.h"             // for GLOBAL_GET
+#include "core/script_language.h"              // for ScriptLanguage::Profil...
+#include "scene/main/node.h"                   // for Node
+#include "servers/display_server.h"            // for DisplayServer
+#include "core/array.h"                        // for Array
+#include "core/engine.h"                       // for Engine
+#include "core/image.h"                        // for Image
+#include "core/map.h"                          // for Map, Map<>::Element
+#include "core/math/math_defs.h"               // for USEC_TO_SEC
+#include "core/node_path.h"                    // for NodePath
+#include "core/object.h"                       // for Object, ObjectDB
+#include "core/object_id.h"                    // for ObjectID
+#include "core/os/memory.h"                    // for memdelete, memnew
+#include "core/rid.h"                          // for RID
+#include "core/sort_array.h"                   // for SortArray
+#include "core/string_name.h"                  // for StringName
+#include "core/typedefs.h"                     // for Comparator, MAX, MIN
+#include "core/variant.h"                      // for Variant, Variant::ARRAY
+#include "core/vector.h"                       // for Vector, VectorWriteProxy
+#include "servers/rendering_server.h"          // for RenderingServer::Frame...
 
 template <typename T>
 void RemoteDebugger::_bind_profiler(const String &p_name, T *p_prof) {

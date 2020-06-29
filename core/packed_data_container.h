@@ -31,7 +31,18 @@
 #ifndef PACKED_DATA_CONTAINER_H
 #define PACKED_DATA_CONTAINER_H
 
-#include "core/resource.h"
+#include <stdint.h>           // for uint32_t, uint8_t
+
+#include "core/resource.h"    // for Resource
+#include "core/error_list.h"  // for Error
+#include "core/map.h"         // for Map
+#include "core/object.h"      // for GDCLASS
+#include "core/reference.h"   // for Reference, Ref
+#include "core/variant.h"     // for Variant
+#include "core/vector.h"      // for Vector
+
+class Array;
+class String;
 
 class PackedDataContainer : public Resource {
 	GDCLASS(PackedDataContainer, Resource);

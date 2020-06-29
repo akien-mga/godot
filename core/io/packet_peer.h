@@ -31,9 +31,15 @@
 #ifndef PACKET_PEER_H
 #define PACKET_PEER_H
 
-#include "core/io/stream_peer.h"
-#include "core/object.h"
-#include "core/ring_buffer.h"
+#include <stdint.h>               // for uint8_t
+
+#include "core/io/stream_peer.h"  // for StreamPeer
+#include "core/object.h"          // for GDCLASS
+#include "core/ring_buffer.h"     // for RingBuffer
+#include "core/error_list.h"      // for Error, OK
+#include "core/reference.h"       // for Reference, Ref, REF
+#include "core/variant.h"         // for Variant
+#include "core/vector.h"          // for Vector
 
 class PacketPeer : public Reference {
 	GDCLASS(PacketPeer, Reference);

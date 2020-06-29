@@ -30,10 +30,17 @@
 
 #include "compressed_translation.h"
 
-#include "core/pair.h"
+#include <string.h>                // for memcpy
+
+#include "core/pair.h"             // for Pair
+#include "core/class_db.h"         // for D_METHOD, ClassDB, MethodDefinition
+#include "core/error_macros.h"     // for ERR_FAIL_COND
+#include "core/map.h"              // for Map, Map<>::Element
+#include "core/math/math_funcs.h"  // for Math
+#include "core/ustring.h"          // for CharString, String, CharProxy
 
 extern "C" {
-#include "thirdparty/misc/smaz.h"
+#include "thirdparty/misc/smaz.h"  // for smaz_compress, smaz_decompress
 }
 
 struct _PHashTranslationCmp {

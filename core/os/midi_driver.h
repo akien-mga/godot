@@ -31,8 +31,11 @@
 #ifndef MIDI_DRIVER_H
 #define MIDI_DRIVER_H
 
+#include <stdint.h>           // for uint8_t, uint32_t, uint64_t
+
 #include "core/typedefs.h"
-#include "core/variant.h"
+#include "core/variant.h"     // for PackedStringArray
+#include "core/error_list.h"  // for Error
 
 /**
  * Multi-Platform abstraction for accessing to MIDI.

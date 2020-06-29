@@ -30,13 +30,20 @@
 
 #include "input.h"
 
-#include "core/input/default_controller_mappings.h"
-#include "core/input/input_map.h"
-#include "core/os/os.h"
-#include "core/project_settings.h"
+#include "core/input/default_controller_mappings.h"  // for DefaultControlle...
+#include "core/input/input_map.h"                    // for InputMap, InputM...
+#include "core/os/os.h"                              // for OS
+#include "core/project_settings.h"                   // for ProjectSettings
+#include "core/class_db.h"                           // for D_METHOD, ClassDB
+#include "core/engine.h"                             // for Engine
+#include "core/error_macros.h"                       // for ERR_CONTINUE_MSG
+#include "core/math/math_funcs.h"                    // for Math
+#include "core/math/rect2.h"                         // for Rect2
+#include "core/typedefs.h"                           // for Comparator, ABS
+#include "core/variant.h"                            // for Variant, Variant...
 
 #ifdef TOOLS_ENABLED
-#include "editor/editor_settings.h"
+#include "editor/editor_settings.h"                  // for EDITOR_DEF
 #endif
 
 static const char *_joy_buttons[JOY_SDL_BUTTONS + 1] = {

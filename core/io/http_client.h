@@ -31,10 +31,23 @@
 #ifndef HTTP_CLIENT_H
 #define HTTP_CLIENT_H
 
-#include "core/io/ip.h"
+#include <stdint.h>            // for uint8_t
+
+#include "core/io/ip.h"        // for IP, IP::RESOLVER_INVALID_ID, IP::Resol...
 #include "core/io/stream_peer.h"
 #include "core/io/stream_peer_tcp.h"
-#include "core/reference.h"
+#include "core/reference.h"    // for Reference, Ref
+#include "core/dictionary.h"   // for Dictionary
+#include "core/error_list.h"   // for Error
+#include "core/list.h"         // for List
+#include "core/method_bind.h"  // for VARIANT_ENUM_CAST
+#include "core/object.h"       // for GDCLASS
+#include "core/ustring.h"      // for String
+#include "core/variant.h"      // for PackedByteArray, PackedStringArray
+#include "core/vector.h"       // for Vector
+
+class StreamPeer;
+class StreamPeerTCP;
 
 class HTTPClient : public Reference {
 	GDCLASS(HTTPClient, Reference);

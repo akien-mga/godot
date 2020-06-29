@@ -30,9 +30,12 @@
 
 #include "dictionary.h"
 
-#include "core/ordered_hash_map.h"
-#include "core/safe_refcount.h"
-#include "core/variant.h"
+#include "core/ordered_hash_map.h"  // for OrderedHashMap<>::Element, Ordere...
+#include "core/safe_refcount.h"     // for SafeRefCount
+#include "core/variant.h"           // for Variant, VariantHasher, VariantCo...
+#include "core/error_macros.h"      // for ERR_FAIL_COND
+#include "core/hashfuncs.h"         // for hash_djb2_one_32
+#include "core/os/memory.h"         // for memdelete, memnew
 
 struct DictionaryPrivate {
 	SafeRefCount refcount;

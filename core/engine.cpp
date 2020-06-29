@@ -30,11 +30,16 @@
 
 #include "engine.h"
 
-#include "core/authors.gen.h"
-#include "core/donors.gen.h"
-#include "core/license.gen.h"
-#include "core/version.h"
-#include "core/version_hash.gen.h"
+#include "core/authors.gen.h"            // for AUTHORS_DEVELOPERS, AUTHORS_...
+#include "core/donors.gen.h"             // for DONORS_BRONZE, DONORS_GOLD
+#include "core/license.gen.h"            // for ComponentCopyrightPart, Comp...
+#include "core/version.h"                // for VERSION_HEX
+#include "core/version_hash.gen.h"       // for VERSION_HASH
+#include "core/error_macros.h"           // for ERR_FAIL_COND_MSG, ERR_FAIL_...
+#include "core/variant.h"                // for Variant
+#include "core/version_generated.gen.h"  // for VERSION_BUILD, VERSION_MAJOR
+
+class Object;
 
 void Engine::set_iterations_per_second(int p_ips) {
 	ERR_FAIL_COND_MSG(p_ips <= 0, "Engine iterations per second must be greater than 0.");

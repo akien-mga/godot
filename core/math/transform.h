@@ -31,9 +31,14 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-#include "core/math/aabb.h"
-#include "core/math/basis.h"
-#include "core/math/plane.h"
+#include "core/math/aabb.h"       // for AABB
+#include "core/math/basis.h"      // for Basis
+#include "core/math/plane.h"      // for Plane
+#include "core/math/math_defs.h"  // for real_t
+#include "core/math/vector3.h"    // for Vector3, Vector3::(anonymous union)...
+#include "core/typedefs.h"        // for _FORCE_INLINE_
+#include "core/ustring.h"         // for String
+#include "core/vector.h"          // for Vector
 
 class Transform {
 public:

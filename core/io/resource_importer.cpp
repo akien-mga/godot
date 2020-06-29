@@ -30,8 +30,14 @@
 
 #include "resource_importer.h"
 
-#include "core/os/os.h"
-#include "core/variant_parser.h"
+#include "core/os/os.h"           // for OS
+#include "core/variant_parser.h"  // for VariantParser::Tag, VariantParser
+#include "core/class_db.h"        // for ClassDB
+#include "core/error_macros.h"    // for ERR_PRINT
+#include "core/os/file_access.h"  // for FileAccess, FileAccess::READ
+#include "core/os/memory.h"       // for memdelete
+#include "core/set.h"             // for Set
+#include "core/string_name.h"     // for StringName
 
 bool ResourceFormatImporter::SortImporterByName::operator()(const Ref<ResourceImporter> &p_a, const Ref<ResourceImporter> &p_b) const {
 	return p_a->get_importer_name() < p_b->get_importer_name();

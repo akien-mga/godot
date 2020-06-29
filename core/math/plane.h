@@ -31,7 +31,10 @@
 #ifndef PLANE_H
 #define PLANE_H
 
-#include "core/math/vector3.h"
+#include "core/math/vector3.h"    // for Vector3
+#include "core/math/math_defs.h"  // for real_t, CLOCKWISE, ClockDirection
+#include "core/typedefs.h"        // for _FORCE_INLINE_, ABS
+#include "core/ustring.h"         // for String
 
 class Plane {
 public:

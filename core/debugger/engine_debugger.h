@@ -31,15 +31,21 @@
 #ifndef ENGINE_DEBUGGER_H
 #define ENGINE_DEBUGGER_H
 
-#include "core/array.h"
-#include "core/map.h"
-#include "core/string_name.h"
-#include "core/ustring.h"
+#include <stdint.h>             // for uint64_t, uint32_t
+
+#include "core/array.h"         // for Array
+#include "core/map.h"           // for Map
+#include "core/string_name.h"   // for StringName
+#include "core/ustring.h"       // for String
 #include "core/variant.h"
 #include "core/vector.h"
+#include "core/error_list.h"    // for Error
+#include "core/error_macros.h"  // for ErrorHandlerType
+#include "core/typedefs.h"      // for _FORCE_INLINE_
 
 class RemoteDebuggerPeer;
 class ScriptDebugger;
+template <class T> class Vector;
 
 class EngineDebugger {
 public:

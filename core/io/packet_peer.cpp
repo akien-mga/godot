@@ -30,8 +30,11 @@
 
 #include "packet_peer.h"
 
-#include "core/io/marshalls.h"
-#include "core/project_settings.h"
+#include "core/io/marshalls.h"      // for decode_uint32, encode_variant
+#include "core/project_settings.h"  // for GLOBAL_GET
+#include "core/class_db.h"          // for D_METHOD, ClassDB, MethodDefinition
+#include "core/error_macros.h"      // for ERR_FAIL_COND_V, ERR_FAIL_COND_MSG
+#include "core/typedefs.h"          // for next_power_of_2, nearest_shift
 
 /* helpers / binders */
 

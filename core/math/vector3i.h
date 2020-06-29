@@ -31,8 +31,10 @@
 #ifndef VECTOR3I_H
 #define VECTOR3I_H
 
-#include "core/typedefs.h"
-#include "core/ustring.h"
+#include <stdint.h>         // for int32_t
+
+#include "core/typedefs.h"  // for _FORCE_INLINE_, ABS, SGN
+#include "core/ustring.h"   // for String
 
 struct Vector3i {
 	enum Axis {

@@ -31,17 +31,21 @@
 #ifndef RID_OWNER_H
 #define RID_OWNER_H
 
-#include "core/list.h"
-#include "core/oa_hash_map.h"
-#include "core/os/memory.h"
-#include "core/print_string.h"
-#include "core/rid.h"
-#include "core/safe_refcount.h"
-#include "core/set.h"
-#include "core/spin_lock.h"
+#include <stdio.h>               // for size_t
+#include <stdint.h>              // for uint32_t, uint64_t
+#include <typeinfo>              // for type_info
 
-#include <stdio.h>
-#include <typeinfo>
+#include "core/list.h"           // for List
+#include "core/oa_hash_map.h"
+#include "core/os/memory.h"      // for memfree, memalloc, memrealloc, memne...
+#include "core/print_string.h"   // for print_error
+#include "core/rid.h"            // for RID
+#include "core/safe_refcount.h"  // for atomic_increment
+#include "core/set.h"
+#include "core/spin_lock.h"      // for SpinLock
+#include "core/error_macros.h"   // for ERR_FAIL, ERR_FAIL_INDEX_V
+#include "core/typedefs.h"       // for _FORCE_INLINE_, unlikely
+#include "core/ustring.h"        // for String, itos, operator+
 
 class RID_AllocBase {
 	static volatile uint64_t base_id;

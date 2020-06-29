@@ -31,8 +31,11 @@
 #ifndef THREAD_H
 #define THREAD_H
 
-#include "core/typedefs.h"
-#include "core/ustring.h"
+#include <stdint.h>           // for uint64_t
+
+#include "core/typedefs.h"    // for _FORCE_INLINE_
+#include "core/ustring.h"     // for String
+#include "core/error_list.h"  // for Error
 
 typedef void (*ThreadCreateCallback)(void *p_userdata);
 

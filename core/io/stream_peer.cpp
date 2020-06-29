@@ -30,7 +30,11 @@
 
 #include "stream_peer.h"
 
-#include "core/io/marshalls.h"
+#include "core/io/marshalls.h"  // for decode_uint16, decode_uint32, decode_...
+#include "core/class_db.h"      // for D_METHOD, ClassDB, MethodDefinition
+#include "core/error_macros.h"  // for ERR_FAIL_COND_V, ERR_FAIL_COND, ERR_F...
+#include "core/os/copymem.h"    // for copymem
+#include "core/typedefs.h"      // for BSWAP32, BSWAP64, BSWAP16
 
 Error StreamPeer::_put_data(const Vector<uint8_t> &p_data) {
 	int len = p_data.size();

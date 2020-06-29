@@ -30,6 +30,13 @@
 
 #include "udp_server.h"
 
+#include "core/class_db.h"            // for D_METHOD, ClassDB, MethodDefini...
+#include "core/error_macros.h"        // for ERR_FAIL_COND_V
+#include "core/io/ip.h"               // for IP, IP::TYPE_ANY, IP::TYPE_IPV4
+#include "core/io/net_socket.h"       // for NetSocket, NetSocket::POLL_TYPE_IN
+#include "core/io/packet_peer_udp.h"  // for PacketPeerUDP
+#include "core/os/memory.h"           // for memnew
+
 void UDPServer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("listen", "port", "bind_address"), &UDPServer::listen, DEFVAL("*"));
 	ClassDB::bind_method(D_METHOD("is_connection_available"), &UDPServer::is_connection_available);

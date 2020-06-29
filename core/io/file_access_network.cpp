@@ -30,10 +30,18 @@
 
 #include "file_access_network.h"
 
-#include "core/io/ip.h"
-#include "core/io/marshalls.h"
-#include "core/os/os.h"
-#include "core/project_settings.h"
+#include "core/io/ip.h"               // for IP
+#include "core/io/marshalls.h"        // for decode_uint32, decode_uint64
+#include "core/os/os.h"               // for OS
+#include "core/project_settings.h"    // for ProjectSettings, GLOBAL_DEF
+#include "core/error_macros.h"        // for ERR_FAIL_COND_V_MSG, ERR_FAIL_COND
+#include "core/io/ip_address.h"       // for IP_Address
+#include "core/io/stream_peer_tcp.h"  // for StreamPeerTCP, StreamPeerTCP::S...
+#include "core/object.h"              // for PROPERTY_HINT_RANGE, PropertyInfo
+#include "core/os/memory.h"           // for memdelete
+#include "core/os/thread.h"           // for Thread
+#include "core/typedefs.h"            // for Comparator
+#include "core/variant.h"             // for Variant, Variant::INT
 
 //#define DEBUG_PRINT(m_p) print_line(m_p)
 //#define DEBUG_TIME(m_what) printf("MS: %s - %lli\n",m_what,OS::get_singleton()->get_ticks_usec());

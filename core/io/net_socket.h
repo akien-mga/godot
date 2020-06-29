@@ -31,8 +31,13 @@
 #ifndef NET_SOCKET_H
 #define NET_SOCKET_H
 
-#include "core/io/ip.h"
-#include "core/reference.h"
+#include <stdint.h>              // for uint16_t, uint8_t
+
+#include "core/io/ip.h"          // for IP, IP::Type
+#include "core/reference.h"      // for Ref, Reference
+#include "core/error_list.h"     // for Error
+#include "core/io/ip_address.h"  // for IP_Address
+#include "core/ustring.h"        // for String
 
 class NetSocket : public Reference {
 protected:

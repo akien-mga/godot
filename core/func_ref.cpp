@@ -30,6 +30,14 @@
 
 #include "func_ref.h"
 
+#include "core/class_db.h"      // for D_METHOD, ClassDB, MethodDefinition
+#include "core/error_macros.h"  // for ERR_FAIL_COND_V, ERR_FAIL_NULL
+#include "core/method_bind.h"   // for METHOD_FLAGS_DEFAULT
+#include "core/ustring.h"       // for String
+#include "core/vector.h"        // for Vector
+
+class Array;
+
 Variant FuncRef::call_func(const Variant **p_args, int p_argcount, Callable::CallError &r_error) {
 	if (id.is_null()) {
 		r_error.error = Callable::CallError::CALL_ERROR_INSTANCE_IS_NULL;

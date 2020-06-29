@@ -30,9 +30,15 @@
 
 #include "pck_packer.h"
 
-#include "core/io/file_access_pack.h" // PACK_HEADER_MAGIC, PACK_FORMAT_VERSION
-#include "core/os/file_access.h"
-#include "core/version.h"
+#include <stdio.h>                       // for printf, fflush, stdout
+
+#include "core/io/file_access_pack.h"    // for PACK_FORMAT_VERSION, PACK_HE...
+#include "core/os/file_access.h"         // for FileAccess, FileAccess::READ
+#include "core/class_db.h"               // for D_METHOD, ClassDB, MethodDef...
+#include "core/error_macros.h"           // for ERR_FAIL_COND_V_MSG
+#include "core/os/memory.h"              // for memdelete, memdelete_arr
+#include "core/typedefs.h"               // for MIN
+#include "core/version_generated.gen.h"  // for VERSION_MAJOR, VERSION_MINOR
 
 static uint64_t _align(uint64_t p_n, int p_alignment) {
 	if (p_alignment == 0) {

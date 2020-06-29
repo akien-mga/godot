@@ -30,8 +30,13 @@
 
 #include "camera_matrix.h"
 
-#include "core/math/math_funcs.h"
-#include "core/print_string.h"
+#include <math.h>                  // for tan
+
+#include "core/math/math_funcs.h"  // for Math
+#include "core/error_macros.h"     // for ERR_FAIL_COND, ERR_FAIL_COND_V
+#include "core/math/aabb.h"        // for AABB
+#include "core/math/basis.h"       // for Basis
+#include "core/math/rect2.h"       // for Rect2
 
 float CameraMatrix::determinant() const {
 	return matrix[0][3] * matrix[1][2] * matrix[2][1] * matrix[3][0] - matrix[0][2] * matrix[1][3] * matrix[2][1] * matrix[3][0] -

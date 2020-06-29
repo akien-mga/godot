@@ -31,8 +31,14 @@
 #ifndef INPUT_MAP_H
 #define INPUT_MAP_H
 
-#include "core/input/input_event.h"
-#include "core/object.h"
+#include "core/input/input_event.h"  // for InputEvent
+#include "core/object.h"             // for Object, GDCLASS
+#include "core/array.h"              // for Array
+#include "core/list.h"               // for List
+#include "core/map.h"                // for Map
+#include "core/reference.h"          // for Ref
+#include "core/string_name.h"        // for StringName
+#include "core/typedefs.h"           // for _FORCE_INLINE_
 
 class InputMap : public Object {
 	GDCLASS(InputMap, Object);

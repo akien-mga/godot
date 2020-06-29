@@ -32,6 +32,17 @@
 
 #include "math_fieldwise.h"
 
+#include "core/error_macros.h"       // for ERR_FAIL_COND_V, ERR_FAIL_V
+#include "core/math/aabb.h"          // for AABB
+#include "core/math/basis.h"         // for Basis
+#include "core/math/plane.h"         // for Plane
+#include "core/math/quat.h"          // for Quat
+#include "core/math/rect2.h"         // for Rect2
+#include "core/math/transform.h"     // for Transform
+#include "core/math/transform_2d.h"  // for Transform2D
+#include "core/math/vector2.h"       // for Vector2, Vector2::(anonymous)
+#include "core/math/vector3.h"       // for Vector3, Vector3::(anonymous uni...
+
 #define SETUP_TYPE(m_type)    \
 	m_type source = p_source; \
 	m_type target = p_target;

@@ -30,9 +30,12 @@
 
 #include "class_db.h"
 
-#include "core/engine.h"
-#include "core/os/mutex.h"
-#include "core/version.h"
+#include "core/engine.h"      // for Engine
+#include "core/version.h"     // for VERSION_FULL_CONFIG
+#include "core/callable.h"    // for Callable, Callable::CallError, Callable...
+#include "core/hashfuncs.h"   // for hash_djb2_one_64, HashMapHasherDefault
+#include "core/object.h"      // for PropertyInfo, MethodInfo, Object, PROPE...
+#include "core/os/rw_lock.h"  // for RWLockRead, RWLockWrite, RWLock
 
 #define OBJTYPE_RLOCK RWLockRead _rw_lockr_(lock);
 #define OBJTYPE_WLOCK RWLockWrite _rw_lockw_(lock);

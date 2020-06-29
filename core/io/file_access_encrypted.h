@@ -31,7 +31,13 @@
 #ifndef FILE_ACCESS_ENCRYPTED_H
 #define FILE_ACCESS_ENCRYPTED_H
 
-#include "core/os/file_access.h"
+#include <stddef.h>               // for size_t
+#include <stdint.h>               // for uint8_t, uint32_t, int64_t, uint64_t
+
+#include "core/os/file_access.h"  // for FileAccess
+#include "core/error_list.h"      // for Error
+#include "core/ustring.h"         // for String
+#include "core/vector.h"          // for Vector
 
 class FileAccessEncrypted : public FileAccess {
 public:

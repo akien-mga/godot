@@ -30,9 +30,15 @@
 
 #include "config_file.h"
 
-#include "core/io/file_access_encrypted.h"
-#include "core/os/keyboard.h"
-#include "core/variant_parser.h"
+#include "core/io/file_access_encrypted.h"  // for FileAccessEncrypted, File...
+#include "core/variant_parser.h"            // for VariantParser, VariantPar...
+#include "core/class_db.h"                  // for D_METHOD, ClassDB, Method...
+#include "core/error_macros.h"              // for ERR_FAIL_COND_MSG, ERR_FA...
+#include "core/map.h"                       // for Map
+#include "core/os/file_access.h"            // for FileAccess, FileAccess::READ
+#include "core/os/memory.h"                 // for memdelete, memnew
+
+template <class T> class Vector;
 
 PackedStringArray ConfigFile::_get_sections() const {
 	List<String> s;

@@ -31,8 +31,12 @@
 #ifndef AES_CONTEXT_H
 #define AES_CONTEXT_H
 
-#include "core/crypto/crypto_core.h"
-#include "core/reference.h"
+#include "core/crypto/crypto_core.h"  // for CryptoCore, CryptoCore::AESContext
+#include "core/reference.h"           // for Reference
+#include "core/error_list.h"          // for Error
+#include "core/method_bind.h"         // for VARIANT_ENUM_CAST
+#include "core/object.h"              // for GDCLASS
+#include "core/variant.h"             // for PackedByteArray
 
 class AESContext : public Reference {
 	GDCLASS(AESContext, Reference);

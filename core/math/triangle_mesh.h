@@ -32,7 +32,14 @@
 #define TRIANGLE_MESH_H
 
 #include "core/math/face3.h"
-#include "core/reference.h"
+#include "core/reference.h"     // for Reference
+#include "core/math/aabb.h"     // for AABB
+#include "core/math/vector3.h"  // for Vector3, Vector3::(anonymous union)::...
+#include "core/object.h"        // for GDCLASS
+#include "core/vector.h"        // for Vector
+
+class Face3;
+class Plane;
 
 class TriangleMesh : public Reference {
 	GDCLASS(TriangleMesh, Reference);

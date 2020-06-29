@@ -31,9 +31,10 @@
 #ifndef THREAD_DUMMY_H
 #define THREAD_DUMMY_H
 
-#include "core/os/rw_lock.h"
+#include "core/os/rw_lock.h"  // for RWLock
 #include "core/os/semaphore.h"
-#include "core/os/thread.h"
+#include "core/os/thread.h"   // for Thread, Thread::ID, Thread::Settings
+#include "core/error_list.h"  // for Error, OK
 
 class ThreadDummy : public Thread {
 	static Thread *create(ThreadCreateCallback p_callback, void *p_user, const Settings &p_settings = Settings());

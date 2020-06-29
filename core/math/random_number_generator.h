@@ -31,8 +31,13 @@
 #ifndef RANDOM_NUMBER_GENERATOR_H
 #define RANDOM_NUMBER_GENERATOR_H
 
-#include "core/math/random_pcg.h"
-#include "core/reference.h"
+#include <stdint.h>                // for uint64_t, uint32_t
+
+#include "core/math/random_pcg.h"  // for RandomPCG
+#include "core/reference.h"        // for Reference
+#include "core/math/math_defs.h"   // for real_t
+#include "core/object.h"           // for GDCLASS
+#include "core/typedefs.h"         // for _FORCE_INLINE_
 
 class RandomNumberGenerator : public Reference {
 	GDCLASS(RandomNumberGenerator, Reference);

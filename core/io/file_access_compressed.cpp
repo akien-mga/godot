@@ -30,7 +30,9 @@
 
 #include "file_access_compressed.h"
 
-#include "core/print_string.h"
+#include "core/error_macros.h"  // for ERR_FAIL_COND_V_MSG, ERR_FAIL_COND_MSG
+#include "core/os/memory.h"     // for memdelete
+#include "core/typedefs.h"      // for next_power_of_2, MAX
 
 void FileAccessCompressed::configure(const String &p_magic, Compression::Mode p_mode, int p_block_size) {
 	magic = p_magic.ascii().get_data();

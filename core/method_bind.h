@@ -35,14 +35,24 @@
 #define DEBUG_METHODS_ENABLED
 #endif
 
-#include "core/list.h"
+#include <stdio.h>
+#include <stdint.h>               // for uint32_t
+
+#include "core/list.h"            // for List
 #include "core/method_ptrcall.h"
 #include "core/object.h"
-#include "core/type_info.h"
-#include "core/typedefs.h"
-#include "core/variant.h"
-
-#include <stdio.h>
+#include "core/type_info.h"       // for MAKE_ENUM_TYPE_INFO, Metadata, META...
+#include "core/typedefs.h"        // for _FORCE_INLINE_
+#include "core/variant.h"         // for Variant, Variant::Type, Variant::Op...
+#include "core/callable.h"        // for Callable::CallError, Callable, Call...
+#include "core/error_list.h"      // for Error
+#include "core/error_macros.h"    // for ERR_FAIL, ERR_FAIL_COND_V
+#include "core/math/math_defs.h"  // for Corner, HAlign, Margin, Orientation
+#include "core/math/vector3.h"    // for Vector3, Vector3::Axis
+#include "core/os/memory.h"       // for memnew, memnew_arr
+#include "core/string_name.h"     // for StringName
+#include "core/ustring.h"         // for String, itos, operator+
+#include "core/vector.h"          // for Vector, VectorWriteProxy
 
 enum MethodFlags {
 
@@ -385,9 +395,15 @@ MethodBind *create_vararg_method_bind(Variant (T::*p_method)(const Variant **, i
 
 // tale of an amazing hack.. //
 
+#include "method_bind.gen.inc"    // for p_args, r_error, p_arg_count, Metho...
+
 // if you declare a nonexistent class..
 class __UnexistingClass;
-
-#include "method_bind.gen.inc"
+class Control;
+class Node;
+class Object;
+struct MethodInfo;
+struct PropertyInfo;
+template <class T> struct PtrToArg;
 
 #endif // METHOD_BIND_H

@@ -32,8 +32,13 @@
 
 #include "file_access_zip.h"
 
-#include "core/os/copymem.h"
-#include "core/os/file_access.h"
+#include "core/os/copymem.h"           // for zeromem
+#include "core/os/file_access.h"       // for FileAccess, FileAccess::READ
+#include "core/error_macros.h"         // for ERR_FAIL_COND_V, ERR_FAIL_COND
+#include "core/os/memory.h"            // for memdelete, memnew, memalloc
+#include "core/typedefs.h"             // for Comparator
+#include "thirdparty/minizip/ioapi.h"  // for zlib_filefunc_def, ZLIB_FILEFU...
+#include "zconf.h"                     // for voidpf, uLong, uInt
 
 ZipArchive *ZipArchive::instance = nullptr;
 

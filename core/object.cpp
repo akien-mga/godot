@@ -30,14 +30,21 @@
 
 #include "object.h"
 
-#include "core/class_db.h"
-#include "core/core_string_names.h"
-#include "core/message_queue.h"
-#include "core/os/os.h"
-#include "core/print_string.h"
-#include "core/resource.h"
-#include "core/script_language.h"
-#include "core/translation.h"
+#include <alloca.h>                  // for alloca
+#include <string.h>                  // for memset
+
+#include "core/class_db.h"           // for D_METHOD, ClassDB, MethodDefinition
+#include "core/core_string_names.h"  // for CoreStringNames
+#include "core/message_queue.h"      // for MessageQueue
+#include "core/os/os.h"              // for OS
+#include "core/print_string.h"       // for print_line
+#include "core/resource.h"           // for RES, Resource
+#include "core/script_language.h"    // for Script, ScriptInstance, ScriptSe...
+#include "core/translation.h"        // for TranslationServer
+#include "core/engine.h"             // for Engine
+#include "core/method_bind.h"        // for METHOD_FLAG_NORMAL, MethodBind
+#include "core/os/memory.h"          // for memdelete, memfree, memrealloc
+#include "core/reference.h"          // for Ref, Reference
 
 #ifdef DEBUG_ENABLED
 

@@ -31,11 +31,14 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
-#include "core/os/file_access.h"
-#include "core/ustring.h"
-#include "core/vector.h"
+#include <stdarg.h>         // for va_list
 
-#include <stdarg.h>
+#include "core/os/file_access.h"
+#include "core/ustring.h"   // for String
+#include "core/vector.h"    // for Vector
+#include "core/typedefs.h"  // for _PRINTF_FORMAT_ATTRIBUTE_2_0, _PRINTF_FOR...
+
+class FileAccess;
 
 class Logger {
 protected:

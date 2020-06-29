@@ -31,10 +31,20 @@
 #ifndef CONFIG_FILE_H
 #define CONFIG_FILE_H
 
-#include "core/ordered_hash_map.h"
+#include <stdint.h>                 // for uint8_t
+
+#include "core/ordered_hash_map.h"  // for OrderedHashMap
 #include "core/os/file_access.h"
-#include "core/reference.h"
-#include "core/variant_parser.h"
+#include "core/reference.h"         // for Reference
+#include "core/variant_parser.h"    // for VariantParser
+#include "core/error_list.h"        // for Error
+#include "core/list.h"              // for List
+#include "core/object.h"            // for GDCLASS
+#include "core/ustring.h"           // for String
+#include "core/variant.h"           // for Variant, PackedStringArray
+
+class FileAccess;
+template <class T> class Vector;
 
 class ConfigFile : public Reference {
 	GDCLASS(ConfigFile, Reference);

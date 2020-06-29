@@ -35,8 +35,10 @@ IP_Address::operator Variant() const {
 	return operator String();
 }*/
 
-#include <stdio.h>
-#include <string.h>
+#include <string.h>             // for memset
+
+#include "core/error_macros.h"  // for ERR_FAIL_MSG, ERR_FAIL_COND_MSG, ERR_...
+#include "core/typedefs.h"      // for _FORCE_INLINE_
 
 IP_Address::operator String() const {
 	if (wildcard) {

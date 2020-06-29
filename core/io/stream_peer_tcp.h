@@ -31,10 +31,17 @@
 #ifndef STREAM_PEER_TCP_H
 #define STREAM_PEER_TCP_H
 
+#include <stdint.h>               // for uint8_t, uint16_t, uint64_t
+
 #include "core/io/ip.h"
-#include "core/io/ip_address.h"
-#include "core/io/net_socket.h"
-#include "core/io/stream_peer.h"
+#include "core/io/ip_address.h"   // for IP_Address
+#include "core/io/net_socket.h"   // for NetSocket, NetSocket::PollType
+#include "core/io/stream_peer.h"  // for StreamPeer
+#include "core/error_list.h"      // for Error
+#include "core/method_bind.h"     // for VARIANT_ENUM_CAST
+#include "core/object.h"          // for GDCLASS, OBJ_CATEGORY
+#include "core/reference.h"       // for Ref
+#include "core/ustring.h"         // for String
 
 class StreamPeerTCP : public StreamPeer {
 	GDCLASS(StreamPeerTCP, StreamPeer);

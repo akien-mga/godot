@@ -30,10 +30,12 @@
 
 #include "geometry_3d.h"
 
-#include "core/print_string.h"
-
-#include "thirdparty/misc/clipper.hpp"
-#include "thirdparty/misc/triangulator.h"
+#include "core/error_macros.h"   // for ERR_FAIL_COND, ERR_FAIL_INDEX, ERR_FAIL
+#include "core/map.h"            // for Map
+#include "core/math/aabb.h"      // for AABB
+#include "core/math/face3.h"     // for Face3
+#include "core/math/vector3i.h"  // for Vector3i, Vector3i::(anonymous union...
+#include "core/os/memory.h"      // for memdelete_arr, memnew_arr
 
 void Geometry3D::MeshData::optimize_vertices() {
 	Map<int, int> vtx_remap;

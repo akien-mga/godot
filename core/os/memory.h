@@ -31,10 +31,12 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
-#include "core/error_macros.h"
-#include "core/safe_refcount.h"
+#include <stddef.h>             // for size_t
+#include <stdint.h>             // for uint64_t
 
-#include <stddef.h>
+#include "core/error_macros.h"  // for ERR_FAIL_COND_V
+#include "core/safe_refcount.h"
+#include "core/typedefs.h"      // for _ALWAYS_INLINE_, _FORCE_INLINE_
 
 #ifndef PAD_ALIGN
 #define PAD_ALIGN 16 //must always be greater than this at much

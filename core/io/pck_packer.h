@@ -31,7 +31,13 @@
 #ifndef PCK_PACKER_H
 #define PCK_PACKER_H
 
-#include "core/reference.h"
+#include <stdint.h>           // for uint64_t
+
+#include "core/reference.h"   // for Reference
+#include "core/error_list.h"  // for Error
+#include "core/object.h"      // for GDCLASS
+#include "core/ustring.h"     // for String
+#include "core/vector.h"      // for Vector
 
 class FileAccess;
 

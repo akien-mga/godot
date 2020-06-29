@@ -31,9 +31,21 @@
 #ifndef CLASS_DB_H
 #define CLASS_DB_H
 
-#include "core/method_bind.h"
+#include <stdint.h>             // for uint32_t, uint64_t
+
+#include "core/method_bind.h"   // for MethodBind (ptr only), create_method_...
 #include "core/object.h"
 #include "core/print_string.h"
+#include "core/error_macros.h"  // for ERR_FAIL_COND, ERR_FAIL_COND_V, ERR_F...
+#include "core/hash_map.h"      // for HashMap
+#include "core/list.h"          // for List
+#include "core/os/memory.h"     // for memdelete, memnew
+#include "core/set.h"           // for Set
+#include "core/string_name.h"   // for StringName
+#include "core/typedefs.h"      // for GLOBAL_LOCK_FUNCTION
+#include "core/ustring.h"       // for String, operator+
+#include "core/variant.h"       // for Variant, Variant::Type
+#include "core/vector.h"        // for Vector
 
 /** To bind more then 6 parameters include this:
  *  #include "core/method_bind_ext.gen.inc"
@@ -42,6 +54,11 @@
 // Makes callable_mp readily available in all classes connecting signals.
 // Needs to come after method_bind and object have been included.
 #include "core/callable_method_pointer.h"
+
+class Object;
+class RWLock;
+struct MethodInfo;
+struct PropertyInfo;
 
 #define DEFVAL(m_defval) (m_defval)
 

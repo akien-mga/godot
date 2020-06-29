@@ -31,8 +31,23 @@
 #ifndef MULTIPLAYER_API_H
 #define MULTIPLAYER_API_H
 
-#include "core/io/networked_multiplayer_peer.h"
-#include "core/reference.h"
+#include <stdint.h>                              // for uint8_t, uint16_t
+
+#include "core/io/networked_multiplayer_peer.h"  // for NetworkedMultiplayer...
+#include "core/reference.h"                      // for Reference, Ref
+#include "core/error_list.h"                     // for Error
+#include "core/hash_map.h"                       // for HashMap
+#include "core/map.h"                            // for Map
+#include "core/method_bind.h"                    // for VARIANT_ENUM_CAST
+#include "core/node_path.h"                      // for NodePath
+#include "core/object.h"                         // for GDCLASS
+#include "core/object_id.h"                      // for ObjectID
+#include "core/set.h"                            // for Set
+#include "core/string_name.h"                    // for StringName
+#include "core/variant.h"                        // for Variant
+#include "core/vector.h"                         // for Vector
+
+class Node;
 
 class MultiplayerAPI : public Reference {
 	GDCLASS(MultiplayerAPI, Reference);

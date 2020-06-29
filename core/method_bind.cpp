@@ -28,11 +28,12 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
+#include "core/method_bind.h"
+
 // object.h needs to be the first include *before* method_bind.h
 // FIXME: Find out why and fix potential cyclical dependencies.
-#include "core/object.h"
-
-#include "method_bind.h"
+#include "core/object.h"  // for PropertyInfo
+#include "method_bind.h"  // for MethodBind, DEBUG_METHODS_ENABLED
 
 #ifdef DEBUG_METHODS_ENABLED
 PropertyInfo MethodBind::get_argument_info(int p_argument) const {

@@ -30,6 +30,8 @@
 
 #include "callable_method_pointer.h"
 
+#include "core/hashfuncs.h"  // for hash_djb2_one_32
+
 bool CallableCustomMethodPointerBase::compare_equal(const CallableCustom *p_a, const CallableCustom *p_b) {
 	const CallableCustomMethodPointerBase *a = static_cast<const CallableCustomMethodPointerBase *>(p_a);
 	const CallableCustomMethodPointerBase *b = static_cast<const CallableCustomMethodPointerBase *>(p_b);

@@ -32,8 +32,17 @@
 #define VARIANT_PARSER_H
 
 #include "core/os/file_access.h"
-#include "core/resource.h"
-#include "core/variant.h"
+#include "core/resource.h"    // for RES, Resource (ptr only)
+#include "core/variant.h"     // for Variant
+#include "core/error_list.h"  // for Error
+#include "core/map.h"         // for Map
+#include "core/ustring.h"     // for String, CharType
+
+class Array;
+class Dictionary;
+class FileAccess;
+template <class T> class Ref;
+template <class T> class Vector;
 
 class VariantParser {
 public:

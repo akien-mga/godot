@@ -31,9 +31,14 @@
 #ifndef MARSHALLS_H
 #define MARSHALLS_H
 
-#include "core/reference.h"
+#include <stdint.h>           // for uint8_t, uint32_t, uint64_t, uint16_t
+
+#include "core/reference.h"   // for Reference
 #include "core/typedefs.h"
-#include "core/variant.h"
+#include "core/variant.h"     // for Variant
+#include "core/error_list.h"  // for Error
+#include "core/object.h"      // for GDCLASS
+#include "core/object_id.h"   // for ObjectID
 
 /**
   * Miscellaneous helpers for marshalling data types, and encoding

@@ -30,7 +30,13 @@
 
 #include "hashing_context.h"
 
-#include "core/crypto/crypto_core.h"
+#include <stddef.h>                   // for size_t
+#include <stdint.h>                   // for uint8_t
+
+#include "core/crypto/crypto_core.h"  // for CryptoCore, CryptoCore::MD5Context
+#include "core/class_db.h"            // for D_METHOD, BIND_ENUM_CONSTANT
+#include "core/error_macros.h"        // for ERR_FAIL_COND_V
+#include "core/os/memory.h"           // for memdelete, memnew
 
 Error HashingContext::start(HashType p_type) {
 	ERR_FAIL_COND_V(ctx != nullptr, ERR_ALREADY_IN_USE);

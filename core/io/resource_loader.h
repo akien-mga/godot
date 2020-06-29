@@ -32,8 +32,21 @@
 #define RESOURCE_LOADER_H
 
 #include "core/os/semaphore.h"
-#include "core/os/thread.h"
-#include "core/resource.h"
+#include "core/os/thread.h"   // for Thread, Thread::ID
+#include "core/resource.h"    // for RES, Resource (ptr only)
+#include "core/error_list.h"  // for Error, OK
+#include "core/hash_map.h"    // for HashMap
+#include "core/list.h"        // for List
+#include "core/map.h"         // for Map
+#include "core/object.h"      // for GDCLASS
+#include "core/os/mutex.h"    // for Mutex
+#include "core/reference.h"   // for Reference, Ref
+#include "core/self_list.h"   // for SelfList
+#include "core/set.h"         // for Set
+#include "core/ustring.h"     // for String
+
+class Semaphore;
+template <class T> class Vector;
 
 class ResourceFormatLoader : public Reference {
 	GDCLASS(ResourceFormatLoader, Reference);

@@ -31,7 +31,12 @@
 #ifndef JSON_H
 #define JSON_H
 
-#include "core/variant.h"
+#include "core/variant.h"     // for Variant
+#include "core/error_list.h"  // for Error
+#include "core/ustring.h"     // for String, CharType
+
+class Array;
+class Dictionary;
 
 class JSON {
 	enum TokenType {

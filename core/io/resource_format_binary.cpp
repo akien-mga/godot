@@ -30,12 +30,33 @@
 
 #include "resource_format_binary.h"
 
-#include "core/image.h"
-#include "core/io/file_access_compressed.h"
-#include "core/io/marshalls.h"
-#include "core/os/dir_access.h"
-#include "core/project_settings.h"
-#include "core/version.h"
+#include <stddef.h>                          // for size_t
+
+#include "core/io/file_access_compressed.h"  // for FileAccessCompressed
+#include "core/os/dir_access.h"              // for DirAccess, DirAccess::AC...
+#include "core/project_settings.h"           // for ProjectSettings
+#include "core/array.h"                      // for Array
+#include "core/callable.h"                   // for Callable, Signal
+#include "core/class_db.h"                   // for ClassDB
+#include "core/color.h"                      // for Color, Color::(anonymous...
+#include "core/dictionary.h"                 // for Dictionary
+#include "core/error_macros.h"               // for ERR_FAIL_V_MSG, ERR_FAIL...
+#include "core/math/aabb.h"                  // for AABB
+#include "core/math/basis.h"                 // for Basis
+#include "core/math/math_defs.h"             // for real_t
+#include "core/math/plane.h"                 // for Plane
+#include "core/math/quat.h"                  // for Quat
+#include "core/math/rect2.h"                 // for Rect2, Rect2i
+#include "core/math/transform.h"             // for Transform
+#include "core/math/transform_2d.h"          // for Transform2D
+#include "core/math/vector2.h"               // for Vector2, Vector2::(anony...
+#include "core/math/vector3.h"               // for Vector3, Vector3::(anony...
+#include "core/math/vector3i.h"              // for Vector3i, Vector3i::(ano...
+#include "core/node_path.h"                  // for NodePath
+#include "core/os/file_access.h"             // for FileAccess, FileAccess::...
+#include "core/os/memory.h"                  // for memdelete, memnew
+#include "core/rid.h"                        // for RID
+#include "core/version_generated.gen.h"      // for VERSION_MAJOR, VERSION_M...
 
 //#define print_bl(m_what) print_line(m_what)
 #define print_bl(m_what) (void)(m_what)

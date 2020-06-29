@@ -29,14 +29,16 @@
 /*************************************************************************/
 
 // Circular dependency between Vector3 and Basis :/
-#include "core/math/vector3.h"
+#include "core/math/vector3.h"     // for Vector3, Vector3::(anonymous union...
+#include "core/error_macros.h"     // for ERR_FAIL_COND_V_MSG
+#include "core/typedefs.h"         // for _FORCE_INLINE_
 
 #ifndef QUAT_H
 #define QUAT_H
 
-#include "core/math/math_defs.h"
-#include "core/math/math_funcs.h"
-#include "core/ustring.h"
+#include "core/math/math_defs.h"   // for real_t, CMP_EPSILON, MATH_CHECKS
+#include "core/math/math_funcs.h"  // for Math
+#include "core/ustring.h"          // for String
 
 class Quat {
 public:

@@ -31,7 +31,9 @@
 #ifndef ERROR_MACROS_H
 #define ERROR_MACROS_H
 
-#include "core/typedefs.h"
+#include <stdint.h>         // for int64_t
+
+#include "core/typedefs.h"  // for _STR, unlikely
 
 class String;
 

@@ -28,7 +28,12 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
-#include "core/math/transform_2d.h" // Includes rect2.h but Rect2 needs Transform2D
+#include "core/math/rect2.h"         // for Rect2
+
+#include "core/math/transform_2d.h"  // for Transform2D
+#include "core/math/math_defs.h"     // for real_t
+#include "core/math/vector2.h"       // for Vector2, Vector2::(anonymous)
+#include "core/typedefs.h"           // for MAX, MIN
 
 bool Rect2::is_equal_approx(const Rect2 &p_rect) const {
 	return position.is_equal_approx(p_rect.position) && size.is_equal_approx(p_rect.size);

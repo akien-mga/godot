@@ -31,12 +31,13 @@
 #ifndef DICTIONARY_H
 #define DICTIONARY_H
 
-#include "core/array.h"
-#include "core/list.h"
+#include <stdint.h>      // for uint32_t
+
+#include "core/array.h"  // for Array
+#include "core/list.h"   // for List
 #include "core/ustring.h"
 
 class Variant;
-
 struct DictionaryPrivate;
 
 class Dictionary {

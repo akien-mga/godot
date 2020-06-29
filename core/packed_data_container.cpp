@@ -30,8 +30,16 @@
 
 #include "packed_data_container.h"
 
-#include "core/core_string_names.h"
-#include "core/io/marshalls.h"
+#include "core/io/marshalls.h"  // for decode_uint32, encode_uint32, encode_...
+#include "core/array.h"         // for Array
+#include "core/class_db.h"      // for D_METHOD, ClassDB, MethodDefinition
+#include "core/dictionary.h"    // for Dictionary
+#include "core/error_macros.h"  // for ERR_FAIL_COND_V, ERR_FAIL_COND_V_MSG
+#include "core/list.h"          // for List, List<>::Element
+#include "core/os/copymem.h"    // for copymem
+#include "core/os/memory.h"     // for memnew
+#include "core/typedefs.h"      // for Comparator
+#include "core/ustring.h"       // for String
 
 Variant PackedDataContainer::getvar(const Variant &p_key, bool *r_valid) const {
 	bool err = false;

@@ -30,9 +30,17 @@
 
 #include "remote_debugger_peer.h"
 
-#include "core/io/marshalls.h"
-#include "core/os/os.h"
-#include "core/project_settings.h"
+#include "core/io/marshalls.h"      // for encode_variant, decode_variant
+#include "core/os/os.h"             // for OS
+#include "core/project_settings.h"  // for GLOBAL_GET
+#include "core/error_macros.h"      // for ERR_CONTINUE, ERR_FAIL_COND_V
+#include "core/io/ip.h"             // for IP
+#include "core/io/ip_address.h"     // for IP_Address
+#include "core/io/net_socket.h"     // for NetSocket, NetSocket::POLL_TYPE_IN
+#include "core/os/memory.h"         // for memdelete, memnew
+#include "core/os/thread.h"         // for Thread
+#include "core/print_string.h"      // for print_verbose
+#include "core/variant.h"           // for Variant, Variant::ARRAY
 
 bool RemoteDebuggerPeerTCP::is_peer_connected() {
 	return connected;

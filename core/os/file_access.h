@@ -31,10 +31,15 @@
 #ifndef FILE_ACCESS_H
 #define FILE_ACCESS_H
 
-#include "core/math/math_defs.h"
-#include "core/os/memory.h"
-#include "core/typedefs.h"
-#include "core/ustring.h"
+#include <stddef.h>               // for size_t
+#include <stdint.h>               // for uint32_t, uint8_t, uint64_t, uint16_t
+
+#include "core/math/math_defs.h"  // for real_t
+#include "core/os/memory.h"       // for memdelete, memnew
+#include "core/typedefs.h"        // for _FORCE_INLINE_
+#include "core/ustring.h"         // for String
+#include "core/error_list.h"      // for Error
+#include "core/vector.h"          // for Vector
 
 /**
  * Multi-Platform abstraction for accessing to files.

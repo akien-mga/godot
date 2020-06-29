@@ -30,14 +30,14 @@
 
 #include "compression.h"
 
-#include "core/io/zip_io.h"
-#include "core/os/copymem.h"
-#include "core/project_settings.h"
+#include <zlib.h>                    // for z_stream, deflateBound, deflateEnd
+#include <zstd.h>                    // for ZSTD_CCtx_setParameter, ZSTD_DCt...
 
-#include "thirdparty/misc/fastlz.h"
-
-#include <zlib.h>
-#include <zstd.h>
+#include "core/io/zip_io.h"          // for zipio_alloc, zipio_free
+#include "core/os/copymem.h"         // for copymem, zeromem
+#include "thirdparty/misc/fastlz.h"  // for fastlz_compress, fastlz_decompress
+#include "core/error_macros.h"       // for ERR_FAIL_V, ERR_FAIL_COND_V
+#include "zconf.h"                   // for Bytef
 
 int Compression::compress(uint8_t *p_dst, const uint8_t *p_src, int p_src_size, Mode p_mode) {
 	switch (p_mode) {

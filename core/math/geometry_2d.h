@@ -31,11 +31,18 @@
 #ifndef GEOMETRY_2D_H
 #define GEOMETRY_2D_H
 
-#include "core/math/delaunay_2d.h"
+#include "core/math/delaunay_2d.h"  // for Delaunay2D::Triangle, Delaunay2D
 #include "core/math/rect2.h"
-#include "core/math/triangulate.h"
+#include "core/math/triangulate.h"  // for Triangulate
 #include "core/object.h"
-#include "core/vector.h"
+#include "core/vector.h"            // for Vector, VectorWriteProxy
+#include "core/error_macros.h"      // for ERR_FAIL_COND_V_MSG
+#include "core/math/math_defs.h"    // for real_t, CMP_EPSILON
+#include "core/math/math_funcs.h"   // for Math
+#include "core/math/vector2.h"      // for Vector2, Point2, Vector2::(anonym...
+#include "core/typedefs.h"          // for CLAMP, MAX, MIN
+
+struct Vector3i;
 
 class Geometry2D {
 	Geometry2D();

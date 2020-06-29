@@ -31,7 +31,14 @@
 #ifndef FUNC_REF_H
 #define FUNC_REF_H
 
-#include "core/reference.h"
+#include "core/reference.h"    // for Reference
+#include "core/callable.h"     // for Callable
+#include "core/object.h"       // for GDCLASS, Object (ptr only)
+#include "core/object_id.h"    // for ObjectID
+#include "core/string_name.h"  // for StringName
+#include "core/variant.h"      // for Variant
+
+class Array;
 
 class FuncRef : public Reference {
 	GDCLASS(FuncRef, Reference);

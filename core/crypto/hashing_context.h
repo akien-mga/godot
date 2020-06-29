@@ -31,7 +31,11 @@
 #ifndef HASHING_CONTEXT_H
 #define HASHING_CONTEXT_H
 
-#include "core/reference.h"
+#include "core/reference.h"    // for Reference
+#include "core/error_list.h"   // for Error
+#include "core/method_bind.h"  // for VARIANT_ENUM_CAST
+#include "core/object.h"       // for GDCLASS
+#include "core/variant.h"      // for PackedByteArray
 
 class HashingContext : public Reference {
 	GDCLASS(HashingContext, Reference);

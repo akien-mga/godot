@@ -31,9 +31,15 @@
 #ifndef TRANSLATION_LOADER_PO_H
 #define TRANSLATION_LOADER_PO_H
 
-#include "core/io/resource_loader.h"
+#include "core/io/resource_loader.h"  // for ResourceFormatLoader
 #include "core/os/file_access.h"
 #include "core/translation.h"
+#include "core/error_list.h"          // for Error
+#include "core/list.h"                // for List
+#include "core/resource.h"            // for RES
+#include "core/ustring.h"             // for String
+
+class FileAccess;
 
 class TranslationLoaderPO : public ResourceFormatLoader {
 public:

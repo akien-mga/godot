@@ -31,16 +31,18 @@
 #ifndef RANDOM_PCG_H
 #define RANDOM_PCG_H
 
-#include <math.h>
+#include <math.h>                 // for cos, sqrt, log
+#include <stdint.h>               // for uint64_t, uint32_t
 
-#include "core/math/math_defs.h"
-
-#include "thirdparty/misc/pcg.h"
+#include "core/math/math_defs.h"  // for real_t, Math_TAU
+#include "thirdparty/misc/pcg.h"  // for pcg32_random_r, pcg32_srandom_r
+#include "core/typedefs.h"        // for _FORCE_INLINE_, unlikely
 
 #if defined(__GNUC__)
 #define CLZ32(x) __builtin_clz(x)
 #elif defined(_MSC_VER)
 #include <intrin.h>
+
 static int __bsr_clz32(uint32_t x) {
 	unsigned long index;
 	_BitScanReverse(&index, x);
@@ -54,7 +56,8 @@ static int __bsr_clz32(uint32_t x) {
 #define LDEXP(s, e) __builtin_ldexp(s, e)
 #define LDEXPF(s, e) __builtin_ldexpf(s, e)
 #else
-#include <math.h>
+#include <math.h>                 // for cos, sqrt, log
+
 #define LDEXP(s, e) ldexp(s, e)
 #define LDEXPF(s, e) ldexp(s, e)
 #endif

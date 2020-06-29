@@ -31,11 +31,19 @@
 #ifndef FILE_ACCESS_PACK_H
 #define FILE_ACCESS_PACK_H
 
-#include "core/list.h"
-#include "core/map.h"
-#include "core/os/dir_access.h"
-#include "core/os/file_access.h"
+#include <stddef.h>               // for size_t
+#include <stdint.h>               // for uint8_t, uint64_t, uint32_t, int64_t
+
+#include "core/list.h"            // for List
+#include "core/map.h"             // for Map, Map<>::Element
+#include "core/os/dir_access.h"   // for DirAccess
+#include "core/os/file_access.h"  // for FileAccess
 #include "core/print_string.h"
+#include "core/error_list.h"      // for Error, FAILED
+#include "core/set.h"             // for Set
+#include "core/typedefs.h"        // for Comparator, _FORCE_INLINE_
+#include "core/ustring.h"         // for String
+#include "core/vector.h"          // for Vector
 
 // Godot's packed file magic header ("GDPC" in ASCII).
 #define PACK_HEADER_MAGIC 0x43504447

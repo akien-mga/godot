@@ -30,6 +30,13 @@
 
 #include "tcp_server.h"
 
+#include "core/class_db.h"            // for D_METHOD, ClassDB, MethodDefini...
+#include "core/error_macros.h"        // for ERR_FAIL_COND_V
+#include "core/io/ip.h"               // for IP, IP::TYPE_ANY, IP::TYPE_IPV4
+#include "core/io/net_socket.h"       // for NetSocket, NetSocket::POLL_TYPE_IN
+#include "core/io/stream_peer_tcp.h"  // for StreamPeerTCP
+#include "core/os/memory.h"           // for memnew
+
 void TCP_Server::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("listen", "port", "bind_address"), &TCP_Server::listen, DEFVAL("*"));
 	ClassDB::bind_method(D_METHOD("is_connection_available"), &TCP_Server::is_connection_available);

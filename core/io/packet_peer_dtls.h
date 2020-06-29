@@ -31,8 +31,16 @@
 #ifndef PACKET_PEER_DTLS_H
 #define PACKET_PEER_DTLS_H
 
-#include "core/crypto/crypto.h"
+#include "core/crypto/crypto.h"   // for X509Certificate
 #include "core/io/packet_peer_udp.h"
+#include "core/error_list.h"      // for Error
+#include "core/io/packet_peer.h"  // for PacketPeer
+#include "core/method_bind.h"     // for VARIANT_ENUM_CAST
+#include "core/object.h"          // for GDCLASS
+#include "core/reference.h"       // for Ref
+#include "core/ustring.h"         // for String
+
+class PacketPeerUDP;
 
 class PacketPeerDTLS : public PacketPeer {
 	GDCLASS(PacketPeerDTLS, PacketPeer);

@@ -29,8 +29,8 @@
 /*************************************************************************/
 
 #include "packet_peer_dtls.h"
-#include "core/os/file_access.h"
-#include "core/project_settings.h"
+
+#include "core/class_db.h"  // for D_METHOD, BIND_ENUM_CONSTANT, ClassDB
 
 PacketPeerDTLS *(*PacketPeerDTLS::_create)() = nullptr;
 bool PacketPeerDTLS::available = false;

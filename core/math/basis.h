@@ -31,8 +31,11 @@
 #ifndef BASIS_H
 #define BASIS_H
 
-#include "core/math/quat.h"
-#include "core/math/vector3.h"
+#include "core/math/quat.h"       // for Quat
+#include "core/math/vector3.h"    // for Vector3, Vector3::(anonymous union)...
+#include "core/math/math_defs.h"  // for real_t, UNIT_EPSILON
+#include "core/typedefs.h"        // for _FORCE_INLINE_
+#include "core/ustring.h"         // for String
 
 class Basis {
 public:

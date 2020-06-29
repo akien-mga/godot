@@ -30,10 +30,12 @@
 
 #include "dir_access.h"
 
-#include "core/os/file_access.h"
-#include "core/os/memory.h"
-#include "core/os/os.h"
-#include "core/project_settings.h"
+#include "core/os/file_access.h"    // for FileAccess, FileAccess::READ, Fil...
+#include "core/os/memory.h"         // for memdelete
+#include "core/os/os.h"             // for OS
+#include "core/project_settings.h"  // for ProjectSettings
+#include "core/list.h"              // for List, List<>::Element
+#include "core/vector.h"            // for Vector
 
 String DirAccess::_get_root_path() const {
 	switch (_access_type) {

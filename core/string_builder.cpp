@@ -30,7 +30,9 @@
 
 #include "string_builder.h"
 
-#include <string.h>
+#include <string.h>          // for memcpy, strlen
+
+#include "core/os/memory.h"  // for memdelete_arr, memnew_arr
 
 StringBuilder &StringBuilder::append(const String &p_string) {
 	if (p_string == String()) {

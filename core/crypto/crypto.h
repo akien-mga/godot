@@ -31,11 +31,19 @@
 #ifndef CRYPTO_H
 #define CRYPTO_H
 
-#include "core/crypto/hashing_context.h"
-#include "core/io/resource_loader.h"
-#include "core/io/resource_saver.h"
-#include "core/reference.h"
-#include "core/resource.h"
+#include <stdint.h>                       // for uint8_t, uint32_t
+
+#include "core/crypto/hashing_context.h"  // for HashingContext, HashingCont...
+#include "core/io/resource_loader.h"      // for ResourceFormatLoader
+#include "core/io/resource_saver.h"       // for ResourceFormatSaver
+#include "core/reference.h"               // for Reference, Ref
+#include "core/resource.h"                // for Resource, RES
+#include "core/error_list.h"              // for Error
+#include "core/list.h"                    // for List
+#include "core/object.h"                  // for GDCLASS
+#include "core/ustring.h"                 // for String
+#include "core/variant.h"                 // for PackedByteArray
+#include "core/vector.h"                  // for Vector
 
 class CryptoKey : public Resource {
 	GDCLASS(CryptoKey, Resource);

@@ -31,9 +31,19 @@
 #ifndef RESOURCE_IMPORTER_H
 #define RESOURCE_IMPORTER_H
 
-#include "core/io/resource_loader.h"
+#include "core/io/resource_loader.h"  // for ResourceFormatLoader
+#include "core/error_list.h"          // for Error, ERR_UNAVAILABLE
+#include "core/list.h"                // for List
+#include "core/map.h"                 // for Map
+#include "core/object.h"              // for PropertyInfo, GDCLASS
+#include "core/reference.h"           // for Ref, Reference
+#include "core/resource.h"            // for RES
+#include "core/ustring.h"             // for String
+#include "core/variant.h"             // for Variant
+#include "core/vector.h"              // for Vector
 
 class ResourceImporter;
+class StringName;
 
 class ResourceFormatImporter : public ResourceFormatLoader {
 	struct PathAndType {

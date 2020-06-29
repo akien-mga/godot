@@ -31,15 +31,23 @@
 #ifndef OS_H
 #define OS_H
 
+#include <stdarg.h>
+#include <stdint.h>             // for uint64_t, uint32_t, int64_t
+
 #include "core/engine.h"
 #include "core/image.h"
-#include "core/io/logger.h"
-#include "core/list.h"
+#include "core/io/logger.h"     // for Logger, CompositeLogger (ptr only)
+#include "core/list.h"          // for List
 #include "core/os/main_loop.h"
-#include "core/ustring.h"
-#include "core/vector.h"
+#include "core/ustring.h"       // for String
+#include "core/vector.h"        // for Vector
+#include "core/error_list.h"    // for Error, ERR_UNAVAILABLE, FAILED
+#include "core/math/vector2.h"  // for Point2
+#include "core/os/mutex.h"      // for Mutex
+#include "core/typedefs.h"      // for _PRINTF_FORMAT_ATTRIBUTE_2_3
+#include "core/variant.h"       // for PackedStringArray
 
-#include <stdarg.h>
+class MainLoop;
 
 class OS {
 	static OS *singleton;

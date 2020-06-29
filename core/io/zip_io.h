@@ -32,12 +32,15 @@
 #define ZIP_IO_H
 
 #include "core/os/file_access.h"
-
 // Not directly used in this header, but assumed available in downstream users
 // like platform/*/export/export.cpp. Could be fixed, but probably better to have
 // thirdparty includes in as little headers as possible.
 #include "thirdparty/minizip/unzip.h"
 #include "thirdparty/minizip/zip.h"
+#include "thirdparty/minizip/ioapi.h"  // for zlib_filefunc_def
+#include "zconf.h"                     // for voidpf, uLong, uInt
+
+class FileAccess;
 
 void *zipio_open(void *data, const char *p_fname, int mode);
 uLong zipio_read(void *data, void *fdata, void *buf, uLong size);

@@ -31,11 +31,23 @@
 #ifndef RESOURCE_H
 #define RESOURCE_H
 
-#include "core/class_db.h"
-#include "core/object.h"
-#include "core/reference.h"
+#include <stdint.h>          // for uint64_t, uint32_t
+
+#include "core/class_db.h"   // for ClassDB
+#include "core/object.h"     // for Object (ptr only), GDCLASS, OBJ_CATEGORY
+#include "core/reference.h"  // for Reference, Ref
 #include "core/safe_refcount.h"
-#include "core/self_list.h"
+#include "core/self_list.h"  // for SelfList
+#include "core/hash_map.h"   // for HashMap
+#include "core/list.h"       // for List
+#include "core/map.h"        // for Map
+#include "core/object_id.h"  // for ObjectID
+#include "core/rid.h"        // for RID
+#include "core/set.h"        // for Set
+#include "core/ustring.h"    // for String
+
+class Node;
+class RWLock;
 
 #define RES_BASE_EXTENSION(m_ext)                                                                                   \
 public:                                                                                                             \

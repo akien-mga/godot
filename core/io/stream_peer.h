@@ -31,7 +31,15 @@
 #ifndef STREAM_PEER_H
 #define STREAM_PEER_H
 
-#include "core/reference.h"
+#include <stdint.h>           // for uint8_t, int16_t, int32_t, int64_t, int8_t
+
+#include "core/reference.h"   // for Reference, Ref
+#include "core/array.h"       // for Array
+#include "core/error_list.h"  // for Error
+#include "core/object.h"      // for GDCLASS, OBJ_CATEGORY
+#include "core/ustring.h"     // for String
+#include "core/variant.h"     // for Variant
+#include "core/vector.h"      // for Vector
 
 class StreamPeer : public Reference {
 	GDCLASS(StreamPeer, Reference);

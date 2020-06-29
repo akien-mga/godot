@@ -30,18 +30,29 @@
 
 #include "multiplayer_api.h"
 
-#include "core/debugger/engine_debugger.h"
-#include "core/io/marshalls.h"
-#include "scene/main/node.h"
+#include <stdint.h>                         // for uint8_t, int64_t, uint16_t
+#include <string.h>                         // for memcpy
 
-#include <stdint.h>
+#include "core/debugger/engine_debugger.h"  // for EngineDebugger
+#include "core/io/marshalls.h"              // for encode_cstring, encode_ui...
+#include "scene/main/node.h"                // for Node
+#include "core/array.h"                     // for Array
+#include "core/callable.h"                  // for Callable::CallError, Call...
+#include "core/callable_method_pointer.h"   // for callable_mp
+#include "core/class_db.h"                  // for D_METHOD, ClassDB, Method...
+#include "core/error_macros.h"              // for ERR_FAIL_COND_MSG, ERR_PRINT
+#include "core/list.h"                      // for List, List<>::Element
+#include "core/os/copymem.h"                // for copymem
+#include "core/script_language.h"           // for ScriptInstance
+#include "core/typedefs.h"                  // for Comparator, _FORCE_INLINE_
+#include "core/ustring.h"                   // for String, operator+, itos
 
 #define NODE_ID_COMPRESSION_SHIFT 3
 #define NAME_ID_COMPRESSION_SHIFT 5
 #define BYTE_ONLY_OR_NO_ARGS_SHIFT 6
 
 #ifdef DEBUG_ENABLED
-#include "core/os/os.h"
+#include "core/os/os.h"                     // for OS
 #endif
 
 _FORCE_INLINE_ bool _should_call_local(MultiplayerAPI::RPCMode mode, bool is_master, bool &r_skip_rpc) {

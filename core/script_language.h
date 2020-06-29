@@ -31,12 +31,29 @@
 #ifndef SCRIPT_LANGUAGE_H
 #define SCRIPT_LANGUAGE_H
 
-#include "core/io/multiplayer_api.h"
-#include "core/map.h"
+#include <stdint.h>                   // for uint16_t, uint64_t, uint8_t
+
+#include "core/io/multiplayer_api.h"  // for MultiplayerAPI, MultiplayerAPI:...
+#include "core/map.h"                 // for Map
 #include "core/pair.h"
-#include "core/resource.h"
+#include "core/resource.h"            // for Resource, RES
+#include "core/array.h"               // for Array
+#include "core/callable.h"            // for Callable, Callable::CallError
+#include "core/dictionary.h"          // for Dictionary
+#include "core/error_list.h"          // for Error, ERR_UNAVAILABLE
+#include "core/hash_map.h"            // for HashMap
+#include "core/list.h"                // for List
+#include "core/object.h"              // for Object (ptr only), PropertyInfo
+#include "core/reference.h"           // for Ref
+#include "core/set.h"                 // for Set
+#include "core/string_name.h"         // for StringName, StringName::AlphCom...
+#include "core/typedefs.h"            // for _FORCE_INLINE_
+#include "core/ustring.h"             // for String
+#include "core/variant.h"             // for Variant, Variant::Type, PackedS...
+#include "core/vector.h"              // for Vector
 
 class ScriptLanguage;
+template <class F, class S> struct Pair;
 
 typedef void (*ScriptEditRequestFunction)(const String &p_path);
 

@@ -30,7 +30,10 @@
 
 #include "reference.h"
 
-#include "core/script_language.h"
+#include <stdint.h>                // for uint32_t
+
+#include "core/script_language.h"  // for ScriptServer, ScriptInstance, Scri...
+#include "core/class_db.h"         // for D_METHOD, ClassDB, MethodDefinition
 
 bool Reference::init_ref() {
 	if (reference()) {

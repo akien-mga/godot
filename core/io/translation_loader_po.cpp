@@ -30,8 +30,12 @@
 
 #include "translation_loader_po.h"
 
-#include "core/os/file_access.h"
-#include "core/translation.h"
+#include "core/os/file_access.h"  // for FileAccess, FileAccess::READ
+#include "core/translation.h"     // for Translation
+#include "core/error_macros.h"    // for ERR_FAIL_COND_V_MSG, ERR_FAIL_V_MSG
+#include "core/os/memory.h"       // for memdelete, memnew
+#include "core/reference.h"       // for Ref
+#include "core/vector.h"          // for Vector
 
 RES TranslationLoaderPO::load_translation(FileAccess *f, Error *r_error) {
 	enum Status {

@@ -30,13 +30,10 @@
 
 #include "pool_allocator.h"
 
-#include "core/error_macros.h"
-#include "core/os/copymem.h"
-#include "core/os/memory.h"
-#include "core/os/os.h"
-#include "core/print_string.h"
-
-#include <assert.h>
+#include "core/error_macros.h"  // for ERR_FAIL_COND_V, ERR_PRINT, ERR_FAIL_...
+#include "core/os/copymem.h"    // for movemem
+#include "core/os/memory.h"     // for memdelete_arr, memnew_arr, Memory
+#include "core/os/os.h"         // for OS
 
 #define COMPACT_CHUNK(m_entry, m_to_pos)                      \
 	do {                                                      \

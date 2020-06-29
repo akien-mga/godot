@@ -30,21 +30,24 @@
 
 #include "ustring.h"
 
-#include "core/color.h"
-#include "core/crypto/crypto_core.h"
-#include "core/math/math_funcs.h"
-#include "core/os/memory.h"
-#include "core/print_string.h"
-#include "core/translation.h"
-#include "core/ucaps.h"
-#include "core/variant.h"
+#include <string.h>                   // for memcpy, strlen
+#include <cstdint>                    // for uint8_t, uint32_t, int64_t, INT...
 
-#include <wchar.h>
-#include <cstdint>
+#include "core/color.h"               // for Color
+#include "core/crypto/crypto_core.h"  // for CryptoCore
+#include "core/print_string.h"        // for print_line
+#include "core/translation.h"         // for TranslationServer
+#include "core/ucaps.h"               // for _find_upper, _find_lower
+#include "core/variant.h"             // for Variant, vformat, Variant::ARRAY
+#include "core/array.h"               // for Array
+#include "core/dictionary.h"          // for Dictionary
+#include "core/error_macros.h"        // for ERR_FAIL_COND_V_MSG, ERR_PRINT
+#include "core/list.h"                // for List, List<>::Element
+#include "core/string_name.h"         // for StringName
 
 #ifndef NO_USE_STDLIB
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdio.h>                    // for snprintf, size_t
+#include <stdlib.h>                   // for strtol
 #endif
 
 #ifdef _MSC_VER

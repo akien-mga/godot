@@ -31,9 +31,25 @@
 #ifndef RESOURCE_FORMAT_BINARY_H
 #define RESOURCE_FORMAT_BINARY_H
 
-#include "core/io/resource_loader.h"
-#include "core/io/resource_saver.h"
+#include <stdint.h>                   // for uint32_t, uint64_t
+
+#include "core/io/resource_loader.h"  // for ResourceFormatLoader
+#include "core/io/resource_saver.h"   // for ResourceFormatSaver
 #include "core/os/file_access.h"
+#include "core/error_list.h"          // for Error, OK
+#include "core/list.h"                // for List
+#include "core/map.h"                 // for Map
+#include "core/object.h"              // for PropertyInfo
+#include "core/reference.h"           // for Ref
+#include "core/resource.h"            // for RES, Resource (ptr only)
+#include "core/set.h"                 // for Set
+#include "core/string_name.h"         // for StringName
+#include "core/typedefs.h"            // for Comparator
+#include "core/ustring.h"             // for String
+#include "core/variant.h"             // for Variant
+#include "core/vector.h"              // for Vector
+
+class FileAccess;
 
 class ResourceLoaderBinary {
 	bool translation_remapped = false;

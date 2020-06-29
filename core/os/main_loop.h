@@ -32,8 +32,10 @@
 #define MAIN_LOOP_H
 
 #include "core/input/input_event.h"
-#include "core/reference.h"
-#include "core/script_language.h"
+#include "core/reference.h"        // for Ref
+#include "core/script_language.h"  // for Script
+#include "core/object.h"           // for Object, GDCLASS, OBJ_CATEGORY
+#include "core/ustring.h"          // for String
 
 class MainLoop : public Object {
 	GDCLASS(MainLoop, Object);

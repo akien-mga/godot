@@ -30,12 +30,10 @@
 
 #include "memory.h"
 
-#include "core/error_macros.h"
-#include "core/os/copymem.h"
-#include "core/safe_refcount.h"
+#include <stdlib.h>              // for free, realloc, malloc
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "core/error_macros.h"   // for ERR_FAIL_COND_V, ERR_FAIL_COND
+#include "core/safe_refcount.h"  // for atomic_add, atomic_exchange_if_greater
 
 void *operator new(size_t p_size, const char *p_description) {
 	return Memory::alloc_static(p_size, false);

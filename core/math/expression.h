@@ -31,7 +31,17 @@
 #ifndef EXPRESSION_H
 #define EXPRESSION_H
 
-#include "core/reference.h"
+#include "core/reference.h"    // for Reference
+#include "core/callable.h"     // for Callable
+#include "core/error_list.h"   // for Error
+#include "core/object.h"       // for Object (ptr only), GDCLASS
+#include "core/os/memory.h"    // for memdelete, memnew
+#include "core/string_name.h"  // for StringName
+#include "core/ustring.h"      // for String
+#include "core/variant.h"      // for Variant, Variant::Type, Variant::NIL
+#include "core/vector.h"       // for Vector
+
+class Array;
 
 class Expression : public Reference {
 	GDCLASS(Expression, Reference);

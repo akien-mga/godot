@@ -31,9 +31,16 @@
 #ifndef LOCAL_DEBUGGER_H
 #define LOCAL_DEBUGGER_H
 
-#include "core/debugger/engine_debugger.h"
-#include "core/list.h"
+#include "core/debugger/engine_debugger.h"  // for EngineDebugger
+#include "core/list.h"                      // for List
 #include "core/script_language.h"
+#include "core/error_macros.h"              // for ErrorHandlerType
+#include "core/map.h"                       // for Map
+#include "core/pair.h"                      // for Pair
+#include "core/ustring.h"                   // for String
+
+class Array;
+class Variant;
 
 class LocalDebugger : public EngineDebugger {
 private:

@@ -30,8 +30,9 @@
 
 #include "midi_driver.h"
 
-#include "core/input/input.h"
-#include "core/os/os.h"
+#include "core/input/input.h"        // for Input
+#include "core/input/input_event.h"  // for InputEventMIDI, InputEvent, MIDI...
+#include "core/reference.h"          // for Ref
 
 uint8_t MIDIDriver::last_received_message = 0x00;
 MIDIDriver *MIDIDriver::singleton = nullptr;
