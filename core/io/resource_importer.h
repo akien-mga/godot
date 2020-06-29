@@ -31,16 +31,16 @@
 #ifndef RESOURCE_IMPORTER_H
 #define RESOURCE_IMPORTER_H
 
-#include "core/io/resource_loader.h"  // for ResourceFormatLoader
-#include "core/error_list.h"          // for Error, ERR_UNAVAILABLE
-#include "core/list.h"                // for List
-#include "core/map.h"                 // for Map
-#include "core/object.h"              // for PropertyInfo, GDCLASS
-#include "core/reference.h"           // for Ref, Reference
-#include "core/resource.h"            // for RES
-#include "core/ustring.h"             // for String
-#include "core/variant.h"             // for Variant
-#include "core/vector.h"              // for Vector
+#include "core/io/resource_loader.h"
+#include "core/error_list.h"
+#include "core/list.h"
+#include "core/map.h"
+#include "core/object.h"
+#include "core/reference.h"
+#include "core/resource.h"
+#include "core/ustring.h"
+#include "core/variant.h"
+#include "core/vector.h"
 
 class ResourceImporter;
 class StringName;

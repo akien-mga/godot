@@ -30,26 +30,26 @@
 
 #include "resource_loader.h"
 
-#include <stdint.h>                     // for int64_t, uint64_t
+#include <stdint.h>
 
-#include "core/io/resource_importer.h"  // for ResourceFormatImporter
-#include "core/os/file_access.h"        // for FileAccess, FileAccessRef
-#include "core/os/os.h"                 // for OS
-#include "core/print_string.h"          // for print_verbose
-#include "core/project_settings.h"      // for ProjectSettings
-#include "core/translation.h"           // for TranslationServer
-#include "core/variant_parser.h"        // for VariantParser::Tag, VariantPa...
-#include "core/array.h"                 // for Array
-#include "core/class_db.h"              // for ClassDB
-#include "core/dictionary.h"            // for Dictionary
-#include "core/error_macros.h"          // for ERR_FAIL_V_MSG, ERR_FAIL_COND
-#include "core/os/memory.h"             // for memdelete, memnew
-#include "core/os/rw_lock.h"            // for RWLock
-#include "core/os/semaphore.h"          // for Semaphore
-#include "core/script_language.h"       // for Script, ScriptInstance, Scrip...
-#include "core/string_name.h"           // for StringName
-#include "core/variant.h"               // for Variant, Variant::STRING, Pac...
-#include "core/vector.h"                // for Vector, VectorWriteProxy
+#include "core/io/resource_importer.h"
+#include "core/os/file_access.h"
+#include "core/os/os.h"
+#include "core/print_string.h"
+#include "core/project_settings.h"
+#include "core/translation.h"
+#include "core/variant_parser.h"
+#include "core/array.h"
+#include "core/class_db.h"
+#include "core/dictionary.h"
+#include "core/error_macros.h"
+#include "core/os/memory.h"
+#include "core/os/rw_lock.h"
+#include "core/os/semaphore.h"
+#include "core/script_language.h"
+#include "core/string_name.h"
+#include "core/variant.h"
+#include "core/vector.h"
 
 #ifdef DEBUG_LOAD_THREADED
 #define print_lt(m_text) print_line(m_text)

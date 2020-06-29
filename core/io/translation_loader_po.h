@@ -31,13 +31,13 @@
 #ifndef TRANSLATION_LOADER_PO_H
 #define TRANSLATION_LOADER_PO_H
 
-#include "core/io/resource_loader.h"  // for ResourceFormatLoader
+#include "core/io/resource_loader.h"
 #include "core/os/file_access.h"
 #include "core/translation.h"
-#include "core/error_list.h"          // for Error
-#include "core/list.h"                // for List
-#include "core/resource.h"            // for RES
-#include "core/ustring.h"             // for String
+#include "core/error_list.h"
+#include "core/list.h"
+#include "core/resource.h"
+#include "core/ustring.h"
 
 class FileAccess;
 

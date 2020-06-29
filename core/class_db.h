@@ -31,21 +31,21 @@
 #ifndef CLASS_DB_H
 #define CLASS_DB_H
 
-#include <stdint.h>             // for uint32_t, uint64_t
+#include <stdint.h>
 
-#include "core/method_bind.h"   // for MethodBind (ptr only), create_method_...
+#include "core/method_bind.h"
 #include "core/object.h"
 #include "core/print_string.h"
-#include "core/error_macros.h"  // for ERR_FAIL_COND, ERR_FAIL_COND_V, ERR_F...
-#include "core/hash_map.h"      // for HashMap
-#include "core/list.h"          // for List
-#include "core/os/memory.h"     // for memdelete, memnew
-#include "core/set.h"           // for Set
-#include "core/string_name.h"   // for StringName
-#include "core/typedefs.h"      // for GLOBAL_LOCK_FUNCTION
-#include "core/ustring.h"       // for String, operator+
-#include "core/variant.h"       // for Variant, Variant::Type
-#include "core/vector.h"        // for Vector
+#include "core/error_macros.h"
+#include "core/hash_map.h"
+#include "core/list.h"
+#include "core/os/memory.h"
+#include "core/set.h"
+#include "core/string_name.h"
+#include "core/typedefs.h"
+#include "core/ustring.h"
+#include "core/variant.h"
+#include "core/vector.h"
 
 /** To bind more then 6 parameters include this:
  *  #include "core/method_bind_ext.gen.inc"

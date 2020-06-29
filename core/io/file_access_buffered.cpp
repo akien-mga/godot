@@ -30,10 +30,10 @@
 
 #include "file_access_buffered.h"
 
-#include <string.h>             // for memcpy, size_t
+#include <string.h>
 
-#include "core/error_macros.h"  // for ERR_FAIL_COND_V_MSG
-#include "core/typedefs.h"      // for MIN
+#include "core/error_macros.h"
+#include "core/typedefs.h"
 
 Error FileAccessBuffered::set_error(Error p_error) const {
 	return (last_error = p_error);

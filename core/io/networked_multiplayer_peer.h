@@ -31,9 +31,9 @@
 #ifndef NETWORKED_MULTIPLAYER_PEER_H
 #define NETWORKED_MULTIPLAYER_PEER_H
 
-#include "core/io/packet_peer.h"  // for PacketPeer
-#include "core/method_bind.h"     // for VARIANT_ENUM_CAST
-#include "core/object.h"          // for GDCLASS
+#include "core/io/packet_peer.h"
+#include "core/method_bind.h"
+#include "core/object.h"
 
 class NetworkedMultiplayerPeer : public PacketPeer {
 	GDCLASS(NetworkedMultiplayerPeer, PacketPeer);

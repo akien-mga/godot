@@ -31,14 +31,14 @@
 #ifndef IP_H
 #define IP_H
 
-#include "core/io/ip_address.h"  // for IP_Address
+#include "core/io/ip_address.h"
 #include "core/os/os.h"
-#include "core/array.h"          // for Array
-#include "core/list.h"           // for List
-#include "core/map.h"            // for Map
-#include "core/method_bind.h"    // for VARIANT_ENUM_CAST
-#include "core/object.h"         // for Object, GDCLASS, OBJ_CATEGORY
-#include "core/ustring.h"        // for String
+#include "core/array.h"
+#include "core/list.h"
+#include "core/map.h"
+#include "core/method_bind.h"
+#include "core/object.h"
+#include "core/ustring.h"
 
 struct _IP_ResolverPrivate;
 

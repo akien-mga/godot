@@ -31,14 +31,14 @@
 #ifndef MESSAGE_QUEUE_H
 #define MESSAGE_QUEUE_H
 
-#include <stdint.h>               // for int16_t, uint32_t, uint8_t
+#include <stdint.h>
 
-#include "core/object.h"          // for Object (ptr only), VARIANT_ARG_LIST
-#include "core/os/thread_safe.h"  // for _THREAD_SAFE_CLASS_
-#include "core/callable.h"        // for Callable
-#include "core/error_list.h"      // for Error
-#include "core/string_name.h"     // for StringName
-#include "core/variant.h"         // for Variant
+#include "core/object.h"
+#include "core/os/thread_safe.h"
+#include "core/callable.h"
+#include "core/error_list.h"
+#include "core/string_name.h"
+#include "core/variant.h"
 
 class ObjectID;
 

@@ -31,15 +31,15 @@
 #ifndef EXPRESSION_H
 #define EXPRESSION_H
 
-#include "core/reference.h"    // for Reference
-#include "core/callable.h"     // for Callable
-#include "core/error_list.h"   // for Error
-#include "core/object.h"       // for Object (ptr only), GDCLASS
-#include "core/os/memory.h"    // for memdelete, memnew
-#include "core/string_name.h"  // for StringName
-#include "core/ustring.h"      // for String
-#include "core/variant.h"      // for Variant, Variant::Type, Variant::NIL
-#include "core/vector.h"       // for Vector
+#include "core/reference.h"
+#include "core/callable.h"
+#include "core/error_list.h"
+#include "core/object.h"
+#include "core/os/memory.h"
+#include "core/string_name.h"
+#include "core/ustring.h"
+#include "core/variant.h"
+#include "core/vector.h"
 
 class Array;
 

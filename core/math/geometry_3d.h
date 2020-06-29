@@ -31,19 +31,19 @@
 #ifndef GEOMETRY_3D_H
 #define GEOMETRY_3D_H
 
-#include <alloca.h>                // for alloca
-#include <stdint.h>                // for uint32_t, int8_t
+#include <alloca.h>
+#include <stdint.h>
 
 #include "core/math/face3.h"
 #include "core/object.h"
-#include "core/vector.h"           // for Vector
-#include "core/color.h"            // for Color
-#include "core/math/math_defs.h"   // for real_t, CMP_EPSILON, Math_PI, CMP_...
-#include "core/math/math_funcs.h"  // for Math
-#include "core/math/plane.h"       // for Plane
-#include "core/math/vector2.h"     // for Vector2, Vector2::(anonymous), Size2
-#include "core/math/vector3.h"     // for Vector3, Vector3::(anonymous union...
-#include "core/typedefs.h"         // for _FORCE_INLINE_, ABS, CLAMP
+#include "core/vector.h"
+#include "core/color.h"
+#include "core/math/math_defs.h"
+#include "core/math/math_funcs.h"
+#include "core/math/plane.h"
+#include "core/math/vector2.h"
+#include "core/math/vector3.h"
+#include "core/typedefs.h"
 
 class Face3;
 struct Vector3i;

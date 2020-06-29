@@ -31,10 +31,10 @@
 #ifndef RECT2_H
 #define RECT2_H
 
-#include "core/math/vector2.h"    // for Vector2::(anonymous), Point2, Vecto...
-#include "core/math/math_defs.h"  // for real_t, MARGIN_BOTTOM, MARGIN_LEFT
-#include "core/typedefs.h"        // for MIN, MAX, _FORCE_INLINE_
-#include "core/ustring.h"         // for String
+#include "core/math/vector2.h" // also includes math_funcs and ustring
+#include "core/math/math_defs.h"
+#include "core/typedefs.h"
+#include "core/ustring.h"
 
 struct Transform2D;
 

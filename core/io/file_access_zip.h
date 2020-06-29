@@ -30,20 +30,20 @@
 
 #ifdef MINIZIP_ENABLED
 
-#include <stdint.h>                    // for uint8_t, uint32_t, int64_t
+#include <stdint.h>
 
-#include "core/error_list.h"           // for Error, FAILED
-#include "core/os/file_access.h"       // for FileAccess, FileAccess::Create...
-#include "core/ustring.h"              // for String
-#include "core/vector.h"               // for Vector
+#include "core/error_list.h"
+#include "core/os/file_access.h"
+#include "core/ustring.h"
+#include "core/vector.h"
 #ifndef FILE_ACCESS_ZIP_H
 #define FILE_ACCESS_ZIP_H
 
-#include <stdlib.h>                    // for size_t
+#include <stdlib.h>
 
-#include "core/io/file_access_pack.h"  // for PackedData, PackSource
-#include "core/map.h"                  // for Map
-#include "thirdparty/minizip/unzip.h"  // for unzFile, unz_file_info64, unz_...
+#include "core/io/file_access_pack.h"
+#include "core/map.h"
+#include "thirdparty/minizip/unzip.h"
 
 class ZipArchive : public PackSource {
 public:

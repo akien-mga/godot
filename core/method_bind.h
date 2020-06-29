@@ -36,23 +36,23 @@
 #endif
 
 #include <stdio.h>
-#include <stdint.h>               // for uint32_t
+#include <stdint.h>
 
-#include "core/list.h"            // for List
+#include "core/list.h"
 #include "core/method_ptrcall.h"
 #include "core/object.h"
-#include "core/type_info.h"       // for MAKE_ENUM_TYPE_INFO, Metadata, META...
-#include "core/typedefs.h"        // for _FORCE_INLINE_
-#include "core/variant.h"         // for Variant, Variant::Type, Variant::Op...
-#include "core/callable.h"        // for Callable::CallError, Callable, Call...
-#include "core/error_list.h"      // for Error
-#include "core/error_macros.h"    // for ERR_FAIL, ERR_FAIL_COND_V
-#include "core/math/math_defs.h"  // for Corner, HAlign, Margin, Orientation
-#include "core/math/vector3.h"    // for Vector3, Vector3::Axis
-#include "core/os/memory.h"       // for memnew, memnew_arr
-#include "core/string_name.h"     // for StringName
-#include "core/ustring.h"         // for String, itos, operator+
-#include "core/vector.h"          // for Vector, VectorWriteProxy
+#include "core/type_info.h"
+#include "core/typedefs.h"
+#include "core/variant.h"
+#include "core/callable.h"
+#include "core/error_list.h"
+#include "core/error_macros.h"
+#include "core/math/math_defs.h"
+#include "core/math/vector3.h"
+#include "core/os/memory.h"
+#include "core/string_name.h"
+#include "core/ustring.h"
+#include "core/vector.h"
 
 enum MethodFlags {
 
@@ -395,7 +395,7 @@ MethodBind *create_vararg_method_bind(Variant (T::*p_method)(const Variant **, i
 
 // tale of an amazing hack.. //
 
-#include "method_bind.gen.inc"    // for p_args, r_error, p_arg_count, Metho...
+#include "method_bind.gen.inc"
 
 // if you declare a nonexistent class..
 class __UnexistingClass;

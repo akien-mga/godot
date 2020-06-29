@@ -30,12 +30,12 @@
 
 #include "file_access.h"
 
-#include "core/crypto/crypto_core.h"   // for CryptoCore::MD5Context, Crypto...
-#include "core/io/file_access_pack.h"  // for PackedData
-#include "core/io/marshalls.h"         // for MarshallDouble, MarshallFloat
-#include "core/os/os.h"                // for OS
-#include "core/project_settings.h"     // for ProjectSettings
-#include "core/error_macros.h"         // for ERR_FAIL_COND_V, ERR_FAIL_COND...
+#include "core/crypto/crypto_core.h"
+#include "core/io/file_access_pack.h"
+#include "core/io/marshalls.h"
+#include "core/os/os.h"
+#include "core/project_settings.h"
+#include "core/error_macros.h"
 
 FileAccess::CreateFunc FileAccess::create_func[ACCESS_MAX] = { nullptr, nullptr };
 

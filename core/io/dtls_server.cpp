@@ -30,7 +30,7 @@
 
 #include "dtls_server.h"
 
-#include "core/class_db.h"  // for D_METHOD, ClassDB, MethodDefinition, DEFVAL
+#include "core/class_db.h"
 
 DTLSServer *(*DTLSServer::_create)() = nullptr;
 bool DTLSServer::available = false;

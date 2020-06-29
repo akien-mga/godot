@@ -31,17 +31,17 @@
 #ifndef CONFIG_FILE_H
 #define CONFIG_FILE_H
 
-#include <stdint.h>                 // for uint8_t
+#include <stdint.h>
 
-#include "core/ordered_hash_map.h"  // for OrderedHashMap
+#include "core/ordered_hash_map.h"
 #include "core/os/file_access.h"
-#include "core/reference.h"         // for Reference
-#include "core/variant_parser.h"    // for VariantParser
-#include "core/error_list.h"        // for Error
-#include "core/list.h"              // for List
-#include "core/object.h"            // for GDCLASS
-#include "core/ustring.h"           // for String
-#include "core/variant.h"           // for Variant, PackedStringArray
+#include "core/reference.h"
+#include "core/variant_parser.h"
+#include "core/error_list.h"
+#include "core/list.h"
+#include "core/object.h"
+#include "core/ustring.h"
+#include "core/variant.h"
 
 class FileAccess;
 template <class T> class Vector;

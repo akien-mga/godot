@@ -31,18 +31,18 @@
 #ifndef A_STAR_H
 #define A_STAR_H
 
-#include <stdint.h>               // for uint64_t, int32_t
+#include <stdint.h>
 
-#include "core/oa_hash_map.h"     // for OAHashMap
-#include "core/reference.h"       // for Reference
-#include "core/array.h"           // for Array
-#include "core/math/math_defs.h"  // for real_t
-#include "core/math/vector2.h"    // for Vector2
-#include "core/math/vector3.h"    // for Vector3
-#include "core/object.h"          // for GDCLASS
-#include "core/set.h"             // for Set
-#include "core/typedefs.h"        // for _FORCE_INLINE_
-#include "core/vector.h"          // for Vector
+#include "core/oa_hash_map.h"
+#include "core/reference.h"
+#include "core/array.h"
+#include "core/math/math_defs.h"
+#include "core/math/vector2.h"
+#include "core/math/vector3.h"
+#include "core/object.h"
+#include "core/set.h"
+#include "core/typedefs.h"
+#include "core/vector.h"
 
 /**
 	A* pathfinding algorithm

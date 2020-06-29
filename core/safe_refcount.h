@@ -31,10 +31,10 @@
 #ifndef SAFE_REFCOUNT_H
 #define SAFE_REFCOUNT_H
 
-#include <stdint.h>         // for uint32_t
+#include <stdint.h>
 
 #include "core/os/mutex.h"
-#include "core/typedefs.h"  // for _ALWAYS_INLINE_
+#include "core/typedefs.h"
 #include "platform_config.h"
 
 // Atomic functions, these are used for multithread safe reference counters!

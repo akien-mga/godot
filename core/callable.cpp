@@ -30,15 +30,15 @@
 
 #include "callable.h"
 
-#include "core/script_language.h"  // for Script
-#include "message_queue.h"         // for MessageQueue
-#include "object.h"                // for Object, Object::Connection, ObjectDB
-#include "reference.h"             // for Ref
-#include "core/error_macros.h"     // for ERR_FAIL_MSG, ERR_FAIL_COND_V, ERR...
-#include "core/hashfuncs.h"        // for hash_djb2_one_64
-#include "core/list.h"             // for List, List<>::Element
-#include "core/os/memory.h"        // for memdelete
-#include "core/variant.h"          // for vformat, Variant
+#include "core/script_language.h"
+#include "message_queue.h"
+#include "object.h"
+#include "reference.h"
+#include "core/error_macros.h"
+#include "core/hashfuncs.h"
+#include "core/list.h"
+#include "core/os/memory.h"
+#include "core/variant.h"
 
 void Callable::call_deferred(const Variant **p_arguments, int p_argcount) const {
 	MessageQueue::get_singleton()->push_callable(*this, p_arguments, p_argcount);

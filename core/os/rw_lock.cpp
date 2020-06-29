@@ -30,7 +30,7 @@
 
 #include "rw_lock.h"
 
-#include "core/error_macros.h"  // for ERR_FAIL_COND_V
+#include "core/error_macros.h"
 
 RWLock *(*RWLock::create_func)() = nullptr;
 

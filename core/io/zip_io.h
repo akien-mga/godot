@@ -37,8 +37,8 @@
 // thirdparty includes in as little headers as possible.
 #include "thirdparty/minizip/unzip.h"
 #include "thirdparty/minizip/zip.h"
-#include "thirdparty/minizip/ioapi.h"  // for zlib_filefunc_def
-#include "zconf.h"                     // for voidpf, uLong, uInt
+#include "thirdparty/minizip/ioapi.h"
+#include "zconf.h"
 
 class FileAccess;
 

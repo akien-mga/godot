@@ -32,15 +32,15 @@
 #define REFERENCE_H
 
 #include "core/class_db.h"
-#include "core/object.h"         // for Object, PropertyInfo, GDCLASS, PROPE...
-#include "core/safe_refcount.h"  // for SafeRefCount
-#include "core/error_macros.h"   // for ERR_FAIL_COND
-#include "core/method_bind.h"    // for METADATA_NONE, Metadata, DEBUG_METHO...
-#include "core/object_id.h"      // for ObjectID
-#include "core/os/memory.h"      // for memdelete, memnew
-#include "core/typedefs.h"       // for _FORCE_INLINE_
-#include "core/ustring.h"        // for String
-#include "core/variant.h"        // for Variant, Variant::OBJECT, Variant::Type
+#include "core/object.h"
+#include "core/safe_refcount.h"
+#include "core/error_macros.h"
+#include "core/method_bind.h"
+#include "core/object_id.h"
+#include "core/os/memory.h"
+#include "core/typedefs.h"
+#include "core/ustring.h"
+#include "core/variant.h"
 
 template <class T, typename = void> struct GetTypeInfo;
 template <class T> struct PtrToArg;

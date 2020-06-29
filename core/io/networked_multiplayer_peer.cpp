@@ -30,8 +30,8 @@
 
 #include "networked_multiplayer_peer.h"
 
-#include "core/class_db.h"  // for D_METHOD, ClassDB, MethodDefinition, BIND...
-#include "core/variant.h"   // for Variant, Variant::INT, Variant::BOOL
+#include "core/class_db.h"
+#include "core/variant.h"
 
 void NetworkedMultiplayerPeer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_transfer_mode", "mode"), &NetworkedMultiplayerPeer::set_transfer_mode);

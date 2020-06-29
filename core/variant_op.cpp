@@ -28,36 +28,36 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
-#include <stdint.h>                         // for int32_t, int64_t, uint8_t
+#include <stdint.h>
 
-#include "variant.h"                        // for Variant, Variant::(anonym...
-#include "core/core_string_names.h"         // for CoreStringNames, CoreStri...
-#include "core/debugger/engine_debugger.h"  // for EngineDebugger
-#include "core/object.h"                    // for PropertyInfo, Object, Obj...
-#include "core/array.h"                     // for Array
-#include "core/callable.h"                  // for Callable::CallError, Call...
-#include "core/color.h"                     // for Color, Color::(anonymous ...
-#include "core/dictionary.h"                // for Dictionary
-#include "core/error_macros.h"              // for WARN_PRINT, ERR_FAIL_INDEX_V
-#include "core/list.h"                      // for List, List<>::Element
-#include "core/math/aabb.h"                 // for AABB
-#include "core/math/basis.h"                // for Basis
-#include "core/math/math_defs.h"            // for real_t
-#include "core/math/math_funcs.h"           // for Math
-#include "core/math/plane.h"                // for Plane
-#include "core/math/quat.h"                 // for Quat
-#include "core/math/rect2.h"                // for Rect2i, Rect2
-#include "core/math/transform.h"            // for Transform
-#include "core/math/transform_2d.h"         // for Transform2D
-#include "core/math/vector2.h"              // for Vector2, Vector2i, Vector...
-#include "core/math/vector3.h"              // for Vector3, Vector3::(anonym...
-#include "core/math/vector3i.h"             // for Vector3i, Vector3i::(anon...
-#include "core/node_path.h"                 // for NodePath
-#include "core/object_id.h"                 // for ObjectID
-#include "core/rid.h"                       // for RID
-#include "core/string_name.h"               // for StringName
-#include "core/ustring.h"                   // for String, CharProxy, CharType
-#include "core/vector.h"                    // for Vector
+#include "variant.h"
+#include "core/core_string_names.h"
+#include "core/debugger/engine_debugger.h"
+#include "core/object.h"
+#include "core/array.h"
+#include "core/callable.h"
+#include "core/color.h"
+#include "core/dictionary.h"
+#include "core/error_macros.h"
+#include "core/list.h"
+#include "core/math/aabb.h"
+#include "core/math/basis.h"
+#include "core/math/math_defs.h"
+#include "core/math/math_funcs.h"
+#include "core/math/plane.h"
+#include "core/math/quat.h"
+#include "core/math/rect2.h"
+#include "core/math/transform.h"
+#include "core/math/transform_2d.h"
+#include "core/math/vector2.h"
+#include "core/math/vector3.h"
+#include "core/math/vector3i.h"
+#include "core/node_path.h"
+#include "core/object_id.h"
+#include "core/rid.h"
+#include "core/string_name.h"
+#include "core/ustring.h"
+#include "core/vector.h"
 
 #define CASE_TYPE_ALL(PREFIX, OP) \
 	CASE_TYPE(PREFIX, OP, INT)    \

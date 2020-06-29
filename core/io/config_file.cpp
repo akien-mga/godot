@@ -30,13 +30,13 @@
 
 #include "config_file.h"
 
-#include "core/io/file_access_encrypted.h"  // for FileAccessEncrypted, File...
-#include "core/variant_parser.h"            // for VariantParser, VariantPar...
-#include "core/class_db.h"                  // for D_METHOD, ClassDB, Method...
-#include "core/error_macros.h"              // for ERR_FAIL_COND_MSG, ERR_FA...
-#include "core/map.h"                       // for Map
-#include "core/os/file_access.h"            // for FileAccess, FileAccess::READ
-#include "core/os/memory.h"                 // for memdelete, memnew
+#include "core/io/file_access_encrypted.h"
+#include "core/variant_parser.h"
+#include "core/class_db.h"
+#include "core/error_macros.h"
+#include "core/map.h"
+#include "core/os/file_access.h"
+#include "core/os/memory.h"
 
 template <class T> class Vector;
 

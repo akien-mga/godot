@@ -31,12 +31,12 @@
 #ifndef VECTOR3_H
 #define VECTOR3_H
 
-#include "core/math/math_funcs.h"  // for Math
-#include "core/math/vector3i.h"    // for Vector3i, Vector3i::(anonymous uni...
-#include "core/ustring.h"          // for String
-#include "core/error_macros.h"     // for ERR_FAIL_COND_V_MSG
-#include "core/math/math_defs.h"   // for real_t, MATH_CHECKS, UNIT_EPSILON
-#include "core/typedefs.h"         // for _FORCE_INLINE_, SGN
+#include "core/math/math_funcs.h"
+#include "core/math/vector3i.h"
+#include "core/ustring.h"
+#include "core/error_macros.h"
+#include "core/math/math_defs.h"
+#include "core/typedefs.h"
 
 class Basis;
 

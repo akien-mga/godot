@@ -31,32 +31,32 @@
 #ifndef CORE_BIND_H
 #define CORE_BIND_H
 
-#include <stdint.h>               // for uint32_t, uint64_t, uint8_t, int64_t
+#include <stdint.h>
 
 #include "core/image.h"
-#include "core/io/compression.h"  // for Compression, Compression::MODE_DEFLATE
+#include "core/io/compression.h"
 #include "core/io/resource_loader.h"
 #include "core/io/resource_saver.h"
 #include "core/os/dir_access.h"
 #include "core/os/file_access.h"
 #include "core/os/os.h"
-#include "core/os/semaphore.h"    // for Semaphore
+#include "core/os/semaphore.h"
 #include "core/os/thread.h"
-#include "core/array.h"           // for Array
-#include "core/dictionary.h"      // for Dictionary
-#include "core/error_list.h"      // for Error
-#include "core/math/math_defs.h"  // for real_t
-#include "core/math/vector2.h"    // for Point2, Vector2, Size2
-#include "core/math/vector3.h"    // for Vector3, Vector3::AXIS_Z, Vector3::...
-#include "core/method_bind.h"     // for VARIANT_ENUM_CAST
-#include "core/object.h"          // for Object, GDCLASS
-#include "core/os/mutex.h"        // for Mutex
-#include "core/reference.h"       // for Reference, Ref
-#include "core/resource.h"        // for RES
-#include "core/string_name.h"     // for StringName
-#include "core/ustring.h"         // for String
-#include "core/variant.h"         // for Variant, PackedStringArray
-#include "core/vector.h"          // for Vector
+#include "core/array.h"
+#include "core/dictionary.h"
+#include "core/error_list.h"
+#include "core/math/math_defs.h"
+#include "core/math/vector2.h"
+#include "core/math/vector3.h"
+#include "core/method_bind.h"
+#include "core/object.h"
+#include "core/os/mutex.h"
+#include "core/reference.h"
+#include "core/resource.h"
+#include "core/string_name.h"
+#include "core/ustring.h"
+#include "core/variant.h"
+#include "core/vector.h"
 
 class DirAccess;
 class FileAccess;

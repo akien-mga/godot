@@ -30,8 +30,8 @@
 
 #include "crypto.h"
 
-#include "core/class_db.h"      // for D_METHOD, ClassDB, MethodDefinition
-#include "core/error_macros.h"  // for ERR_FAIL_COND_V_MSG, ERR_FAIL_V, ERR_...
+#include "core/class_db.h"
+#include "core/error_macros.h"
 
 /// Resources
 

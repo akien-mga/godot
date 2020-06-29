@@ -30,17 +30,17 @@
 
 #include "message_queue.h"
 
-#include <alloca.h>                  // for alloca
+#include <alloca.h>
 
-#include "core/core_string_names.h"  // for CoreStringNames
-#include "core/project_settings.h"   // for ProjectSettings, GLOBAL_DEF_RST
-#include "core/error_macros.h"       // for ERR_FAIL_V_MSG, ERR_FAIL_COND
-#include "core/map.h"                // for Map, Map<>::Element
-#include "core/object_id.h"          // for ObjectID
-#include "core/os/memory.h"          // for memnew_placement, memdelete_arr
-#include "core/print_string.h"       // for print_line
-#include "core/typedefs.h"           // for Comparator
-#include "core/ustring.h"            // for itos, operator+, String
+#include "core/core_string_names.h"
+#include "core/project_settings.h"
+#include "core/error_macros.h"
+#include "core/map.h"
+#include "core/object_id.h"
+#include "core/os/memory.h"
+#include "core/print_string.h"
+#include "core/typedefs.h"
+#include "core/ustring.h"
 
 MessageQueue *MessageQueue::singleton = nullptr;
 

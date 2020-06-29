@@ -30,10 +30,10 @@
 
 #include "color.h"
 
-#include "core/color_names.inc"    // for _populate_named_colors, _named_colors
-#include "core/map.h"              // for Map, Map<>::Element
-#include "core/math/math_funcs.h"  // for Math
-#include "core/error_macros.h"     // for ERR_FAIL_COND_V_MSG, ERR_FAIL_NULL...
+#include "core/color_names.inc"
+#include "core/map.h"
+#include "core/math/math_funcs.h"
+#include "core/error_macros.h"
 
 uint32_t Color::to_argb32() const {
 	uint32_t c = (uint8_t)Math::round(a * 255);

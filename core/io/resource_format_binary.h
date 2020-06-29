@@ -31,23 +31,23 @@
 #ifndef RESOURCE_FORMAT_BINARY_H
 #define RESOURCE_FORMAT_BINARY_H
 
-#include <stdint.h>                   // for uint32_t, uint64_t
+#include <stdint.h>
 
-#include "core/io/resource_loader.h"  // for ResourceFormatLoader
-#include "core/io/resource_saver.h"   // for ResourceFormatSaver
+#include "core/io/resource_loader.h"
+#include "core/io/resource_saver.h"
 #include "core/os/file_access.h"
-#include "core/error_list.h"          // for Error, OK
-#include "core/list.h"                // for List
-#include "core/map.h"                 // for Map
-#include "core/object.h"              // for PropertyInfo
-#include "core/reference.h"           // for Ref
-#include "core/resource.h"            // for RES, Resource (ptr only)
-#include "core/set.h"                 // for Set
-#include "core/string_name.h"         // for StringName
-#include "core/typedefs.h"            // for Comparator
-#include "core/ustring.h"             // for String
-#include "core/variant.h"             // for Variant
-#include "core/vector.h"              // for Vector
+#include "core/error_list.h"
+#include "core/list.h"
+#include "core/map.h"
+#include "core/object.h"
+#include "core/reference.h"
+#include "core/resource.h"
+#include "core/set.h"
+#include "core/string_name.h"
+#include "core/typedefs.h"
+#include "core/ustring.h"
+#include "core/variant.h"
+#include "core/vector.h"
 
 class FileAccess;
 

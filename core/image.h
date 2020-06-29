@@ -31,21 +31,21 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#include <stdint.h>             // for uint8_t, uint32_t, uint16_t
+#include <stdint.h>
 
-#include "core/color.h"         // for Color
-#include "core/math/rect2.h"    // for Rect2
-#include "core/resource.h"      // for Resource
-#include "core/dictionary.h"    // for Dictionary
-#include "core/error_list.h"    // for Error
-#include "core/error_macros.h"  // for ERR_FAIL_COND_MSG
-#include "core/math/vector2.h"  // for Point2, Size2i, Vector2
-#include "core/method_bind.h"   // for VARIANT_ENUM_CAST
-#include "core/object.h"        // for GDCLASS
-#include "core/reference.h"     // for Ref
-#include "core/typedefs.h"      // for _FORCE_INLINE_
-#include "core/ustring.h"       // for String
-#include "core/vector.h"        // for Vector
+#include "core/color.h"
+#include "core/math/rect2.h"
+#include "core/resource.h"
+#include "core/dictionary.h"
+#include "core/error_list.h"
+#include "core/error_macros.h"
+#include "core/math/vector2.h"
+#include "core/method_bind.h"
+#include "core/object.h"
+#include "core/reference.h"
+#include "core/typedefs.h"
+#include "core/ustring.h"
+#include "core/vector.h"
 
 /**
  *	@author Juan Linietsky <reduzio@gmail.com>

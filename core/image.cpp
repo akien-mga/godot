@@ -30,15 +30,15 @@
 
 #include "image.h"
 
-#include "core/hash_map.h"            // for HashMap
-#include "core/io/image_loader.h"     // for ImageLoader
-#include "core/io/resource_loader.h"  // for ResourceLoader
-#include "core/math/math_funcs.h"     // for Math
-#include "core/os/copymem.h"          // for copymem, zeromem
-#include "core/class_db.h"            // for D_METHOD, BIND_ENUM_CONSTANT
-#include "core/math/vector3.h"        // for Vector3, Vector3::(anonymous un...
-#include "core/os/memory.h"           // for memdelete_arr, memnew_arr, memnew
-#include "core/variant.h"             // for Variant, Variant::DICTIONARY
+#include "core/hash_map.h"
+#include "core/io/image_loader.h"
+#include "core/io/resource_loader.h"
+#include "core/math/math_funcs.h"
+#include "core/os/copymem.h"
+#include "core/class_db.h"
+#include "core/math/vector3.h"
+#include "core/os/memory.h"
+#include "core/variant.h"
 
 const char *Image::format_names[Image::FORMAT_MAX] = {
 	"Lum8", //luminance

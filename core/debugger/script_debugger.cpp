@@ -30,8 +30,8 @@
 
 #include "script_debugger.h"
 
-#include "core/debugger/engine_debugger.h"  // for EngineDebugger
-#include "core/typedefs.h"                  // for Comparator
+#include "core/debugger/engine_debugger.h"
+#include "core/typedefs.h"
 
 void ScriptDebugger::set_lines_left(int p_left) {
 	lines_left = p_left;

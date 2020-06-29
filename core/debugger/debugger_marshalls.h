@@ -31,18 +31,18 @@
 #ifndef DEBUGGER_MARSHARLLS_H
 #define DEBUGGER_MARSHARLLS_H
 
-#include <stdint.h>                    // for uint64_t
+#include <stdint.h>
 
-#include "core/script_language.h"      // for ScriptLanguage::StackInfo, Scr...
-#include "servers/rendering_server.h"  // for RenderingServer::FrameProfileArea
-#include "core/array.h"                // for Array
-#include "core/list.h"                 // for List
-#include "core/object_id.h"            // for ObjectID
-#include "core/rid.h"                  // for RID
-#include "core/string_name.h"          // for StringName
-#include "core/ustring.h"              // for String
-#include "core/variant.h"              // for Variant
-#include "core/vector.h"               // for Vector
+#include "core/script_language.h"
+#include "servers/rendering_server.h"
+#include "core/array.h"
+#include "core/list.h"
+#include "core/object_id.h"
+#include "core/rid.h"
+#include "core/string_name.h"
+#include "core/ustring.h"
+#include "core/variant.h"
+#include "core/vector.h"
 
 struct DebuggerMarshalls {
 	// Memory usage

@@ -30,19 +30,19 @@
 
 #include "os.h"
 
-#include <stdarg.h>                      // for va_end, va_list, va_start
+#include <stdarg.h>
 
-#include "core/os/dir_access.h"          // for DirAccess, DirAccess::ACCESS...
-#include "core/os/file_access.h"         // for FileAccess, FileAccess::WRITE
-#include "core/os/midi_driver.h"         // for MIDIDriver
-#include "core/project_settings.h"       // for ProjectSettings
-#include "core/version_generated.gen.h"  // for VERSION_SHORT_NAME
-#include "core/error_macros.h"           // for ERR_PRINT, ERR_FAIL_COND
-#include "core/object.h"                 // for Object, ObjectDB
-#include "core/object_id.h"              // for ObjectID
-#include "core/os/memory.h"              // for memdelete, Memory, memnew
-#include "core/print_string.h"           // for print_line
-#include "core/resource.h"               // for Resource, ResourceCache
+#include "core/os/dir_access.h"
+#include "core/os/file_access.h"
+#include "core/os/midi_driver.h"
+#include "core/project_settings.h"
+#include "core/version_generated.gen.h"
+#include "core/error_macros.h"
+#include "core/object.h"
+#include "core/object_id.h"
+#include "core/os/memory.h"
+#include "core/print_string.h"
+#include "core/resource.h"
 
 OS *OS::singleton = nullptr;
 

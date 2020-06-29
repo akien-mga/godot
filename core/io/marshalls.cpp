@@ -30,32 +30,32 @@
 
 #include "marshalls.h"
 
-#include <limits.h>                  // for INT_MAX, INT_MIN
+#include <limits.h>
 
-#include "core/reference.h"          // for REF, Ref, Reference
-#include "core/array.h"              // for Array
-#include "core/callable.h"           // for Callable, Signal
-#include "core/class_db.h"           // for D_METHOD, ClassDB, MethodDefinition
-#include "core/color.h"              // for Color, Color::(anonymous union):...
-#include "core/dictionary.h"         // for Dictionary
-#include "core/error_macros.h"       // for ERR_FAIL_COND_V, ERR_FAIL_COND_V...
-#include "core/list.h"               // for List<>::Element, List
-#include "core/math/aabb.h"          // for AABB
-#include "core/math/basis.h"         // for Basis
-#include "core/math/plane.h"         // for Plane
-#include "core/math/quat.h"          // for Quat
-#include "core/math/rect2.h"         // for Rect2, Rect2i
-#include "core/math/transform.h"     // for Transform
-#include "core/math/transform_2d.h"  // for Transform2D
-#include "core/math/vector2.h"       // for Vector2, Vector2::(anonymous)
-#include "core/math/vector3.h"       // for Vector3, Vector3::(anonymous uni...
-#include "core/math/vector3i.h"      // for Vector3i, Vector3i::(anonymous u...
-#include "core/node_path.h"          // for NodePath
-#include "core/os/copymem.h"         // for copymem
-#include "core/rid.h"                // for RID
-#include "core/string_name.h"        // for StringName
-#include "core/ustring.h"            // for String, CharString
-#include "core/vector.h"             // for Vector
+#include "core/reference.h"
+#include "core/array.h"
+#include "core/callable.h"
+#include "core/class_db.h"
+#include "core/color.h"
+#include "core/dictionary.h"
+#include "core/error_macros.h"
+#include "core/list.h"
+#include "core/math/aabb.h"
+#include "core/math/basis.h"
+#include "core/math/plane.h"
+#include "core/math/quat.h"
+#include "core/math/rect2.h"
+#include "core/math/transform.h"
+#include "core/math/transform_2d.h"
+#include "core/math/vector2.h"
+#include "core/math/vector3.h"
+#include "core/math/vector3i.h"
+#include "core/node_path.h"
+#include "core/os/copymem.h"
+#include "core/rid.h"
+#include "core/string_name.h"
+#include "core/ustring.h"
+#include "core/vector.h"
 
 void EncodedObjectAsID::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_object_id", "id"), &EncodedObjectAsID::set_object_id);

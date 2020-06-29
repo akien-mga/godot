@@ -31,23 +31,23 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include <stdint.h>                  // for uint64_t, int64_t
+#include <stdint.h>
 
-#include "core/input/input_event.h"  // for InputEvent, JoyAxisList, JoyButt...
-#include "core/object.h"             // for Object, GDCLASS
-#include "core/os/thread_safe.h"     // for _THREAD_SAFE_CLASS_
-#include "core/array.h"              // for Array
-#include "core/list.h"               // for List
-#include "core/map.h"                // for Map
-#include "core/math/vector2.h"       // for Vector2, Point2, Point2i
-#include "core/math/vector3.h"       // for Vector3
-#include "core/method_bind.h"        // for VARIANT_ENUM_CAST
-#include "core/reference.h"          // for Ref
-#include "core/resource.h"           // for RES
-#include "core/set.h"                // for Set
-#include "core/string_name.h"        // for StringName
-#include "core/ustring.h"            // for String
-#include "core/vector.h"             // for Vector
+#include "core/input/input_event.h"
+#include "core/object.h"
+#include "core/os/thread_safe.h"
+#include "core/array.h"
+#include "core/list.h"
+#include "core/map.h"
+#include "core/math/vector2.h"
+#include "core/math/vector3.h"
+#include "core/method_bind.h"
+#include "core/reference.h"
+#include "core/resource.h"
+#include "core/set.h"
+#include "core/string_name.h"
+#include "core/ustring.h"
+#include "core/vector.h"
 
 struct Rect2;
 

@@ -30,10 +30,10 @@
 
 #include "core/crypto/aes_context.h"
 
-#include <stdint.h>             // for uint8_t
+#include <stdint.h>
 
-#include "core/class_db.h"      // for D_METHOD, BIND_ENUM_CONSTANT, ClassDB
-#include "core/error_macros.h"  // for ERR_FAIL_COND_V_MSG, ERR_FAIL_COND_V
+#include "core/class_db.h"
+#include "core/error_macros.h"
 
 Error AESContext::start(Mode p_mode, PackedByteArray p_key, PackedByteArray p_iv) {
 	ERR_FAIL_COND_V_MSG(mode != MODE_MAX, ERR_ALREADY_IN_USE, "AESContext already started. Call 'finish' before starting a new one.");

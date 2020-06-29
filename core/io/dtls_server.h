@@ -33,10 +33,10 @@
 
 #include "core/io/net_socket.h"
 #include "core/io/packet_peer_dtls.h"
-#include "core/crypto/crypto.h"  // for X509Certificate, CryptoKey (ptr only)
-#include "core/error_list.h"     // for Error
-#include "core/object.h"         // for GDCLASS
-#include "core/reference.h"      // for Reference, Ref
+#include "core/crypto/crypto.h"
+#include "core/error_list.h"
+#include "core/object.h"
+#include "core/reference.h"
 
 class PacketPeerDTLS;
 class PacketPeerUDP;

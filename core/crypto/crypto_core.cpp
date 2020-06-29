@@ -30,14 +30,14 @@
 
 #include "crypto_core.h"
 
-#include <mbedtls/aes.h>     // for mbedtls_aes_context, mbedtls_aes_crypt_cbc
-#include <mbedtls/base64.h>  // for mbedtls_base64_decode, mbedtls_base64_en...
-#include <mbedtls/md5.h>     // for mbedtls_md5_context, mbedtls_md5_finish_ret
-#include <mbedtls/sha1.h>    // for mbedtls_sha1_context, mbedtls_sha1_finis...
-#include <mbedtls/sha256.h>  // for mbedtls_sha256_context, mbedtls_sha256_f...
+#include <mbedtls/aes.h>
+#include <mbedtls/base64.h>
+#include <mbedtls/md5.h>
+#include <mbedtls/sha1.h>
+#include <mbedtls/sha256.h>
 
-#include "core/os/memory.h"  // for memalloc, memfree
-#include "core/vector.h"     // for Vector
+#include "core/os/memory.h"
+#include "core/vector.h"
 
 // MD5
 CryptoCore::MD5Context::MD5Context() {

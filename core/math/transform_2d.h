@@ -31,14 +31,14 @@
 #ifndef TRANSFORM_2D_H
 #define TRANSFORM_2D_H
 
-#include "core/math/rect2.h"       // for Rect2
-#include "core/error_macros.h"     // for ERR_FAIL_INDEX, ERR_FAIL_INDEX_V
-#include "core/math/math_defs.h"   // for real_t
-#include "core/math/math_funcs.h"  // for Math
-#include "core/math/vector2.h"     // for Vector2, Size2, Vector2::(anonymous)
-#include "core/typedefs.h"         // for _FORCE_INLINE_
-#include "core/ustring.h"          // for String
-#include "core/vector.h"           // for Vector
+#include "core/math/rect2.h" // also includes vector2, math_funcs, and ustring
+#include "core/error_macros.h"
+#include "core/math/math_defs.h"
+#include "core/math/math_funcs.h"
+#include "core/math/vector2.h"
+#include "core/typedefs.h"
+#include "core/ustring.h"
+#include "core/vector.h"
 
 struct Transform2D {
 	// Warning #1: basis of Transform2D is stored differently from Basis. In terms of elements array, the basis matrix looks like "on paper":

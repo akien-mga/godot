@@ -30,34 +30,34 @@
 
 #include "variant_parser.h"
 
-#include <stdint.h>                   // for int32_t, int64_t, uint8_t
+#include <stdint.h>
 
-#include "core/io/resource_loader.h"  // for ResourceLoader
-#include "core/string_buffer.h"       // for StringBuffer
-#include "core/array.h"               // for Array
-#include "core/class_db.h"            // for ClassDB
-#include "core/color.h"               // for Color, Color::(anonymous union)...
-#include "core/dictionary.h"          // for Dictionary
-#include "core/error_macros.h"        // for ERR_PRINT
-#include "core/list.h"                // for List<>::Element, List
-#include "core/math/aabb.h"           // for AABB
-#include "core/math/basis.h"          // for Basis
-#include "core/math/math_defs.h"      // for Math_INF, Math_NAN, real_t
-#include "core/math/plane.h"          // for Plane
-#include "core/math/quat.h"           // for Quat
-#include "core/math/rect2.h"          // for Rect2, Rect2i
-#include "core/math/transform.h"      // for Transform
-#include "core/math/transform_2d.h"   // for Transform2D
-#include "core/math/vector2.h"        // for Vector2, Vector2::(anonymous)
-#include "core/math/vector3.h"        // for Vector3, Vector3::(anonymous un...
-#include "core/math/vector3i.h"       // for Vector3i, Vector3i::(anonymous ...
-#include "core/node_path.h"           // for NodePath
-#include "core/object.h"              // for PropertyInfo, Object, PROPERTY_...
-#include "core/os/file_access.h"      // for FileAccess
-#include "core/reference.h"           // for REF, Reference
-#include "core/string_name.h"         // for StringName
-#include "core/typedefs.h"            // for Comparator
-#include "core/vector.h"              // for Vector
+#include "core/io/resource_loader.h"
+#include "core/string_buffer.h"
+#include "core/array.h"
+#include "core/class_db.h"
+#include "core/color.h"
+#include "core/dictionary.h"
+#include "core/error_macros.h"
+#include "core/list.h"
+#include "core/math/aabb.h"
+#include "core/math/basis.h"
+#include "core/math/math_defs.h"
+#include "core/math/plane.h"
+#include "core/math/quat.h"
+#include "core/math/rect2.h"
+#include "core/math/transform.h"
+#include "core/math/transform_2d.h"
+#include "core/math/vector2.h"
+#include "core/math/vector3.h"
+#include "core/math/vector3i.h"
+#include "core/node_path.h"
+#include "core/object.h"
+#include "core/os/file_access.h"
+#include "core/reference.h"
+#include "core/string_name.h"
+#include "core/typedefs.h"
+#include "core/vector.h"
 
 CharType VariantParser::StreamFile::get_char() {
 	return f->get_8();

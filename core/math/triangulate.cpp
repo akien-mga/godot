@@ -30,8 +30,8 @@
 
 #include "triangulate.h"
 
-#include "core/math/vector2.h"  // for Vector2, Vector2::(anonymous)
-#include "core/vector.h"        // for Vector, VectorWriteProxy
+#include "core/math/vector2.h"
+#include "core/vector.h"
 
 real_t Triangulate::get_area(const Vector<Vector2> &contour) {
 	int n = contour.size();

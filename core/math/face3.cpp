@@ -30,11 +30,11 @@
 
 #include "face3.h"
 
-#include "core/math/geometry_3d.h"  // for Geometry3D
-#include "core/error_macros.h"      // for ERR_FAIL_COND_V
-#include "core/math/basis.h"        // for Basis
-#include "core/math/math_funcs.h"   // for Math
-#include "core/math/transform.h"    // for Transform
+#include "core/math/geometry_3d.h"
+#include "core/error_macros.h"
+#include "core/math/basis.h"
+#include "core/math/math_funcs.h"
+#include "core/math/transform.h"
 
 int Face3::split_by_plane(const Plane &p_plane, Face3 p_res[3], bool p_is_point_over[3]) const {
 	ERR_FAIL_COND_V(is_degenerate(), 0);

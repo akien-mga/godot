@@ -31,15 +31,15 @@
 #ifndef PACKED_DATA_CONTAINER_H
 #define PACKED_DATA_CONTAINER_H
 
-#include <stdint.h>           // for uint32_t, uint8_t
+#include <stdint.h>
 
-#include "core/resource.h"    // for Resource
-#include "core/error_list.h"  // for Error
-#include "core/map.h"         // for Map
-#include "core/object.h"      // for GDCLASS
-#include "core/reference.h"   // for Reference, Ref
-#include "core/variant.h"     // for Variant
-#include "core/vector.h"      // for Vector
+#include "core/resource.h"
+#include "core/error_list.h"
+#include "core/map.h"
+#include "core/object.h"
+#include "core/reference.h"
+#include "core/variant.h"
+#include "core/vector.h"
 
 class Array;
 class String;

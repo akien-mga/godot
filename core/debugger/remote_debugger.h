@@ -32,19 +32,19 @@
 #define REMOTE_DEBUGGER_H
 
 #include "core/array.h"
-#include "core/debugger/debugger_marshalls.h"    // for DebuggerMarshalls
-#include "core/debugger/engine_debugger.h"       // for EngineDebugger
-#include "core/debugger/remote_debugger_peer.h"  // for RemoteDebuggerPeer
+#include "core/debugger/debugger_marshalls.h"
+#include "core/debugger/engine_debugger.h"
+#include "core/debugger/remote_debugger_peer.h"
 #include "core/object.h"
 #include "core/string_name.h"
-#include "core/ustring.h"                        // for String
-#include "core/error_list.h"                     // for Error
-#include "core/error_macros.h"                   // for ErrorHandlerType
-#include "core/list.h"                           // for List
-#include "core/os/mutex.h"                       // for Mutex
-#include "core/os/thread.h"                      // for Thread, Thread::ID
-#include "core/print_string.h"                   // for PrintHandlerList
-#include "core/reference.h"                      // for Ref
+#include "core/ustring.h"
+#include "core/error_list.h"
+#include "core/error_macros.h"
+#include "core/list.h"
+#include "core/os/mutex.h"
+#include "core/os/thread.h"
+#include "core/print_string.h"
+#include "core/reference.h"
 
 class Array;
 class Variant;

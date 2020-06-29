@@ -31,16 +31,16 @@
 #ifndef GEOMETRY_2D_H
 #define GEOMETRY_2D_H
 
-#include "core/math/delaunay_2d.h"  // for Delaunay2D::Triangle, Delaunay2D
+#include "core/math/delaunay_2d.h"
 #include "core/math/rect2.h"
-#include "core/math/triangulate.h"  // for Triangulate
+#include "core/math/triangulate.h"
 #include "core/object.h"
-#include "core/vector.h"            // for Vector, VectorWriteProxy
-#include "core/error_macros.h"      // for ERR_FAIL_COND_V_MSG
-#include "core/math/math_defs.h"    // for real_t, CMP_EPSILON
-#include "core/math/math_funcs.h"   // for Math
-#include "core/math/vector2.h"      // for Vector2, Point2, Vector2::(anonym...
-#include "core/typedefs.h"          // for CLAMP, MAX, MIN
+#include "core/vector.h"
+#include "core/error_macros.h"
+#include "core/math/math_defs.h"
+#include "core/math/math_funcs.h"
+#include "core/math/vector2.h"
+#include "core/typedefs.h"
 
 struct Vector3i;
 

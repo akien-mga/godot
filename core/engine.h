@@ -31,17 +31,17 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include <stdint.h>            // for uint64_t, uint32_t
+#include <stdint.h>
 
-#include "core/list.h"         // for List
+#include "core/list.h"
 #include "core/os/main_loop.h"
-#include "core/ustring.h"      // for String
+#include "core/ustring.h"
 #include "core/vector.h"
-#include "core/array.h"        // for Array
-#include "core/dictionary.h"   // for Dictionary
-#include "core/map.h"          // for Map
-#include "core/string_name.h"  // for StringName
-#include "core/typedefs.h"     // for _FORCE_INLINE_
+#include "core/array.h"
+#include "core/dictionary.h"
+#include "core/map.h"
+#include "core/string_name.h"
+#include "core/typedefs.h"
 
 class Object;
 

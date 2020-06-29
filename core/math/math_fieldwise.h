@@ -31,10 +31,10 @@
 #ifndef MATH_FIELDWISE_H
 #define MATH_FIELDWISE_H
 
-#include "core/ustring.h"  // for String
+#include "core/ustring.h"
 #ifdef TOOLS_ENABLED
 
-#include "core/variant.h"  // for Variant
+#include "core/variant.h"
 
 Variant fieldwise_assign(const Variant &p_target, const Variant &p_source, const String &p_field);
 

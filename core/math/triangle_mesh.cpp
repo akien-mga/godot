@@ -30,18 +30,18 @@
 
 #include "triangle_mesh.h"
 
-#include <alloca.h>               // for alloca
-#include <stdint.h>               // for uint32_t
+#include <alloca.h>
+#include <stdint.h>
 
-#include "core/sort_array.h"      // for SortArray
-#include "core/error_macros.h"    // for ERR_FAIL_COND
-#include "core/map.h"             // for Map, Map<>::Element
-#include "core/math/basis.h"      // for Basis
-#include "core/math/face3.h"      // for Face3
-#include "core/math/math_defs.h"  // for real_t
-#include "core/math/plane.h"      // for Plane
-#include "core/math/transform.h"  // for Transform
-#include "core/typedefs.h"        // for Comparator
+#include "core/sort_array.h"
+#include "core/error_macros.h"
+#include "core/map.h"
+#include "core/math/basis.h"
+#include "core/math/face3.h"
+#include "core/math/math_defs.h"
+#include "core/math/plane.h"
+#include "core/math/transform.h"
+#include "core/typedefs.h"
 
 int TriangleMesh::_create_bvh(BVH *p_bvh, BVH **p_bb, int p_from, int p_size, int p_depth, int &max_depth, int &max_alloc) {
 	if (p_depth > max_depth) {

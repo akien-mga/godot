@@ -31,17 +31,17 @@
 #ifndef PROJECT_SETTINGS_H
 #define PROJECT_SETTINGS_H
 
-#include "core/object.h"          // for Object, PropertyInfo, GDCLASS
-#include "core/os/thread_safe.h"  // for _THREAD_SAFE_CLASS_
-#include "core/set.h"             // for Set
-#include "core/error_list.h"      // for Error
-#include "core/list.h"            // for List
-#include "core/map.h"             // for Map
-#include "core/string_name.h"     // for StringName
-#include "core/typedefs.h"        // for Comparator
-#include "core/ustring.h"         // for String
-#include "core/variant.h"         // for Variant
-#include "core/vector.h"          // for Vector
+#include "core/object.h"
+#include "core/os/thread_safe.h"
+#include "core/set.h"
+#include "core/error_list.h"
+#include "core/list.h"
+#include "core/map.h"
+#include "core/string_name.h"
+#include "core/typedefs.h"
+#include "core/ustring.h"
+#include "core/variant.h"
+#include "core/vector.h"
 
 class Dictionary;
 

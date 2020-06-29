@@ -31,17 +31,17 @@
 #ifndef TRANSLATION_H
 #define TRANSLATION_H
 
-#include "core/resource.h"     // for Resource, RES_BASE_EXTENSION
-#include "core/array.h"        // for Array
-#include "core/list.h"         // for List
-#include "core/map.h"          // for Map
-#include "core/object.h"       // for Object, GDCLASS, OBJ_SAVE_TYPE
-#include "core/reference.h"    // for Ref
-#include "core/set.h"          // for Set
-#include "core/string_name.h"  // for StringName
-#include "core/typedefs.h"     // for _FORCE_INLINE_
-#include "core/ustring.h"      // for String
-#include "core/vector.h"       // for Vector
+#include "core/resource.h"
+#include "core/array.h"
+#include "core/list.h"
+#include "core/map.h"
+#include "core/object.h"
+#include "core/reference.h"
+#include "core/set.h"
+#include "core/string_name.h"
+#include "core/typedefs.h"
+#include "core/ustring.h"
+#include "core/vector.h"
 
 class Translation : public Resource {
 	GDCLASS(Translation, Resource);

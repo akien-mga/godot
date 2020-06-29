@@ -30,14 +30,14 @@
 
 #include "translation.h"
 
-#include "core/io/resource_loader.h"  // for ResourceLoader
-#include "core/os/os.h"               // for OS
-#include "core/project_settings.h"    // for ProjectSettings, GLOBAL_DEF
-#include "core/class_db.h"            // for D_METHOD, ClassDB, MethodDefini...
-#include "core/error_macros.h"        // for ERR_FAIL_COND_V, ERR_FAIL_COND_...
-#include "core/os/main_loop.h"        // for MainLoop, MainLoop::NOTIFICATIO...
-#include "core/print_string.h"        // for print_verbose
-#include "core/variant.h"             // for Variant, vformat, Variant::STRING
+#include "core/io/resource_loader.h"
+#include "core/os/os.h"
+#include "core/project_settings.h"
+#include "core/class_db.h"
+#include "core/error_macros.h"
+#include "core/os/main_loop.h"
+#include "core/print_string.h"
+#include "core/variant.h"
 
 // ISO 639-1 language codes, with the addition of glibc locales with their
 // regional identifiers. This list must match the language names (in English)

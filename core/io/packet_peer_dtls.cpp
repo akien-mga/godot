@@ -30,7 +30,7 @@
 
 #include "packet_peer_dtls.h"
 
-#include "core/class_db.h"  // for D_METHOD, BIND_ENUM_CONSTANT, ClassDB
+#include "core/class_db.h"
 
 PacketPeerDTLS *(*PacketPeerDTLS::_create)() = nullptr;
 bool PacketPeerDTLS::available = false;

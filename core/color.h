@@ -31,13 +31,13 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-#include <math.h>                  // for floor, pow
-#include <stdint.h>                // for uint32_t, uint64_t
+#include <math.h>
+#include <stdint.h>
 
-#include "core/math/math_funcs.h"  // for Math
-#include "core/ustring.h"          // for String
-#include "core/math/math_defs.h"   // for real_t, Math_LN2
-#include "core/typedefs.h"         // for _FORCE_INLINE_, MAX, MIN
+#include "core/math/math_funcs.h"
+#include "core/ustring.h"
+#include "core/math/math_defs.h"
+#include "core/typedefs.h"
 
 struct Color {
 	union {

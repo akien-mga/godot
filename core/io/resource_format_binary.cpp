@@ -30,33 +30,33 @@
 
 #include "resource_format_binary.h"
 
-#include <stddef.h>                          // for size_t
+#include <stddef.h>
 
-#include "core/io/file_access_compressed.h"  // for FileAccessCompressed
-#include "core/os/dir_access.h"              // for DirAccess, DirAccess::AC...
-#include "core/project_settings.h"           // for ProjectSettings
-#include "core/array.h"                      // for Array
-#include "core/callable.h"                   // for Callable, Signal
-#include "core/class_db.h"                   // for ClassDB
-#include "core/color.h"                      // for Color, Color::(anonymous...
-#include "core/dictionary.h"                 // for Dictionary
-#include "core/error_macros.h"               // for ERR_FAIL_V_MSG, ERR_FAIL...
-#include "core/math/aabb.h"                  // for AABB
-#include "core/math/basis.h"                 // for Basis
-#include "core/math/math_defs.h"             // for real_t
-#include "core/math/plane.h"                 // for Plane
-#include "core/math/quat.h"                  // for Quat
-#include "core/math/rect2.h"                 // for Rect2, Rect2i
-#include "core/math/transform.h"             // for Transform
-#include "core/math/transform_2d.h"          // for Transform2D
-#include "core/math/vector2.h"               // for Vector2, Vector2::(anony...
-#include "core/math/vector3.h"               // for Vector3, Vector3::(anony...
-#include "core/math/vector3i.h"              // for Vector3i, Vector3i::(ano...
-#include "core/node_path.h"                  // for NodePath
-#include "core/os/file_access.h"             // for FileAccess, FileAccess::...
-#include "core/os/memory.h"                  // for memdelete, memnew
-#include "core/rid.h"                        // for RID
-#include "core/version_generated.gen.h"      // for VERSION_MAJOR, VERSION_M...
+#include "core/io/file_access_compressed.h"
+#include "core/os/dir_access.h"
+#include "core/project_settings.h"
+#include "core/array.h"
+#include "core/callable.h"
+#include "core/class_db.h"
+#include "core/color.h"
+#include "core/dictionary.h"
+#include "core/error_macros.h"
+#include "core/math/aabb.h"
+#include "core/math/basis.h"
+#include "core/math/math_defs.h"
+#include "core/math/plane.h"
+#include "core/math/quat.h"
+#include "core/math/rect2.h"
+#include "core/math/transform.h"
+#include "core/math/transform_2d.h"
+#include "core/math/vector2.h"
+#include "core/math/vector3.h"
+#include "core/math/vector3i.h"
+#include "core/node_path.h"
+#include "core/os/file_access.h"
+#include "core/os/memory.h"
+#include "core/rid.h"
+#include "core/version_generated.gen.h"
 
 //#define print_bl(m_what) print_line(m_what)
 #define print_bl(m_what) (void)(m_what)

@@ -30,15 +30,15 @@
 
 #include "ip.h"
 
-#include "core/hash_map.h"      // for HashMap
-#include "core/os/semaphore.h"  // for Semaphore
-#include "core/os/thread.h"     // for Thread
-#include "core/class_db.h"      // for D_METHOD, BIND_ENUM_CONSTANT, ClassDB
-#include "core/dictionary.h"    // for Dictionary
-#include "core/error_macros.h"  // for ERR_FAIL_INDEX_V, ERR_PRINT, ERR_FAIL...
-#include "core/os/memory.h"     // for memdelete, memnew
-#include "core/os/mutex.h"      // for Mutex
-#include "core/variant.h"       // for Variant
+#include "core/hash_map.h"
+#include "core/os/semaphore.h"
+#include "core/os/thread.h"
+#include "core/class_db.h"
+#include "core/dictionary.h"
+#include "core/error_macros.h"
+#include "core/os/memory.h"
+#include "core/os/mutex.h"
+#include "core/variant.h"
 
 VARIANT_ENUM_CAST(IP::ResolverStatus);
 

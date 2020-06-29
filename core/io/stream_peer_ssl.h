@@ -31,13 +31,13 @@
 #ifndef STREAM_PEER_SSL_H
 #define STREAM_PEER_SSL_H
 
-#include "core/crypto/crypto.h"   // for X509Certificate, CryptoKey (ptr only)
-#include "core/io/stream_peer.h"  // for StreamPeer
-#include "core/error_list.h"      // for Error
-#include "core/method_bind.h"     // for VARIANT_ENUM_CAST
-#include "core/object.h"          // for GDCLASS
-#include "core/reference.h"       // for Ref
-#include "core/ustring.h"         // for String
+#include "core/crypto/crypto.h"
+#include "core/io/stream_peer.h"
+#include "core/error_list.h"
+#include "core/method_bind.h"
+#include "core/object.h"
+#include "core/reference.h"
+#include "core/ustring.h"
 
 class StreamPeerSSL : public StreamPeer {
 	GDCLASS(StreamPeerSSL, StreamPeer);

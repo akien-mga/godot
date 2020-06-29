@@ -30,15 +30,15 @@
 
 #include "engine_debugger.h"
 
-#include "core/debugger/local_debugger.h"        // for LocalDebugger
-#include "core/debugger/remote_debugger.h"       // for RemoteDebugger
-#include "core/debugger/remote_debugger_peer.h"  // for RemoteDebuggerPeer
-#include "core/debugger/script_debugger.h"       // for ScriptDebugger
-#include "core/os/os.h"                          // for OS
-#include "core/math/math_defs.h"                 // for USEC_TO_SEC
-#include "core/os/memory.h"                      // for memdelete, memnew
-#include "core/reference.h"                      // for Ref
-#include "core/vector.h"                         // for Vector
+#include "core/debugger/local_debugger.h"
+#include "core/debugger/remote_debugger.h"
+#include "core/debugger/remote_debugger_peer.h"
+#include "core/debugger/script_debugger.h"
+#include "core/os/os.h"
+#include "core/math/math_defs.h"
+#include "core/os/memory.h"
+#include "core/reference.h"
+#include "core/vector.h"
 
 EngineDebugger *EngineDebugger::singleton = nullptr;
 ScriptDebugger *EngineDebugger::script_debugger = nullptr;

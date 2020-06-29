@@ -31,12 +31,12 @@
 #ifndef CRYPTO_CORE_H
 #define CRYPTO_CORE_H
 
-#include <stddef.h>           // for size_t
-#include <stdint.h>           // for uint8_t
+#include <stddef.h>
+#include <stdint.h>
 
 #include "core/reference.h"
-#include "core/error_list.h"  // for Error
-#include "core/ustring.h"     // for String
+#include "core/error_list.h"
+#include "core/ustring.h"
 
 class CryptoCore {
 public:

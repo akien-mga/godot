@@ -30,21 +30,21 @@
 
 #include "array.h"
 
-#include "container_type_validate.h"  // for ContainerTypeValidate
-#include "core/hashfuncs.h"           // for hash_djb2_one_32
-#include "core/object.h"              // for Object
-#include "core/script_language.h"     // for Script
-#include "core/variant.h"             // for Variant, Variant::NIL, Variant:...
-#include "core/vector.h"              // for Vector, VectorWriteProxy
-#include "core/callable.h"            // for Callable::CallError, Callable
-#include "core/error_macros.h"        // for ERR_FAIL_COND, ERR_FAIL_COND_V
-#include "core/math/math_funcs.h"     // for Math
-#include "core/os/memory.h"           // for memdelete, memnew
-#include "core/reference.h"           // for Ref
-#include "core/safe_refcount.h"       // for SafeRefCount
-#include "core/sort_array.h"          // for SortArray
-#include "core/string_name.h"         // for StringName
-#include "core/ustring.h"             // for String, itos, operator+
+#include "container_type_validate.h"
+#include "core/hashfuncs.h"
+#include "core/object.h"
+#include "core/script_language.h"
+#include "core/variant.h"
+#include "core/vector.h"
+#include "core/callable.h"
+#include "core/error_macros.h"
+#include "core/math/math_funcs.h"
+#include "core/os/memory.h"
+#include "core/reference.h"
+#include "core/safe_refcount.h"
+#include "core/sort_array.h"
+#include "core/string_name.h"
+#include "core/ustring.h"
 
 class ArrayPrivate {
 public:

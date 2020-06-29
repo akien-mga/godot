@@ -31,10 +31,10 @@
 #ifndef POOL_ALLOCATOR_H
 #define POOL_ALLOCATOR_H
 
-#include <stdint.h>           // for uint8_t
+#include <stdint.h>
 
 #include "core/typedefs.h"
-#include "core/error_list.h"  // for Error
+#include "core/error_list.h"
 
 /**
 	@author Juan Linietsky <reduzio@gmail.com>

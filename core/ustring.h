@@ -31,13 +31,13 @@
 #ifndef USTRING_H
 #define USTRING_H
 
-#include <stdint.h>           // for int64_t, uint32_t, uint8_t, uint64_t
+#include <stdint.h>
 
 #include "core/array.h"
-#include "core/cowdata.h"     // for CowData
-#include "core/typedefs.h"    // for _FORCE_INLINE_, unlikely
-#include "core/vector.h"      // for Vector
-#include "core/error_list.h"  // for Error
+#include "core/cowdata.h"
+#include "core/typedefs.h"
+#include "core/vector.h"
+#include "core/error_list.h"
 
 class Array;
 class Variant;

@@ -30,9 +30,9 @@
 
 #include "main_loop.h"
 
-#include "core/script_language.h"  // for ScriptInstance, Script
-#include "core/class_db.h"         // for D_METHOD, BIND_CONSTANT, BIND_VMETHOD
-#include "core/variant.h"          // for Variant, Variant::BOOL, Variant::F...
+#include "core/script_language.h"
+#include "core/class_db.h"
+#include "core/variant.h"
 
 void MainLoop::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("init"), &MainLoop::init);

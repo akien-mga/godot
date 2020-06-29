@@ -30,13 +30,13 @@
 
 #include "input_map.h"
 
-#include "core/os/keyboard.h"       // for KEY_SPACE, KEY_TAB, KEY_DOWN, KEY...
-#include "core/project_settings.h"  // for ProjectSettings
-#include "core/class_db.h"          // for D_METHOD, ClassDB, MethodDefinition
-#include "core/dictionary.h"        // for Dictionary
-#include "core/error_macros.h"      // for ERR_FAIL_COND_MSG, ERR_FAIL_COND_...
-#include "core/ustring.h"           // for String, operator+
-#include "core/variant.h"           // for Variant
+#include "core/os/keyboard.h"
+#include "core/project_settings.h"
+#include "core/class_db.h"
+#include "core/dictionary.h"
+#include "core/error_macros.h"
+#include "core/ustring.h"
+#include "core/variant.h"
 
 InputMap *InputMap::singleton = nullptr;
 

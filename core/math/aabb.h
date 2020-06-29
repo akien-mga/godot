@@ -31,12 +31,12 @@
 #ifndef AABB_H
 #define AABB_H
 
-#include "core/math/math_defs.h"  // for real_t
-#include "core/math/plane.h"      // for Plane
-#include "core/math/vector3.h"    // for Vector3, Vector3::(anonymous), Vect...
-#include "core/error_macros.h"    // for ERR_FAIL_V
-#include "core/typedefs.h"        // for _FORCE_INLINE_
-#include "core/ustring.h"         // for String
+#include "core/math/math_defs.h"
+#include "core/math/plane.h"
+#include "core/math/vector3.h"
+#include "core/error_macros.h"
+#include "core/typedefs.h"
+#include "core/ustring.h"
 
 /**
  * AABB / AABB (Axis Aligned Bounding Box)

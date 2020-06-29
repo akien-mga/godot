@@ -32,7 +32,7 @@
 #define TRIANGULATE_H
 
 #include "core/math/vector2.h"
-#include "core/math/math_defs.h"  // for real_t
+#include "core/math/math_defs.h"
 
 struct Vector2;
 template <class T> class Vector;

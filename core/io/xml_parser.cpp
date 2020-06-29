@@ -30,12 +30,12 @@
 
 #include "xml_parser.h"
 
-#include "core/class_db.h"        // for D_METHOD, ClassDB, MethodDefinition
-#include "core/error_macros.h"    // for ERR_FAIL_COND_V, ERR_FAIL_COND_V_MSG
-#include "core/method_bind.h"     // for VARIANT_ENUM_CAST
-#include "core/os/copymem.h"      // for copymem
-#include "core/os/file_access.h"  // for FileAccess, FileAccess::READ
-#include "core/os/memory.h"       // for memdelete_arr, memdelete, memnew_arr
+#include "core/class_db.h"
+#include "core/error_macros.h"
+#include "core/method_bind.h"
+#include "core/os/copymem.h"
+#include "core/os/file_access.h"
+#include "core/os/memory.h"
 
 //#define DEBUG_XML
 

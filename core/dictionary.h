@@ -31,10 +31,10 @@
 #ifndef DICTIONARY_H
 #define DICTIONARY_H
 
-#include <stdint.h>      // for uint32_t
+#include <stdint.h>
 
-#include "core/array.h"  // for Array
-#include "core/list.h"   // for List
+#include "core/array.h"
+#include "core/list.h"
 #include "core/ustring.h"
 
 class Variant;

@@ -31,35 +31,35 @@
 #ifndef VARIANT_H
 #define VARIANT_H
 
-#include <stdint.h>                  // for int64_t, int32_t, uint8_t, uint64_t
+#include <stdint.h>
 
-#include "core/array.h"              // for Array
-#include "core/callable.h"           // for Callable, Signal
-#include "core/color.h"              // for Color
-#include "core/dictionary.h"         // for Dictionary
-#include "core/io/ip_address.h"      // for IP_Address
-#include "core/math/aabb.h"          // for AABB
-#include "core/math/basis.h"         // for Basis
+#include "core/array.h"
+#include "core/callable.h"
+#include "core/color.h"
+#include "core/dictionary.h"
+#include "core/io/ip_address.h"
+#include "core/math/aabb.h"
+#include "core/math/basis.h"
 #include "core/math/face3.h"
-#include "core/math/plane.h"         // for Plane
-#include "core/math/quat.h"          // for Quat
-#include "core/math/transform.h"     // for Transform
-#include "core/math/transform_2d.h"  // for Transform2D
-#include "core/math/vector3.h"       // for Vector3
-#include "core/math/vector3i.h"      // for Vector3i
-#include "core/node_path.h"          // for NodePath
-#include "core/object_id.h"          // for ObjectID
-#include "core/rid.h"                // for RID
-#include "core/ustring.h"            // for String, CharType
-#include "core/list.h"               // for List
-#include "core/math/math_defs.h"     // for Margin, Orientation, real_t
-#include "core/math/rect2.h"         // for Rect2i, Rect2
-#include "core/math/vector2.h"       // for Vector2, Vector2i
-#include "core/os/memory.h"          // for memdelete, memnew
-#include "core/safe_refcount.h"      // for SafeRefCount
-#include "core/string_name.h"        // for StringName
-#include "core/typedefs.h"           // for _FORCE_INLINE_, _ALWAYS_INLINE_
-#include "core/vector.h"             // for Vector
+#include "core/math/plane.h"
+#include "core/math/quat.h"
+#include "core/math/transform.h"
+#include "core/math/transform_2d.h"
+#include "core/math/vector3.h"
+#include "core/math/vector3i.h"
+#include "core/node_path.h"
+#include "core/object_id.h"
+#include "core/rid.h"
+#include "core/ustring.h"
+#include "core/list.h"
+#include "core/math/math_defs.h"
+#include "core/math/rect2.h"
+#include "core/math/vector2.h"
+#include "core/os/memory.h"
+#include "core/safe_refcount.h"
+#include "core/string_name.h"
+#include "core/typedefs.h"
+#include "core/vector.h"
 
 class Object;
 class Node; // helper

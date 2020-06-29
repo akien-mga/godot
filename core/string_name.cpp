@@ -30,10 +30,10 @@
 
 #include "string_name.h"
 
-#include "core/os/os.h"         // for OS
-#include "core/print_string.h"  // for print_line, print_verbose
-#include "core/error_macros.h"  // for ERR_FAIL_COND, ERR_FAIL_COND_V, ERR_P...
-#include "core/os/memory.h"     // for memdelete, memnew
+#include "core/os/os.h"
+#include "core/print_string.h"
+#include "core/error_macros.h"
+#include "core/os/memory.h"
 
 StaticCString StaticCString::create(const char *p_ptr) {
 	StaticCString scs;

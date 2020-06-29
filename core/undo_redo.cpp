@@ -30,11 +30,11 @@
 
 #include "undo_redo.h"
 
-#include "core/os/os.h"         // for OS
-#include "core/class_db.h"      // for D_METHOD, ClassDB, MethodDefinition
-#include "core/error_macros.h"  // for ERR_FAIL_COND, ERR_FAIL_COND_V, ERR_P...
-#include "core/os/memory.h"     // for memdelete
-#include "core/typedefs.h"      // for MIN
+#include "core/os/os.h"
+#include "core/class_db.h"
+#include "core/error_macros.h"
+#include "core/os/memory.h"
+#include "core/typedefs.h"
 
 void UndoRedo::_discard_redo() {
 	if (current_action == actions.size() - 1) {

@@ -31,14 +31,14 @@
 #ifndef RESOURCE_SAVER_H
 #define RESOURCE_SAVER_H
 
-#include <stdint.h>           // for uint32_t
+#include <stdint.h>
 
-#include "core/resource.h"    // for RES, Resource (ptr only)
-#include "core/error_list.h"  // for Error
-#include "core/list.h"        // for List
-#include "core/object.h"      // for GDCLASS
-#include "core/reference.h"   // for Reference, Ref
-#include "core/ustring.h"     // for String
+#include "core/resource.h"
+#include "core/error_list.h"
+#include "core/list.h"
+#include "core/object.h"
+#include "core/reference.h"
+#include "core/ustring.h"
 
 class ResourceFormatSaver : public Reference {
 	GDCLASS(ResourceFormatSaver, Reference);

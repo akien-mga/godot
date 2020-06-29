@@ -31,16 +31,16 @@
 #ifndef TCP_SERVER_H
 #define TCP_SERVER_H
 
-#include <stdint.h>              // for uint16_t
+#include <stdint.h>
 
 #include "core/io/ip.h"
 #include "core/io/net_socket.h"
 #include "core/io/stream_peer.h"
 #include "core/io/stream_peer_tcp.h"
-#include "core/error_list.h"     // for Error
-#include "core/io/ip_address.h"  // for IP_Address
-#include "core/object.h"         // for GDCLASS
-#include "core/reference.h"      // for Reference, Ref
+#include "core/error_list.h"
+#include "core/io/ip_address.h"
+#include "core/object.h"
+#include "core/reference.h"
 
 class NetSocket;
 class StreamPeerTCP;

@@ -31,10 +31,10 @@
 #ifndef ARRAY_H
 #define ARRAY_H
 
-#include <stdint.h>           // for uint32_t
+#include <stdint.h>
 
-#include "core/typedefs.h"    // for _FORCE_INLINE_
-#include "core/error_list.h"  // for Error
+#include "core/typedefs.h"
+#include "core/error_list.h"
 
 class Variant;
 class ArrayPrivate;

@@ -31,7 +31,7 @@
 #ifndef COMPRESSION_H
 #define COMPRESSION_H
 
-#include <stdint.h>  // for uint8_t
+#include <stdint.h>
 
 #include "core/typedefs.h"
 

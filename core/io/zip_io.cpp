@@ -30,13 +30,13 @@
 
 #include "zip_io.h"
 
-#include <stdint.h>               // for uint8_t
+#include <stdint.h>
 
-#include "core/os/copymem.h"      // for zeromem
-#include "core/error_list.h"      // for OK
-#include "core/os/file_access.h"  // for FileAccess, FileAccess::READ, FileA...
-#include "core/os/memory.h"       // for memdelete, memalloc, memfree
-#include "core/ustring.h"         // for String
+#include "core/os/copymem.h"
+#include "core/error_list.h"
+#include "core/os/file_access.h"
+#include "core/os/memory.h"
+#include "core/ustring.h"
 
 void *zipio_open(void *data, const char *p_fname, int mode) {
 	FileAccess *&f = *(FileAccess **)data;

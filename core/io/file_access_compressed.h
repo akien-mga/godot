@@ -31,14 +31,14 @@
 #ifndef FILE_ACCESS_COMPRESSED_H
 #define FILE_ACCESS_COMPRESSED_H
 
-#include <stddef.h>               // for size_t
-#include <stdint.h>               // for uint32_t, uint8_t, int64_t, uint64_t
+#include <stddef.h>
+#include <stdint.h>
 
-#include "core/io/compression.h"  // for Compression, Compression::MODE_ZSTD
-#include "core/os/file_access.h"  // for FileAccess
-#include "core/error_list.h"      // for Error
-#include "core/ustring.h"         // for String
-#include "core/vector.h"          // for Vector
+#include "core/io/compression.h"
+#include "core/os/file_access.h"
+#include "core/error_list.h"
+#include "core/ustring.h"
+#include "core/vector.h"
 
 class FileAccessCompressed : public FileAccess {
 	Compression::Mode cmode = Compression::MODE_ZSTD;

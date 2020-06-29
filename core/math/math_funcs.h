@@ -32,12 +32,12 @@
 #define MATH_FUNCS_H
 
 #include <float.h>
-#include <math.h>                 // for sin, acos, asin, atan, atan2, ceil
-#include <stdint.h>               // for uint32_t, uint16_t, uint64_t, int64_t
+#include <math.h>
+#include <stdint.h>
 
-#include "core/math/math_defs.h"  // for real_t, CMP_EPSILON, Math_PI, Math_TAU
+#include "core/math/math_defs.h"
 #include "core/math/random_pcg.h"
-#include "core/typedefs.h"        // for _ALWAYS_INLINE_, CLAMP, SGN
+#include "core/typedefs.h"
 #include "thirdparty/misc/pcg.h"
 
 class RandomPCG;

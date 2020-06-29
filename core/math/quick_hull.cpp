@@ -30,13 +30,13 @@
 
 #include "quick_hull.h"
 
-#include "core/map.h"              // for Map<>::Element, Map
-#include "core/error_macros.h"     // for ERR_CONTINUE, ERR_FAIL_COND_V
-#include "core/math/aabb.h"        // for AABB
-#include "core/math/math_defs.h"   // for real_t, UNIT_EPSILON
-#include "core/math/math_funcs.h"  // for Math
-#include "core/math/vector3.h"     // for Vector3, Vector3::(anonymous union...
-#include "core/set.h"              // for Set
+#include "core/map.h"
+#include "core/error_macros.h"
+#include "core/math/aabb.h"
+#include "core/math/math_defs.h"
+#include "core/math/math_funcs.h"
+#include "core/math/vector3.h"
+#include "core/set.h"
 
 uint32_t QuickHull::debug_stop_after = 0xFFFFFFFF;
 

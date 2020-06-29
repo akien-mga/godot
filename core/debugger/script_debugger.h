@@ -31,13 +31,13 @@
 #ifndef SCRIPT_DEBUGGER_H
 #define SCRIPT_DEBUGGER_H
 
-#include "core/map.h"              // for Map
-#include "core/script_language.h"  // for ScriptLanguage, ScriptLanguage::St...
-#include "core/set.h"              // for Set
-#include "core/string_name.h"      // for StringName
-#include "core/vector.h"           // for Vector
-#include "core/error_macros.h"     // for ErrorHandlerType
-#include "core/ustring.h"          // for String
+#include "core/map.h"
+#include "core/script_language.h"
+#include "core/set.h"
+#include "core/string_name.h"
+#include "core/vector.h"
+#include "core/error_macros.h"
+#include "core/ustring.h"
 
 class ScriptDebugger {
 	typedef ScriptLanguage::StackInfo StackInfo;

@@ -30,60 +30,60 @@
 
 #include "register_core_types.h"
 
-#include "core/bind/core_bind.h"                 // for _Engine, _Geometry2D
-#include "core/class_db.h"                       // for ClassDB
-#include "core/compressed_translation.h"         // for PHashTranslation
-#include "core/core_string_names.h"              // for CoreStringNames, reg...
-#include "core/crypto/aes_context.h"             // for AESContext
-#include "core/crypto/crypto.h"                  // for ResourceFormatLoader...
-#include "core/crypto/hashing_context.h"         // for HashingContext
-#include "core/engine.h"                         // for Engine, Engine::Sing...
-#include "core/func_ref.h"                       // for FuncRef
-#include "core/input/input.h"                    // for Input
-#include "core/input/input_map.h"                // for InputMap
-#include "core/io/config_file.h"                 // for ConfigFile
-#include "core/io/dtls_server.h"                 // for DTLSServer
-#include "core/io/http_client.h"                 // for HTTPClient
-#include "core/io/image_loader.h"                // for ResourceFormatLoader...
-#include "core/io/marshalls.h"                   // for EncodedObjectAsID
-#include "core/io/multiplayer_api.h"             // for MultiplayerAPI
-#include "core/io/networked_multiplayer_peer.h"  // for NetworkedMultiplayer...
-#include "core/io/packet_peer.h"                 // for PacketPeerStream
-#include "core/io/packet_peer_dtls.h"            // for PacketPeerDTLS
-#include "core/io/packet_peer_udp.h"             // for PacketPeerUDP
-#include "core/io/pck_packer.h"                  // for PCKPacker
-#include "core/io/resource_format_binary.h"      // for ResourceFormatLoader...
-#include "core/io/resource_importer.h"           // for ResourceFormatImporter
-#include "core/io/stream_peer_ssl.h"             // for StreamPeerSSL
-#include "core/io/tcp_server.h"                  // for TCP_Server
-#include "core/io/translation_loader_po.h"       // for TranslationLoaderPO
-#include "core/io/udp_server.h"                  // for UDPServer
-#include "core/io/xml_parser.h"                  // for XMLParser
-#include "core/math/a_star.h"                    // for AStar, AStar2D
-#include "core/math/expression.h"                // for Expression
-#include "core/math/random_number_generator.h"   // for RandomNumberGenerator
-#include "core/math/triangle_mesh.h"             // for TriangleMesh
-#include "core/os/main_loop.h"                   // for MainLoop
-#include "core/packed_data_container.h"          // for PackedDataContainer
-#include "core/project_settings.h"               // for ProjectSettings, GLO...
-#include "core/translation.h"                    // for TranslationServer
-#include "core/undo_redo.h"                      // for UndoRedo
-#include "core/callable.h"                       // for Callable
-#include "core/image.h"                          // for Image
-#include "core/input/input_event.h"              // for InputEventAction
-#include "core/io/ip.h"                          // for IP
-#include "core/io/resource_loader.h"             // for ResourceFormatLoader
-#include "core/io/resource_saver.h"              // for ResourceFormatSaver
-#include "core/io/stream_peer.h"                 // for StreamPeerBuffer
-#include "core/io/stream_peer_tcp.h"             // for StreamPeerTCP
-#include "core/object.h"                         // for Object, PropertyInfo
-#include "core/os/memory.h"                      // for memdelete, memnew
-#include "core/os/mutex.h"                       // for Mutex
-#include "core/reference.h"                      // for Ref, Reference, WeakRef
-#include "core/resource.h"                       // for Resource, ResourceCache
-#include "core/script_language.h"                // for Script
-#include "core/string_name.h"                    // for StringName, register...
-#include "core/variant.h"                        // for Variant, Variant::INT
+#include "core/bind/core_bind.h"
+#include "core/class_db.h"
+#include "core/compressed_translation.h"
+#include "core/core_string_names.h"
+#include "core/crypto/aes_context.h"
+#include "core/crypto/crypto.h"
+#include "core/crypto/hashing_context.h"
+#include "core/engine.h"
+#include "core/func_ref.h"
+#include "core/input/input.h"
+#include "core/input/input_map.h"
+#include "core/io/config_file.h"
+#include "core/io/dtls_server.h"
+#include "core/io/http_client.h"
+#include "core/io/image_loader.h"
+#include "core/io/marshalls.h"
+#include "core/io/multiplayer_api.h"
+#include "core/io/networked_multiplayer_peer.h"
+#include "core/io/packet_peer.h"
+#include "core/io/packet_peer_dtls.h"
+#include "core/io/packet_peer_udp.h"
+#include "core/io/pck_packer.h"
+#include "core/io/resource_format_binary.h"
+#include "core/io/resource_importer.h"
+#include "core/io/stream_peer_ssl.h"
+#include "core/io/tcp_server.h"
+#include "core/io/translation_loader_po.h"
+#include "core/io/udp_server.h"
+#include "core/io/xml_parser.h"
+#include "core/math/a_star.h"
+#include "core/math/expression.h"
+#include "core/math/random_number_generator.h"
+#include "core/math/triangle_mesh.h"
+#include "core/os/main_loop.h"
+#include "core/packed_data_container.h"
+#include "core/project_settings.h"
+#include "core/translation.h"
+#include "core/undo_redo.h"
+#include "core/callable.h"
+#include "core/image.h"
+#include "core/input/input_event.h"
+#include "core/io/ip.h"
+#include "core/io/resource_loader.h"
+#include "core/io/resource_saver.h"
+#include "core/io/stream_peer.h"
+#include "core/io/stream_peer_tcp.h"
+#include "core/object.h"
+#include "core/os/memory.h"
+#include "core/os/mutex.h"
+#include "core/reference.h"
+#include "core/resource.h"
+#include "core/script_language.h"
+#include "core/string_name.h"
+#include "core/variant.h"
 
 static Ref<ResourceFormatSaverBinary> resource_saver_binary;
 static Ref<ResourceFormatLoaderBinary> resource_loader_binary;

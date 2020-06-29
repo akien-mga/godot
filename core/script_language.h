@@ -31,26 +31,26 @@
 #ifndef SCRIPT_LANGUAGE_H
 #define SCRIPT_LANGUAGE_H
 
-#include <stdint.h>                   // for uint16_t, uint64_t, uint8_t
+#include <stdint.h>
 
-#include "core/io/multiplayer_api.h"  // for MultiplayerAPI, MultiplayerAPI:...
-#include "core/map.h"                 // for Map
+#include "core/io/multiplayer_api.h"
+#include "core/map.h"
 #include "core/pair.h"
-#include "core/resource.h"            // for Resource, RES
-#include "core/array.h"               // for Array
-#include "core/callable.h"            // for Callable, Callable::CallError
-#include "core/dictionary.h"          // for Dictionary
-#include "core/error_list.h"          // for Error, ERR_UNAVAILABLE
-#include "core/hash_map.h"            // for HashMap
-#include "core/list.h"                // for List
-#include "core/object.h"              // for Object (ptr only), PropertyInfo
-#include "core/reference.h"           // for Ref
-#include "core/set.h"                 // for Set
-#include "core/string_name.h"         // for StringName, StringName::AlphCom...
-#include "core/typedefs.h"            // for _FORCE_INLINE_
-#include "core/ustring.h"             // for String
-#include "core/variant.h"             // for Variant, Variant::Type, PackedS...
-#include "core/vector.h"              // for Vector
+#include "core/resource.h"
+#include "core/array.h"
+#include "core/callable.h"
+#include "core/dictionary.h"
+#include "core/error_list.h"
+#include "core/hash_map.h"
+#include "core/list.h"
+#include "core/object.h"
+#include "core/reference.h"
+#include "core/set.h"
+#include "core/string_name.h"
+#include "core/typedefs.h"
+#include "core/ustring.h"
+#include "core/variant.h"
+#include "core/vector.h"
 
 class ScriptLanguage;
 template <class F, class S> struct Pair;

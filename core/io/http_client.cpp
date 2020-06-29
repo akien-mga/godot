@@ -30,17 +30,17 @@
 
 #include "http_client.h"
 
-#include "core/io/stream_peer_ssl.h"  // for StreamPeerSSL, StreamPeerSSL::S...
-#include "core/version.h"             // for VERSION_FULL_BUILD
-#include "core/array.h"               // for Array
-#include "core/class_db.h"            // for BIND_ENUM_CONSTANT, D_METHOD
-#include "core/error_macros.h"        // for ERR_FAIL_COND_V, ERR_PRINT, ERR...
-#include "core/io/ip_address.h"       // for IP_Address
-#include "core/io/stream_peer.h"      // for StreamPeer
-#include "core/io/stream_peer_tcp.h"  // for StreamPeerTCP, StreamPeerTCP::S...
-#include "core/os/copymem.h"          // for copymem
-#include "core/os/os.h"               // for OS
-#include "core/typedefs.h"            // for MIN
+#include "core/io/stream_peer_ssl.h"
+#include "core/version.h"
+#include "core/array.h"
+#include "core/class_db.h"
+#include "core/error_macros.h"
+#include "core/io/ip_address.h"
+#include "core/io/stream_peer.h"
+#include "core/io/stream_peer_tcp.h"
+#include "core/os/copymem.h"
+#include "core/os/os.h"
+#include "core/typedefs.h"
 
 const char *HTTPClient::_methods[METHOD_MAX] = {
 	"GET",

@@ -30,23 +30,23 @@
 
 #include "expression.h"
 
-#include <stdint.h>                // for int64_t, uint64_t, uint8_t
+#include <stdint.h>
 
-#include "core/class_db.h"         // for D_METHOD, ClassDB, DEFVAL, MethodD...
-#include "core/func_ref.h"         // for FuncRef
-#include "core/io/marshalls.h"     // for encode_variant, decode_variant
-#include "core/math/math_funcs.h"  // for Math
-#include "core/os/os.h"            // for OS
-#include "core/reference.h"        // for Ref, WeakRef, REF
-#include "core/variant_parser.h"   // for VariantParser::StreamString, Varia...
-#include "core/array.h"            // for Array
-#include "core/color.h"            // for Color, Color::(anonymous union)::(...
-#include "core/dictionary.h"       // for Dictionary
-#include "core/error_macros.h"     // for ERR_FAIL_V, ERR_FAIL_COND_V_MSG
-#include "core/math/math_defs.h"   // for real_t, Math_INF, Math_NAN, Math_PI
-#include "core/math/vector2.h"     // for Vector2
-#include "core/print_string.h"     // for print_error, print_line
-#include "core/typedefs.h"         // for next_power_of_2, CLAMP, MAX, MIN, ABS
+#include "core/class_db.h"
+#include "core/func_ref.h"
+#include "core/io/marshalls.h"
+#include "core/math/math_funcs.h"
+#include "core/os/os.h"
+#include "core/reference.h"
+#include "core/variant_parser.h"
+#include "core/array.h"
+#include "core/color.h"
+#include "core/dictionary.h"
+#include "core/error_macros.h"
+#include "core/math/math_defs.h"
+#include "core/math/vector2.h"
+#include "core/print_string.h"
+#include "core/typedefs.h"
 
 const char *Expression::func_name[Expression::FUNC_MAX] = {
 	"sin",

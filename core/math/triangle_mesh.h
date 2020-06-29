@@ -32,11 +32,11 @@
 #define TRIANGLE_MESH_H
 
 #include "core/math/face3.h"
-#include "core/reference.h"     // for Reference
-#include "core/math/aabb.h"     // for AABB
-#include "core/math/vector3.h"  // for Vector3, Vector3::(anonymous union)::...
-#include "core/object.h"        // for GDCLASS
-#include "core/vector.h"        // for Vector
+#include "core/reference.h"
+#include "core/math/aabb.h"
+#include "core/math/vector3.h"
+#include "core/object.h"
+#include "core/vector.h"
 
 class Face3;
 class Plane;

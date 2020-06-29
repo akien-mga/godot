@@ -30,16 +30,16 @@
 
 #include "logger.h"
 
-#include <stdint.h>               // for uint8_t
-#include <stdio.h>                // for vsnprintf, fflush, sprintf, vfprintf
+#include <stdint.h>
+#include <stdio.h>
 
-#include "core/os/dir_access.h"   // for DirAccess, DirAccess::ACCESS_USERDATA
-#include "core/os/os.h"           // for OS, OS::Date, OS::Time
-#include "core/print_string.h"    // for _print_error_enabled, _print_line_e...
-#include "core/error_macros.h"    // for ERR_PRINT
-#include "core/os/file_access.h"  // for FileAccess, FileAccess::WRITE
-#include "core/os/memory.h"       // for memdelete, Memory
-#include "core/set.h"             // for Set, Set<>::Element
+#include "core/os/dir_access.h"
+#include "core/os/os.h"
+#include "core/print_string.h"
+#include "core/error_macros.h"
+#include "core/os/file_access.h"
+#include "core/os/memory.h"
+#include "core/set.h"
 
 #if defined(MINGW_ENABLED) || defined(_MSC_VER)
 #define sprintf sprintf_s

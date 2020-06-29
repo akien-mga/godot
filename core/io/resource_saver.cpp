@@ -30,15 +30,15 @@
 
 #include "resource_saver.h"
 
-#include "core/io/resource_loader.h"  // for ResourceLoader
-#include "core/os/file_access.h"      // for FileAccess
-#include "core/project_settings.h"    // for ProjectSettings
-#include "core/script_language.h"     // for Script, ScriptInstance, ScriptS...
-#include "core/class_db.h"            // for ClassDB
-#include "core/error_macros.h"        // for ERR_FAIL_COND, ERR_FAIL_COND_MSG
-#include "core/string_name.h"         // for StringName
-#include "core/variant.h"             // for Variant, PackedStringArray, Var...
-#include "core/vector.h"              // for Vector
+#include "core/io/resource_loader.h"
+#include "core/os/file_access.h"
+#include "core/project_settings.h"
+#include "core/script_language.h"
+#include "core/class_db.h"
+#include "core/error_macros.h"
+#include "core/string_name.h"
+#include "core/variant.h"
+#include "core/vector.h"
 
 Ref<ResourceFormatSaver> ResourceSaver::saver[MAX_SAVERS];
 

@@ -30,11 +30,11 @@
 
 #include "stream_peer_tcp.h"
 
-#include "core/project_settings.h"  // for GLOBAL_GET
-#include "core/class_db.h"          // for D_METHOD, ClassDB, MethodDefinition
-#include "core/error_macros.h"      // for ERR_FAIL_COND_V, ERR_FAIL_COND
-#include "core/io/ip.h"             // for IP, IP::TYPE_IPV4, IP::TYPE_IPV6
-#include "core/os/os.h"             // for OS
+#include "core/project_settings.h"
+#include "core/class_db.h"
+#include "core/error_macros.h"
+#include "core/io/ip.h"
+#include "core/os/os.h"
 
 Error StreamPeerTCP::_poll_connection() {
 	ERR_FAIL_COND_V(status != STATUS_CONNECTING || !_sock.is_valid() || !_sock->is_open(), FAILED);

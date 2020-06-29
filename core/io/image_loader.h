@@ -32,13 +32,13 @@
 #define IMAGE_LOADER_H
 
 #include "core/image.h"
-#include "core/io/resource_loader.h"  // for ResourceFormatLoader
-#include "core/list.h"                // for List
+#include "core/io/resource_loader.h"
+#include "core/list.h"
 #include "core/os/file_access.h"
-#include "core/ustring.h"             // for String
-#include "core/error_list.h"          // for Error
-#include "core/reference.h"           // for Ref
-#include "core/resource.h"            // for RES
+#include "core/ustring.h"
+#include "core/error_list.h"
+#include "core/reference.h"
+#include "core/resource.h"
 
 class ImageLoader;
 class FileAccess;

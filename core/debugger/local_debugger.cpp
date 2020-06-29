@@ -30,21 +30,21 @@
 
 #include "local_debugger.h"
 
-#include <stdint.h>                         // for uint64_t
+#include <stdint.h>
 
-#include "core/debugger/script_debugger.h"  // for ScriptDebugger
-#include "core/os/os.h"                     // for OS
-#include "scene/main/scene_tree.h"          // for SceneTree
-#include "core/math/math_defs.h"            // for USEC_TO_SEC
-#include "core/os/memory.h"                 // for memdelete, memnew
-#include "core/print_string.h"              // for print_line
-#include "core/script_language.h"           // for ScriptLanguage::Profiling...
-#include "core/set.h"                       // for Set, Set<>::Element
-#include "core/sort_array.h"                // for SortArray
-#include "core/string_name.h"               // for StringName
-#include "core/typedefs.h"                  // for Comparator
-#include "core/variant.h"                   // for Variant
-#include "core/vector.h"                    // for Vector, VectorWriteProxy
+#include "core/debugger/script_debugger.h"
+#include "core/os/os.h"
+#include "scene/main/scene_tree.h"
+#include "core/math/math_defs.h"
+#include "core/os/memory.h"
+#include "core/print_string.h"
+#include "core/script_language.h"
+#include "core/set.h"
+#include "core/sort_array.h"
+#include "core/string_name.h"
+#include "core/typedefs.h"
+#include "core/variant.h"
+#include "core/vector.h"
 
 class Array;
 

@@ -31,11 +31,11 @@
 #ifndef STRING_BUILDER_H
 #define STRING_BUILDER_H
 
-#include <stdint.h>         // for int32_t, uint32_t
+#include <stdint.h>
 
-#include "core/ustring.h"   // for String
-#include "core/vector.h"    // for Vector
-#include "core/typedefs.h"  // for _FORCE_INLINE_
+#include "core/ustring.h"
+#include "core/vector.h"
+#include "core/typedefs.h"
 
 class StringBuilder {
 	uint32_t string_length = 0;

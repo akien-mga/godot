@@ -30,13 +30,13 @@
 
 #include "file_access_memory.h"
 
-#include "core/map.h"               // for Map, Map<>::Element
-#include "core/os/copymem.h"        // for copymem
-#include "core/project_settings.h"  // for ProjectSettings
-#include "core/error_macros.h"      // for ERR_FAIL_COND, ERR_FAIL_COND_V
-#include "core/os/memory.h"         // for memdelete, memnew
-#include "core/typedefs.h"          // for Comparator, MIN
-#include "core/vector.h"            // for Vector
+#include "core/map.h"
+#include "core/os/copymem.h"
+#include "core/project_settings.h"
+#include "core/error_macros.h"
+#include "core/os/memory.h"
+#include "core/typedefs.h"
+#include "core/vector.h"
 
 static Map<String, Vector<uint8_t>> *files = nullptr;
 

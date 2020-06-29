@@ -32,18 +32,18 @@
 #define RESOURCE_LOADER_H
 
 #include "core/os/semaphore.h"
-#include "core/os/thread.h"   // for Thread, Thread::ID
-#include "core/resource.h"    // for RES, Resource (ptr only)
-#include "core/error_list.h"  // for Error, OK
-#include "core/hash_map.h"    // for HashMap
-#include "core/list.h"        // for List
-#include "core/map.h"         // for Map
-#include "core/object.h"      // for GDCLASS
-#include "core/os/mutex.h"    // for Mutex
-#include "core/reference.h"   // for Reference, Ref
-#include "core/self_list.h"   // for SelfList
-#include "core/set.h"         // for Set
-#include "core/ustring.h"     // for String
+#include "core/os/thread.h"
+#include "core/resource.h"
+#include "core/error_list.h"
+#include "core/hash_map.h"
+#include "core/list.h"
+#include "core/map.h"
+#include "core/object.h"
+#include "core/os/mutex.h"
+#include "core/reference.h"
+#include "core/self_list.h"
+#include "core/set.h"
+#include "core/ustring.h"
 
 class Semaphore;
 template <class T> class Vector;

@@ -31,16 +31,16 @@
 #ifndef COMPRESSED_TRANSLATION_H
 #define COMPRESSED_TRANSLATION_H
 
-#include <stdint.h>            // for uint32_t, uint8_t
+#include <stdint.h>
 
-#include "core/translation.h"  // for Translation
-#include "core/list.h"         // for List
-#include "core/object.h"       // for GDCLASS, PropertyInfo (ptr only)
-#include "core/reference.h"    // for Ref
-#include "core/string_name.h"  // for StringName
-#include "core/typedefs.h"     // for _FORCE_INLINE_
-#include "core/variant.h"      // for Variant
-#include "core/vector.h"       // for Vector
+#include "core/translation.h"
+#include "core/list.h"
+#include "core/object.h"
+#include "core/reference.h"
+#include "core/string_name.h"
+#include "core/typedefs.h"
+#include "core/variant.h"
+#include "core/vector.h"
 
 class PHashTranslation : public Translation {
 	GDCLASS(PHashTranslation, Translation);

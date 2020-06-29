@@ -31,13 +31,13 @@
 #ifndef LOCAL_DEBUGGER_H
 #define LOCAL_DEBUGGER_H
 
-#include "core/debugger/engine_debugger.h"  // for EngineDebugger
-#include "core/list.h"                      // for List
+#include "core/debugger/engine_debugger.h"
+#include "core/list.h"
 #include "core/script_language.h"
-#include "core/error_macros.h"              // for ErrorHandlerType
-#include "core/map.h"                       // for Map
-#include "core/pair.h"                      // for Pair
-#include "core/ustring.h"                   // for String
+#include "core/error_macros.h"
+#include "core/map.h"
+#include "core/pair.h"
+#include "core/ustring.h"
 
 class Array;
 class Variant;

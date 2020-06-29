@@ -30,27 +30,27 @@
 
 #include "project_settings.h"
 
-#include <zlib.h>                         // for Z_DEFAULT_COMPRESSION
-#include <stdint.h>                       // for uint8_t, uint32_t
+#include <zlib.h>
+#include <stdint.h>
 
-#include "core/core_string_names.h"       // for CoreStringNames
-#include "core/io/file_access_network.h"  // for FileAccessNetworkClient
-#include "core/io/file_access_pack.h"     // for DirAccessPack, PackedData
-#include "core/io/marshalls.h"            // for encode_variant, decode_variant
-#include "core/os/dir_access.h"           // for DirAccess, DirAccess::ACCES...
-#include "core/os/file_access.h"          // for FileAccess, FileAccess::READ
-#include "core/os/keyboard.h"             // for KEY_SPACE, KEY_TAB, KEY_DOWN
-#include "core/os/os.h"                   // for OS
-#include "core/variant_parser.h"          // for VariantParser::Tag, Variant...
-#include "core/array.h"                   // for Array
-#include "core/class_db.h"                // for D_METHOD, ClassDB, MethodDe...
-#include "core/dictionary.h"              // for Dictionary
-#include "core/engine.h"                  // for Engine
-#include "core/error_macros.h"            // for ERR_FAIL_COND_V_MSG, ERR_FA...
-#include "core/input/input_event.h"       // for InputEventKey, InputEventJo...
-#include "core/io/compression.h"          // for Compression, Compression::g...
-#include "core/os/memory.h"               // for memdelete
-#include "core/reference.h"               // for Ref
+#include "core/core_string_names.h"
+#include "core/io/file_access_network.h"
+#include "core/io/file_access_pack.h"
+#include "core/io/marshalls.h"
+#include "core/os/dir_access.h"
+#include "core/os/file_access.h"
+#include "core/os/keyboard.h"
+#include "core/os/os.h"
+#include "core/variant_parser.h"
+#include "core/array.h"
+#include "core/class_db.h"
+#include "core/dictionary.h"
+#include "core/engine.h"
+#include "core/error_macros.h"
+#include "core/input/input_event.h"
+#include "core/io/compression.h"
+#include "core/os/memory.h"
+#include "core/reference.h"
 
 ProjectSettings *ProjectSettings::singleton = nullptr;
 

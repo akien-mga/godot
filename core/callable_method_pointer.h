@@ -31,21 +31,21 @@
 #ifndef CALLABLE_METHOD_POINTER_H
 #define CALLABLE_METHOD_POINTER_H
 
-#include <stddef.h>             // for size_t
-#include <stdint.h>             // for uint32_t, uint64_t
+#include <stddef.h>
+#include <stdint.h>
 
-#include "core/callable.h"      // for Callable::CallError, Callable, Callab...
+#include "core/callable.h"
 #include "core/hashfuncs.h"
 #include "core/object.h"
-#include "core/os/copymem.h"    // for zeromem
+#include "core/os/copymem.h"
 #include "core/simple_type.h"
-#include "core/error_macros.h"  // for ERR_FAIL_COND_MSG
-#include "core/method_bind.h"   // for GetTypeInfo
-#include "core/object_id.h"     // for ObjectID
-#include "core/os/memory.h"     // for memnew
-#include "core/typedefs.h"      // for _FORCE_INLINE_, BuildIndexSequence
-#include "core/ustring.h"       // for String, uitos
-#include "core/variant.h"       // for Variant, Variant::Type
+#include "core/error_macros.h"
+#include "core/method_bind.h"
+#include "core/object_id.h"
+#include "core/os/memory.h"
+#include "core/typedefs.h"
+#include "core/ustring.h"
+#include "core/variant.h"
 
 class CallableCustomMethodPointerBase : public CallableCustom {
 	uint32_t *comp_ptr;

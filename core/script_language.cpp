@@ -30,14 +30,14 @@
 
 #include "script_language.h"
 
-#include <stdint.h>                         // for UINT16_MAX, uint16_t
+#include <stdint.h>
 
-#include "core/debugger/engine_debugger.h"  // for EngineDebugger
-#include "core/debugger/script_debugger.h"  // for ScriptDebugger
-#include "core/project_settings.h"          // for ProjectSettings
-#include "core/class_db.h"                  // for D_METHOD, ClassDB, Method...
-#include "core/error_macros.h"              // for ERR_FAIL_COND_V, ERR_FAIL...
-#include "core/pair.h"                      // for Pair
+#include "core/debugger/engine_debugger.h"
+#include "core/debugger/script_debugger.h"
+#include "core/project_settings.h"
+#include "core/class_db.h"
+#include "core/error_macros.h"
+#include "core/pair.h"
 
 ScriptLanguage *ScriptServer::_languages[MAX_LANGUAGES];
 int ScriptServer::_language_count = 0;

@@ -30,33 +30,33 @@
 
 #include "core_bind.h"
 
-#include <stddef.h>                          // for size_t
+#include <stddef.h>
 
-#include "core/crypto/crypto_core.h"         // for CryptoCore
-#include "core/io/file_access_compressed.h"  // for FileAccessCompressed
-#include "core/io/file_access_encrypted.h"   // for FileAccessEncrypted, Fil...
-#include "core/io/json.h"                    // for JSON
-#include "core/io/marshalls.h"               // for encode_variant, decode_v...
-#include "core/math/geometry_2d.h"           // for Geometry2D, Geometry2D::...
-#include "core/math/geometry_3d.h"           // for Geometry3D
-#include "core/os/keyboard.h"                // for find_keycode, keycode_ge...
-#include "core/os/os.h"                      // for OS, OS::Date, OS::Time
-#include "core/project_settings.h"           // for ProjectSettings
-#include "core/callable.h"                   // for Callable::CallError, Cal...
-#include "core/class_db.h"                   // for D_METHOD, ClassDB, Metho...
-#include "core/engine.h"                     // for Engine
-#include "core/error_macros.h"               // for ERR_FAIL_COND_V_MSG, ERR...
-#include "core/image.h"                      // for Image, Image::Format
-#include "core/io/resource_loader.h"         // for ResourceLoader, Resource...
-#include "core/io/resource_saver.h"          // for ResourceSaver
-#include "core/list.h"                       // for List, List<>::Element
-#include "core/map.h"                        // for Map
-#include "core/object_id.h"                  // for ObjectID
-#include "core/os/dir_access.h"              // for DirAccess, DirAccess::AC...
-#include "core/os/file_access.h"             // for FileAccess
-#include "core/os/memory.h"                  // for memdelete, memnew
-#include "core/os/thread.h"                  // for Thread, Thread::Settings
-#include "core/typedefs.h"                   // for Comparator
+#include "core/crypto/crypto_core.h"
+#include "core/io/file_access_compressed.h"
+#include "core/io/file_access_encrypted.h"
+#include "core/io/json.h"
+#include "core/io/marshalls.h"
+#include "core/math/geometry_2d.h"
+#include "core/math/geometry_3d.h"
+#include "core/os/keyboard.h"
+#include "core/os/os.h"
+#include "core/project_settings.h"
+#include "core/callable.h"
+#include "core/class_db.h"
+#include "core/engine.h"
+#include "core/error_macros.h"
+#include "core/image.h"
+#include "core/io/resource_loader.h"
+#include "core/io/resource_saver.h"
+#include "core/list.h"
+#include "core/map.h"
+#include "core/object_id.h"
+#include "core/os/dir_access.h"
+#include "core/os/file_access.h"
+#include "core/os/memory.h"
+#include "core/os/thread.h"
+#include "core/typedefs.h"
 
 class Plane;
 

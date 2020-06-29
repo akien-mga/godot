@@ -31,12 +31,12 @@
 #ifndef FILE_ACCESS_MEMORY_H
 #define FILE_ACCESS_MEMORY_H
 
-#include <stddef.h>               // for size_t
-#include <stdint.h>               // for uint8_t, uint32_t, int64_t, uint64_t
+#include <stddef.h>
+#include <stdint.h>
 
-#include "core/os/file_access.h"  // for FileAccess
-#include "core/error_list.h"      // for Error, FAILED
-#include "core/ustring.h"         // for String
+#include "core/os/file_access.h"
+#include "core/error_list.h"
+#include "core/ustring.h"
 
 template <class T> class Vector;
 

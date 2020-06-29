@@ -30,14 +30,14 @@
 
 #include "global_constants.h"
 
-#include "core/input/input_event.h"  // for JoyButtonList, JoyAxisList, Butt...
-#include "core/object.h"             // for PropertyHint, PropertyUsageFlags
-#include "core/os/keyboard.h"        // for KeyList, KeyModifierMask, KEY_0
-#include "core/variant.h"            // for Variant, Variant::Type, Variant:...
-#include "core/error_list.h"         // for Error, ERR_ALREADY_EXISTS, ERR_A...
-#include "core/math/math_defs.h"     // for Corner, Margin, HAlign, VAlign
-#include "core/method_bind.h"        // for __constant_get_enum_name, Method...
-#include "core/vector.h"             // for Vector
+#include "core/input/input_event.h"
+#include "core/object.h"
+#include "core/os/keyboard.h"
+#include "core/variant.h"
+#include "core/error_list.h"
+#include "core/math/math_defs.h"
+#include "core/method_bind.h"
+#include "core/vector.h"
 
 struct _GlobalConstant {
 #ifdef DEBUG_METHODS_ENABLED

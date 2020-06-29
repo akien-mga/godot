@@ -30,18 +30,18 @@
 
 #include "variant.h"
 
-#include "core/core_string_names.h"         // for CoreStringNames
-#include "core/debugger/engine_debugger.h"  // for EngineDebugger
-#include "core/math/math_funcs.h"           // for Math
-#include "core/variant_parser.h"            // for VariantWriter
-#include "scene/gui/control.h"              // for Control
-#include "scene/main/node.h"                // for Node
-#include "core/error_macros.h"              // for ERR_PRINT, ERR_FAIL_COND_...
-#include "core/hashfuncs.h"                 // for hash_djb2_one_float, hash...
-#include "core/math/face3.h"                // for Face3
-#include "core/object.h"                    // for Object, ObjectDB, VARIANT...
-#include "core/reference.h"                 // for Reference, Ref
-#include "core/script_language.h"           // for Script
+#include "core/core_string_names.h"
+#include "core/debugger/engine_debugger.h"
+#include "core/math/math_funcs.h"
+#include "core/variant_parser.h"
+#include "scene/gui/control.h"
+#include "scene/main/node.h"
+#include "core/error_macros.h"
+#include "core/hashfuncs.h"
+#include "core/math/face3.h"
+#include "core/object.h"
+#include "core/reference.h"
+#include "core/script_language.h"
 
 String Variant::get_type_name(Variant::Type p_type) {
 	switch (p_type) {

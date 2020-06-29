@@ -31,16 +31,16 @@
 #ifndef QUICK_HULL_H
 #define QUICK_HULL_H
 
-#include <stdint.h>                 // for uint32_t, uint64_t
+#include <stdint.h>
 
-#include "core/list.h"              // for List
+#include "core/list.h"
 #include "core/math/aabb.h"
-#include "core/math/geometry_3d.h"  // for Geometry3D, Geometry3D::MeshData:...
+#include "core/math/geometry_3d.h"
 #include "core/set.h"
-#include "core/error_list.h"        // for Error
-#include "core/math/plane.h"        // for Plane
-#include "core/typedefs.h"          // for SWAP
-#include "core/vector.h"            // for Vector
+#include "core/error_list.h"
+#include "core/math/plane.h"
+#include "core/typedefs.h"
+#include "core/vector.h"
 
 struct Vector3;
 

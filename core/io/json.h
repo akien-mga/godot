@@ -31,9 +31,9 @@
 #ifndef JSON_H
 #define JSON_H
 
-#include "core/variant.h"     // for Variant
-#include "core/error_list.h"  // for Error
-#include "core/ustring.h"     // for String, CharType
+#include "core/variant.h"
+#include "core/error_list.h"
+#include "core/ustring.h"
 
 class Array;
 class Dictionary;

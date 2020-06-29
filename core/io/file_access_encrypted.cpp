@@ -30,13 +30,13 @@
 
 #include "file_access_encrypted.h"
 
-#include <stdio.h>                    // for size_t
+#include <stdio.h>
 
-#include "core/crypto/crypto_core.h"  // for CryptoCore::AESContext, CryptoCore
-#include "core/os/copymem.h"          // for zeromem
-#include "core/error_macros.h"        // for ERR_FAIL_COND_V, ERR_FAIL_COND_...
-#include "core/os/memory.h"           // for memdelete
-#include "core/typedefs.h"            // for MIN
+#include "core/crypto/crypto_core.h"
+#include "core/os/copymem.h"
+#include "core/error_macros.h"
+#include "core/os/memory.h"
+#include "core/typedefs.h"
 
 #define COMP_MAGIC 0x43454447
 

@@ -30,8 +30,8 @@
 
 #include "transform.h"
 
-#include "core/error_macros.h"  // for ERR_FAIL_COND
-#include "core/math/quat.h"     // for Quat
+#include "core/error_macros.h"
+#include "core/math/quat.h"
 
 void Transform::affine_invert() {
 	basis.invert();

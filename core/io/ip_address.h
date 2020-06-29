@@ -31,9 +31,9 @@
 #ifndef IP_ADDRESS_H
 #define IP_ADDRESS_H
 
-#include <stdint.h>        // for uint32_t, uint8_t, uint16_t
+#include <stdint.h>
 
-#include "core/ustring.h"  // for String
+#include "core/ustring.h"
 
 struct IP_Address {
 private:

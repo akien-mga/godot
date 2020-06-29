@@ -31,28 +31,28 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include <stdint.h>              // for uint64_t, uint32_t
+#include <stdint.h>
 
-#include "core/hash_map.h"       // for HashMap
-#include "core/list.h"           // for List
+#include "core/hash_map.h"
+#include "core/list.h"
 #include "core/map.h"
-#include "core/object_id.h"      // for ObjectID
+#include "core/object_id.h"
 #include "core/os/rw_lock.h"
-#include "core/set.h"            // for Set, Set<>::Element
-#include "core/spin_lock.h"      // for SpinLock
-#include "core/variant.h"        // for Variant, Variant::NIL, Variant::Type
-#include "core/vmap.h"           // for VMap
-#include "core/array.h"          // for Array
-#include "core/callable.h"       // for Callable, Signal
-#include "core/dictionary.h"     // for Dictionary
-#include "core/error_list.h"     // for Error
-#include "core/error_macros.h"   // for ERR_FAIL_COND_V
-#include "core/node_path.h"      // for NodePath
-#include "core/safe_refcount.h"  // for SafeRefCount
-#include "core/string_name.h"    // for StringName
-#include "core/typedefs.h"       // for _FORCE_INLINE_, _ALWAYS_INLINE_, unl...
-#include "core/ustring.h"        // for String
-#include "core/vector.h"         // for Vector
+#include "core/set.h"
+#include "core/spin_lock.h"
+#include "core/variant.h"
+#include "core/vmap.h"
+#include "core/array.h"
+#include "core/callable.h"
+#include "core/dictionary.h"
+#include "core/error_list.h"
+#include "core/error_macros.h"
+#include "core/node_path.h"
+#include "core/safe_refcount.h"
+#include "core/string_name.h"
+#include "core/typedefs.h"
+#include "core/ustring.h"
+#include "core/vector.h"
 
 #define VARIANT_ARG_LIST const Variant &p_arg1 = Variant(), const Variant &p_arg2 = Variant(), const Variant &p_arg3 = Variant(), const Variant &p_arg4 = Variant(), const Variant &p_arg5 = Variant()
 #define VARIANT_ARG_PASS p_arg1, p_arg2, p_arg3, p_arg4, p_arg5

@@ -30,8 +30,8 @@
 
 #include "node_path.h"
 
-#include "core/error_macros.h"  // for ERR_FAIL_COND_V, ERR_FAIL_INDEX_V
-#include "core/os/memory.h"     // for memdelete, memnew
+#include "core/error_macros.h"
+#include "core/os/memory.h"
 
 void NodePath::_update_hash_cache() const {
 	uint32_t h = data->absolute ? 1 : 0;

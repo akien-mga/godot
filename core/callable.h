@@ -31,17 +31,17 @@
 #ifndef CALLABLE_H
 #define CALLABLE_H
 
-#include <stdint.h>              // for uint32_t, uint64_t
+#include <stdint.h>
 
 #include "core/list.h"
-#include "core/object_id.h"      // for ObjectID
-#include "core/string_name.h"    // for StringName
-#include "core/array.h"          // for Array
-#include "core/error_list.h"     // for Error
-#include "core/safe_refcount.h"  // for SafeRefCount
-#include "core/typedefs.h"       // for _FORCE_INLINE_
-#include "core/ustring.h"        // for String
-#include "core/vector.h"         // for Vector
+#include "core/object_id.h"
+#include "core/string_name.h"
+#include "core/array.h"
+#include "core/error_list.h"
+#include "core/safe_refcount.h"
+#include "core/typedefs.h"
+#include "core/ustring.h"
+#include "core/vector.h"
 
 class Object;
 class Variant;

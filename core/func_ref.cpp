@@ -30,11 +30,11 @@
 
 #include "func_ref.h"
 
-#include "core/class_db.h"      // for D_METHOD, ClassDB, MethodDefinition
-#include "core/error_macros.h"  // for ERR_FAIL_COND_V, ERR_FAIL_NULL
-#include "core/method_bind.h"   // for METHOD_FLAGS_DEFAULT
-#include "core/ustring.h"       // for String
-#include "core/vector.h"        // for Vector
+#include "core/class_db.h"
+#include "core/error_macros.h"
+#include "core/method_bind.h"
+#include "core/ustring.h"
+#include "core/vector.h"
 
 class Array;
 

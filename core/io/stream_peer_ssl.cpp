@@ -30,8 +30,8 @@
 
 #include "stream_peer_ssl.h"
 
-#include "core/class_db.h"  // for D_METHOD, ClassDB, MethodDefinition, BIND...
-#include "core/variant.h"   // for Variant, Variant::BOOL
+#include "core/class_db.h"
+#include "core/variant.h"
 
 StreamPeerSSL *(*StreamPeerSSL::_create)() = nullptr;
 

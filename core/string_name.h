@@ -31,12 +31,12 @@
 #ifndef STRING_NAME_H
 #define STRING_NAME_H
 
-#include <stdint.h>              // for uint32_t
+#include <stdint.h>
 
-#include "core/os/mutex.h"       // for Mutex
-#include "core/safe_refcount.h"  // for SafeRefCount
-#include "core/ustring.h"        // for String, is_str_less, CharType
-#include "core/typedefs.h"       // for _FORCE_INLINE_
+#include "core/os/mutex.h"
+#include "core/safe_refcount.h"
+#include "core/ustring.h"
+#include "core/typedefs.h"
 
 struct StaticCString {
 	const char *ptr;

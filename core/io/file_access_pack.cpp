@@ -30,11 +30,11 @@
 
 #include "file_access_pack.h"
 
-#include <stdio.h>                       // for size_t
+#include <stdio.h>
 
-#include "core/error_macros.h"           // for ERR_FAIL, ERR_FAIL_V_MSG
-#include "core/os/memory.h"              // for memdelete, memnew
-#include "core/version_generated.gen.h"  // for VERSION_MAJOR, VERSION_MINOR
+#include "core/error_macros.h"
+#include "core/os/memory.h"
+#include "core/version_generated.gen.h"
 
 Error PackedData::add_pack(const String &p_path, bool p_replace_files) {
 	for (int i = 0; i < sources.size(); i++) {

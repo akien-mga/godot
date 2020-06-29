@@ -31,11 +31,11 @@
 #ifndef VECTOR2_H
 #define VECTOR2_H
 
-#include "core/math/math_funcs.h"  // for Math
-#include "core/ustring.h"          // for String
-#include "core/error_macros.h"     // for ERR_FAIL_COND_V_MSG
-#include "core/math/math_defs.h"   // for real_t, MATH_CHECKS
-#include "core/typedefs.h"         // for _FORCE_INLINE_, ABS, SGN
+#include "core/math/math_funcs.h"
+#include "core/ustring.h"
+#include "core/error_macros.h"
+#include "core/math/math_defs.h"
+#include "core/typedefs.h"
 
 struct Vector2i;
 

@@ -31,14 +31,14 @@
 #ifndef COMMAND_QUEUE_MT_H
 #define COMMAND_QUEUE_MT_H
 
-#include <stdint.h>             // for uint32_t, uint8_t
+#include <stdint.h>
 
-#include "core/os/memory.h"     // for memalloc, memnew_placement
-#include "core/os/mutex.h"      // for Mutex
-#include "core/os/semaphore.h"  // for Semaphore
-#include "core/simple_type.h"   // for GetSimpleTypeT
+#include "core/os/memory.h"
+#include "core/os/mutex.h"
+#include "core/os/semaphore.h"
+#include "core/simple_type.h"
 #include "core/typedefs.h"
-#include "core/error_macros.h"  // for ERR_FAIL_COND, ERR_FAIL_COND_V
+#include "core/error_macros.h"
 
 class CommandQueueMT;
 struct CommandQueueMT::CommandBase;

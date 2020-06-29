@@ -31,13 +31,13 @@
 #ifndef FACE3_H
 #define FACE3_H
 
-#include "core/math/aabb.h"       // for AABB
-#include "core/math/plane.h"      // for Plane
+#include "core/math/aabb.h"
+#include "core/math/plane.h"
 #include "core/math/transform.h"
-#include "core/math/vector3.h"    // for Vector3, Vector3::(anonymous union)...
-#include "core/math/math_defs.h"  // for real_t, CLOCKWISE, ClockDirection
-#include "core/typedefs.h"        // for SWAP, _FORCE_INLINE_
-#include "core/ustring.h"         // for String
+#include "core/math/vector3.h"
+#include "core/math/math_defs.h"
+#include "core/typedefs.h"
+#include "core/ustring.h"
 
 class Transform;
 

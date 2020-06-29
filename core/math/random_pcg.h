@@ -31,12 +31,12 @@
 #ifndef RANDOM_PCG_H
 #define RANDOM_PCG_H
 
-#include <math.h>                 // for cos, sqrt, log
-#include <stdint.h>               // for uint64_t, uint32_t
+#include <math.h>
+#include <stdint.h>
 
-#include "core/math/math_defs.h"  // for real_t, Math_TAU
-#include "thirdparty/misc/pcg.h"  // for pcg32_random_r, pcg32_srandom_r
-#include "core/typedefs.h"        // for _FORCE_INLINE_, unlikely
+#include "core/math/math_defs.h"
+#include "thirdparty/misc/pcg.h"
+#include "core/typedefs.h"
 
 #if defined(__GNUC__)
 #define CLZ32(x) __builtin_clz(x)
@@ -56,7 +56,7 @@ static int __bsr_clz32(uint32_t x) {
 #define LDEXP(s, e) __builtin_ldexp(s, e)
 #define LDEXPF(s, e) __builtin_ldexpf(s, e)
 #else
-#include <math.h>                 // for cos, sqrt, log
+#include <math.h>
 
 #define LDEXP(s, e) ldexp(s, e)
 #define LDEXPF(s, e) ldexp(s, e)
