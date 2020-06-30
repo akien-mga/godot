@@ -34,16 +34,6 @@
 #include "core/class_db.h"
 #include "core/object.h"
 #include "core/safe_refcount.h"
-#include "core/error_macros.h"
-#include "core/method_bind.h"
-#include "core/object_id.h"
-#include "core/os/memory.h"
-#include "core/typedefs.h"
-#include "core/ustring.h"
-#include "core/variant.h"
-
-template <class T, typename = void> struct GetTypeInfo;
-template <class T> struct PtrToArg;
 
 class Reference : public Object {
 	GDCLASS(Reference, Object);

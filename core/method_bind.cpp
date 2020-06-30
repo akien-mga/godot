@@ -28,11 +28,11 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
-#include "core/method_bind.h"
-
+#include "core/object.h"
 // object.h needs to be the first include *before* method_bind.h
 // FIXME: Find out why and fix potential cyclical dependencies.
-#include "core/object.h"
+// IWYU pragma: no_include "core/method_bind.h"
+
 #include "method_bind.h"
 
 #ifdef DEBUG_METHODS_ENABLED

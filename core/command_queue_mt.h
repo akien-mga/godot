@@ -40,9 +40,7 @@
 #include "core/typedefs.h"
 #include "core/error_macros.h"
 
-class CommandQueueMT;
-struct CommandQueueMT::CommandBase;
-struct CommandQueueMT::SyncCommand;
+// IWYU pragma: no_forward_declare CommandQueueMT
 
 #define COMMA(N) _COMMA_##N
 #define _COMMA_0
