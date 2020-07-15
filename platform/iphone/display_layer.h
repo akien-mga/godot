@@ -1,5 +1,5 @@
 /*************************************************************************/
-/*  godot_iphone.cpp                                                     */
+/*  display_layer.h                                                      */
 /*************************************************************************/
 /*                       This file is part of:                           */
 /*                           GODOT ENGINE                                */
@@ -28,64 +28,31 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
-#include "core/ustring.h"
-#include "main/main.h"
-#include "os_iphone.h"
+#import <OpenGLES/EAGLDrawable.h>
+#import <QuartzCore/QuartzCore.h>
 
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
+@protocol DisplayLayer <NSObject>
 
-static OSIPhone *os = nullptr;
+- (void)renderDisplayLayer;
+- (void)initializeDisplayLayer;
+- (void)layoutDisplayLayer;
 
-extern "C" {
-int add_path(int p_argc, char **p_args);
-int add_cmdline(int p_argc, char **p_args);
-};
+@end
 
-int iphone_main(int, int, int, char **, String);
+// An ugly workaround for iOS simulator
+#if TARGET_OS_SIMULATOR
+#if defined(__IPHONE_13_0)
+API_AVAILABLE(ios(13.0))
+@interface GodotMetalLayer : CAMetalLayer <DisplayLayer>
+#else
+@interface GodotMetalLayer : CALayer <DisplayLayer>
+#endif
+#else
+@interface GodotMetalLayer : CAMetalLayer <DisplayLayer>
+#endif
+@end
 
-int iphone_main(int width, int height, int argc, char **argv, String data_dir) {
-	size_t len = strlen(argv[0]);
+API_DEPRECATED("OpenGLES is deprecated", ios(2.0, 12.0))
+@interface GodotOpenGLLayer : CAEAGLLayer <DisplayLayer>
 
-	while (len--) {
-		if (argv[0][len] == '/')
-			break;
-	}
-
-	if (len >= 0) {
-		char path[512];
-		memcpy(path, argv[0], len > sizeof(path) ? sizeof(path) : len);
-		path[len] = 0;
-		printf("Path: %s\n", path);
-		chdir(path);
-	}
-
-	printf("godot_iphone %s\n", argv[0]);
-	char cwd[512];
-	getcwd(cwd, sizeof(cwd));
-	printf("cwd %s\n", cwd);
-	os = new OSIPhone(width, height, data_dir);
-
-	char *fargv[64];
-	for (int i = 0; i < argc; i++) {
-		fargv[i] = argv[i];
-	};
-	fargv[argc] = nullptr;
-	argc = add_path(argc, fargv);
-	argc = add_cmdline(argc, fargv);
-
-	printf("os created\n");
-	Error err = Main::setup(fargv[0], argc - 1, &fargv[1], false);
-	printf("setup %i\n", err);
-	if (err != OK)
-		return 255;
-
-	return 0;
-};
-
-void iphone_finish() {
-	printf("iphone_finish\n");
-	Main::cleanup();
-	delete os;
-};
+@end
