@@ -61,8 +61,9 @@ jobs:
       - name: Compilation
         env:
           SCONS_CACHE: ${{github.workspace}}/.scons_cache/
+        # Forcing -j1 as we run out of memory compiling the GDScript VM otherwise.
         run: |
-          scons tools=yes tests=yes target=release_debug module_mono_enabled=yes mono_glue=no
+          scons tools=yes tests=yes target=release_debug module_mono_enabled=yes mono_glue=no -j1
           ls -l bin/
 
       # Execute unit tests for the editor
