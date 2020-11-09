@@ -19,6 +19,22 @@
 				Constructs a new [PackedByteArray]. Optionally, you can pass in a generic [Array] that will be converted.
 			</description>
 		</method>
+		<method name="PackedByteArray">
+			<return type="PackedByteArray">
+			</return>
+			<argument index="0" name="from" type="PackedByteArray">
+			</argument>
+			<description>
+				Constructs a [PackedByteArray] as a copy of the given [PackedByteArray].
+			</description>
+		</method>
+		<method name="PackedByteArray">
+			<return type="PackedByteArray">
+			</return>
+			<description>
+				Constructs an empty [PackedByteArray].
+			</description>
+		</method>
 		<method name="append">
 			<return type="bool">
 			</return>

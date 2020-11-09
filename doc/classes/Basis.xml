@@ -22,6 +22,19 @@
 		<method name="Basis">
 			<return type="Basis">
 			</return>
+			<argument index="0" name="x_axis" type="Vector3">
+			</argument>
+			<argument index="1" name="y_axis" type="Vector3">
+			</argument>
+			<argument index="2" name="z_axis" type="Vector3">
+			</argument>
+			<description>
+				Constructs a basis matrix from 3 axis vectors (matrix columns).
+			</description>
+		</method>
+		<method name="Basis">
+			<return type="Basis">
+			</return>
 			<argument index="0" name="from" type="Quat">
 			</argument>
 			<description>
@@ -31,35 +44,17 @@
 		<method name="Basis">
 			<return type="Basis">
 			</return>
-			<argument index="0" name="from" type="Vector3">
+			<argument index="0" name="from" type="Basis">
 			</argument>
 			<description>
-				Constructs a pure rotation basis matrix from the given Euler angles (in the YXZ convention: when *composing*, first Y, then X, and Z last), given in the vector format as (X angle, Y angle, Z angle).
-				Consider using the [Quat] constructor instead, which uses a quaternion instead of Euler angles.
+				Constructs a [Basis] as a copy of the given [Basis].
 			</description>
 		</method>
 		<method name="Basis">
 			<return type="Basis">
 			</return>
-			<argument index="0" name="axis" type="Vector3">
-			</argument>
-			<argument index="1" name="phi" type="float">
-			</argument>
 			<description>
-				Constructs a pure rotation basis matrix, rotated around the given [code]axis[/code] by [code]phi[/code], in radians. The axis must be a normalized vector.
-			</description>
-		</method>
-		<method name="Basis">
-			<return type="Basis">
-			</return>
-			<argument index="0" name="x_axis" type="Vector3">
-			</argument>
-			<argument index="1" name="y_axis" type="Vector3">
-			</argument>
-			<argument index="2" name="z_axis" type="Vector3">
-			</argument>
-			<description>
-				Constructs a basis matrix from 3 axis vectors (matrix columns).
+				Constructs a default-initialized [Basis] set to [constant IDENTITY].
 			</description>
 		</method>
 		<method name="determinant">

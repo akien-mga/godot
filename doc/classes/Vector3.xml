@@ -20,6 +20,19 @@
 		<method name="Vector3">
 			<return type="Vector3">
 			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<argument index="2" name="z" type="float">
+			</argument>
+			<description>
+				Returns a [Vector3] with the given components.
+			</description>
+		</method>
+		<method name="Vector3">
+			<return type="Vector3">
+			</return>
 			<argument index="0" name="from" type="Vector3i">
 			</argument>
 			<description>
@@ -29,14 +42,17 @@
 		<method name="Vector3">
 			<return type="Vector3">
 			</return>
-			<argument index="0" name="x" type="float">
-			</argument>
-			<argument index="1" name="y" type="float">
-			</argument>
-			<argument index="2" name="z" type="float">
+			<argument index="0" name="from" type="Vector3">
 			</argument>
 			<description>
-				Returns a [Vector3] with the given components.
+				Constructs a [Vector3] as a copy of the given [Vector3].
+			</description>
+		</method>
+		<method name="Vector3">
+			<return type="Vector3">
+			</return>
+			<description>
+				Constructs a default-initialized [Vector3] with all components set to [code]0[/code].
 			</description>
 		</method>
 		<method name="abs">
@@ -339,7 +355,7 @@
 		<member name="y" type="float" setter="" getter="" default="0.0">
 			The vector's Y component. Also accessible by using the index position [code][1][/code].
 		</member>
-		<member name="z" type="float" setter="" getter="" default="0.0">
+		<member name="z" type="float" setter="" getter="" default="3.38586e-34">
 			The vector's Z component. Also accessible by using the index position [code][2][/code].
 		</member>
 	</members>

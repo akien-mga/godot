@@ -25,6 +25,22 @@
 				Constructs an [AABB] from a position and size.
 			</description>
 		</method>
+		<method name="AABB">
+			<return type="AABB">
+			</return>
+			<argument index="0" name="from" type="AABB">
+			</argument>
+			<description>
+				Constructs an [AABB] as a copy of the given [AABB].
+			</description>
+		</method>
+		<method name="AABB">
+			<return type="AABB">
+			</return>
+			<description>
+				Constructs a default-initialized [AABB] with default (zero) values of [member position] and [member size].
+			</description>
+		</method>
 		<method name="abs">
 			<return type="AABB">
 			</return>

@@ -292,7 +292,7 @@ public:
 	}
 
 	static Variant::Type get_base_type() {
-		return Variant::CALLABLE;
+		return Variant::SIGNAL;
 	}
 };
 
@@ -511,9 +511,11 @@ void Variant::_register_variant_constructors() {
 
 	add_constructor<VariantConstructor<int64_t, int64_t>>(sarray("from"));
 	add_constructor<VariantConstructor<int64_t, double>>(sarray("from"));
+	add_constructor<VariantConstructor<int64_t, bool>>(sarray("from"));
 
 	add_constructor<VariantConstructor<double, double>>(sarray("from"));
 	add_constructor<VariantConstructor<double, int64_t>>(sarray("from"));
+	add_constructor<VariantConstructor<double, bool>>(sarray("from"));
 
 	add_constructor<VariantConstructor<String, String>>(sarray("from"));
 	add_constructor<VariantConstructor<String, StringName>>(sarray("from"));
@@ -546,25 +548,28 @@ void Variant::_register_variant_constructors() {
 	add_constructor<VariantConstructor<Vector3i, int64_t, int64_t, int64_t>>(sarray("x", "y", "z"));
 
 	add_constructor<VariantConstructor<Transform2D, Transform2D>>(sarray("from"));
-	add_constructor<VariantConstructor<Transform2D, Vector2, Vector2, Vector2>>(sarray("x", "y", "origin"));
+	add_constructor<VariantConstructor<Transform2D, float, Vector2>>(sarray("rotation", "position"));
+	add_constructor<VariantConstructor<Transform2D, Vector2, Vector2, Vector2>>(sarray("x_axis", "y_axis", "origin"));
 
 	add_constructor<VariantConstructor<Plane, Plane>>(sarray("from"));
 	add_constructor<VariantConstructor<Plane, Vector3, double>>(sarray("normal", "d"));
 	add_constructor<VariantConstructor<Plane, Vector3, Vector3>>(sarray("point", "normal"));
 	add_constructor<VariantConstructor<Plane, Vector3, Vector3, Vector3>>(sarray("point1", "point2", "point3"));
+	add_constructor<VariantConstructor<Plane, double, double, double, double>>(sarray("x", "y", "z", "d"));
 
 	add_constructor<VariantConstructor<Quat, Quat>>(sarray("from"));
 	add_constructor<VariantConstructor<Quat, Basis>>(sarray("from"));
 	add_constructor<VariantConstructor<Quat, Vector3>>(sarray("euler"));
 	add_constructor<VariantConstructor<Quat, Vector3, double>>(sarray("axis", "angle"));
 	add_constructor<VariantConstructor<Quat, Vector3, Vector3>>(sarray("arc_from", "arc_to"));
+	add_constructor<VariantConstructor<Quat, double, double, double, double>>(sarray("x", "y", "z", "w"));
 
 	add_constructor<VariantConstructor<::AABB, ::AABB>>(sarray("from"));
 	add_constructor<VariantConstructor<::AABB, Vector3, Vector3>>(sarray("position", "size"));
 
 	add_constructor<VariantConstructor<Basis, Basis>>(sarray("from"));
 	add_constructor<VariantConstructor<Basis, Quat>>(sarray("from"));
-	add_constructor<VariantConstructor<Basis, Vector3, Vector3, Vector3>>(sarray("x", "y", "z"));
+	add_constructor<VariantConstructor<Basis, Vector3, Vector3, Vector3>>(sarray("x_axis", "y_axis", "z_axis"));
 
 	add_constructor<VariantConstructor<Transform, Transform>>(sarray("from"));
 	add_constructor<VariantConstructor<Transform, Basis, Vector3>>(sarray("basis", "origin"));
@@ -594,7 +599,7 @@ void Variant::_register_variant_constructors() {
 	add_constructor<VariantConstructorToArray<PackedByteArray>>(sarray("from"));
 	add_constructor<VariantConstructorToArray<PackedInt32Array>>(sarray("from"));
 	add_constructor<VariantConstructorToArray<PackedInt64Array>>(sarray("from"));
-	add_constructor<VariantConstructorToArray<PackedFloat64Array>>(sarray("from"));
+	add_constructor<VariantConstructorToArray<PackedFloat32Array>>(sarray("from"));
 	add_constructor<VariantConstructorToArray<PackedFloat64Array>>(sarray("from"));
 	add_constructor<VariantConstructorToArray<PackedStringArray>>(sarray("from"));
 	add_constructor<VariantConstructorToArray<PackedVector2Array>>(sarray("from"));
@@ -766,7 +771,10 @@ void Variant::get_constructor_list(Type p_type, List<MethodInfo> *r_list) {
 	MethodInfo mi;
 	mi.return_val.type = p_type;
 	mi.name = get_type_name(p_type);
+	// Built-in constructor (e.g. `String()`).
+	r_list->push_back(mi);
 
+	// Constructors with arguments (e.g. `String(int)`).
 	for (int i = 0; i < get_constructor_count(p_type); i++) {
 		int ac = get_constructor_argument_count(p_type, i);
 		mi.arguments.clear();

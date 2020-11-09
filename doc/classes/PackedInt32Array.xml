@@ -20,6 +20,22 @@
 				Constructs a new [PackedInt32Array]. Optionally, you can pass in a generic [Array] that will be converted.
 			</description>
 		</method>
+		<method name="PackedInt32Array">
+			<return type="PackedInt32Array">
+			</return>
+			<argument index="0" name="from" type="PackedInt32Array">
+			</argument>
+			<description>
+				Constructs a [PackedInt32Array] as a copy of the given [PackedInt32Array].
+			</description>
+		</method>
+		<method name="PackedInt32Array">
+			<return type="PackedInt32Array">
+			</return>
+			<description>
+				Constructs an empty [PackedInt32Array].
+			</description>
+		</method>
 		<method name="append">
 			<return type="bool">
 			</return>

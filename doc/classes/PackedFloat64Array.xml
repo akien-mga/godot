@@ -20,6 +20,22 @@
 				Constructs a new [PackedFloat64Array]. Optionally, you can pass in a generic [Array] that will be converted.
 			</description>
 		</method>
+		<method name="PackedFloat64Array">
+			<return type="PackedFloat64Array">
+			</return>
+			<argument index="0" name="from" type="PackedFloat64Array">
+			</argument>
+			<description>
+				Constructs a [PackedFloat64Array] as a copy of the given [PackedFloat64Array].
+			</description>
+		</method>
+		<method name="PackedFloat64Array">
+			<return type="PackedFloat64Array">
+			</return>
+			<description>
+				Constructs an empty [PackedFloat64Array].
+			</description>
+		</method>
 		<method name="append">
 			<return type="bool">
 			</return>

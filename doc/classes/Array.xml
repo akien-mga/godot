@@ -124,6 +124,22 @@
 				Constructs an array from a [PackedByteArray].
 			</description>
 		</method>
+		<method name="Array">
+			<return type="Array">
+			</return>
+			<argument index="0" name="from" type="Array">
+			</argument>
+			<description>
+				Constructs an [Array] as a copy of the given [Array].
+			</description>
+		</method>
+		<method name="Array">
+			<return type="Array">
+			</return>
+			<description>
+				Constructs an empty [Array].
+			</description>
+		</method>
 		<method name="append">
 			<return type="void">
 			</return>

@@ -17,17 +17,6 @@
 		<method name="Rect2">
 			<return type="Rect2">
 			</return>
-			<argument index="0" name="position" type="Vector2">
-			</argument>
-			<argument index="1" name="size" type="Vector2">
-			</argument>
-			<description>
-				Constructs a [Rect2] by position and size.
-			</description>
-		</method>
-		<method name="Rect2">
-			<return type="Rect2">
-			</return>
 			<argument index="0" name="x" type="float">
 			</argument>
 			<argument index="1" name="y" type="float">
@@ -43,10 +32,37 @@
 		<method name="Rect2">
 			<return type="Rect2">
 			</return>
+			<argument index="0" name="position" type="Vector2">
+			</argument>
+			<argument index="1" name="size" type="Vector2">
+			</argument>
+			<description>
+				Constructs a [Rect2] by position and size.
+			</description>
+		</method>
+		<method name="Rect2">
+			<return type="Rect2">
+			</return>
 			<argument index="0" name="from" type="Rect2i">
 			</argument>
 			<description>
 				Constructs a [Rect2] from a [Rect2i].
+			</description>
+		</method>
+		<method name="Rect2">
+			<return type="Rect2">
+			</return>
+			<argument index="0" name="from" type="Rect2">
+			</argument>
+			<description>
+				Constructs a [Rect2] as a copy of the given [Rect2].
+			</description>
+		</method>
+		<method name="Rect2">
+			<return type="Rect2">
+			</return>
+			<description>
+				Constructs a default-initialized [Rect2] with default (zero) values of [member position] and [member size].
 			</description>
 		</method>
 		<method name="abs">
@@ -173,13 +189,13 @@
 		</method>
 	</methods>
 	<members>
-		<member name="end" type="Vector2" setter="" getter="" default="Vector2( 0, 0 )">
+		<member name="end" type="Vector2" setter="" getter="" default="Vector2( 3.38586e-34, 0 )">
 			Ending corner. This is calculated as [code]position + size[/code]. Setting this value will change the size.
 		</member>
 		<member name="position" type="Vector2" setter="" getter="" default="Vector2( 0, 0 )">
 			Beginning corner. Typically has values lower than [member end].
 		</member>
-		<member name="size" type="Vector2" setter="" getter="" default="Vector2( 0, 0 )">
+		<member name="size" type="Vector2" setter="" getter="" default="Vector2( 3.38586e-34, 0 )">
 			Size from [member position] to [member end]. Typically all components are positive.
 			If the size is negative, you can use [method abs] to fix it.
 		</member>

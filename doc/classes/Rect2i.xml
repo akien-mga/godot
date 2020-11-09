@@ -15,17 +15,6 @@
 		<method name="Rect2i">
 			<return type="Rect2i">
 			</return>
-			<argument index="0" name="position" type="Vector2i">
-			</argument>
-			<argument index="1" name="size" type="Vector2i">
-			</argument>
-			<description>
-				Constructs a [Rect2i] by position and size.
-			</description>
-		</method>
-		<method name="Rect2i">
-			<return type="Rect2i">
-			</return>
 			<argument index="0" name="x" type="int">
 			</argument>
 			<argument index="1" name="y" type="int">
@@ -41,10 +30,37 @@
 		<method name="Rect2i">
 			<return type="Rect2i">
 			</return>
+			<argument index="0" name="position" type="Vector2i">
+			</argument>
+			<argument index="1" name="size" type="Vector2i">
+			</argument>
+			<description>
+				Constructs a [Rect2i] by position and size.
+			</description>
+		</method>
+		<method name="Rect2i">
+			<return type="Rect2i">
+			</return>
 			<argument index="0" name="from" type="Rect2">
 			</argument>
 			<description>
 				Constructs a new [Rect2i] from [Rect2]. The floating point coordinates will be truncated.
+			</description>
+		</method>
+		<method name="Rect2i">
+			<return type="Rect2i">
+			</return>
+			<argument index="0" name="from" type="Rect2i">
+			</argument>
+			<description>
+				Constructs a [Rect2i] as a copy of the given [Rect2i].
+			</description>
+		</method>
+		<method name="Rect2i">
+			<return type="Rect2i">
+			</return>
+			<description>
+				Constructs a default-initialized [Rect2i] with default (zero) values of [member position] and [member size].
 			</description>
 		</method>
 		<method name="abs">
@@ -160,13 +176,13 @@
 		</method>
 	</methods>
 	<members>
-		<member name="end" type="Vector2i" setter="" getter="" default="Vector2i( 0, 0 )">
+		<member name="end" type="Vector2i" setter="" getter="" default="Vector2i( 132188000, 0 )">
 			Ending corner. This is calculated as [code]position + size[/code]. Setting this value will change the size.
 		</member>
 		<member name="position" type="Vector2i" setter="" getter="" default="Vector2i( 0, 0 )">
 			Beginning corner. Typically has values lower than [member end].
 		</member>
-		<member name="size" type="Vector2i" setter="" getter="" default="Vector2i( 0, 0 )">
+		<member name="size" type="Vector2i" setter="" getter="" default="Vector2i( 132188000, 0 )">
 			Size from [member position] to [member end]. Typically all components are positive.
 			If the size is negative, you can use [method abs] to fix it.
 		</member>

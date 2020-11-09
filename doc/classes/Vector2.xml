@@ -20,6 +20,17 @@
 		<method name="Vector2">
 			<return type="Vector2">
 			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<description>
+				Constructs a new [Vector2] from the given [code]x[/code] and [code]y[/code].
+			</description>
+		</method>
+		<method name="Vector2">
+			<return type="Vector2">
+			</return>
 			<argument index="0" name="from" type="Vector2i">
 			</argument>
 			<description>
@@ -29,12 +40,17 @@
 		<method name="Vector2">
 			<return type="Vector2">
 			</return>
-			<argument index="0" name="x" type="float">
-			</argument>
-			<argument index="1" name="y" type="float">
+			<argument index="0" name="from" type="Vector2">
 			</argument>
 			<description>
-				Constructs a new [Vector2] from the given [code]x[/code] and [code]y[/code].
+				Constructs a [Vector2] as a copy of the given [Vector2].
+			</description>
+		</method>
+		<method name="Vector2">
+			<return type="Vector2">
+			</return>
+			<description>
+				Constructs a default-initialized [Vector2] with all components set to [code]0[/code].
 			</description>
 		</method>
 		<method name="abs">

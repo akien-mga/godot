@@ -20,6 +20,22 @@
 				Constructs a new [PackedStringArray]. Optionally, you can pass in a generic [Array] that will be converted.
 			</description>
 		</method>
+		<method name="PackedStringArray">
+			<return type="PackedStringArray">
+			</return>
+			<argument index="0" name="from" type="PackedStringArray">
+			</argument>
+			<description>
+				Constructs a [PackedStringArray] as a copy of the given [PackedStringArray].
+			</description>
+		</method>
+		<method name="PackedStringArray">
+			<return type="PackedStringArray">
+			</return>
+			<description>
+				Constructs an empty [PackedStringArray].
+			</description>
+		</method>
 		<method name="append">
 			<return type="bool">
 			</return>

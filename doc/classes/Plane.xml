@@ -13,29 +13,17 @@
 		<method name="Plane">
 			<return type="Plane">
 			</return>
-			<argument index="0" name="a" type="float">
-			</argument>
-			<argument index="1" name="b" type="float">
-			</argument>
-			<argument index="2" name="c" type="float">
-			</argument>
-			<argument index="3" name="d" type="float">
-			</argument>
 			<description>
-				Creates a plane from the four parameters. The three components of the resulting plane's [member normal] are [code]a[/code], [code]b[/code] and [code]c[/code], and the plane has a distance of [code]d[/code] from the origin.
+				Constructs a default-initialized [Plane] with all components set to [code]0[/code].
 			</description>
 		</method>
 		<method name="Plane">
 			<return type="Plane">
 			</return>
-			<argument index="0" name="v1" type="Vector3">
-			</argument>
-			<argument index="1" name="v2" type="Vector3">
-			</argument>
-			<argument index="2" name="v3" type="Vector3">
+			<argument index="0" name="from" type="Plane">
 			</argument>
 			<description>
-				Creates a plane from the three points, given in clockwise order.
+				Constructs a [Plane] as a copy of the given [Plane].
 			</description>
 		</method>
 		<method name="Plane">
@@ -47,6 +35,45 @@
 			</argument>
 			<description>
 				Creates a plane from the normal and the plane's distance to the origin.
+			</description>
+		</method>
+		<method name="Plane">
+			<return type="Plane">
+			</return>
+			<argument index="0" name="point" type="Vector3">
+			</argument>
+			<argument index="1" name="normal" type="Vector3">
+			</argument>
+			<description>
+				Creates a plane from the given position and a plane normal.
+			</description>
+		</method>
+		<method name="Plane">
+			<return type="Plane">
+			</return>
+			<argument index="0" name="point1" type="Vector3">
+			</argument>
+			<argument index="1" name="point2" type="Vector3">
+			</argument>
+			<argument index="2" name="point3" type="Vector3">
+			</argument>
+			<description>
+				Creates a plane from the three points, given in clockwise order.
+			</description>
+		</method>
+		<method name="Plane">
+			<return type="Plane">
+			</return>
+			<argument index="0" name="x" type="float">
+			</argument>
+			<argument index="1" name="y" type="float">
+			</argument>
+			<argument index="2" name="z" type="float">
+			</argument>
+			<argument index="3" name="d" type="float">
+			</argument>
+			<description>
+				Creates a plane from the four parameters. The three components of the resulting plane's [member normal] are [code]a[/code], [code]b[/code] and [code]c[/code], and the plane has a distance of [code]d[/code] from the origin.
 			</description>
 		</method>
 		<method name="center">
@@ -149,17 +176,17 @@
 			The distance from the origin to the plane, in the direction of [member normal]. This value is typically non-negative.
 			In the scalar equation of the plane [code]ax + by + cz = d[/code], this is [code]d[/code], while the [code](a, b, c)[/code] coordinates are represented by the [member normal] property.
 		</member>
-		<member name="normal" type="Vector3" setter="" getter="" default="Vector3( 0, 0, 0 )">
+		<member name="normal" type="Vector3" setter="" getter="" default="Vector3( 3.04896e-32, 0, 3.38586e-34 )">
 			The normal of the plane, which must be normalized.
 			In the scalar equation of the plane [code]ax + by + cz = d[/code], this is the vector [code](a, b, c)[/code], where [code]d[/code] is the [member d] property.
 		</member>
-		<member name="x" type="float" setter="" getter="" default="0.0">
+		<member name="x" type="float" setter="" getter="" default="3.04896e-32">
 			The X component of the plane's [member normal] vector.
 		</member>
 		<member name="y" type="float" setter="" getter="" default="0.0">
 			The Y component of the plane's [member normal] vector.
 		</member>
-		<member name="z" type="float" setter="" getter="" default="0.0">
+		<member name="z" type="float" setter="" getter="" default="3.38586e-34">
 			The Z component of the plane's [member normal] vector.
 		</member>
 	</members>

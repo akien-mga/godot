@@ -31,6 +31,16 @@
 		<method name="Quat">
 			<return type="Quat">
 			</return>
+			<argument index="0" name="arc_from" type="Vector3">
+			</argument>
+			<argument index="1" name="arc_to" type="Vector3">
+			</argument>
+			<description>
+			</description>
+		</method>
+		<method name="Quat">
+			<return type="Quat">
+			</return>
 			<argument index="0" name="axis" type="Vector3">
 			</argument>
 			<argument index="1" name="angle" type="float">
@@ -55,6 +65,22 @@
 			</argument>
 			<description>
 				Constructs a quaternion from the given [Basis].
+			</description>
+		</method>
+		<method name="Quat">
+			<return type="Quat">
+			</return>
+			<argument index="0" name="from" type="Quat">
+			</argument>
+			<description>
+				Constructs a [Quat] as a copy of the given [Quat].
+			</description>
+		</method>
+		<method name="Quat">
+			<return type="Quat">
+			</return>
+			<description>
+				Constructs a default-initialized quaternion with all components set to [code]0[/code].
 			</description>
 		</method>
 		<method name="cubic_slerp">
@@ -157,11 +183,11 @@
 		</method>
 	</methods>
 	<members>
-		<member name="w" type="float" setter="" getter="" default="1.0">
+		<member name="w" type="float" setter="" getter="" default="0.0">
 			W component of the quaternion (real part).
 			Quaternion components should usually not be manipulated directly.
 		</member>
-		<member name="x" type="float" setter="" getter="" default="0.0">
+		<member name="x" type="float" setter="" getter="" default="3.04896e-32">
 			X component of the quaternion (imaginary [code]i[/code] axis part).
 			Quaternion components should usually not be manipulated directly.
 		</member>
@@ -169,7 +195,7 @@
 			Y component of the quaternion (imaginary [code]j[/code] axis part).
 			Quaternion components should usually not be manipulated directly.
 		</member>
-		<member name="z" type="float" setter="" getter="" default="0.0">
+		<member name="z" type="float" setter="" getter="" default="3.38586e-34">
 			Z component of the quaternion (imaginary [code]k[/code] axis part).
 			Quaternion components should usually not be manipulated directly.
 		</member>
