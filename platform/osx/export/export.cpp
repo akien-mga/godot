@@ -399,6 +399,7 @@ Error EditorExportPlatformOSX::_code_sign(const Ref<EditorExportPreset> &p_prese
 	args.push_back(p_preset->get("codesign/identity"));
 
 	args.push_back("-v"); /* provide some more feedback */
+	args.push_back("--deep"); /* sign all libraries in the package */
 
 	args.push_back(p_path);
 
@@ -604,20 +605,33 @@ Error EditorExportPlatformOSX::export_project(const Ref<EditorExportPreset> &p_p
 		}
 
 		if (data.size() > 0) {
-
-			if (file.find("/data.mono.osx.64.release_debug/") != -1) {
+			if (file.find("/data.mono.osx.64.frameworks.release_debug/") != -1) {
 				if (!p_debug) {
 					ret = unzGoToNextFile(src_pkg_zip);
 					continue; // skip
 				}
-				file = file.replace("/data.mono.osx.64.release_debug/", "/data_" + pkg_name + "/");
+				file = file.replace("/data.mono.osx.64.frameworks.release_debug/", "/Mono/");
 			}
-			if (file.find("/data.mono.osx.64.release/") != -1) {
+			if (file.find("/data.mono.osx.64.frameworks.release/") != -1) {
 				if (p_debug) {
 					ret = unzGoToNextFile(src_pkg_zip);
 					continue; // skip
 				}
-				file = file.replace("/data.mono.osx.64.release/", "/data_" + pkg_name + "/");
+				file = file.replace("/data.mono.osx.64.frameworks.release/", "/Mono/");
+			}
+			if (file.find("/data.mono.osx.64.resources.release_debug/") != -1) {
+				if (!p_debug) {
+					ret = unzGoToNextFile(src_pkg_zip);
+					continue; // skip
+				}
+				file = file.replace("/data.mono.osx.64.resources.release_debug/", "/Mono/");
+			}
+			if (file.find("/data.mono.osx.64.resources.release/") != -1) {
+				if (p_debug) {
+					ret = unzGoToNextFile(src_pkg_zip);
+					continue; // skip
+				}
+				file = file.replace("/data.mono.osx.64.resources.release/", "/Mono/");
 			}
 
 			print_line("ADDING: " + file + " size: " + itos(data.size()));

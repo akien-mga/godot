@@ -25,7 +25,11 @@ def build(env_mono, api_sln_cmd):
     assert env_mono["tools"]
 
     output_dir = Dir("#bin").abspath
-    editor_tools_dir = os.path.join(output_dir, "GodotSharp", "Tools")
+    editor_tools_dir = (
+        os.path.join(output_dir, "GodotSharp", "Tools")
+        if env_mono["platform"] != "osx"
+        else os.path.join(output_dir, "GodotSharp.resources", "Tools")
+    )
 
     target_filenames = ["GodotTools.dll"]
 

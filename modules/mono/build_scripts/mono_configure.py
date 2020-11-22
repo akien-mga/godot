@@ -404,60 +404,91 @@ def make_template_dir(env, mono_root):
     platform = env["platform"]
     target = env["target"]
 
-    template_dir_name = ""
-
     assert is_desktop(platform)
 
-    template_dir_name = "data.mono.%s.%s.%s" % (platform, env["bits"], target)
+    if platform == "osx":
+        template_frameworks_dir_name = "data.mono.%s.%s.frameworks.%s" % (platform, env["bits"], target)
+        template_resources_dir_name = "data.mono.%s.%s.resources.%s" % (platform, env["bits"], target)
 
-    output_dir = Dir("#bin").abspath
-    template_dir = os.path.join(output_dir, template_dir_name)
+        output_dir = Dir("#bin").abspath
 
-    template_mono_root_dir = os.path.join(template_dir, "Mono")
+        template_frameworks_mono_root_dir = os.path.join(output_dir, template_frameworks_dir_name)
+        template_resources_mono_root_dir = os.path.join(output_dir, template_resources_dir_name)
 
-    if os.path.isdir(template_mono_root_dir):
-        rmtree(template_mono_root_dir)  # Clean first
+        if os.path.isdir(template_frameworks_mono_root_dir):
+            rmtree(template_frameworks_mono_root_dir)  # Clean first
+        if os.path.isdir(template_resources_mono_root_dir):
+            rmtree(template_resources_mono_root_dir)  # Clean first
 
-    # Copy etc/mono/
+        template_mono_config_dir = os.path.join(template_resources_mono_root_dir, "etc", "mono")
 
-    template_mono_config_dir = os.path.join(template_mono_root_dir, "etc", "mono")
-    copy_mono_etc_dir(mono_root, template_mono_config_dir, platform)
+        copy_mono_etc_dir(mono_root, template_mono_config_dir, platform)
+        copy_mono_shared_libs(env, mono_root, template_frameworks_mono_root_dir)
+    else:
+        template_dir_name = "data.mono.%s.%s.%s" % (platform, env["bits"], target)
 
-    # Copy the required shared libraries
+        output_dir = Dir("#bin").abspath
+        template_dir = os.path.join(output_dir, template_dir_name)
 
-    copy_mono_shared_libs(env, mono_root, template_mono_root_dir)
+        template_mono_root_dir = os.path.join(template_dir, "Mono")
+
+        if os.path.isdir(template_mono_root_dir):
+            rmtree(template_mono_root_dir)  # Clean first
+
+        # Copy etc/mono/
+
+        template_mono_config_dir = os.path.join(template_mono_root_dir, "etc", "mono")
+        copy_mono_etc_dir(mono_root, template_mono_config_dir, platform)
+
+        # Copy the required shared libraries
+
+        copy_mono_shared_libs(env, mono_root, template_mono_root_dir)
 
 
 def copy_mono_root_files(env, mono_root, mono_bcl):
-    from glob import glob
-    from shutil import copy
     from shutil import rmtree
 
     if not mono_root:
         raise RuntimeError("Mono installation directory not found")
 
-    output_dir = Dir("#bin").abspath
-    editor_mono_root_dir = os.path.join(output_dir, "GodotSharp", "Mono")
+    if env["platform"] == "osx":
+        output_dir = Dir("#bin").abspath
+        editor_frameworks_mono_root_dir = os.path.join(output_dir, "GodotSharp.frameworks", "Mono")
+        editor_resources_mono_root_dir = os.path.join(output_dir, "GodotSharp.resources", "Mono")
 
-    if os.path.isdir(editor_mono_root_dir):
-        rmtree(editor_mono_root_dir)  # Clean first
+        if os.path.isdir(editor_frameworks_mono_root_dir):
+            rmtree(editor_frameworks_mono_root_dir)  # Clean first
+        if os.path.isdir(editor_resources_mono_root_dir):
+            rmtree(editor_resources_mono_root_dir)  # Clean first
 
-    # Copy etc/mono/
+        editor_mono_config_dir = os.path.join(editor_resources_mono_root_dir, "etc", "mono")
 
-    editor_mono_config_dir = os.path.join(editor_mono_root_dir, "etc", "mono")
-    copy_mono_etc_dir(mono_root, editor_mono_config_dir, env["platform"])
+        copy_mono_etc_dir(mono_root, editor_mono_config_dir, env["platform"])
+        copy_mono_shared_libs(env, mono_root, editor_frameworks_mono_root_dir)
+        copy_framework_assemblies(mono_root, editor_resources_mono_root_dir, mono_bcl)
+    else:
+        output_dir = Dir("#bin").abspath
+        editor_mono_root_dir = os.path.join(output_dir, "GodotSharp", "Mono")
 
-    # Copy the required shared libraries
+        if os.path.isdir(editor_mono_root_dir):
+            rmtree(editor_mono_root_dir)  # Clean first
 
-    copy_mono_shared_libs(env, mono_root, editor_mono_root_dir)
+        editor_mono_config_dir = os.path.join(editor_mono_root_dir, "etc", "mono")
 
-    # Copy framework assemblies
+        copy_mono_etc_dir(mono_root, editor_mono_config_dir, env["platform"])
+        copy_mono_shared_libs(env, mono_root, editor_mono_root_dir)
+        copy_framework_assemblies(mono_root, editor_mono_root_dir, mono_bcl)
 
-    mono_framework_dir = mono_bcl or os.path.join(mono_root, "lib", "mono", "4.5")
-    mono_framework_facades_dir = os.path.join(mono_framework_dir, "Facades")
+
+def copy_framework_assemblies(mono_root, editor_mono_root_dir, mono_bcl):
+    from glob import glob
+    from shutil import copy
 
     editor_mono_framework_dir = os.path.join(editor_mono_root_dir, "lib", "mono", "4.5")
     editor_mono_framework_facades_dir = os.path.join(editor_mono_framework_dir, "Facades")
+
+    mono_framework_dir = mono_bcl or os.path.join(mono_root, "lib", "mono", "4.5")
+    mono_framework_facades_dir = os.path.join(mono_framework_dir, "Facades")
 
     if not os.path.isdir(editor_mono_framework_dir):
         os.makedirs(editor_mono_framework_dir)
