@@ -35,6 +35,10 @@ if env["tests"]:
     )
     env.AlwaysBuild("modules_tests.gen.h")
 
+# Some modules like webrtc depend on gdnative code generation, so make sure to put
+# include the gdnative SCsub *last* so that it is built *first*.
+env.module_list["gdnative"] = env.module_list.pop("gdnative")
+
 vs_sources = []
 # libmodule_<name>.a for each active module.
 for name, path in env.module_list.items():
