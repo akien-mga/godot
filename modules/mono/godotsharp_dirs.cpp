@@ -180,16 +180,16 @@ private:
 
 #ifdef OSX_ENABLED
 		if (!DirAccess::exists(data_editor_tools_dir)) {
-			data_editor_tools_dir = exe_dir.plus_file("../Resources/GodotSharp/Tools");
+			data_editor_tools_dir = exe_dir.plus_file("../GodotSharp/Tools");
 		}
 
 		if (!DirAccess::exists(data_editor_prebuilt_api_dir)) {
-			data_editor_prebuilt_api_dir = exe_dir.plus_file("../Resources/GodotSharp/Api");
+			data_editor_prebuilt_api_dir = exe_dir.plus_file("../GodotSharp/Api");
 		}
 
 		if (!DirAccess::exists(data_mono_root_dir)) {
-			data_mono_etc_dir = exe_dir.plus_file("../Resources/GodotSharp/Mono/etc");
-			data_mono_lib_dir = exe_dir.plus_file("../Resources/GodotSharp/Mono/lib");
+			data_mono_etc_dir = exe_dir.plus_file("../GodotSharp/Mono/etc");
+			data_mono_lib_dir = exe_dir.plus_file("../GodotSharp/Mono/lib");
 		}
 #endif
 
@@ -217,11 +217,11 @@ private:
 #endif
 
 #ifdef OSX_ENABLED
-		data_mono_etc_dir = exe_dir.plus_file("../Resources/GodotSharp/Mono/etc");
-		data_mono_lib_dir = exe_dir.plus_file("../Frameworks/GodotSharp/Mono/lib");
+		data_mono_etc_dir = exe_dir.plus_file("../GodotSharp/Mono/etc");
+		data_mono_lib_dir = exe_dir.plus_file("../GodotSharp/Mono/lib");
 
 		if (!DirAccess::exists(data_game_assemblies_dir)) {
-			data_game_assemblies_dir = exe_dir.plus_file("../Resources/GodotSharp/Assemblies");
+			data_game_assemblies_dir = exe_dir.plus_file("../GodotSharp/Assemblies");
 		}
 #endif
 
