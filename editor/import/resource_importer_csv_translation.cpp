@@ -44,7 +44,7 @@ String ResourceImporterCSVTranslation::get_visible_name() const {
 }
 
 void ResourceImporterCSVTranslation::get_recognized_extensions(List<String> *p_extensions) const {
-	p_extensions->push_back("csv");
+	p_extensions->push_back("tcsv"); // Not .csv to avoid conflict with database CSV files.
 }
 
 String ResourceImporterCSVTranslation::get_save_extension() const {
