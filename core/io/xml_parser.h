@@ -67,13 +67,13 @@ public:
 private:
 	char *data;
 	char *P;
-	int64_t length;
+	uint64_t length;
 	void unescape(String &p_str);
 	Vector<String> special_characters;
 	String node_name;
 	bool node_empty;
 	NodeType node_type;
-	int64_t node_offset;
+	uint64_t node_offset;
 
 	struct Attribute {
 		String name;
@@ -98,7 +98,7 @@ public:
 	NodeType get_node_type();
 	String get_node_name() const;
 	String get_node_data() const;
-	int64_t get_node_offset() const;
+	uint64_t get_node_offset() const;
 	int get_attribute_count() const;
 	String get_attribute_name(int p_idx) const;
 	String get_attribute_value(int p_idx) const;
@@ -109,7 +109,7 @@ public:
 	int get_current_line() const;
 
 	void skip_section();
-	Error seek(int64_t p_pos);
+	Error seek(uint64_t p_pos);
 
 	Error open(const String &p_path);
 	Error open_buffer(const Vector<uint8_t> &p_buffer);

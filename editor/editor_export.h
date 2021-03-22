@@ -153,8 +153,8 @@ public:
 
 private:
 	struct SavedData {
-		int64_t ofs;
-		int64_t size;
+		uint64_t ofs;
+		uint64_t size;
 		Vector<uint8_t> md5;
 		CharString path_utf8;
 

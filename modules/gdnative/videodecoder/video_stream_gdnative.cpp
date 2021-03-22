@@ -48,10 +48,6 @@ godot_int GDAPI godot_videodecoder_file_read(void *ptr, uint8_t *buf, int buf_si
 	// if file exists
 	if (file) {
 		int64_t bytes_read = file->get_buffer(buf, buf_size);
-		// No bytes to read => EOF
-		if (bytes_read == 0) {
-			return 0;
-		}
 		return bytes_read;
 	}
 	return -1;
@@ -69,17 +65,15 @@ int64_t GDAPI godot_videodecoder_file_seek(void *ptr, int64_t pos, int whence) {
 					return -1;
 				}
 				file->seek(pos);
-				pos = file->get_position();
-				return pos;
+				return file->get_position();
 			} break;
 			case SEEK_CUR: {
 				// Just in case it doesn't exist
-				if (pos < 0 && -pos > file->get_position()) {
+				if (pos < 0 && -pos > (int64_t)file->get_position()) {
 					return -1;
 				}
 				file->seek(file->get_position() + pos);
-				pos = file->get_position();
-				return pos;
+				return file->get_position();
 			} break;
 			case SEEK_END: {
 				// Just in case something goes wrong
@@ -87,8 +81,7 @@ int64_t GDAPI godot_videodecoder_file_seek(void *ptr, int64_t pos, int whence) {
 					return -1;
 				}
 				file->seek_end(pos);
-				pos = file->get_position();
-				return pos;
+				return file->get_position();
 			} break;
 			default: {
 				// Only 4 possible options, hence default = AVSEEK_SIZE

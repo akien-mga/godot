@@ -67,7 +67,7 @@ static long godot_tell(voidpf opaque, voidpf stream) {
 static long godot_seek(voidpf opaque, voidpf stream, uLong offset, int origin) {
 	FileAccess *f = (FileAccess *)stream;
 
-	int64_t pos = offset;
+	uint64_t pos = offset;
 	switch (origin) {
 		case ZLIB_FILEFUNC_SEEK_CUR:
 			pos = f->get_position() + offset;
@@ -145,7 +145,7 @@ unzFile ZipArchive::get_file_handle(String p_file) const {
 	return pkg;
 }
 
-bool ZipArchive::try_open_pack(const String &p_path, bool p_replace_files, size_t p_offset = 0) {
+bool ZipArchive::try_open_pack(const String &p_path, bool p_replace_files, uint64_t p_offset = 0) {
 	//printf("opening zip pack %ls, %i, %i\n", p_name.c_str(), p_name.extension().nocasecmp_to("zip"), p_name.extension().nocasecmp_to("pcz"));
 	// load with offset feature only supported for PCK files
 	ERR_FAIL_COND_V_MSG(p_offset != 0, false, "Invalid PCK data. Note that loading files with a non-zero offset isn't supported with ZIP archives.");
@@ -267,8 +267,7 @@ bool FileAccessZip::is_open() const {
 	return zfile != nullptr;
 }
 
-void FileAccessZip::seek(int64_t p_position) {
-	ERR_FAIL_COND(p_position < 0);
+void FileAccessZip::seek(uint64_t p_position) {
 	ERR_FAIL_COND(!zfile);
 
 	unzSeekCurrentFile(zfile, p_position);
@@ -279,12 +278,12 @@ void FileAccessZip::seek_end(int64_t p_position) {
 	unzSeekCurrentFile(zfile, get_len() + p_position);
 }
 
-int64_t FileAccessZip::get_position() const {
+uint64_t FileAccessZip::get_position() const {
 	ERR_FAIL_COND_V(!zfile, 0);
 	return unztell(zfile);
 }
 
-int64_t FileAccessZip::get_len() const {
+uint64_t FileAccessZip::get_len() const {
 	ERR_FAIL_COND_V(!zfile, 0);
 	return file_info.uncompressed_size;
 }
@@ -301,9 +300,8 @@ uint8_t FileAccessZip::get_8() const {
 	return ret;
 }
 
-int64_t FileAccessZip::get_buffer(uint8_t *p_dst, int64_t p_length) const {
+uint64_t FileAccessZip::get_buffer(uint8_t *p_dst, uint64_t p_length) const {
 	ERR_FAIL_COND_V(!p_dst && p_length > 0, -1);
-	ERR_FAIL_COND_V(p_length < 0, -1);
 	ERR_FAIL_COND_V(!zfile, -1);
 
 	at_eof = unzeof(zfile);
@@ -312,7 +310,7 @@ int64_t FileAccessZip::get_buffer(uint8_t *p_dst, int64_t p_length) const {
 	}
 	int64_t read = unzReadCurrentFile(zfile, p_dst, p_length);
 	ERR_FAIL_COND_V(read < 0, read);
-	if (read < p_length) {
+	if ((uint64_t)read < p_length) {
 		at_eof = true;
 	}
 	return read;

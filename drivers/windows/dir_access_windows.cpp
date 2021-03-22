@@ -326,7 +326,7 @@ FileType DirAccessWindows::get_file_type(const String& p_file) const {
 }
 */
 
-int64_t DirAccessWindows::get_space_left() {
+uint64_t DirAccessWindows::get_space_left() {
 	uint64_t bytes = 0;
 	if (!GetDiskFreeSpaceEx(NULL, (PULARGE_INTEGER)&bytes, NULL, NULL))
 		return 0;
