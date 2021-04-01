@@ -149,6 +149,7 @@ Ref<Image> ProceduralSky::_generate_sky() {
 		PoolVector<uint8_t>::Write dataw = imgdata.write();
 
 		uint32_t *ptr = (uint32_t *)dataw.ptr();
+		ERR_FAIL_COND_V(ptr == NULL, Ref<Image>());
 
 		Color sky_top_linear = sky_top_color.to_linear();
 		Color sky_horizon_linear = sky_horizon_color.to_linear();
@@ -419,6 +420,7 @@ void ProceduralSky::_update_sky() {
 
 	} else {
 		panorama = _generate_sky();
+		ERR_FAIL_COND(panorama.is_null());
 		VS::get_singleton()->texture_allocate(texture, panorama->get_width(), panorama->get_height(), 0, Image::FORMAT_RGBE9995, VS::TEXTURE_TYPE_2D, VS::TEXTURE_FLAG_FILTER | VS::TEXTURE_FLAG_REPEAT);
 		VS::get_singleton()->texture_set_data(texture, panorama);
 		_radiance_changed();
@@ -436,10 +438,16 @@ void ProceduralSky::_queue_update() {
 
 void ProceduralSky::_thread_done(const Ref<Image> &p_image) {
 
-	panorama = p_image;
-	VS::get_singleton()->texture_allocate(texture, panorama->get_width(), panorama->get_height(), 0, Image::FORMAT_RGBE9995, VS::TEXTURE_TYPE_2D, VS::TEXTURE_FLAG_FILTER | VS::TEXTURE_FLAG_REPEAT);
-	VS::get_singleton()->texture_set_data(texture, panorama);
-	_radiance_changed();
+	if (p_image.is_null()) {
+		// Bug, handle restarting the thread anyway.
+		ERR_PRINT("Error during generation of ProceduralSky.");
+	} else {
+		panorama = p_image;
+		VS::get_singleton()->texture_allocate(texture, panorama->get_width(), panorama->get_height(), 0, Image::FORMAT_RGBE9995, VS::TEXTURE_TYPE_2D, VS::TEXTURE_FLAG_FILTER | VS::TEXTURE_FLAG_REPEAT);
+		VS::get_singleton()->texture_set_data(texture, panorama);
+		_radiance_changed();
+	}
+
 	sky_thread.wait_to_finish();
 	if (regen_queued) {
 		sky_thread.start(_thread_function, this);
