@@ -108,13 +108,11 @@ comments.
 - Version: git (403d38b3f1cb347c196d845d0a05e44a00d17169, 2021)
 - License: BSD-3-Clause
 
-- Upstream: https://gist.github.com/jtbr/7a43e6281e6cca353b33ee501421860c
-- License: MIT
+Important: Some Godot-made changes, see `patches` folders.
 
-Important: Some Godot-made changes.
 Files extracted from upstream source:
 
-- All `.cpp`, `.h` and `.hpp` files
+- All `.cpp`, `.h` and `.hpp` files except `Application.cpp` and `getopt/`.
 - `AUTHORS.txt` and `LICENSE.txt`
 
 ## fonts

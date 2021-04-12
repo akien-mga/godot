@@ -21,12 +21,6 @@
 #  else
 #    include <x86intrin.h>
 #  endif
-#else
-#  ifndef _MSC_VER
-#    include <byteswap.h>
-#    define _bswap(x) bswap_32(x)
-#    define _bswap64(x) bswap_64(x)
-#  endif
 #endif
 
 #ifndef _bswap
@@ -1733,7 +1727,7 @@ static etcpak_force_inline int16x8_t Planar_NEON_SumWide( uint8x16_t src )
     uint16x4_t accu2 = vpadd_u16( accu4, accu4 );
     uint16x4_t accu1 = vpadd_u16( accu2, accu2 );
     return vreinterpretq_s16_u16( vcombine_u16( accu1, accu1 ) );
-#else 
+#else
     return vdupq_n_s16( vaddvq_u16( accu8 ) );
 #endif
 }

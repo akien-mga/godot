@@ -29,6 +29,7 @@
 /*************************************************************************/
 
 #include "image_etc.h"
+
 #include "core/io/image.h"
 #include "core/os/copymem.h"
 #include "core/os/os.h"
@@ -38,16 +39,10 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+
 #include <future>
 #include <limits>
 #include <memory>
-
-#ifdef _MSC_VER
-#include "getopt/getopt.h"
-#else
-#include <getopt.h>
-#include <unistd.h>
-#endif
 
 #include "thirdparty/etcpak/ProcessDxtc.hpp"
 #include "thirdparty/etcpak/ProcessRGB.hpp"

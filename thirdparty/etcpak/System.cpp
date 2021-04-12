@@ -35,7 +35,7 @@ unsigned int System::CPUCores()
 
 void System::SetThreadName( std::thread& thread, const char* name )
 {
-#ifdef _WIN32
+#ifdef _MSC_VER
     const DWORD MS_VC_EXCEPTION=0x406D1388;
 
 #  pragma pack( push, 8 )
