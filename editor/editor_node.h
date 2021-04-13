@@ -387,6 +387,7 @@ private:
 	uint64_t saved_version;
 	uint64_t last_checked_version;
 	bool unsaved_cache;
+	bool force_update_node_paths_cache;
 	String open_navigate;
 	bool changing_scene;
 	bool waiting_for_first_scan;

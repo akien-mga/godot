@@ -1503,14 +1503,16 @@ void EditorNode::_save_scene(String p_file, int idx) {
 		return;
 	}
 
-	// force creation of node path cache
-	// (hacky but needed for the tree to update properly)
-	Node *dummy_scene = sdata->instance(PackedScene::GEN_EDIT_STATE_INSTANCE);
-	if (!dummy_scene) {
-		show_accept(TTR("Couldn't save scene. Likely dependencies (instances or inheritance) couldn't be satisfied."), TTR("OK"));
-		return;
+	if (force_update_node_paths_cache) {
+		// force creation of node path cache
+		// (hacky but needed for the tree to update properly)
+		Node *dummy_scene = sdata->instance(PackedScene::GEN_EDIT_STATE_INSTANCE);
+		if (!dummy_scene) {
+			show_accept(TTR("Couldn't save scene. Likely dependencies (instances or inheritance) couldn't be satisfied."), TTR("OK"));
+			return;
+		}
+		memdelete(dummy_scene);
 	}
-	memdelete(dummy_scene);
 
 	int flg = 0;
 	if (EditorSettings::get_singleton()->get("filesystem/on_save/compress_binary_resources"))
@@ -5842,6 +5844,7 @@ EditorNode::EditorNode() {
 	cmdline_export_mode = false;
 	scene_distraction = false;
 	script_distraction = false;
+	force_update_node_paths_cache = GLOBAL_DEF_RST("editor/validate_node_paths_on_scene_save", true);
 
 	TranslationServer::get_singleton()->set_enabled(false);
 	// load settings
