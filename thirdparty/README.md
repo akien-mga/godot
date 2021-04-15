@@ -83,20 +83,20 @@ It is still possible to build against a system wide ENet but doing so
 will limit its functionality to IPv4 only.
 
 
-## etc2comp
+## etcpak
 
-- Upstream: https://github.com/google/etc2comp
-- Version: git (9cd0f9cae0f32338943699bb418107db61bb66f2, 2017)
-- License: Apache 2.0
+- Upstream: https://github.com/wolfpld/etcpak
+- Version: git (f27daea656ff77671580f838a889e33049430ebd, 2021)
+- License: BSD-3-Clause
 
 Files extracted from upstream source:
 
-- all .cpp and .h files in EtcLib/
-- README.md, LICENSE, AUTHORS
-
-Important: Some files have Godot-made changes.
-They are marked with `// -- GODOT start --` and `// -- GODOT end --`
-comments.
+- Only the files relevant for compression (i.e. `Process*.cpp` and their deps):
+  ```
+  Dither.{cpp,hpp} ForceInline.hpp Math.hpp ProcessCommon.hpp ProcessRGB.{cpp,hpp}
+  ProcessDxtc.{cpp,hpp} Tables.{cpp,hpp} Vector.hpp
+  ```
+- `AUTHORS.txt` and `LICENSE.txt`
 
 
 ## fonts

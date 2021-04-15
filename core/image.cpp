@@ -1943,6 +1943,16 @@ int Image::get_image_mipmap_offset(int p_width, int p_height, Format p_format, i
 	return _get_dst_image_size(p_width, p_height, p_format, mm, p_mipmap - 1);
 }
 
+int Image::get_image_mipmap_offset_and_dimensions(int p_width, int p_height, Format p_format, int p_mipmap, int &r_w, int &r_h) {
+	if (p_mipmap <= 0) {
+		r_w = p_width;
+		r_h = p_height;
+		return 0;
+	}
+	int mm;
+	return _get_dst_image_size(p_width, p_height, p_format, mm, p_mipmap - 1, &r_w, &r_h);
+}
+
 bool Image::is_compressed() const {
 	return format > FORMAT_RGBE9995;
 }
