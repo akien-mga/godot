@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [3.3] - TBD
+## [3.3] - 2021-04-21
 
 See the [release announcement](TBD) for details.
 
@@ -173,7 +173,7 @@ See the [release announcement](TBD) for details.
 #### Mono (C#)
 
 - [The `copy_mono_root` SCons build option now defaults to `yes`](https://github.com/godotengine/godot/pull/42332).
-- Official builds now use Mono 6.12.0.114.
+- Official builds now use Mono 6.12.0.122.
 
 #### Networking
 
@@ -1583,7 +1583,6 @@ See the [release announcement](https://godotengine.org/article/maintenance-relea
 - HTML5 export using asm.js.
   - Only WebAssembly is supported now, since all browsers supporting WebGL 2.0 also support WebAssembly.
 
-[Unreleased]: https://github.com/godotengine/godot/compare/3.3-stable...HEAD
 [3.3]: https://downloads.tuxfamily.org/godotengine/3.3/Godot_v3.3-stable_changelog_chrono.txt
 [3.2.3]: https://downloads.tuxfamily.org/godotengine/3.2.3/Godot_v3.2.3-stable_changelog_chrono.txt
 [3.2.2]: https://downloads.tuxfamily.org/godotengine/3.2.2/Godot_v3.2.2-stable_changelog_chrono.txt
