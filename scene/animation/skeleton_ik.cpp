@@ -312,22 +312,24 @@ void FabrikInverseKinematic::solve(Task *p_task, real_t blending_delta, bool ove
 
 		// The root bone needs to be rotated differently so it isn't frozen in place
 		if (ci == &p_task->chain.chain_root && !ci->children.empty()) {
-			new_bone_pose = new_bone_pose.looking_at(ci->children[0].current_pos, Vector3(0, 1, 0));
-			const Vector3 bone_rest_dir = p_task->skeleton->get_bone_rest(ci->children[0].bone).origin.normalized().abs();
+			const Vector3 bone_rest_dir = p_task->skeleton->get_bone_rest(ci->children[0].bone).origin.normalized();
 			const Vector3 bone_rest_dir_abs = bone_rest_dir.abs();
 			if (bone_rest_dir_abs.x > bone_rest_dir_abs.y && bone_rest_dir_abs.x > bone_rest_dir_abs.z) {
+				new_bone_pose = new_bone_pose.looking_at(ci->children[0].current_pos, Vector3(0, 1, 0));
 				if (bone_rest_dir.x < 0) {
 					new_bone_pose.basis.rotate_local(Vector3(0, 1, 0), -Math_PI / 2.0f);
 				} else {
 					new_bone_pose.basis.rotate_local(Vector3(0, 1, 0), Math_PI / 2.0f);
 				}
 			} else if (bone_rest_dir_abs.y > bone_rest_dir_abs.x && bone_rest_dir_abs.y > bone_rest_dir_abs.z) {
+				new_bone_pose = new_bone_pose.looking_at(ci->children[0].current_pos, Vector3(0, 1, 0));
 				if (bone_rest_dir.y < 0) {
 					new_bone_pose.basis.rotate_local(Vector3(1, 0, 0), Math_PI / 2.0f);
 				} else {
 					new_bone_pose.basis.rotate_local(Vector3(1, 0, 0), -Math_PI / 2.0f);
 				}
 			} else {
+				new_bone_pose = new_bone_pose.looking_at(ci->children[0].current_pos, Vector3(1, 0, 0));
 				if (bone_rest_dir.z < 0) {
 					// Do nothing!
 				} else {
