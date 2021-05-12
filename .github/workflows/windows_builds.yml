@@ -5,9 +5,7 @@ on: [push, pull_request]
 # SCONS_CACHE for windows must be set in the build environment
 env:
   GODOT_BASE_BRANCH: master
-  SCONSFLAGS: platform=windows verbose=yes warnings=all werror=yes debug_symbols=no --jobs=2 module_text_server_fb_enabled=yes
-  SCONS_CACHE_MSVC_CONFIG: true
-  SCONS_CACHE_LIMIT: 3072
+  SCONSFLAGS: platform=windows verbose=yes warnings=extra werror=no debug_symbols=no --jobs=2 module_text_server_fb_enabled=yes
 
 jobs:
   windows-editor:
@@ -19,19 +17,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
-      # Upload cache on completion and check it out now
-      # Editing this is pretty dangerous for Windows since it can break and needs to be properly tested with a fresh cache.
-    - name: Load .scons_cache directory
-      id: windows-editor-cache
-      uses: actions/cache@v2
-      with:
-        path: /.scons_cache/
-        key: ${{github.job}}-${{env.GODOT_BASE_BRANCH}}-${{github.ref}}-${{github.sha}}
-        restore-keys: |
-          ${{github.job}}-${{env.GODOT_BASE_BRANCH}}-${{github.ref}}-${{github.sha}}
-          ${{github.job}}-${{env.GODOT_BASE_BRANCH}}-${{github.ref}}
-          ${{github.job}}-${{env.GODOT_BASE_BRANCH}}
 
     # Use python 3.x release (works cross platform; best to keep self contained in it's own step)
     - name: Set up Python 3.x
@@ -52,8 +37,6 @@ jobs:
 
     # We should always be explicit with our flags usage here since it's gonna be sure to always set those flags
     - name: Compilation
-      env:
-        SCONS_CACHE: /.scons_cache/
       run: |
         scons tools=yes tests=yes target=release_debug
         ls -l bin/
@@ -76,19 +59,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    # Upload cache on completion and check it out now
-    # Editing this is pretty dangerous for Windows since it can break and needs to be properly tested with a fresh cache.
-    - name: Load .scons_cache directory
-      id: windows-template-cache
-      uses: RevoluPowered/cache@v2.1
-      with:
-        path: /.scons_cache/
-        key: ${{github.job}}-${{env.GODOT_BASE_BRANCH}}-${{github.ref}}-${{github.sha}}
-        restore-keys: |
-          ${{github.job}}-${{env.GODOT_BASE_BRANCH}}-${{github.ref}}-${{github.sha}}
-          ${{github.job}}-${{env.GODOT_BASE_BRANCH}}-${{github.ref}}
-          ${{github.job}}-${{env.GODOT_BASE_BRANCH}}
-
     # Use python 3.x release (works cross platform)
     - name: Set up Python 3.x
       uses: actions/setup-python@v2
@@ -107,8 +77,6 @@ jobs:
         scons --version
 
     - name: Compilation
-      env:
-        SCONS_CACHE: /.scons_cache/
       run: |
         scons target=release tools=no
         ls -l bin/
