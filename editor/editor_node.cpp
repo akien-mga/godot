@@ -96,6 +96,7 @@
 #include "editor/export/editor_export.h"
 #include "editor/export/export_template_manager.h"
 #include "editor/export/project_export.h"
+#include "editor/fbx_importer_manager.h"
 #include "editor/filesystem_dock.h"
 #include "editor/history_dock.h"
 #include "editor/import/audio_stream_import_settings.h"
@@ -2981,7 +2982,9 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 		} break;
 		case SETTINGS_MANAGE_EXPORT_TEMPLATES: {
 			export_template_manager->popup_manager();
-
+		} break;
+		case SETTINGS_MANAGE_FBX_IMPORTER: {
+			fbx_importer_manager->show_dialog();
 		} break;
 		case SETTINGS_INSTALL_ANDROID_BUILD_TEMPLATE: {
 			custom_build_manage_templates->hide();
@@ -6624,6 +6627,9 @@ EditorNode::EditorNode() {
 	gui_base->add_child(about);
 	feature_profile_manager->connect("current_feature_profile_changed", callable_mp(this, &EditorNode::_feature_profile_changed));
 
+	fbx_importer_manager = memnew(FBXImporterManager);
+	gui_base->add_child(fbx_importer_manager);
+
 	warning = memnew(AcceptDialog);
 	warning->add_button(TTR("Copy Text"), true, "copy");
 	gui_base->add_child(warning);
@@ -6795,6 +6801,7 @@ EditorNode::EditorNode() {
 	settings_menu->add_item(TTR("Manage Editor Features..."), SETTINGS_MANAGE_FEATURE_PROFILES);
 #ifndef ANDROID_ENABLED
 	settings_menu->add_item(TTR("Manage Export Templates..."), SETTINGS_MANAGE_EXPORT_TEMPLATES);
+	settings_menu->add_item(TTR("Configure FBX Importer..."), SETTINGS_MANAGE_FBX_IMPORTER);
 #endif
 
 	help_menu = memnew(PopupMenu);
