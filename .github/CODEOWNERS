@@ -168,6 +168,7 @@
 ## Text
 /modules/freetype/                            @godotengine/buildsystem
 /modules/msdfgen/                             @godotengine/buildsystem
+/modules/skia/                                @godotengine/buildsystem
 /modules/text_server_adv/                     @godotengine/gui-nodes
 /modules/text_server_adv/doc_classes/         @godotengine/gui-nodes @godotengine/documentation
 /modules/text_server_fb/                      @godotengine/gui-nodes

@@ -40,7 +40,7 @@
 #include "core/string/translation_server.h"
 #include "scene/resources/image_texture.h"
 
-#include "modules/modules_enabled.gen.h" // For freetype, msdfgen, svg.
+#include "modules/modules_enabled.gen.h" // For freetype, msdfgen, svg, skia.
 
 // Built-in ICU data.
 
@@ -58,6 +58,7 @@ GODOT_MSVC_WARNING_PUSH_AND_IGNORE(4458) // "Declaration of 'identifier' hides c
 #include <core/ShapeDistanceFinder.h>
 #include <core/contour-combiners.h>
 #include <core/edge-selectors.h>
+#include <ext/resolve-shape-geometry.h>
 #include <msdfgen.h>
 
 GODOT_GCC_WARNING_POP
@@ -1014,6 +1015,9 @@ _FORCE_INLINE_ TextServerAdvanced::FontGlyph TextServerAdvanced::rasterize_msdf(
 
 	shape.inverseYAxis = true;
 	shape.normalize();
+#ifdef MODULE_SKIA_ENABLED
+	resolveShapeGeometry(shape);
+#endif
 
 	msdfgen::Shape::Bounds bounds = shape.getBounds(p_pixel_range);
 
