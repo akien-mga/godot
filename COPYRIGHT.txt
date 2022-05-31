@@ -581,6 +581,11 @@ Comment: hidapi
 Copyright: 2010, Alan Ott, Signal 11 Software
 License: BSD-3-clause
 
+Files: ./thirdparty/skia/*
+Comment: Skia
+Copyright: 2011, Google Inc.
+License: BSD-3-clause
+
 Files: thirdparty/spirv-cross/*
 Comment: SPIRV-Cross
 Copyright: 2015-2021, Arm Limited
