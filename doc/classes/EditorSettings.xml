@@ -450,10 +450,10 @@
 		<member name="filesystem/file_dialog/thumbnail_size" type="int" setter="" getter="">
 			The thumbnail size to use in the editor's file dialogs (in pixels). See also [member docks/filesystem/thumbnail_size].
 		</member>
-		<member name="filesystem/on_save/compress_binary_resources" type="bool" setter="" getter="">
+		<member name="filesystem/saving/compress_binary_resources" type="bool" setter="" getter="">
 			If [code]true[/code], uses lossless compression for binary resources.
 		</member>
-		<member name="filesystem/on_save/safe_save_on_backup_then_rename" type="bool" setter="" getter="">
+		<member name="filesystem/saving/safe_save_on_backup_then_rename" type="bool" setter="" getter="">
 			If [code]true[/code], when saving a file, the editor will rename the old file to a different name, save a new file, then only remove the old file once the new file has been saved. This makes loss of data less likely to happen if the editor or operating system exits unexpectedly while saving (e.g. due to a crash or power outage).
 			[b]Note:[/b] On Windows, this feature can interact negatively with certain antivirus programs. In this case, you may have to set this to [code]false[/code] to prevent file locking issues.
 		</member>

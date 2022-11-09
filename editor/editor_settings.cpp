@@ -478,8 +478,8 @@ void EditorSettings::_load_defaults(Ref<ConfigFile> p_extra_config) {
 	EDITOR_SETTING(Variant::STRING, PROPERTY_HINT_GLOBAL_DIR, "filesystem/directories/default_project_path", fs_dir_default_project_path, "")
 
 	// On save
-	_initial_set("filesystem/on_save/compress_binary_resources", true);
-	_initial_set("filesystem/on_save/safe_save_on_backup_then_rename", true);
+	_initial_set("filesystem/saving/compress_binary_resources", true);
+	_initial_set("filesystem/saving/safe_save_on_backup_then_rename", true);
 
 	// File dialog
 	_initial_set("filesystem/file_dialog/show_hidden_files", false);

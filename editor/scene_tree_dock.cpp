@@ -2453,7 +2453,7 @@ void SceneTreeDock::_new_scene_from(String p_file) {
 		}
 
 		int flg = 0;
-		if (EDITOR_GET("filesystem/on_save/compress_binary_resources")) {
+		if (EDITOR_GET("filesystem/saving/compress_binary_resources")) {
 			flg |= ResourceSaver::FLAG_COMPRESS;
 		}
 

@@ -1203,7 +1203,7 @@ void EditorNode::edit_node(Node *p_node) {
 void EditorNode::save_resource_in_path(const Ref<Resource> &p_resource, const String &p_path) {
 	editor_data.apply_changes_in_editors();
 	int flg = 0;
-	if (EDITOR_GET("filesystem/on_save/compress_binary_resources")) {
+	if (EDITOR_GET("filesystem/saving/compress_binary_resources")) {
 		flg |= ResourceSaver::FLAG_COMPRESS;
 	}
 
@@ -1631,7 +1631,7 @@ int EditorNode::_save_external_resources() {
 	// Save external resources and its subresources if any was modified.
 
 	int flg = 0;
-	if (EDITOR_GET("filesystem/on_save/compress_binary_resources")) {
+	if (EDITOR_GET("filesystem/saving/compress_binary_resources")) {
 		flg |= ResourceSaver::FLAG_COMPRESS;
 	}
 	flg |= ResourceSaver::FLAG_REPLACE_SUBRESOURCE_PATHS;
@@ -1737,7 +1737,7 @@ void EditorNode::_save_scene(String p_file, int idx) {
 	}
 
 	int flg = 0;
-	if (EDITOR_GET("filesystem/on_save/compress_binary_resources")) {
+	if (EDITOR_GET("filesystem/saving/compress_binary_resources")) {
 		flg |= ResourceSaver::FLAG_COMPRESS;
 	}
 	flg |= ResourceSaver::FLAG_REPLACE_SUBRESOURCE_PATHS;
@@ -6058,7 +6058,7 @@ EditorNode::EditorNode() {
 		EditorSettings::create();
 	}
 
-	FileAccess::set_backup_save(EDITOR_GET("filesystem/on_save/safe_save_on_backup_then_rename"));
+	FileAccess::set_backup_save(EDITOR_GET("filesystem/saving/safe_save_on_backup_then_rename"));
 
 	{
 		int display_scale = EDITOR_GET("interface/editor/display_scale");
