@@ -1674,45 +1674,49 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 	OS::get_singleton()->set_cmdline(execpath, main_args, user_args);
 
 	{
-		String driver_hints = "";
+		HashMap<String, Vector<String>> platforms_drivers_hints;
 #ifdef VULKAN_ENABLED
-		driver_hints = "vulkan";
+		platforms_drivers_hints["windows"].push_back("vulkan");
+		platforms_drivers_hints["linuxbsd"].push_back("vulkan");
+		platforms_drivers_hints["android"].push_back("vulkan");
+		platforms_drivers_hints["ios"].push_back("vulkan");
+		platforms_drivers_hints["macos"].push_back("vulkan");
 #endif
-
-		String default_driver = driver_hints.get_slice(",", 0);
-
-		// For now everything defaults to vulkan when available. This can change in future updates.
+#ifdef D3D12_ENABLED
+		platforms_drivers_hints["windows"].push_back("d3d12");
+#endif
+		String default_driver = platforms_drivers_hints.size() ? platforms_drivers_hints.begin()->value[0] : String(); // Defaulting to the first one seen.
 		GLOBAL_DEF("rendering/rendering_device/driver", default_driver);
-		GLOBAL_DEF(PropertyInfo(Variant::STRING, "rendering/rendering_device/driver.windows", PROPERTY_HINT_ENUM, driver_hints), default_driver);
-		GLOBAL_DEF(PropertyInfo(Variant::STRING, "rendering/rendering_device/driver.linuxbsd", PROPERTY_HINT_ENUM, driver_hints), default_driver);
-		GLOBAL_DEF(PropertyInfo(Variant::STRING, "rendering/rendering_device/driver.android", PROPERTY_HINT_ENUM, driver_hints), default_driver);
-		GLOBAL_DEF(PropertyInfo(Variant::STRING, "rendering/rendering_device/driver.ios", PROPERTY_HINT_ENUM, driver_hints), default_driver);
-		GLOBAL_DEF(PropertyInfo(Variant::STRING, "rendering/rendering_device/driver.macos", PROPERTY_HINT_ENUM, driver_hints), default_driver);
+		for (const KeyValue<String, Vector<String>> &E : platforms_drivers_hints) {
+			String hints_string = String(",").join(E.value);
+			GLOBAL_DEF(PropertyInfo(Variant::STRING, "rendering/rendering_device/driver." + E.key, PROPERTY_HINT_ENUM, hints_string), default_driver);
+		}
 
-		driver_hints = "";
+		platforms_drivers_hints.clear();
 #ifdef GLES3_ENABLED
-		driver_hints += "opengl3";
+		platforms_drivers_hints["windows"].push_back("opengl3");
+		platforms_drivers_hints["linuxbsd"].push_back("opengl3");
+		platforms_drivers_hints["web"].push_back("opengl3");
+		platforms_drivers_hints["android"].push_back("opengl3");
+		platforms_drivers_hints["ios"].push_back("opengl3");
+		platforms_drivers_hints["macos"].push_back("opengl3");
 #endif
-
-		default_driver = driver_hints.get_slice(",", 0);
-
+		default_driver = platforms_drivers_hints.size() ? platforms_drivers_hints.begin()->value[0] : String(); // Defaulting to the first one seen.
 		GLOBAL_DEF("rendering/gl_compatibility/driver", default_driver);
-		GLOBAL_DEF(PropertyInfo(Variant::STRING, "rendering/gl_compatibility/driver.windows", PROPERTY_HINT_ENUM, driver_hints), default_driver);
-		GLOBAL_DEF(PropertyInfo(Variant::STRING, "rendering/gl_compatibility/driver.linuxbsd", PROPERTY_HINT_ENUM, driver_hints), default_driver);
-		GLOBAL_DEF(PropertyInfo(Variant::STRING, "rendering/gl_compatibility/driver.web", PROPERTY_HINT_ENUM, driver_hints), default_driver);
-		GLOBAL_DEF(PropertyInfo(Variant::STRING, "rendering/gl_compatibility/driver.android", PROPERTY_HINT_ENUM, driver_hints), default_driver);
-		GLOBAL_DEF(PropertyInfo(Variant::STRING, "rendering/gl_compatibility/driver.ios", PROPERTY_HINT_ENUM, driver_hints), default_driver);
-		GLOBAL_DEF(PropertyInfo(Variant::STRING, "rendering/gl_compatibility/driver.macos", PROPERTY_HINT_ENUM, driver_hints), default_driver);
+		for (const KeyValue<String, Vector<String>> &E : platforms_drivers_hints) {
+			String hints_string = String(",").join(E.value);
+			GLOBAL_DEF(PropertyInfo(Variant::STRING, "rendering/gl_compatibility/driver." + E.key, PROPERTY_HINT_ENUM, hints_string), default_driver);
+		}
 		GLOBAL_DEF_RST("rendering/gl_compatibility/nvidia_disable_threaded_optimization", true);
 	}
 
 	// Start with RenderingDevice-based backends. Should be included if any RD driver present.
-#ifdef VULKAN_ENABLED
+#if defined(VULKAN_ENABLED) || defined(D3D12_ENABLED)
 	renderer_hints = "forward_plus,mobile";
 	default_renderer_mobile = "mobile";
 #endif
 
-	// And Compatibility next, or first if Vulkan is disabled.
+	// And Compatibility next, or first if all RD ones are disabled.
 #ifdef GLES3_ENABLED
 	if (!renderer_hints.is_empty()) {
 		renderer_hints += ",";
@@ -1787,11 +1791,14 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 		// Now validate whether the selected driver matches with the renderer.
 		bool valid_combination = false;
 		Vector<String> available_drivers;
-#ifdef VULKAN_ENABLED
 		if (rendering_method == "forward_plus" || rendering_method == "mobile") {
+#ifdef VULKAN_ENABLED
 			available_drivers.push_back("vulkan");
-		}
 #endif
+#ifdef D3D12_ENABLED
+			available_drivers.push_back("d3d12");
+#endif
+		}
 #ifdef GLES3_ENABLED
 		if (rendering_method == "gl_compatibility") {
 			available_drivers.push_back("opengl3");
