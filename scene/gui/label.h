@@ -46,6 +46,7 @@ private:
 	bool clip = false;
 	TextServer::OverrunBehavior overrun_behavior = TextServer::OVERRUN_NO_TRIMMING;
 	Size2 minsize;
+	real_t stable_width = -1;
 	bool uppercase = false;
 
 	bool lines_dirty = true;
@@ -64,6 +65,7 @@ private:
 	float visible_ratio = 1.0;
 	int lines_skipped = 0;
 	int max_lines_visible = -1;
+	bool draw_pending = false;
 
 	Ref<LabelSettings> settings;
 
@@ -81,8 +83,7 @@ private:
 		int font_shadow_outline_size;
 	} theme_cache;
 
-	void _update_visible();
-	void _shape();
+	bool _shape();
 	void _invalidate();
 
 protected:
