@@ -143,7 +143,7 @@ License: Expat
 
 Files: ./thirdparty/astcenc/
 Comment: Arm ASTC Encoder
-Copyright: 2022, Arm Limited and contributors.
+Copyright: 2011-2023, Arm Limited
 License: Apache-2.0
 
 Files: ./thirdparty/basis_universal/

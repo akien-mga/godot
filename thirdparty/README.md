@@ -20,7 +20,7 @@ Files extracted from upstream source:
 ## astcenc
 
 - Upstream: https://github.com/ARM-software/astc-encoder
-- Version: 4.2.0 (3103c70ccf6194e3796467c466f5adb047deac7f, 2023)
+- Version: 4.3.0 (ec83dda79fcefe07f69cdae7ed980d169bf2c4d4, 2023)
 - License: Apache 2.0
 
 Files extracted from upstream source:

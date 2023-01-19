@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2011-2022 Arm Limited
+// Copyright 2011-2023 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -82,7 +82,7 @@ static bool realign_weights_undecimated(
 	const quant_and_transfer_table& qat = quant_and_xfer_tables[weight_quant_level];
 
 	unsigned int max_plane = bm.is_dual_plane;
-	int plane2_component = bm.is_dual_plane ? scb.plane2_component : -1;
+	int plane2_component = scb.plane2_component;
 	vmask4 plane_mask = vint4::lane_id() == vint4(plane2_component);
 
 	// Decode the color endpoints
@@ -99,7 +99,6 @@ static bool realign_weights_undecimated(
 	{
 		unpack_color_endpoints(decode_mode,
 		                       scb.color_formats[pa_idx],
-		                       scb.get_color_quant_mode(),
 		                       scb.color_values[pa_idx],
 		                       rgb_hdr, alpha_hdr,
 		                       endpnt0[pa_idx],
@@ -207,7 +206,7 @@ static bool realign_weights_decimated(
 	assert(weight_count != bsd.texel_count);
 
 	unsigned int max_plane = bm.is_dual_plane;
-	int plane2_component = bm.is_dual_plane ? scb.plane2_component : -1;
+	int plane2_component = scb.plane2_component;
 	vmask4 plane_mask = vint4::lane_id() == vint4(plane2_component);
 
 	// Decode the color endpoints
@@ -225,7 +224,6 @@ static bool realign_weights_decimated(
 	{
 		unpack_color_endpoints(decode_mode,
 		                       scb.color_formats[pa_idx],
-		                       scb.get_color_quant_mode(),
 		                       scb.color_values[pa_idx],
 		                       rgb_hdr, alpha_hdr,
 		                       endpnt0[pa_idx],
@@ -279,17 +277,14 @@ static bool realign_weights_decimated(
 			promise(texels_to_evaluate > 0);
 			for (unsigned int te_idx = 0; te_idx < texels_to_evaluate; te_idx++)
 			{
-				unsigned int texel = di.weight_texel[te_idx][we_idx];
+				unsigned int texel = di.weight_texels_tr[te_idx][we_idx];
 
-				const uint8_t *texel_weights = di.texel_weights_texel[we_idx][te_idx];
-				const float *texel_weights_float = di.texel_weights_float_texel[we_idx][te_idx];
+				float tw_base = di.texel_contrib_for_weight[te_idx][we_idx];
 
-				float tw_base = texel_weights_float[0];
-
-				float weight_base = (uqw_base                      * tw_base
-				                   + uq_weightsf[texel_weights[1]] * texel_weights_float[1])
-				                  + (uq_weightsf[texel_weights[2]] * texel_weights_float[2]
-				                   + uq_weightsf[texel_weights[3]] * texel_weights_float[3]);
+				float weight_base = (uq_weightsf[di.texel_weights_tr[0][texel]] * di.texel_weight_contribs_float_tr[0][texel]
+				                   + uq_weightsf[di.texel_weights_tr[1][texel]] * di.texel_weight_contribs_float_tr[1][texel])
+					              + (uq_weightsf[di.texel_weights_tr[2][texel]] * di.texel_weight_contribs_float_tr[2][texel]
+				                   + uq_weightsf[di.texel_weights_tr[3][texel]] * di.texel_weight_contribs_float_tr[3][texel]);
 
 				// Ideally this is integer rounded, but IQ gain it isn't worth the overhead
 				// float weight = astc::flt_rd(weight_base + 0.5f);
@@ -624,12 +619,12 @@ static float compress_symbolic_block_for_partition_1plane(
 				trace_add_data("error_prerealign", errorval);
 				best_errorval_in_mode = astc::min(errorval, best_errorval_in_mode);
 
-				// Average refinement improvement is 3.5% per iteration (allow 5%), but the first
-				// iteration can help more so we give it a extra 10% leeway. Use this knowledge to
+				// Average refinement improvement is 3.5% per iteration (allow 4.5%), but the first
+				// iteration can help more so we give it a extra 8% leeway. Use this knowledge to
 				// drive a heuristic to skip blocks that are unlikely to catch up with the best
 				// block we have already.
 				unsigned int iters_remaining = config.tune_refinement_limit - l;
-				float threshold = (0.05f * static_cast<float>(iters_remaining)) + 1.1f;
+				float threshold = (0.045f * static_cast<float>(iters_remaining)) + 1.08f;
 				if (errorval > (threshold * best_errorval_in_scb))
 				{
 					break;
@@ -674,10 +669,10 @@ static float compress_symbolic_block_for_partition_1plane(
 			best_errorval_in_mode = astc::min(errorval, best_errorval_in_mode);
 
 			// Average refinement improvement is 3.5% per iteration, so skip blocks that are
-			// unlikely to catch up with the best block we have already. Assume a 5% per step to
+			// unlikely to catch up with the best block we have already. Assume a 4.5% per step to
 			// give benefit of the doubt ...
 			unsigned int iters_remaining = config.tune_refinement_limit - 1 - l;
-			float threshold = (0.05f * static_cast<float>(iters_remaining)) + 1.0f;
+			float threshold = (0.045f * static_cast<float>(iters_remaining)) + 1.0f;
 			if (errorval > (threshold * best_errorval_in_scb))
 			{
 				break;
@@ -958,12 +953,12 @@ static float compress_symbolic_block_for_partition_2planes(
 				trace_add_data("error_prerealign", errorval);
 				best_errorval_in_mode = astc::min(errorval, best_errorval_in_mode);
 
-				// Average refinement improvement is 3.5% per iteration (allow 5%), but the first
-				// iteration can help more so we give it a extra 10% leeway. Use this knowledge to
+				// Average refinement improvement is 3.5% per iteration (allow 4.5%), but the first
+				// iteration can help more so we give it a extra 8% leeway. Use this knowledge to
 				// drive a heuristic to skip blocks that are unlikely to catch up with the best
 				// block we have already.
 				unsigned int iters_remaining = config.tune_refinement_limit - l;
-				float threshold = (0.05f * static_cast<float>(iters_remaining)) + 1.1f;
+				float threshold = (0.045f * static_cast<float>(iters_remaining)) + 1.08f;
 				if (errorval > (threshold * best_errorval_in_scb))
 				{
 					break;
@@ -1009,10 +1004,10 @@ static float compress_symbolic_block_for_partition_2planes(
 			best_errorval_in_mode = astc::min(errorval, best_errorval_in_mode);
 
 			// Average refinement improvement is 3.5% per iteration, so skip blocks that are
-			// unlikely to catch up with the best block we have already. Assume a 5% per step to
+			// unlikely to catch up with the best block we have already. Assume a 4.5% per step to
 			// give benefit of the doubt ...
 			unsigned int iters_remaining = config.tune_refinement_limit - 1 - l;
-			float threshold = (0.05f * static_cast<float>(iters_remaining)) + 1.0f;
+			float threshold = (0.045f * static_cast<float>(iters_remaining)) + 1.0f;
 			if (errorval > (threshold * best_errorval_in_scb))
 			{
 				break;
@@ -1281,13 +1276,13 @@ void compress_block(
 	// compression and slightly reduces image quality.
 
 	float errorval_mult[2] {
-		1.0f / ctx.config.tune_mode0_mse_overshoot,
+		1.0f / ctx.config.tune_mse_overshoot,
 		1.0f
 	};
 
-	static const float errorval_overshoot = 1.0f / ctx.config.tune_refinement_mse_overshoot;
+	static const float errorval_overshoot = 1.0f / ctx.config.tune_mse_overshoot;
 
-	// Only enable MODE0 fast path (trial 0) if 2D and more than 25 texels
+	// Only enable MODE0 fast path (trial 0) if 2D, and more than 25 texels
 	int start_trial = 1;
 	if ((bsd.texel_count >= TUNE_MIN_TEXELS_MODE0_FASTPATH) && (bsd.zdim == 1))
 	{
@@ -1358,7 +1353,7 @@ void compress_block(
 
 		// If attempting two planes is much worse than the best one plane result
 		// then further two plane searches are unlikely to help so move on ...
-		if (errorval > (best_errorvals_for_pcount[0] * 2.0f))
+		if (errorval > (best_errorvals_for_pcount[0] * 1.85f))
 		{
 			break;
 		}
@@ -1373,7 +1368,7 @@ void compress_block(
 	// Find best blocks for 2, 3 and 4 partitions
 	for (int partition_count = 2; partition_count <= max_partitions; partition_count++)
 	{
-		unsigned int partition_indices[TUNE_MAX_PARTITIIONING_CANDIDATES];
+		unsigned int partition_indices[TUNE_MAX_PARTITIONING_CANDIDATES];
 
 		unsigned int requested_indices = requested_partition_indices[partition_count - 2];
 
@@ -1404,10 +1399,9 @@ void compress_block(
 			// If using N partitions doesn't improve much over using N-1 partitions then skip trying
 			// N+1. Error can dramatically improve if the data is correlated or non-correlated and
 			// aligns with a partitioning that suits that encoding, so for this inner loop check add
-			// a large error scale because the "other" trial could be a lot better. In total the
-			// error must be at least 2x worse than the best existing error to early-out.
+			// a large error scale because the "other" trial could be a lot better.
 			float best_error = best_errorvals_for_pcount[partition_count - 1];
-			float best_error_scale = exit_thresholds_for_pcount[partition_count - 1] * 2.0f;
+			float best_error_scale = exit_thresholds_for_pcount[partition_count - 1] * 1.85f;
 			if (best_error > (best_error_in_prev * best_error_scale))
 			{
 				trace_add_data("skip", "tune_partition_early_out_limit_factor");

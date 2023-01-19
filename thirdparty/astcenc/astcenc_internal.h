@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2011-2022 Arm Limited
+// Copyright 2011-2023 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -137,7 +137,7 @@ static constexpr unsigned int TUNE_MAX_TRIAL_CANDIDATES { 8 };
  *
  * This can be dynamically reduced by the compression quality preset.
  */
-static constexpr unsigned int TUNE_MAX_PARTITIIONING_CANDIDATES { 32 };
+static constexpr unsigned int TUNE_MAX_PARTITIONING_CANDIDATES { 32 };
 
 /**
  * @brief The maximum quant level using full angular endpoint search method.
@@ -154,9 +154,11 @@ static constexpr unsigned int TUNE_MAX_PARTITIIONING_CANDIDATES { 32 };
  */
 static constexpr unsigned int TUNE_MAX_ANGULAR_QUANT { 7 }; /* QUANT_12 */
 
-
 static_assert((BLOCK_MAX_TEXELS % ASTCENC_SIMD_WIDTH) == 0,
               "BLOCK_MAX_TEXELS must be multiple of ASTCENC_SIMD_WIDTH");
+
+static_assert(BLOCK_MAX_TEXELS <= 216,
+              "BLOCK_MAX_TEXELS must not be greater than 216");
 
 static_assert((BLOCK_MAX_WEIGHTS % ASTCENC_SIMD_WIDTH) == 0,
               "BLOCK_MAX_WEIGHTS must be multiple of ASTCENC_SIMD_WIDTH");
@@ -360,38 +362,50 @@ struct decimation_info
 	/** @brief The number of stored weights in the Z dimension. */
 	uint8_t weight_z;
 
-	/** @brief The number of stored weights that contribute to each texel, between 1 and 4. */
+	/**
+	 * @brief The number of weights that contribute to each texel.
+	 * Value is between 1 and 4.
+	 */
 	uint8_t texel_weight_count[BLOCK_MAX_TEXELS];
 
-	/** @brief The weight index of the N weights that need to be interpolated for each texel. */
-	uint8_t texel_weights_4t[4][BLOCK_MAX_TEXELS];
+	/**
+	 * @brief The weight index of the N weights that are interpolated for each texel.
+	 * Stored transposed to improve vectorization.
+	 */
+	uint8_t texel_weights_tr[4][BLOCK_MAX_TEXELS];
 
-	/** @brief The bilinear interpolation weighting of the N input weights for each texel, between 0 and 16. */
-	uint8_t texel_weights_int_4t[4][BLOCK_MAX_TEXELS];
+	/**
+	 * @brief The bilinear contribution of the N weights that are interpolated for each texel.
+	 * Value is between 0 and 16, stored transposed to improve vectorization.
+	 */
+	uint8_t texel_weight_contribs_int_tr[4][BLOCK_MAX_TEXELS];
 
-	/** @brief The bilinear interpolation weighting of the N input weights for each texel, between 0 and 1. */
-	alignas(ASTCENC_VECALIGN) float texel_weights_float_4t[4][BLOCK_MAX_TEXELS];
+	/**
+	 * @brief The bilinear contribution of the N weights that are interpolated for each texel.
+	 * Value is between 0 and 1, stored transposed to improve vectorization.
+	 */
+	alignas(ASTCENC_VECALIGN) float texel_weight_contribs_float_tr[4][BLOCK_MAX_TEXELS];
 
 	/** @brief The number of texels that each stored weight contributes to. */
 	uint8_t weight_texel_count[BLOCK_MAX_WEIGHTS];
 
-	/** @brief The list of weights that contribute to each texel. */
-	uint8_t weight_texel[BLOCK_MAX_TEXELS][BLOCK_MAX_WEIGHTS];
-
-	/** @brief The list of weight indices that contribute to each texel. */
-	alignas(ASTCENC_VECALIGN) float weights_flt[BLOCK_MAX_TEXELS][BLOCK_MAX_WEIGHTS];
+	/**
+	 * @brief The list of texels that use a specific weight index.
+	 * Stored transposed to improve vectorization.
+	 */
+	uint8_t weight_texels_tr[BLOCK_MAX_TEXELS][BLOCK_MAX_WEIGHTS];
 
 	/**
-	 * @brief Folded structure for faster access:
-	 *     texel_weights_texel[i][j][.] = texel_weights[.][weight_texel[i][j]]
+	 * @brief The bilinear contribution to the N texels that use each weight.
+	 * Value is between 0 and 1, stored transposed to improve vectorization.
 	 */
-	uint8_t texel_weights_texel[BLOCK_MAX_WEIGHTS][BLOCK_MAX_TEXELS][4];
+	alignas(ASTCENC_VECALIGN) float weights_texel_contribs_tr[BLOCK_MAX_TEXELS][BLOCK_MAX_WEIGHTS];
 
 	/**
-	 * @brief Folded structure for faster access:
-	 *     texel_weights_float_texel[i][j][.] = texel_weights_float[.][weight_texel[i][j]]
+	 * @brief The bilinear contribution to the Nth texel that uses each weight.
+	 * Value is between 0 and 1, stored transposed to improve vectorization.
 	 */
-	float texel_weights_float_texel[BLOCK_MAX_WEIGHTS][BLOCK_MAX_TEXELS][4];
+	float texel_contrib_for_weight[BLOCK_MAX_TEXELS][BLOCK_MAX_WEIGHTS];
 };
 
 /**
@@ -1008,9 +1022,6 @@ struct dt_init_working_buffers
 */
 struct quant_and_transfer_table
 {
-	/** @brief The quantization level used. */
-	quant_method method;
-
 	/** @brief The unscrambled unquantized value. */
 	int8_t quant_to_unquant[32];
 
@@ -1322,20 +1333,32 @@ bool is_legal_3d_block_size(
 /**
  * @brief The precomputed table for quantizing color values.
  *
- * Returned value is in the ASTC BISE scrambled order.
+ * Converts unquant value in 0-255 range into quant value in 0-255 range.
+ * No BISE scrambling is applied at this stage.
  *
  * Indexed by [quant_mode - 4][data_value].
  */
-extern const uint8_t color_quant_tables[17][256];
+extern const uint8_t color_unquant_to_uquant_tables[17][256];
 
 /**
- * @brief The precomputed table for unquantizing color values.
+ * @brief The precomputed table for packing quantized color values.
  *
- * Returned value is in the ASTC BISE scrambled order.
+ * Converts quant value in 0-255 range into packed quant value in 0-N range,
+ * with BISE scrambling applied.
  *
  * Indexed by [quant_mode - 4][data_value].
  */
-extern const uint8_t color_unquant_tables[17][256];
+extern const uint8_t color_uquant_to_scrambled_pquant_tables[17][256];
+
+/**
+ * @brief The precomputed table for unpacking color values.
+ *
+ * Converts quant value in 0-N range into unpacked value in 0-255 range,
+ * with BISE unscrambling applied.
+ *
+ * Indexed by [quant_mode - 4][data_value].
+ */
+extern const uint8_t* color_scrambled_pquant_to_uquant_tables[17];
 
 /**
  * @brief The precomputed quant mode storage table.
@@ -1532,8 +1555,8 @@ void compute_error_squared_rgba(
  * @param      partition_count          The number of partitions in the block.
  * @param      partition_search_limit   The number of candidate partition encodings to trial.
  * @param[out] best_partitions          The best partition candidates.
- * @param      requested_candidates     The number of requsted partitionings. May return fewer if
- *                                      candidates are not avaiable.
+ * @param      requested_candidates     The number of requested partitionings. May return fewer if
+ *                                      candidates are not available.
  *
  * @return The actual number of candidates returned.
  */
@@ -1542,7 +1565,7 @@ unsigned int find_best_partition_candidates(
 	const image_block& blk,
 	unsigned int partition_count,
 	unsigned int partition_search_limit,
-	unsigned int best_partitions[TUNE_MAX_PARTITIIONING_CANDIDATES],
+	unsigned int best_partitions[TUNE_MAX_PARTITIONING_CANDIDATES],
 	unsigned int requested_candidates);
 
 /* ============================================================================
@@ -1798,11 +1821,12 @@ uint8_t pack_color_endpoints(
 	quant_method quant_level);
 
 /**
- * @brief Unpack a single pair of encoded and quantized color endpoints.
+ * @brief Unpack a single pair of encoded endpoints.
+ *
+ * Endpoints must be unscrambled and converted into the 0-255 range before calling this functions.
  *
  * @param      decode_mode   The decode mode (LDR, HDR).
  * @param      format        The color endpoint mode used.
- * @param      quant_level   The quantization level used.
  * @param      input         The raw array of encoded input integers. The length of this array
  *                           depends on @c format; it can be safely assumed to be large enough.
  * @param[out] rgb_hdr       Is the endpoint using HDR for the RGB channels?
@@ -1813,7 +1837,6 @@ uint8_t pack_color_endpoints(
 void unpack_color_endpoints(
 	astcenc_profile decode_mode,
 	int format,
-	quant_method quant_level,
 	const uint8_t* input,
 	bool& rgb_hdr,
 	bool& alpha_hdr,
