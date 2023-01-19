@@ -19,14 +19,14 @@ Files extracted from upstream source:
 
 ## astcenc
 
-- Upstream: https://github.com/ARM-software/astc-encoder.git
-- Version: 4.2.0 (3103c70ccf6194e3796467c466f5adb047deac7f, 2022)
+- Upstream: https://github.com/ARM-software/astc-encoder
+- Version: 4.2.0 (3103c70ccf6194e3796467c466f5adb047deac7f, 2023)
 - License: Apache 2.0
 
 Files extracted from upstream source:
 
-- `license.txt`
-- `astc-encoder/Source` folder
+- `astcenc_*` and `astcenc.h` files from `Source`
+- `LICENSE.txt`
 
 
 ## basis_universal
@@ -38,7 +38,7 @@ Files extracted from upstream source:
 Files extracted from upstream source:
 
 - `encoder/` and `transcoder/` folders
-- `LICENSE.txt`
+- `LICENSE`
 
 
 ## brotli

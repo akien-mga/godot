@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  register_types.cpp                                                    */
+/*  image_compress_astcenc.h                                              */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                             GODOT ENGINE                               */
@@ -28,21 +28,12 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-#include "register_types.h"
+#ifndef IMAGE_COMPRESS_ASTCENC_H
+#define IMAGE_COMPRESS_ASTCENC_H
 
-#include "image_compress_astcenc.h"
+#include "core/io/image.h"
 
-void initialize_astcenc_module(ModuleInitializationLevel p_level) {
-	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
-		return;
-	}
+void _compress_astc(Image *r_img, float p_lossy_quality, Image::ASTCFormat p_format);
+void _decompress_astc(Image *r_img);
 
-	Image::_image_compress_astc_func = _compress_astc;
-	Image::_image_decompress_astc = _decompress_astc;
-}
-
-void uninitialize_astcenc_module(ModuleInitializationLevel p_level) {
-	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
-		return;
-	}
-}
+#endif // IMAGE_COMPRESS_ASTCENC_H

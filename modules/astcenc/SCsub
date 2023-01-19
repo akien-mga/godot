@@ -37,11 +37,7 @@ thirdparty_sources = [
 ]
 thirdparty_sources = [thirdparty_dir + file for file in thirdparty_sources]
 
-env_astcenc.Prepend(CPPPATH=[thirdparty_dir, "include", "#thirdparty/tinyexr", "#thirdparty/misc"])
-env_astcenc.Append(CPPDEFINES=[("TINYEXR_USE_MINIZ", 0)])
-
-if env["platform"] == "windows":
-    env_astcenc.Append(CPPDEFINES=["_WIN32"])
+env_astcenc.Prepend(CPPPATH=[thirdparty_dir])
 
 env_thirdparty = env_astcenc.Clone()
 env_thirdparty.disable_warnings()

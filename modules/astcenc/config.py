@@ -1,5 +1,5 @@
 def can_build(env, platform):
-    return env["target"] == "editor"
+    return env.editor_build
 
 
 def configure(env):
