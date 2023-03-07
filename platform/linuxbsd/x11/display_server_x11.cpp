@@ -5472,10 +5472,14 @@ DisplayServerX11::DisplayServerX11(const String &p_rendering_driver, WindowMode 
 	tts = memnew(TTS_Linux);
 #endif
 
-	//!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//TODO - do Vulkan and OpenGL support checks, driver selection and fallback
+	// Graphics API and system window initialization need to be timed properly.
+	// 1. Graphics API context
+	// 2. System window
+	// 3. Our renderer
+
 	rendering_driver = p_rendering_driver;
 
+	// Initialize graphics API context first.
 	bool driver_found = false;
 #if defined(VULKAN_ENABLED)
 	if (rendering_driver == "vulkan") {
@@ -5489,7 +5493,6 @@ DisplayServerX11::DisplayServerX11(const String &p_rendering_driver, WindowMode 
 		driver_found = true;
 	}
 #endif
-	// Initialize context and rendering device.
 #if defined(GLES3_ENABLED)
 	if (rendering_driver == "opengl3") {
 		if (getenv("DRI_PRIME") == nullptr) {
@@ -5544,22 +5547,14 @@ DisplayServerX11::DisplayServerX11(const String &p_rendering_driver, WindowMode 
 			return;
 		}
 		driver_found = true;
-
-		if (true) {
-			RasterizerGLES3::make_current();
-		} else {
-			memdelete(gl_manager);
-			gl_manager = nullptr;
-			r_error = ERR_UNAVAILABLE;
-			return;
-		}
 	}
 #endif
 	if (!driver_found) {
 		r_error = ERR_UNAVAILABLE;
-		ERR_FAIL_MSG("Video driver not found");
+		ERR_FAIL_MSG("Rendering driver not found");
 	}
 
+	// Create window with that context.
 	Point2i window_position;
 	if (p_position != nullptr) {
 		window_position = *p_position;
@@ -5582,13 +5577,24 @@ DisplayServerX11::DisplayServerX11(const String &p_rendering_driver, WindowMode 
 	}
 	show_window(main_window);
 
+	// Create renderer after the window.
 #if defined(VULKAN_ENABLED)
 	if (rendering_driver == "vulkan") {
-		//temporary
 		rendering_device_vulkan = memnew(RenderingDeviceVulkan);
 		rendering_device_vulkan->initialize(context_vulkan);
-
 		RendererCompositorRD::make_current();
+	}
+#endif
+#if defined(GLES3_ENABLED)
+	if (rendering_driver == "opengl3") {
+		if (RasterizerGLES3::is_viable() == OK) {
+			RasterizerGLES3::make_current();
+		} else {
+			memdelete(gl_manager);
+			gl_manager = nullptr;
+			r_error = ERR_UNAVAILABLE;
+			return;
+		}
 	}
 #endif
 

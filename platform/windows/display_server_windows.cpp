@@ -4120,8 +4120,6 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Win
 	old_invalid = true;
 	mouse_mode = MOUSE_MODE_VISIBLE;
 
-	rendering_driver = p_rendering_driver;
-
 	// Init TTS
 	tts = memnew(TTS_Windows);
 
@@ -4221,7 +4219,17 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Win
 	}
 
 	_register_raw_input_devices(INVALID_WINDOW_ID);
+	mouse_monitor = SetWindowsHookEx(WH_MOUSE, ::MouseProc, nullptr, GetCurrentThreadId());
+	joypad = new JoypadWindows(&windows[MAIN_WINDOW_ID].hWnd);
 
+	// Graphics API and system window initialization need to be timed properly.
+	// 1. Graphics API context
+	// 2. System window
+	// 3. Our renderer
+
+	rendering_driver = p_rendering_driver;
+
+	// Initialize graphics API context first.
 #if defined(VULKAN_ENABLED)
 	if (rendering_driver == "vulkan") {
 		context_vulkan = memnew(VulkanContextWindows);
@@ -4233,27 +4241,20 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Win
 		}
 	}
 #endif
-	// Init context and rendering device
 #if defined(GLES3_ENABLED)
-
 	if (rendering_driver == "opengl3") {
 		GLManager_Windows::ContextType opengl_api_type = GLManager_Windows::GLES_3_0_COMPATIBLE;
-
 		gl_manager = memnew(GLManager_Windows(opengl_api_type));
-
 		if (gl_manager->initialize() != OK) {
 			memdelete(gl_manager);
 			gl_manager = nullptr;
 			r_error = ERR_UNAVAILABLE;
 			return;
 		}
-
-		RasterizerGLES3::make_current();
 	}
 #endif
 
-	mouse_monitor = SetWindowsHookEx(WH_MOUSE, ::MouseProc, nullptr, GetCurrentThreadId());
-
+	// Create window with that context.
 	Point2i window_position;
 	if (p_position != nullptr) {
 		window_position = *p_position;
@@ -4267,8 +4268,6 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Win
 	WindowID main_window = _create_window(p_mode, p_vsync_mode, p_flags, Rect2i(window_position, p_resolution));
 	ERR_FAIL_COND_MSG(main_window == INVALID_WINDOW_ID, "Failed to create main window.");
 
-	joypad = new JoypadWindows(&windows[MAIN_WINDOW_ID].hWnd);
-
 	for (int i = 0; i < WINDOW_FLAG_MAX; i++) {
 		if (p_flags & (1 << i)) {
 			window_set_flag(WindowFlags(i), true, main_window);
@@ -4277,13 +4276,26 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Win
 
 	show_window(MAIN_WINDOW_ID);
 
+	// Create renderer after the window.
 #if defined(VULKAN_ENABLED)
-
 	if (rendering_driver == "vulkan") {
 		rendering_device_vulkan = memnew(RenderingDeviceVulkan);
 		rendering_device_vulkan->initialize(context_vulkan);
 
 		RendererCompositorRD::make_current();
+	}
+#endif
+#if defined(GLES3_ENABLED)
+	if (rendering_driver == "opengl3") {
+		if (RasterizerGLES3::is_viable() == OK) {
+			RasterizerGLES3::make_current();
+		} else {
+			memdelete(gl_manager);
+			gl_manager = nullptr;
+			r_error = ERR_UNAVAILABLE;
+			ERR_FAIL_MSG("Could not initialize OpenGL");
+			return;
+		}
 	}
 #endif
 

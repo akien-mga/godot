@@ -29,13 +29,13 @@
 /**************************************************************************/
 
 #include "rasterizer_gles3.h"
-#include "storage/utilities.h"
 
 #ifdef GLES3_ENABLED
 
 #include "core/config/project_settings.h"
 #include "core/os/os.h"
 #include "storage/texture_storage.h"
+#include "storage/utilities.h"
 
 #define _EXT_DEBUG_OUTPUT_SYNCHRONOUS_ARB 0x8242
 #define _EXT_DEBUG_NEXT_LOGGED_MESSAGE_LENGTH_ARB 0x8243
@@ -84,6 +84,10 @@
 #include <EGL/eglext.h>
 #endif
 
+#ifdef GLAD_ENABLED
+#include "thirdparty/glad/glad/gl.h"
+#endif
+
 #if defined(MINGW_ENABLED) || defined(_MSC_VER)
 #define strcpy strcpy_s
 #endif
@@ -102,8 +106,6 @@ void RasterizerGLES3::begin_frame(double frame_step) {
 
 	GLES3::Utilities *utils = GLES3::Utilities::get_singleton();
 	utils->_capture_timestamps_begin();
-
-	//scene->iteration();
 }
 
 void RasterizerGLES3::end_frame(bool p_swap_buffers) {
@@ -178,6 +180,28 @@ typedef void (*DEBUGPROCARB)(GLenum source,
 
 typedef void (*DebugMessageCallbackARB)(DEBUGPROCARB callback, const void *userParam);
 
+Error RasterizerGLES3::is_viable() {
+#ifdef GLAD_ENABLED
+	// Returns GL version on success, otherwise 0.
+	int gl_version = gladLoaderLoadGL();
+	if (gl_version == 0) {
+		ERR_PRINT("Error initializing GLAD");
+		return ERR_UNAVAILABLE;
+	}
+
+// GLVersion seems to be used for both GL and GL ES, so we need different version checks for them
+#ifdef GLES_OVER_GL // OpenGL 3.3 Core Profile required
+	if (GLAD_VERSION_MAJOR(gl_version) < 3 || (GLAD_VERSION_MAJOR(gl_version) == 3 && GLAD_VERSION_MINOR(gl_version) < 3)) {
+#else // OpenGL ES 3.0
+	if (GLAD_VERSION_MAJOR(gl_version) < 3) {
+#endif
+		return ERR_UNAVAILABLE;
+	}
+#endif // GLAD_ENABLED
+
+	return OK;
+}
+
 void RasterizerGLES3::initialize() {
 	// NVIDIA suffixes all GPU model names with "/PCIe/SSE2" in OpenGL (but not Vulkan). This isn't necessary to display nowadays, so it can be trimmed.
 	print_line(vformat("OpenGL API %s - Compatibility - Using Device: %s - %s", RS::get_singleton()->get_video_adapter_api_version(), RS::get_singleton()->get_video_adapter_vendor(), RS::get_singleton()->get_video_adapter_name().trim_suffix("/PCIe/SSE2")));
@@ -202,16 +226,6 @@ RasterizerGLES3 *RasterizerGLES3::singleton = nullptr;
 
 RasterizerGLES3::RasterizerGLES3() {
 	singleton = this;
-
-#ifdef GLAD_ENABLED
-	if (!gladLoaderLoadGL()) {
-		ERR_PRINT("Error initializing GLAD");
-		// FIXME this is an early return from a constructor.  Any other code using this instance will crash or the finalizer will crash, because none of
-		// the members of this instance are initialized, so this just makes debugging harder.  It should either crash here intentionally,
-		// or we need to actually test for this situation before constructing this.
-		return;
-	}
-#endif
 
 #ifdef GLAD_ENABLED
 	if (OS::get_singleton()->is_stdout_verbose()) {
@@ -273,6 +287,9 @@ RasterizerGLES3::RasterizerGLES3() {
 }
 
 RasterizerGLES3::~RasterizerGLES3() {
+#ifdef GLAD_ENABLED
+	gladLoaderUnloadGL();
+#endif
 }
 
 void RasterizerGLES3::prepare_for_blitting_render_targets() {

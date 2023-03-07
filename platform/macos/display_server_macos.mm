@@ -3905,10 +3905,25 @@ DisplayServerMacOS::DisplayServerMacOS(const String &p_rendering_driver, WindowM
 
 	menu_delegate = [[GodotMenuDelegate alloc] init];
 
-	//!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//TODO - do Vulkan and OpenGL support checks, driver selection and fallback
+	// Graphics API and system window initialization need to be timed properly.
+	// 1. Graphics API context
+	// 2. System window
+	// 3. Our renderer
+
 	rendering_driver = p_rendering_driver;
 
+	// Initialize graphics API context first.
+#if defined(VULKAN_ENABLED)
+	if (rendering_driver == "vulkan") {
+		context_vulkan = memnew(VulkanContextMacOS);
+		if (context_vulkan->initialize() != OK) {
+			memdelete(context_vulkan);
+			context_vulkan = nullptr;
+			r_error = ERR_CANT_CREATE;
+			ERR_FAIL_MSG("Could not initialize Vulkan");
+		}
+	}
+#endif
 #if defined(GLES3_ENABLED)
 	if (rendering_driver == "opengl3") {
 		GLManager_MacOS::ContextType opengl_api_type = GLManager_MacOS::GLES_3_0_COMPATIBLE;
@@ -3922,18 +3937,8 @@ DisplayServerMacOS::DisplayServerMacOS(const String &p_rendering_driver, WindowM
 		}
 	}
 #endif
-#if defined(VULKAN_ENABLED)
-	if (rendering_driver == "vulkan") {
-		context_vulkan = memnew(VulkanContextMacOS);
-		if (context_vulkan->initialize() != OK) {
-			memdelete(context_vulkan);
-			context_vulkan = nullptr;
-			r_error = ERR_CANT_CREATE;
-			ERR_FAIL_MSG("Could not initialize Vulkan");
-		}
-	}
-#endif
 
+	// Create window with that context.
 	Point2i window_position;
 	if (p_position != nullptr) {
 		window_position = *p_position;
@@ -3954,17 +3959,26 @@ DisplayServerMacOS::DisplayServerMacOS(const String &p_rendering_driver, WindowM
 	show_window(MAIN_WINDOW_ID);
 	force_process_and_drop_events();
 
-#if defined(GLES3_ENABLED)
-	if (rendering_driver == "opengl3") {
-		RasterizerGLES3::make_current();
-	}
-#endif
+	// Create renderer after the window.
 #if defined(VULKAN_ENABLED)
 	if (rendering_driver == "vulkan") {
 		rendering_device_vulkan = memnew(RenderingDeviceVulkan);
 		rendering_device_vulkan->initialize(context_vulkan);
 
 		RendererCompositorRD::make_current();
+	}
+#endif
+#if defined(GLES3_ENABLED)
+	if (rendering_driver == "opengl3") {
+		if (RasterizerGLES3::is_viable() == OK) {
+			RasterizerGLES3::make_current();
+		} else {
+			memdelete(gl_manager);
+			gl_manager = nullptr;
+			r_error = ERR_UNAVAILABLE;
+			ERR_FAIL_MSG("Could not initialize OpenGL");
+			return;
+		}
 	}
 #endif
 

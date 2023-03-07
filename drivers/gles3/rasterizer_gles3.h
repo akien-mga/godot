@@ -85,6 +85,8 @@ public:
 
 	void set_boot_image(const Ref<Image> &p_image, const Color &p_color, bool p_scale, bool p_use_filter = true);
 
+	static Error is_viable();
+
 	void initialize();
 	void begin_frame(double frame_step);
 
