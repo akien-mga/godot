@@ -31,6 +31,7 @@
 #include "editor_node.h"
 
 #include "core/config/project_settings.h"
+#include "core/extension/gdextension_manager.h"
 #include "core/input/input.h"
 #include "core/io/config_file.h"
 #include "core/io/file_access.h"
@@ -4493,14 +4494,24 @@ Ref<Texture2D> EditorNode::get_object_icon(const Object *p_object, const String 
 		while (base_scr.is_valid()) {
 			StringName name = EditorNode::get_editor_data().script_class_get_name(base_scr->get_path());
 			String icon_path = EditorNode::get_editor_data().script_class_get_icon_path(name);
-			Ref<ImageTexture> icon = _load_custom_class_icon(icon_path);
+			Ref<Texture2D> icon = _load_custom_class_icon(icon_path);
 			if (icon.is_valid()) {
 				script_icon_cache[scr] = icon;
 				return icon;
 			}
 
-			// TODO: should probably be deprecated in 4.x
 			StringName base = base_scr->get_instance_base_type();
+			// If not a script class, might be GDExtension.
+			if (base != StringName() && GDExtensionManager::get_singleton()->class_has_icon_path(base)) {
+				icon_path = GDExtensionManager::get_singleton()->class_get_icon_path(base);
+				icon = _load_custom_class_icon(icon_path);
+				if (icon.is_valid()) {
+					script_icon_cache[scr] = icon;
+					return icon;
+				}
+			}
+
+			// TODO: should probably be deprecated in 4.x
 			if (base != StringName() && EditorNode::get_editor_data().get_custom_types().has(base)) {
 				const Vector<EditorData::CustomType> &types = EditorNode::get_editor_data().get_custom_types()[base];
 				for (int i = 0; i < types.size(); ++i) {
@@ -4544,7 +4555,7 @@ Ref<Texture2D> EditorNode::get_class_icon(const String &p_class, const String &p
 
 		while (true) {
 			String icon_path = EditorNode::get_editor_data().script_class_get_icon_path(class_name);
-			Ref<Texture> icon = _load_custom_class_icon(icon_path);
+			Ref<Texture2D> icon = _load_custom_class_icon(icon_path);
 			if (icon.is_valid()) {
 				return icon; // Current global class has icon.
 			}
@@ -4569,6 +4580,14 @@ Ref<Texture2D> EditorNode::get_class_icon(const String &p_class, const String &p
 
 	if (const EditorData::CustomType *ctype = EditorNode::get_editor_data().get_custom_type_by_name(p_class)) {
 		return ctype->icon;
+	}
+
+	if (GDExtensionManager::get_singleton()->class_has_icon_path(p_class)) {
+		String icon_path = GDExtensionManager::get_singleton()->class_get_icon_path(p_class);
+		Ref<Texture2D> icon = _load_custom_class_icon(icon_path);
+		if (icon.is_valid()) {
+			return icon;
+		}
 	}
 
 	if (gui_base->has_theme_icon(p_class, SNAME("EditorIcons"))) {
