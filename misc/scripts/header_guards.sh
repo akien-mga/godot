@@ -5,9 +5,19 @@ if [ ! -f "version.py" ]; then
   echo "Some of the paths checks may not work as intended from a different folder."
 fi
 
+files=$@
+
+if [ -z "$files" ]; then
+    # Loop through all code files tracked by Git.
+    files=$(find -name "thirdparty" -prune -o -name "*.h" -print | sed "s/ /\\\ /g")
+else
+    # Remove files we don't want handle.
+    files=$(echo "$files" | sed "s/ /\n/g" | grep -v "thirdparty/" | grep -E "\.h$")
+fi
+
 files_invalid_guard=""
 
-for file in $(find -name "thirdparty" -prune -o -name "*.h" -print); do
+for file in $files; do
   # Skip *.gen.h and *-so_wrap.h, they're generated.
   if [[ "$file" == *".gen.h" || "$file" == *"-so_wrap.h" ]]; then continue; fi
   # Has important define before normal header guards.

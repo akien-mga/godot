@@ -10,11 +10,15 @@ if [ ! -x "$(command -v dos2unix)" -o ! -x "$(command -v isutf8)" ]; then
 fi
 
 set -uo pipefail
-IFS=$'\n\t'
 
-# Loops through all text files tracked by Git.
-git grep -zIl '' |
-while IFS= read -rd '' f; do
+if [ -z "$@" ]; then
+    # Loop through all code files tracked by Git.
+    mapfile -d '' files < <(git grep -zIl '')
+else
+    mapfile -d ' ' < <(echo "$@")
+fi
+
+for f in "${files[@]}"; do
     # Exclude some types of files.
     if [[ "$f" == *"csproj" ]]; then
         continue

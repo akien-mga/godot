@@ -5,15 +5,24 @@
 
 set -uo pipefail
 
-# Loops through all code files tracked by Git.
-git ls-files -- '*.c' '*.h' '*.cpp' '*.hpp' '*.cc' '*.hh' '*.cxx' '*.m' '*.mm' '*.inc' '*.java' '*.glsl' \
-                ':!:.git/*' ':!:thirdparty/*' ':!:*/thirdparty/*' ':!:platform/android/java/lib/src/com/google/*' \
-                ':!:*-so_wrap.*' ':!:tests/python_build/*' |
-while read -r f; do
-    # Run clang-format.
-    clang-format --Wno-error=unknown -i "$f"
+files=$@
 
-    # Fix copyright headers, but not all files get them.
+if [ -z "$files" ]; then
+    # Loop through all code files tracked by Git.
+    files=$(git ls-files -- '*.c' '*.h' '*.cpp' '*.hpp' '*.cc' '*.hh' '*.cxx' '*.m' '*.mm' '*.inc' '*.java' '*.glsl' \
+                ':!:.git/*' ':!:thirdparty/*' ':!:*/thirdparty/*' ':!:platform/android/java/lib/src/com/google/*' \
+                ':!:*-so_wrap.*' ':!:tests/python_build/*' | sed "s/ /\\\ /g")
+else
+    # Remove files we don't want handle.
+    files=$(echo "$files" | sed "s/ /\n/g" | grep -v "thirdparty/" | grep -E "\.(c|h|cpp|hpp|cc|hh|cxx|m|mm|inc|java|glsl)$" | grep -v "platform/android/java/lib/src/com/google/" | grep -v "\-so_wrap\." | grep -v "tests/python_build/")
+fi
+
+if [ ! -z "$files" ]; then
+    clang-format --Wno-error=unknown -i $files
+fi
+
+# Fix copyright headers, but not all files get them.
+for f in $files; do
     if [[ "$f" == *"inc" ]]; then
         continue
     elif [[ "$f" == *"glsl" ]]; then
