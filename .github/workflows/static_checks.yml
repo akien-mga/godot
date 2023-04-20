@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 2
+          packages: dos2unix libxml2-utils moreutils
 
       - name: Get changed files
         id: changed-files
@@ -29,8 +30,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo rm -f /etc/apt/sources.list.d/microsoft-prod.list
-          sudo apt-get install -qq dos2unix libxml2-utils moreutils
           pip3 install black==22.3.0 pytest==7.1.2 mypy==0.971
           git config diff.wsErrorHighlight all
 
