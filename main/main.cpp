@@ -29,7 +29,6 @@
 /**************************************************************************/
 
 #include "main.h"
-
 #include "core/config/project_settings.h"
 #include "core/core_globals.h"
 #include "core/core_string_names.h"
