@@ -11,11 +11,25 @@ jobs:
     name: Static Checks (clang-format, black format, file format, documentation checks)
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout
+      - name: Checkout and setup
         uses: actions/checkout@v3
         with:
           fetch-depth: 2
+      - run: |
+          git config diff.wsErrorHighlight all
+
+      - name: Install APT dependencies
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
           packages: dos2unix libxml2-utils moreutils
+
+      - name: Install Pip dependencies
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          cache: pip
+      - run: |
+          pip3 install black==22.3.0 pytest==7.1.2 mypy==0.971
 
       - name: Get changed files
         id: changed-files
@@ -27,11 +41,6 @@ jobs:
           fi
           echo "$files" >> changed.txt
           cat changed.txt
-
-      - name: Install dependencies
-        run: |
-          pip3 install black==22.3.0 pytest==7.1.2 mypy==0.971
-          git config diff.wsErrorHighlight all
 
       - name: File formatting checks (file_format.sh)
         run: |
