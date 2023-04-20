@@ -21,21 +21,14 @@ jobs:
         with:
           packages: dos2unix libxml2-utils moreutils
 
-      - name: Setup Python with Pip cache
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-          cache: pip
-          cache-dependency-path: misc/scripts/requirements.txt
-
-      - name: Install Pip dependencies
+      - name: Install Python dependencies and general setup
         run: |
-          pip3 install -r misc/scripts/requirements.txt
+          pip3 install black==22.3.0 pytest==7.1.2 mypy==0.971
+          git config diff.wsErrorHighlight all
 
       - name: Get changed files
         id: changed-files
         run: |
-          git config diff.wsErrorHighlight all
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             files=$(git diff-tree --no-commit-id --name-only -r ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} 2> /dev/null)
           elif [ "${{ github.event_name }}" == "push" -a "${{ github.event.forced }}" == "false" -a "${{ github.event.created }}" == "false" ]; then
