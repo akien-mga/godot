@@ -4,6 +4,8 @@ Please keep categories (`##` level) listed alphabetically and matching their
 respective folder names. Use two empty lines to separate categories for
 readability.
 
+Retruns
+
 
 ## amd-fsr
 
