@@ -8703,6 +8703,7 @@ void fragment() {
 	}
 	clear(); // Make sure values are initialized. Will call _snap_update() for us.
 }
+
 Node3DEditor::~Node3DEditor() {
 	memdelete(preview_node);
 	if (preview_sun_dangling && preview_sun) {

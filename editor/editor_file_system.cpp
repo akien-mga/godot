@@ -2455,6 +2455,7 @@ static void _scan_extensions_dir(EditorFileSystemDirectory *d, HashSet<String> &
 		_scan_extensions_dir(d->get_subdir(i), extensions);
 	}
 }
+
 bool EditorFileSystem::_scan_extensions() {
 	EditorFileSystemDirectory *d = get_filesystem();
 	HashSet<String> extensions;
@@ -2564,6 +2565,7 @@ void EditorFileSystem::add_import_format_support_query(Ref<EditorFileSystemImpor
 	ERR_FAIL_COND(import_support_queries.find(p_query) != -1);
 	import_support_queries.push_back(p_query);
 }
+
 void EditorFileSystem::remove_import_format_support_query(Ref<EditorFileSystemImportFormatSupportQuery> p_query) {
 	import_support_queries.erase(p_query);
 }

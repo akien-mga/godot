@@ -297,6 +297,7 @@ void AnimationLibraryEditor::_file_popup_selected(int p_id) {
 		} break;
 	}
 }
+
 void AnimationLibraryEditor::_load_file(String p_path) {
 	switch (file_dialog_action) {
 		case FILE_DIALOG_ACTION_OPEN_LIBRARY: {

@@ -697,6 +697,7 @@ void RenderForwardClustered::_update_instance_data_buffer(RenderListType p_rende
 		RD::get_singleton()->buffer_update(scene_state.instance_buffer[p_render_list], 0, sizeof(SceneState::InstanceData) * scene_state.instance_data[p_render_list].size(), scene_state.instance_data[p_render_list].ptr(), RD::BARRIER_MASK_RASTER);
 	}
 }
+
 void RenderForwardClustered::_fill_instance_data(RenderListType p_render_list, int *p_render_info, uint32_t p_offset, int32_t p_max_elements, bool p_update_buffer) {
 	RenderList *rl = &render_list[p_render_list];
 	uint32_t element_total = p_max_elements >= 0 ? uint32_t(p_max_elements) : rl->elements.size();
@@ -794,6 +795,7 @@ _FORCE_INLINE_ static uint32_t _indices_to_primitives(RS::PrimitiveType p_primit
 	static const uint32_t subtractor[RS::PRIMITIVE_MAX] = { 0, 0, 1, 0, 1 };
 	return (p_indices - subtractor[p_primitive]) / divisor[p_primitive];
 }
+
 void RenderForwardClustered::_fill_render_list(RenderListType p_render_list, const RenderDataRD *p_render_data, PassMode p_pass_mode, uint32_t p_color_pass_flags = 0, bool p_using_sdfgi, bool p_using_opaque_gi, bool p_append) {
 	RendererRD::MeshStorage *mesh_storage = RendererRD::MeshStorage::get_singleton();
 
@@ -2401,6 +2403,7 @@ void RenderForwardClustered::_render_shadow_process() {
 
 	RD::get_singleton()->draw_command_end_label();
 }
+
 void RenderForwardClustered::_render_shadow_end(uint32_t p_barrier) {
 	RD::get_singleton()->draw_command_begin_label("Shadow Render");
 
@@ -3773,6 +3776,7 @@ void RenderForwardClustered::_geometry_instance_dependency_changed(Dependency::D
 		} break;
 	}
 }
+
 void RenderForwardClustered::_geometry_instance_dependency_deleted(const RID &p_dependency, DependencyTracker *p_tracker) {
 	static_cast<RenderGeometryInstance *>(p_tracker->userdata)->_mark_dirty();
 	static_cast<GeometryInstanceForwardClustered *>(p_tracker->userdata)->data->dirty_dependencies = true;

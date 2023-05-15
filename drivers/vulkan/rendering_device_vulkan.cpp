@@ -4028,6 +4028,7 @@ RenderingDevice::FramebufferFormatID RenderingDeviceVulkan::framebuffer_format_c
 	passes.push_back(pass);
 	return framebuffer_format_create_multipass(p_format, passes, p_view_count);
 }
+
 RenderingDevice::FramebufferFormatID RenderingDeviceVulkan::framebuffer_format_create_multipass(const Vector<AttachmentFormat> &p_attachments, const Vector<FramebufferPass> &p_passes, uint32_t p_view_count) {
 	_THREAD_SAFE_METHOD_
 
@@ -4601,11 +4602,13 @@ struct RenderingDeviceVulkanShaderBinaryDataBinding {
 struct RenderingDeviceVulkanShaderBinarySpecializationConstant {
 	uint32_t type;
 	uint32_t constant_id;
+
 	union {
 		uint32_t int_value;
 		float float_value;
 		bool bool_value;
 	};
+
 	uint32_t stage_flags;
 };
 
@@ -7475,6 +7478,7 @@ RenderingDevice::DrawListID RenderingDeviceVulkan::draw_list_switch_to_next_pass
 
 	return int64_t(ID_TYPE_DRAW_LIST) << ID_BASE_SHIFT;
 }
+
 Error RenderingDeviceVulkan::draw_list_switch_to_next_pass_split(uint32_t p_splits, DrawListID *r_split_ids) {
 	ERR_FAIL_COND_V(draw_list == nullptr, ERR_INVALID_PARAMETER);
 	ERR_FAIL_COND_V(draw_list_current_subpass >= draw_list_subpass_count - 1, ERR_INVALID_PARAMETER);

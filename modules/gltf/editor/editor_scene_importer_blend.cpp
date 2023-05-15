@@ -341,6 +341,7 @@ bool EditorFileSystemImportFormatSupportQueryBlend::is_active() const {
 
 	return false;
 }
+
 Vector<String> EditorFileSystemImportFormatSupportQueryBlend::get_file_extensions() const {
 	Vector<String> ret;
 	ret.push_back("blend");
@@ -390,6 +391,7 @@ void EditorFileSystemImportFormatSupportQueryBlend::_select_install(String p_pat
 	blender_path->set_text(p_path);
 	_validate_path(p_path);
 }
+
 void EditorFileSystemImportFormatSupportQueryBlend::_browse_install() {
 	if (blender_path->get_text() != String()) {
 		browse_dialog->set_current_dir(blender_path->get_text());

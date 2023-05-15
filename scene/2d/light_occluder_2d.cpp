@@ -265,6 +265,7 @@ void LightOccluder2D::set_as_sdf_collision(bool p_enable) {
 	sdf_collision = p_enable;
 	RS::get_singleton()->canvas_light_occluder_set_as_sdf_collision(occluder, sdf_collision);
 }
+
 bool LightOccluder2D::is_set_as_sdf_collision() const {
 	return sdf_collision;
 }

@@ -191,14 +191,17 @@ bool ServersDebugger::VisualProfilerFrame::deserialize(const Array &p_arr) {
 	CHECK_END(p_arr, idx, "VisualProfilerFrame");
 	return true;
 }
+
 class ServersDebugger::ScriptsProfiler : public EngineProfiler {
 	typedef ServersDebugger::ScriptFunctionSignature FunctionSignature;
 	typedef ServersDebugger::ScriptFunctionInfo FunctionInfo;
+
 	struct ProfileInfoSort {
 		bool operator()(ScriptLanguage::ProfilingInfo *A, ScriptLanguage::ProfilingInfo *B) const {
 			return A->total_time < B->total_time;
 		}
 	};
+
 	Vector<ScriptLanguage::ProfilingInfo> info;
 	Vector<ScriptLanguage::ProfilingInfo *> ptrs;
 	HashMap<StringName, int> sig_map;

@@ -1543,6 +1543,7 @@ void TileMapEditorTilesPlugin::_fix_invalid_tiles_in_tile_map_selection() {
 		tile_map_selection.erase(cell);
 	}
 }
+
 void TileMapEditorTilesPlugin::patterns_item_list_empty_clicked(const Vector2 &p_pos, MouseButton p_mouse_button_index) {
 	if (p_mouse_button_index == MouseButton::LEFT) {
 		_update_selection_pattern_from_tileset_pattern_selection();

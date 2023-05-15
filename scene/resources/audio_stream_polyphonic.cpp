@@ -50,6 +50,7 @@ void AudioStreamPolyphonic::set_polyphony(int p_voices) {
 	ERR_FAIL_COND(p_voices < 0 || p_voices > 128);
 	polyphony = p_voices;
 }
+
 int AudioStreamPolyphonic::get_polyphony() const {
 	return polyphony;
 }
@@ -109,6 +110,7 @@ int AudioStreamPlaybackPolyphonic::get_loop_count() const {
 double AudioStreamPlaybackPolyphonic::get_playback_position() const {
 	return 0;
 }
+
 void AudioStreamPlaybackPolyphonic::seek(double p_time) {
 	// Ignored.
 }

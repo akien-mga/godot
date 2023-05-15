@@ -324,6 +324,7 @@ bool OptionButton::is_item_disabled(int p_idx) const {
 bool OptionButton::is_item_separator(int p_idx) const {
 	return popup->is_item_separator(p_idx);
 }
+
 void OptionButton::set_item_count(int p_count) {
 	ERR_FAIL_COND(p_count < 0);
 
@@ -352,6 +353,7 @@ bool OptionButton::has_selectable_items() const {
 	}
 	return false;
 }
+
 int OptionButton::get_selectable_item(bool p_from_last) const {
 	if (!p_from_last) {
 		for (int i = 0; i < get_item_count(); i++) {

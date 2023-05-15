@@ -368,6 +368,7 @@ uint32_t WorkerThreadPool::get_group_processed_element_count(GroupID p_group) co
 	task_mutex.unlock();
 	return elements;
 }
+
 bool WorkerThreadPool::is_group_task_completed(GroupID p_group) const {
 	task_mutex.lock();
 	const Group *const *groupp = groups.getptr(p_group);

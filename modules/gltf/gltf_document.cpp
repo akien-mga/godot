@@ -696,6 +696,7 @@ static Vector<uint8_t> _parse_base64_uri(const String &uri) {
 
 	return buf;
 }
+
 Error GLTFDocument::_encode_buffer_glb(Ref<GLTFState> p_state, const String &p_path) {
 	print_verbose("glTF: Total buffers: " + itos(p_state->buffers.size()));
 
@@ -2077,6 +2078,7 @@ Vector<Color> GLTFDocument::_decode_accessor_as_color(Ref<GLTFState> p_state, co
 	}
 	return ret;
 }
+
 Vector<Quaternion> GLTFDocument::_decode_accessor_as_quaternion(Ref<GLTFState> p_state, const GLTFAccessorIndex p_accessor, const bool p_for_vertex) {
 	const Vector<double> attribs = _decode_accessor(p_state, p_accessor, p_for_vertex);
 	Vector<Quaternion> ret;
@@ -2096,6 +2098,7 @@ Vector<Quaternion> GLTFDocument::_decode_accessor_as_quaternion(Ref<GLTFState> p
 	}
 	return ret;
 }
+
 Vector<Transform2D> GLTFDocument::_decode_accessor_as_xform2d(Ref<GLTFState> p_state, const GLTFAccessorIndex p_accessor, const bool p_for_vertex) {
 	const Vector<double> attribs = _decode_accessor(p_state, p_accessor, p_for_vertex);
 	Vector<Transform2D> ret;

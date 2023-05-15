@@ -115,6 +115,7 @@ ManagedCallable::ManagedCallable(GCHandleIntPtr p_delegate_handle, void *p_tramp
 	}
 #endif
 }
+
 /* clang-format on */
 
 ManagedCallable::~ManagedCallable() {

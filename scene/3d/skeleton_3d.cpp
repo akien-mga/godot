@@ -414,6 +414,7 @@ String Skeleton3D::get_bone_name(int p_bone) const {
 	ERR_FAIL_INDEX_V(p_bone, bone_size, "");
 	return bones[p_bone].name;
 }
+
 void Skeleton3D::set_bone_name(int p_bone, const String &p_name) {
 	const int bone_size = bones.size();
 	ERR_FAIL_INDEX(p_bone, bone_size);
@@ -510,12 +511,14 @@ void Skeleton3D::set_bone_rest(int p_bone, const Transform3D &p_rest) {
 	rest_dirty = true;
 	_make_dirty();
 }
+
 Transform3D Skeleton3D::get_bone_rest(int p_bone) const {
 	const int bone_size = bones.size();
 	ERR_FAIL_INDEX_V(p_bone, bone_size, Transform3D());
 
 	return bones[p_bone].rest;
 }
+
 Transform3D Skeleton3D::get_bone_global_rest(int p_bone) const {
 	const int bone_size = bones.size();
 	ERR_FAIL_INDEX_V(p_bone, bone_size, Transform3D());
@@ -569,6 +572,7 @@ void Skeleton3D::set_bone_pose_position(int p_bone, const Vector3 &p_position) {
 		_make_dirty();
 	}
 }
+
 void Skeleton3D::set_bone_pose_rotation(int p_bone, const Quaternion &p_rotation) {
 	const int bone_size = bones.size();
 	ERR_FAIL_INDEX(p_bone, bone_size);
@@ -579,6 +583,7 @@ void Skeleton3D::set_bone_pose_rotation(int p_bone, const Quaternion &p_rotation
 		_make_dirty();
 	}
 }
+
 void Skeleton3D::set_bone_pose_scale(int p_bone, const Vector3 &p_scale) {
 	const int bone_size = bones.size();
 	ERR_FAIL_INDEX(p_bone, bone_size);

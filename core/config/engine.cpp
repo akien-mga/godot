@@ -272,6 +272,7 @@ bool Engine::is_singleton_user_created(const StringName &p_name) const {
 
 	return false;
 }
+
 void Engine::remove_singleton(const StringName &p_name) {
 	ERR_FAIL_COND(!singleton_ptrs.has(p_name));
 
@@ -305,6 +306,7 @@ void Engine::set_write_movie_path(const String &p_path) {
 void Engine::set_shader_cache_path(const String &p_path) {
 	shader_cache_path = p_path;
 }
+
 String Engine::get_shader_cache_path() const {
 	return shader_cache_path;
 }
@@ -327,6 +329,7 @@ void Engine::startup_benchmark_begin_measure(const String &p_what) {
 	startup_benchmark_section = p_what;
 	startup_benchmark_from = OS::get_singleton()->get_ticks_usec();
 }
+
 void Engine::startup_benchmark_end_measure() {
 	uint64_t total = OS::get_singleton()->get_ticks_usec() - startup_benchmark_from;
 	double total_f = double(total) / double(1000000);

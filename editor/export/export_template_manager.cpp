@@ -653,6 +653,7 @@ Error ExportTemplateManager::install_android_template() {
 	ERR_FAIL_COND_V(!FileAccess::exists(source_zip), ERR_CANT_OPEN);
 	return install_android_template_from_file(source_zip);
 }
+
 Error ExportTemplateManager::install_android_template_from_file(const String &p_file) {
 	// To support custom Android builds, we install the Java source code and buildsystem
 	// from android_source.zip to the project's res://android folder.

@@ -34,6 +34,7 @@
 
 struct HashMapHasherKeys {
 	static _FORCE_INLINE_ uint32_t hash(const Key p_key) { return hash_fmix32(static_cast<uint32_t>(p_key)); }
+
 	static _FORCE_INLINE_ uint32_t hash(const CFIndex p_key) { return hash_fmix32(p_key); }
 };
 

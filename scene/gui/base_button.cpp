@@ -540,6 +540,7 @@ BaseButton *ButtonGroup::get_pressed_button() {
 void ButtonGroup::set_allow_unpress(bool p_enabled) {
 	allow_unpress = p_enabled;
 }
+
 bool ButtonGroup::is_allow_unpress() {
 	return allow_unpress;
 }

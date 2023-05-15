@@ -57,6 +57,7 @@ uint32_t MovieWriter::get_audio_mix_rate() const {
 	GDVIRTUAL_REQUIRED_CALL(_get_audio_mix_rate, ret);
 	return ret;
 }
+
 AudioServer::SpeakerMode MovieWriter::get_audio_speaker_mode() const {
 	AudioServer::SpeakerMode ret = AudioServer::SPEAKER_MODE_STEREO;
 	GDVIRTUAL_REQUIRED_CALL(_get_audio_speaker_mode, ret);

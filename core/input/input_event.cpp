@@ -1265,6 +1265,7 @@ bool InputEventScreenTouch::is_pressed() const {
 void InputEventScreenTouch::set_double_tap(bool p_double_tap) {
 	double_tap = p_double_tap;
 }
+
 bool InputEventScreenTouch::is_double_tap() const {
 	return double_tap;
 }

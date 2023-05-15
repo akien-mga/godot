@@ -48,6 +48,7 @@ void UniformSetCacheRD::_invalidate(Cache *p_cache) {
 	cache_allocator.free(p_cache);
 	cache_instances_used--;
 }
+
 void UniformSetCacheRD::_uniform_set_invalidation_callback(void *p_userdata) {
 	singleton->_invalidate(reinterpret_cast<Cache *>(p_userdata));
 }

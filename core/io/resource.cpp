@@ -149,6 +149,7 @@ bool Resource::editor_can_reload_from_file() {
 
 void Resource::reset_state() {
 }
+
 Error Resource::copy_from(const Ref<Resource> &p_resource) {
 	ERR_FAIL_COND_V(p_resource.is_null(), ERR_INVALID_PARAMETER);
 	if (get_class() != p_resource->get_class()) {
@@ -172,6 +173,7 @@ Error Resource::copy_from(const Ref<Resource> &p_resource) {
 	}
 	return OK;
 }
+
 void Resource::reload_from_file() {
 	String path = get_path();
 	if (!path.is_resource_file()) {

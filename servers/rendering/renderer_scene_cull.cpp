@@ -43,6 +43,7 @@
 RID RendererSceneCull::camera_allocate() {
 	return camera_owner.allocate_rid();
 }
+
 void RendererSceneCull::camera_initialize(RID p_rid) {
 	camera_owner.initialize_rid(p_rid);
 }
@@ -352,6 +353,7 @@ void RendererSceneCull::_instance_unpair(Instance *p_A, Instance *p_B) {
 RID RendererSceneCull::scenario_allocate() {
 	return scenario_owner.allocate_rid();
 }
+
 void RendererSceneCull::scenario_initialize(RID p_rid) {
 	scenario_owner.initialize_rid(p_rid);
 
@@ -459,6 +461,7 @@ void RendererSceneCull::_instance_queue_update(Instance *p_instance, bool p_upda
 RID RendererSceneCull::instance_allocate() {
 	return instance_owner.allocate_rid();
 }
+
 void RendererSceneCull::instance_initialize(RID p_rid) {
 	instance_owner.initialize_rid(p_rid);
 	Instance *instance = instance_owner.get_or_null(p_rid);
@@ -1082,6 +1085,7 @@ Vector<ObjectID> RendererSceneCull::instances_cull_aabb(const AABB &p_aabb, RID 
 
 	struct CullAABB {
 		Vector<ObjectID> instances;
+
 		_FORCE_INLINE_ bool operator()(void *p_data) {
 			Instance *p_instance = (Instance *)p_data;
 			if (!p_instance->object_id.is_null()) {
@@ -1105,6 +1109,7 @@ Vector<ObjectID> RendererSceneCull::instances_cull_ray(const Vector3 &p_from, co
 
 	struct CullRay {
 		Vector<ObjectID> instances;
+
 		_FORCE_INLINE_ bool operator()(void *p_data) {
 			Instance *p_instance = (Instance *)p_data;
 			if (!p_instance->object_id.is_null()) {
@@ -1130,6 +1135,7 @@ Vector<ObjectID> RendererSceneCull::instances_cull_convex(const Vector<Plane> &p
 
 	struct CullConvex {
 		Vector<ObjectID> instances;
+
 		_FORCE_INLINE_ bool operator()(void *p_data) {
 			Instance *p_instance = (Instance *)p_data;
 			if (!p_instance->object_id.is_null()) {
@@ -2317,6 +2323,7 @@ bool RendererSceneCull::_light_instance_update_shadow(Instance *p_instance, cons
 
 					struct CullConvex {
 						PagedArray<Instance *> *result;
+
 						_FORCE_INLINE_ bool operator()(void *p_data) {
 							Instance *p_instance = (Instance *)p_data;
 							result->push_back(p_instance);
@@ -2395,6 +2402,7 @@ bool RendererSceneCull::_light_instance_update_shadow(Instance *p_instance, cons
 
 					struct CullConvex {
 						PagedArray<Instance *> *result;
+
 						_FORCE_INLINE_ bool operator()(void *p_data) {
 							Instance *p_instance = (Instance *)p_data;
 							result->push_back(p_instance);
@@ -2458,6 +2466,7 @@ bool RendererSceneCull::_light_instance_update_shadow(Instance *p_instance, cons
 
 			struct CullConvex {
 				PagedArray<Instance *> *result;
+
 				_FORCE_INLINE_ bool operator()(void *p_data) {
 					Instance *p_instance = (Instance *)p_data;
 					result->push_back(p_instance);
@@ -3704,6 +3713,7 @@ void RendererSceneCull::render_particle_colliders() {
 
 			struct CullAABB {
 				PagedArray<Instance *> *result;
+
 				_FORCE_INLINE_ bool operator()(void *p_data) {
 					Instance *p_instance = (Instance *)p_data;
 					result->push_back(p_instance);

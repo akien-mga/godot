@@ -36,6 +36,7 @@ void ImmediateMesh::surface_begin(PrimitiveType p_primitive, const Ref<Material>
 	active_surface_data.material = p_material;
 	surface_active = true;
 }
+
 void ImmediateMesh::surface_set_color(const Color &p_color) {
 	ERR_FAIL_COND_MSG(!surface_active, "Not creating any surface. Use surface_begin() to do it.");
 
@@ -49,6 +50,7 @@ void ImmediateMesh::surface_set_color(const Color &p_color) {
 
 	current_color = p_color;
 }
+
 void ImmediateMesh::surface_set_normal(const Vector3 &p_normal) {
 	ERR_FAIL_COND_MSG(!surface_active, "Not creating any surface. Use surface_begin() to do it.");
 
@@ -62,6 +64,7 @@ void ImmediateMesh::surface_set_normal(const Vector3 &p_normal) {
 
 	current_normal = p_normal;
 }
+
 void ImmediateMesh::surface_set_tangent(const Plane &p_tangent) {
 	ERR_FAIL_COND_MSG(!surface_active, "Not creating any surface. Use surface_begin() to do it.");
 	if (!uses_tangents) {
@@ -74,6 +77,7 @@ void ImmediateMesh::surface_set_tangent(const Plane &p_tangent) {
 
 	current_tangent = p_tangent;
 }
+
 void ImmediateMesh::surface_set_uv(const Vector2 &p_uv) {
 	ERR_FAIL_COND_MSG(!surface_active, "Not creating any surface. Use surface_begin() to do it.");
 	if (!uses_uvs) {
@@ -86,6 +90,7 @@ void ImmediateMesh::surface_set_uv(const Vector2 &p_uv) {
 
 	current_uv = p_uv;
 }
+
 void ImmediateMesh::surface_set_uv2(const Vector2 &p_uv2) {
 	ERR_FAIL_COND_MSG(!surface_active, "Not creating any surface. Use surface_begin() to do it.");
 	if (!uses_uv2s) {
@@ -98,6 +103,7 @@ void ImmediateMesh::surface_set_uv2(const Vector2 &p_uv2) {
 
 	current_uv2 = p_uv2;
 }
+
 void ImmediateMesh::surface_add_vertex(const Vector3 &p_vertex) {
 	ERR_FAIL_COND_MSG(!surface_active, "Not creating any surface. Use surface_begin() to do it.");
 	ERR_FAIL_COND_MSG(vertices.size() && active_surface_data.vertex_2d, "Can't mix 2D and 3D vertices in a surface.");
@@ -324,31 +330,39 @@ void ImmediateMesh::clear_surfaces() {
 int ImmediateMesh::get_surface_count() const {
 	return surfaces.size();
 }
+
 int ImmediateMesh::surface_get_array_len(int p_idx) const {
 	ERR_FAIL_INDEX_V(p_idx, int(surfaces.size()), -1);
 	return surfaces[p_idx].array_len;
 }
+
 int ImmediateMesh::surface_get_array_index_len(int p_idx) const {
 	return 0;
 }
+
 Array ImmediateMesh::surface_get_arrays(int p_surface) const {
 	ERR_FAIL_INDEX_V(p_surface, int(surfaces.size()), Array());
 	return RS::get_singleton()->mesh_surface_get_arrays(mesh, p_surface);
 }
+
 TypedArray<Array> ImmediateMesh::surface_get_blend_shape_arrays(int p_surface) const {
 	return TypedArray<Array>();
 }
+
 Dictionary ImmediateMesh::surface_get_lods(int p_surface) const {
 	return Dictionary();
 }
+
 BitField<Mesh::ArrayFormat> ImmediateMesh::surface_get_format(int p_idx) const {
 	ERR_FAIL_INDEX_V(p_idx, int(surfaces.size()), 0);
 	return surfaces[p_idx].format;
 }
+
 Mesh::PrimitiveType ImmediateMesh::surface_get_primitive_type(int p_idx) const {
 	ERR_FAIL_INDEX_V(p_idx, int(surfaces.size()), PRIMITIVE_MAX);
 	return surfaces[p_idx].primitive;
 }
+
 void ImmediateMesh::surface_set_material(int p_idx, const Ref<Material> &p_material) {
 	ERR_FAIL_INDEX(p_idx, int(surfaces.size()));
 	surfaces[p_idx].material = p_material;
@@ -358,16 +372,20 @@ void ImmediateMesh::surface_set_material(int p_idx, const Ref<Material> &p_mater
 	}
 	RS::get_singleton()->mesh_surface_set_material(mesh, p_idx, mat);
 }
+
 Ref<Material> ImmediateMesh::surface_get_material(int p_idx) const {
 	ERR_FAIL_INDEX_V(p_idx, int(surfaces.size()), Ref<Material>());
 	return surfaces[p_idx].material;
 }
+
 int ImmediateMesh::get_blend_shape_count() const {
 	return 0;
 }
+
 StringName ImmediateMesh::get_blend_shape_name(int p_index) const {
 	return StringName();
 }
+
 void ImmediateMesh::set_blend_shape_name(int p_index, const StringName &p_name) {
 }
 
@@ -404,6 +422,7 @@ RID ImmediateMesh::get_rid() const {
 ImmediateMesh::ImmediateMesh() {
 	mesh = RS::get_singleton()->mesh_create();
 }
+
 ImmediateMesh::~ImmediateMesh() {
 	ERR_FAIL_NULL(RenderingServer::get_singleton());
 	RS::get_singleton()->free(mesh);

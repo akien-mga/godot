@@ -925,6 +925,7 @@ void Node::_add_tree_to_process_thread_group(Node *p_owner) {
 		K.value->_add_to_process_thread_group();
 	}
 }
+
 bool Node::is_processing_internal() const {
 	return data.process_internal;
 }
@@ -3175,11 +3176,13 @@ void Node::call_deferred_thread_groupp(const StringName &p_method, const Variant
 	SceneTree::ProcessGroup *pg = (SceneTree::ProcessGroup *)data.process_group;
 	pg->call_queue.push_callp(this, p_method, p_args, p_argcount, p_show_error);
 }
+
 void Node::set_deferred_thread_group(const StringName &p_property, const Variant &p_value) {
 	ERR_FAIL_COND(!is_inside_tree());
 	SceneTree::ProcessGroup *pg = (SceneTree::ProcessGroup *)data.process_group;
 	pg->call_queue.push_set(this, p_property, p_value);
 }
+
 void Node::notify_deferred_thread_group(int p_notification) {
 	ERR_FAIL_COND(!is_inside_tree());
 	SceneTree::ProcessGroup *pg = (SceneTree::ProcessGroup *)data.process_group;
@@ -3197,6 +3200,7 @@ void Node::call_thread_safep(const StringName &p_method, const Variant **p_args,
 		call_deferred_thread_groupp(p_method, p_args, p_argcount, p_show_error);
 	}
 }
+
 void Node::set_thread_safe(const StringName &p_property, const Variant &p_value) {
 	if (is_accessible_from_caller_thread()) {
 		set(p_property, p_value);
@@ -3204,6 +3208,7 @@ void Node::set_thread_safe(const StringName &p_property, const Variant &p_value)
 		set_deferred_thread_group(p_property, p_value);
 	}
 }
+
 void Node::notify_thread_safe(int p_notification) {
 	if (is_accessible_from_caller_thread()) {
 		notification(p_notification);

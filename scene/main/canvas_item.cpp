@@ -117,6 +117,7 @@ bool CanvasItem::is_visible() const {
 }
 
 CanvasItem *CanvasItem::current_item_drawn = nullptr;
+
 CanvasItem *CanvasItem::get_current_item_drawn() {
 	return current_item_drawn;
 }
@@ -706,6 +707,7 @@ void CanvasItem::draw_set_transform_matrix(const Transform2D &p_matrix) {
 
 	RenderingServer::get_singleton()->canvas_item_add_set_transform(canvas_item, p_matrix);
 }
+
 void CanvasItem::draw_animation_slice(double p_animation_length, double p_slice_begin, double p_slice_end, double p_offset) {
 	ERR_FAIL_COND_MSG(!drawing, "Drawing is only allowed inside NOTIFICATION_DRAW, _draw() function or 'draw' signal.");
 
@@ -1333,6 +1335,7 @@ void CanvasItem::set_clip_children_mode(ClipChildrenMode p_clip_mode) {
 
 	RS::get_singleton()->canvas_item_set_canvas_group_mode(get_canvas_item(), RS::CanvasGroupMode(clip_children_mode));
 }
+
 CanvasItem::ClipChildrenMode CanvasItem::get_clip_children_mode() const {
 	return clip_children_mode;
 }
@@ -1371,6 +1374,7 @@ void CanvasTexture::set_diffuse_texture(const Ref<Texture2D> &p_diffuse) {
 	RS::get_singleton()->canvas_texture_set_channel(canvas_texture, RS::CANVAS_TEXTURE_CHANNEL_DIFFUSE, tex_rid);
 	emit_changed();
 }
+
 Ref<Texture2D> CanvasTexture::get_diffuse_texture() const {
 	return diffuse_texture;
 }
@@ -1381,6 +1385,7 @@ void CanvasTexture::set_normal_texture(const Ref<Texture2D> &p_normal) {
 	RID tex_rid = normal_texture.is_valid() ? normal_texture->get_rid() : RID();
 	RS::get_singleton()->canvas_texture_set_channel(canvas_texture, RS::CANVAS_TEXTURE_CHANNEL_NORMAL, tex_rid);
 }
+
 Ref<Texture2D> CanvasTexture::get_normal_texture() const {
 	return normal_texture;
 }
@@ -1418,6 +1423,7 @@ void CanvasTexture::set_texture_filter(CanvasItem::TextureFilter p_filter) {
 	texture_filter = p_filter;
 	RS::get_singleton()->canvas_texture_set_texture_filter(canvas_texture, RS::CanvasItemTextureFilter(p_filter));
 }
+
 CanvasItem::TextureFilter CanvasTexture::get_texture_filter() const {
 	return texture_filter;
 }
@@ -1426,6 +1432,7 @@ void CanvasTexture::set_texture_repeat(CanvasItem::TextureRepeat p_repeat) {
 	texture_repeat = p_repeat;
 	RS::get_singleton()->canvas_texture_set_texture_repeat(canvas_texture, RS::CanvasItemTextureRepeat(p_repeat));
 }
+
 CanvasItem::TextureRepeat CanvasTexture::get_texture_repeat() const {
 	return texture_repeat;
 }
@@ -1437,6 +1444,7 @@ int CanvasTexture::get_width() const {
 		return 1;
 	}
 }
+
 int CanvasTexture::get_height() const {
 	if (diffuse_texture.is_valid()) {
 		return diffuse_texture->get_height();
@@ -1511,6 +1519,7 @@ void CanvasTexture::_bind_methods() {
 CanvasTexture::CanvasTexture() {
 	canvas_texture = RS::get_singleton()->canvas_texture_create();
 }
+
 CanvasTexture::~CanvasTexture() {
 	ERR_FAIL_NULL(RenderingServer::get_singleton());
 	RS::get_singleton()->free(canvas_texture);

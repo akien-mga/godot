@@ -111,6 +111,7 @@ Error RemoteFilesystemClient::_store_file(const String &p_path, const LocalVecto
 Error RemoteFilesystemClient::_remove_file(const String &p_path) {
 	return DirAccess::remove_absolute(cache_path.path_join(FILES_SUBFOLDER).path_join(p_path));
 }
+
 Error RemoteFilesystemClient::_store_cache_file(const Vector<FileCache> &p_cache) {
 	String full_path = cache_path.path_join(FILES_CACHE_FILE);
 	String base_file_dir = full_path.get_base_dir();

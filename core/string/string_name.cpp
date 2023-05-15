@@ -488,6 +488,7 @@ StringName StringName::search(const String &p_name) {
 bool operator==(const String &p_name, const StringName &p_string_name) {
 	return p_name == p_string_name.operator String();
 }
+
 bool operator!=(const String &p_name, const StringName &p_string_name) {
 	return p_name != p_string_name.operator String();
 }
@@ -495,6 +496,7 @@ bool operator!=(const String &p_name, const StringName &p_string_name) {
 bool operator==(const char *p_name, const StringName &p_string_name) {
 	return p_name == p_string_name.operator String();
 }
+
 bool operator!=(const char *p_name, const StringName &p_string_name) {
 	return p_name != p_string_name.operator String();
 }

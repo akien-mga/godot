@@ -62,6 +62,7 @@ GDExtensionManager::LoadStatus GDExtensionManager::load_extension(const String &
 GDExtensionManager::LoadStatus GDExtensionManager::reload_extension(const String &p_path) {
 	return LOAD_STATUS_OK; //TODO
 }
+
 GDExtensionManager::LoadStatus GDExtensionManager::unload_extension(const String &p_path) {
 	if (!gdextension_map.has(p_path)) {
 		return LOAD_STATUS_NOT_LOADED;
@@ -99,6 +100,7 @@ Vector<String> GDExtensionManager::get_loaded_extensions() const {
 	}
 	return ret;
 }
+
 Ref<GDExtension> GDExtensionManager::get_extension(const String &p_path) {
 	HashMap<String, Ref<GDExtension>>::Iterator E = gdextension_map.find(p_path);
 	ERR_FAIL_COND_V(!E, Ref<GDExtension>());
@@ -148,6 +150,7 @@ void GDExtensionManager::load_extensions() {
 GDExtensionManager *GDExtensionManager::get_singleton() {
 	return singleton;
 }
+
 void GDExtensionManager::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("load_extension", "path"), &GDExtensionManager::load_extension);
 	ClassDB::bind_method(D_METHOD("reload_extension", "path"), &GDExtensionManager::reload_extension);

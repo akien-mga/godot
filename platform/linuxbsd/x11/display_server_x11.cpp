@@ -856,6 +856,7 @@ Size2i DisplayServerX11::screen_get_size(int p_screen) const {
 }
 
 bool g_bad_window = false;
+
 int bad_window_error_handler(Display *display, XErrorEvent *error) {
 	if (error->error_code == BadWindow) {
 		g_bad_window = true;
@@ -4738,6 +4739,7 @@ void DisplayServerX11::set_native_icon(const String &p_filename) {
 }
 
 bool g_set_icon_error = false;
+
 int set_icon_errorhandler(Display *dpy, XErrorEvent *ev) {
 	g_set_icon_error = true;
 	return 0;

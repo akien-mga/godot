@@ -54,6 +54,7 @@ void get_vogel_disk(float *r_kernel, int p_sample_count) {
 RID RendererSceneRenderRD::sky_allocate() {
 	return sky.allocate_sky_rid();
 }
+
 void RendererSceneRenderRD::sky_initialize(RID p_rid) {
 	sky.initialize_sky_rid(p_rid);
 }
@@ -94,6 +95,7 @@ void RendererSceneRenderRD::environment_set_sdfgi_ray_count(RS::EnvironmentSDFGI
 void RendererSceneRenderRD::environment_set_sdfgi_frames_to_converge(RS::EnvironmentSDFGIFramesToConverge p_frames) {
 	gi.sdfgi_frames_to_converge = p_frames;
 }
+
 void RendererSceneRenderRD::environment_set_sdfgi_frames_to_update_light(RS::EnvironmentSDFGIFramesToUpdateLight p_update) {
 	gi.sdfgi_frames_to_update_light = p_update;
 }
@@ -846,6 +848,7 @@ void RendererSceneRenderRD::decals_set_filter(RenderingServer::DecalFilter p_fil
 	decals_filter = p_filter;
 	_update_shader_quality_settings();
 }
+
 void RendererSceneRenderRD::light_projectors_set_filter(RenderingServer::LightProjectorFilter p_filter) {
 	if (light_projectors_filter == p_filter) {
 		return;

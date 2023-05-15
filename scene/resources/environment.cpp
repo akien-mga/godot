@@ -533,6 +533,7 @@ void Environment::set_sdfgi_bounce_feedback(float p_amount) {
 	sdfgi_bounce_feedback = p_amount;
 	_update_sdfgi();
 }
+
 float Environment::get_sdfgi_bounce_feedback() const {
 	return sdfgi_bounce_feedback;
 }
@@ -771,41 +772,52 @@ void Environment::set_fog_light_color(const Color &p_light_color) {
 	fog_light_color = p_light_color;
 	_update_fog();
 }
+
 Color Environment::get_fog_light_color() const {
 	return fog_light_color;
 }
+
 void Environment::set_fog_light_energy(float p_amount) {
 	fog_light_energy = p_amount;
 	_update_fog();
 }
+
 float Environment::get_fog_light_energy() const {
 	return fog_light_energy;
 }
+
 void Environment::set_fog_sun_scatter(float p_amount) {
 	fog_sun_scatter = p_amount;
 	_update_fog();
 }
+
 float Environment::get_fog_sun_scatter() const {
 	return fog_sun_scatter;
 }
+
 void Environment::set_fog_density(float p_amount) {
 	fog_density = p_amount;
 	_update_fog();
 }
+
 float Environment::get_fog_density() const {
 	return fog_density;
 }
+
 void Environment::set_fog_height(float p_amount) {
 	fog_height = p_amount;
 	_update_fog();
 }
+
 float Environment::get_fog_height() const {
 	return fog_height;
 }
+
 void Environment::set_fog_height_density(float p_amount) {
 	fog_height_density = p_amount;
 	_update_fog();
 }
+
 float Environment::get_fog_height_density() const {
 	return fog_height_density;
 }
@@ -814,6 +826,7 @@ void Environment::set_fog_aerial_perspective(float p_aerial_perspective) {
 	fog_aerial_perspective = p_aerial_perspective;
 	_update_fog();
 }
+
 float Environment::get_fog_aerial_perspective() const {
 	return fog_aerial_perspective;
 }
@@ -870,53 +883,67 @@ void Environment::set_volumetric_fog_enabled(bool p_enable) {
 bool Environment::is_volumetric_fog_enabled() const {
 	return volumetric_fog_enabled;
 }
+
 void Environment::set_volumetric_fog_density(float p_density) {
 	volumetric_fog_density = p_density;
 	_update_volumetric_fog();
 }
+
 float Environment::get_volumetric_fog_density() const {
 	return volumetric_fog_density;
 }
+
 void Environment::set_volumetric_fog_albedo(Color p_color) {
 	volumetric_fog_albedo = p_color;
 	_update_volumetric_fog();
 }
+
 Color Environment::get_volumetric_fog_albedo() const {
 	return volumetric_fog_albedo;
 }
+
 void Environment::set_volumetric_fog_emission(Color p_color) {
 	volumetric_fog_emission = p_color;
 	_update_volumetric_fog();
 }
+
 Color Environment::get_volumetric_fog_emission() const {
 	return volumetric_fog_emission;
 }
+
 void Environment::set_volumetric_fog_emission_energy(float p_begin) {
 	volumetric_fog_emission_energy = p_begin;
 	_update_volumetric_fog();
 }
+
 float Environment::get_volumetric_fog_emission_energy() const {
 	return volumetric_fog_emission_energy;
 }
+
 void Environment::set_volumetric_fog_anisotropy(float p_anisotropy) {
 	volumetric_fog_anisotropy = p_anisotropy;
 	_update_volumetric_fog();
 }
+
 float Environment::get_volumetric_fog_anisotropy() const {
 	return volumetric_fog_anisotropy;
 }
+
 void Environment::set_volumetric_fog_length(float p_length) {
 	volumetric_fog_length = p_length;
 	_update_volumetric_fog();
 }
+
 float Environment::get_volumetric_fog_length() const {
 	return volumetric_fog_length;
 }
+
 void Environment::set_volumetric_fog_detail_spread(float p_detail_spread) {
 	p_detail_spread = CLAMP(p_detail_spread, 0.5, 6.0);
 	volumetric_fog_detail_spread = p_detail_spread;
 	_update_volumetric_fog();
 }
+
 float Environment::get_volumetric_fog_detail_spread() const {
 	return volumetric_fog_detail_spread;
 }
@@ -925,13 +952,16 @@ void Environment::set_volumetric_fog_gi_inject(float p_gi_inject) {
 	volumetric_fog_gi_inject = p_gi_inject;
 	_update_volumetric_fog();
 }
+
 float Environment::get_volumetric_fog_gi_inject() const {
 	return volumetric_fog_gi_inject;
 }
+
 void Environment::set_volumetric_fog_ambient_inject(float p_ambient_inject) {
 	volumetric_fog_ambient_inject = p_ambient_inject;
 	_update_volumetric_fog();
 }
+
 float Environment::get_volumetric_fog_ambient_inject() const {
 	return volumetric_fog_ambient_inject;
 }
@@ -949,9 +979,11 @@ void Environment::set_volumetric_fog_temporal_reprojection_enabled(bool p_enable
 	volumetric_fog_temporal_reproject = p_enable;
 	_update_volumetric_fog();
 }
+
 bool Environment::is_volumetric_fog_temporal_reprojection_enabled() const {
 	return volumetric_fog_temporal_reproject;
 }
+
 void Environment::set_volumetric_fog_temporal_reprojection_amount(float p_amount) {
 	volumetric_fog_temporal_reproject_amount = p_amount;
 	_update_volumetric_fog();

@@ -1501,6 +1501,7 @@ void ParticleProcessMaterial::set_sub_emitter_keep_velocity(bool p_enable) {
 	sub_emitter_keep_velocity = p_enable;
 	RenderingServer::get_singleton()->material_set_param(_get_material(), shader_names->sub_emitter_keep_velocity, p_enable);
 }
+
 bool ParticleProcessMaterial::get_sub_emitter_keep_velocity() const {
 	return sub_emitter_keep_velocity;
 }

@@ -35,6 +35,7 @@
 void ImporterMeshInstance3D::set_mesh(const Ref<ImporterMesh> &p_mesh) {
 	mesh = p_mesh;
 }
+
 Ref<ImporterMesh> ImporterMeshInstance3D::get_mesh() const {
 	return mesh;
 }
@@ -42,6 +43,7 @@ Ref<ImporterMesh> ImporterMeshInstance3D::get_mesh() const {
 void ImporterMeshInstance3D::set_skin(const Ref<Skin> &p_skin) {
 	skin = p_skin;
 }
+
 Ref<Skin> ImporterMeshInstance3D::get_skin() const {
 	return skin;
 }
@@ -54,6 +56,7 @@ void ImporterMeshInstance3D::set_surface_material(int p_idx, const Ref<Material>
 
 	surface_materials.write[p_idx] = p_material;
 }
+
 Ref<Material> ImporterMeshInstance3D::get_surface_material(int p_idx) const {
 	ERR_FAIL_COND_V(p_idx < 0, Ref<Material>());
 	if (p_idx >= surface_materials.size()) {
@@ -65,6 +68,7 @@ Ref<Material> ImporterMeshInstance3D::get_surface_material(int p_idx) const {
 void ImporterMeshInstance3D::set_skeleton_path(const NodePath &p_path) {
 	skeleton_path = p_path;
 }
+
 NodePath ImporterMeshInstance3D::get_skeleton_path() const {
 	return skeleton_path;
 }

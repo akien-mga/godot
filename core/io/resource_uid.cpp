@@ -100,6 +100,7 @@ bool ResourceUID::has_id(ID p_id) const {
 	MutexLock l(mutex);
 	return unique_ids.has(p_id);
 }
+
 void ResourceUID::add_id(ID p_id, const String &p_path) {
 	MutexLock l(mutex);
 	ERR_FAIL_COND(unique_ids.has(p_id));
@@ -131,6 +132,7 @@ String ResourceUID::get_id_path(ID p_id) const {
 	const CharString &cs = unique_ids[p_id].cs;
 	return String::utf8(cs.ptr());
 }
+
 void ResourceUID::remove_id(ID p_id) {
 	MutexLock l(mutex);
 	ERR_FAIL_COND(!unique_ids.has(p_id));
@@ -240,6 +242,7 @@ void ResourceUID::clear() {
 	unique_ids.clear();
 	changed = false;
 }
+
 void ResourceUID::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("id_to_text", "id"), &ResourceUID::id_to_text);
 	ClassDB::bind_method(D_METHOD("text_to_id", "text_id"), &ResourceUID::text_to_id);
@@ -254,13 +257,16 @@ void ResourceUID::_bind_methods() {
 
 	BIND_CONSTANT(INVALID_ID)
 }
+
 ResourceUID *ResourceUID::singleton = nullptr;
+
 ResourceUID::ResourceUID() {
 	ERR_FAIL_COND(singleton != nullptr);
 	singleton = this;
 	crypto = memnew(CryptoCore::RandomGenerator);
 	((CryptoCore::RandomGenerator *)crypto)->init();
 }
+
 ResourceUID::~ResourceUID() {
 	memdelete((CryptoCore::RandomGenerator *)crypto);
 }

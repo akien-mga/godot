@@ -803,6 +803,7 @@ void Viewport::_process_picking() {
 							return a->is_greater_than(b);
 						}
 					};
+
 					SortArray<PhysicsDirectSpaceState2D::ShapeResult, ComparatorCollisionObjects> sorter;
 					sorter.sort(res, rc);
 				}
@@ -1284,6 +1285,7 @@ void Viewport::set_positional_shadow_atlas_16_bits(bool p_16_bits) {
 bool Viewport::get_positional_shadow_atlas_16_bits() const {
 	return positional_shadow_atlas_16_bits;
 }
+
 void Viewport::set_positional_shadow_atlas_quadrant_subdiv(int p_quadrant, PositionalShadowAtlasQuadrantSubdiv p_subdiv) {
 	ERR_FAIL_INDEX(p_quadrant, 4);
 	ERR_FAIL_INDEX(p_subdiv, SHADOW_ATLAS_QUADRANT_SUBDIV_MAX);
@@ -2385,6 +2387,7 @@ Window *Viewport::get_base_window() const {
 
 	return w;
 }
+
 void Viewport::_gui_remove_focus_for_window(Node *p_window) {
 	if (get_base_window() == p_window) {
 		gui_release_focus();

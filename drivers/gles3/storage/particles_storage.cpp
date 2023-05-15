@@ -207,11 +207,13 @@ void ParticlesStorage::particles_set_pre_process_time(RID p_particles, double p_
 	ERR_FAIL_COND(!particles);
 	particles->pre_process_time = p_time;
 }
+
 void ParticlesStorage::particles_set_explosiveness_ratio(RID p_particles, real_t p_ratio) {
 	Particles *particles = particles_owner.get_or_null(p_particles);
 	ERR_FAIL_COND(!particles);
 	particles->explosiveness = p_ratio;
 }
+
 void ParticlesStorage::particles_set_randomness_ratio(RID p_particles, real_t p_ratio) {
 	Particles *particles = particles_owner.get_or_null(p_particles);
 	ERR_FAIL_COND(!particles);
@@ -231,6 +233,7 @@ void ParticlesStorage::particles_set_speed_scale(RID p_particles, double p_scale
 
 	particles->speed_scale = p_scale;
 }
+
 void ParticlesStorage::particles_set_use_local_coordinates(RID p_particles, bool p_enable) {
 	Particles *particles = particles_owner.get_or_null(p_particles);
 	ERR_FAIL_COND(!particles);
@@ -881,6 +884,7 @@ void ParticlesStorage::_particles_allocate_history_buffers(Particles *particles)
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 }
+
 void ParticlesStorage::_particles_update_instance_buffer(Particles *particles, const Vector3 &p_axis, const Vector3 &p_up_axis) {
 	ParticlesCopyShaderGLES3::ShaderVariant variant = ParticlesCopyShaderGLES3::MODE_DEFAULT;
 
@@ -1171,6 +1175,7 @@ bool ParticlesStorage::particles_is_inactive(RID p_particles) const {
 RID ParticlesStorage::particles_collision_allocate() {
 	return particles_collision_owner.allocate_rid();
 }
+
 void ParticlesStorage::particles_collision_initialize(RID p_rid) {
 	particles_collision_owner.initialize_rid(p_rid, ParticlesCollision());
 }

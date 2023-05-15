@@ -3945,6 +3945,7 @@ void EditorNode::update_diff_data_for_node(
 		update_diff_data_for_node(p_edited_scene, p_root, child, p_modification_table, p_addition_list);
 	}
 }
+
 //
 
 void EditorNode::open_request(const String &p_path) {
@@ -4440,6 +4441,7 @@ void EditorNode::_begin_first_scan() {
 	Engine::get_singleton()->startup_benchmark_begin_measure("editor_scan_and_import");
 	EditorFileSystem::get_singleton()->scan();
 }
+
 void EditorNode::set_use_startup_benchmark(bool p_use_startup_benchmark, const String &p_startup_benchmark_file) {
 	use_startup_benchmark = p_use_startup_benchmark;
 	startup_benchmark_file = p_startup_benchmark_file;
@@ -5303,6 +5305,7 @@ bool EditorNode::ensure_main_scene(bool p_from_native) {
 void EditorNode::_immediate_dialog_confirmed() {
 	immediate_dialog_confirmed = true;
 }
+
 bool EditorNode::immediate_confirmation_dialog(const String &p_text, const String &p_ok_text, const String &p_cancel_text) {
 	ConfirmationDialog *cd = memnew(ConfirmationDialog);
 	cd->set_text(p_text);

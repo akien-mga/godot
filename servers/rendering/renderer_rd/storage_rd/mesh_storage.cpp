@@ -1218,6 +1218,7 @@ void MeshStorage::_mesh_surface_generate_version_for_input_mask(Mesh::Surface::V
 RID MeshStorage::multimesh_allocate() {
 	return multimesh_owner.allocate_rid();
 }
+
 void MeshStorage::multimesh_initialize(RID p_rid) {
 	multimesh_owner.initialize_rid(p_rid, MultiMesh());
 }
@@ -1895,6 +1896,7 @@ void MeshStorage::_update_dirty_multimeshes() {
 RID MeshStorage::skeleton_allocate() {
 	return skeleton_owner.allocate_rid();
 }
+
 void MeshStorage::skeleton_initialize(RID p_rid) {
 	skeleton_owner.initialize_rid(p_rid, Skeleton());
 }

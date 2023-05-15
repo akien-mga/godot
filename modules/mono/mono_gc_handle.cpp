@@ -44,6 +44,7 @@ void MonoGCHandleData::release() {
 		handle.value = nullptr;
 	}
 }
+
 void MonoGCHandleData::free_gchandle(GCHandleIntPtr p_gchandle) {
 	CRASH_COND(!GDMonoCache::godot_api_cache_updated);
 	GDMonoCache::managed_callbacks.GCHandleBridge_FreeGCHandle(p_gchandle);

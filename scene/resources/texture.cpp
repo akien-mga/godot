@@ -419,6 +419,7 @@ void PortableCompressedTexture2D::_set_data(const Vector<uint8_t> &p_data) {
 PortableCompressedTexture2D::CompressionMode PortableCompressedTexture2D::get_compression_mode() const {
 	return compression_mode;
 }
+
 Vector<uint8_t> PortableCompressedTexture2D::_get_data() const {
 	return compressed_buffer;
 }
@@ -1163,6 +1164,7 @@ Vector<Ref<Image>> Texture3D::get_data() const {
 	}
 	return data;
 }
+
 void Texture3D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_format"), &Texture3D::get_format);
 	ClassDB::bind_method(D_METHOD("get_width"), &Texture3D::get_width);
@@ -1192,15 +1194,19 @@ Ref<Resource> Texture3D::create_placeholder() const {
 Image::Format ImageTexture3D::get_format() const {
 	return format;
 }
+
 int ImageTexture3D::get_width() const {
 	return width;
 }
+
 int ImageTexture3D::get_height() const {
 	return height;
 }
+
 int ImageTexture3D::get_depth() const {
 	return depth;
 }
+
 bool ImageTexture3D::has_mipmaps() const {
 	return mipmaps;
 }
@@ -1258,6 +1264,7 @@ RID ImageTexture3D::get_rid() const {
 	}
 	return texture;
 }
+
 void ImageTexture3D::set_path(const String &p_path, bool p_take_over) {
 	if (texture.is_valid()) {
 		RenderingServer::get_singleton()->texture_set_path(texture, p_path);
@@ -1949,6 +1956,7 @@ void CurveTexture::set_texture_mode(TextureMode p_mode) {
 	texture_mode = p_mode;
 	_update();
 }
+
 CurveTexture::TextureMode CurveTexture::get_texture_mode() const {
 	return texture_mode;
 }
@@ -2461,6 +2469,7 @@ void GradientTexture2D::set_height(int p_height) {
 	height = p_height;
 	_queue_update();
 }
+
 int GradientTexture2D::get_height() const {
 	return height;
 }
@@ -3479,6 +3488,7 @@ void PlaceholderTexture3D::_bind_methods() {
 PlaceholderTexture3D::PlaceholderTexture3D() {
 	rid = RS::get_singleton()->texture_3d_placeholder_create();
 }
+
 PlaceholderTexture3D::~PlaceholderTexture3D() {
 	ERR_FAIL_NULL(RenderingServer::get_singleton());
 	RS::get_singleton()->free(rid);
@@ -3538,6 +3548,7 @@ PlaceholderTextureLayered::PlaceholderTextureLayered(LayeredType p_type) {
 	layered_type = p_type;
 	rid = RS::get_singleton()->texture_2d_layered_placeholder_create(RS::TextureLayeredType(layered_type));
 }
+
 PlaceholderTextureLayered::~PlaceholderTextureLayered() {
 	ERR_FAIL_NULL(RenderingServer::get_singleton());
 	RS::get_singleton()->free(rid);

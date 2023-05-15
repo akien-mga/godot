@@ -66,6 +66,7 @@ void XRPose::_bind_methods() {
 void XRPose::set_has_tracking_data(const bool p_has_tracking_data) {
 	has_tracking_data = p_has_tracking_data;
 }
+
 bool XRPose::get_has_tracking_data() const {
 	return has_tracking_data;
 }

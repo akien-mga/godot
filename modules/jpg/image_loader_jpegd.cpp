@@ -145,6 +145,7 @@ public:
 class ImageLoaderJPGOSBuffer : public jpge::output_stream {
 public:
 	Vector<uint8_t> *buffer = nullptr;
+
 	virtual bool put_buf(const void *Pbuf, int len) {
 		uint32_t base = buffer->size();
 		buffer->resize(base + len);

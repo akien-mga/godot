@@ -85,6 +85,7 @@ Vector4 Projection::xform(const Vector4 &p_vec4) const {
 			columns[0][2] * p_vec4.x + columns[1][2] * p_vec4.y + columns[2][2] * p_vec4.z + columns[3][2] * p_vec4.w,
 			columns[0][3] * p_vec4.x + columns[1][3] * p_vec4.y + columns[2][3] * p_vec4.z + columns[3][3] * p_vec4.w);
 }
+
 Vector4 Projection::xform_inv(const Vector4 &p_vec4) const {
 	return Vector4(
 			columns[0][0] * p_vec4.x + columns[0][1] * p_vec4.y + columns[0][2] * p_vec4.z + columns[0][3] * p_vec4.w,

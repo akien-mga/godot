@@ -2395,6 +2395,7 @@ void ResourceFormatSaverText::get_recognized_extensions(const Ref<Resource> &p_r
 }
 
 ResourceFormatSaverText *ResourceFormatSaverText::singleton = nullptr;
+
 ResourceFormatSaverText::ResourceFormatSaverText() {
 	singleton = this;
 }

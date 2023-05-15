@@ -35,6 +35,7 @@
 uint32_t CallableCustomBind::hash() const {
 	return callable.hash();
 }
+
 String CallableCustomBind::get_as_text() const {
 	return callable.operator String();
 }
@@ -157,6 +158,7 @@ CallableCustomBind::~CallableCustomBind() {
 uint32_t CallableCustomUnbind::hash() const {
 	return callable.hash();
 }
+
 String CallableCustomUnbind::get_as_text() const {
 	return callable.operator String();
 }

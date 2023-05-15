@@ -160,5 +160,6 @@ void AnimationLibrary::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("animation_renamed", PropertyInfo(Variant::STRING_NAME, "name"), PropertyInfo(Variant::STRING_NAME, "to_name")));
 	ADD_SIGNAL(MethodInfo("animation_changed", PropertyInfo(Variant::STRING_NAME, "name")));
 }
+
 AnimationLibrary::AnimationLibrary() {
 }

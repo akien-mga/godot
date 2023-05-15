@@ -168,6 +168,7 @@ void FastNoiseLite::set_fractal_weighted_strength(real_t p_weighted_strength) {
 	_noise.SetFractalWeightedStrength(p_weighted_strength);
 	emit_changed();
 }
+
 real_t FastNoiseLite::get_fractal_weighted_strength() const {
 	return fractal_weighted_strength;
 }
@@ -177,6 +178,7 @@ void FastNoiseLite::set_fractal_ping_pong_strength(real_t p_ping_pong_strength) 
 	_noise.SetFractalPingPongStrength(p_ping_pong_strength);
 	emit_changed();
 }
+
 real_t FastNoiseLite::get_fractal_ping_pong_strength() const {
 	return fractal_ping_pong_strength;
 }
@@ -242,6 +244,7 @@ void FastNoiseLite::set_domain_warp_amplitude(real_t p_amplitude) {
 	_domain_warp_noise.SetDomainWarpAmp(p_amplitude);
 	emit_changed();
 }
+
 real_t FastNoiseLite::get_domain_warp_amplitude() const {
 	return domain_warp_amplitude;
 }

@@ -98,6 +98,7 @@ void PipelineCacheRD::setup(RID p_shader, RD::RenderPrimitive p_primitive, const
 	dynamic_state_flags = p_dynamic_state_flags;
 	base_specialization_constants = p_base_specialization_constants;
 }
+
 void PipelineCacheRD::update_specialization_constants(const Vector<RD::PipelineSpecializationConstant> &p_base_specialization_constants) {
 	base_specialization_constants = p_base_specialization_constants;
 	_clear();

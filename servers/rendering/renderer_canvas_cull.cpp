@@ -410,6 +410,7 @@ bool RendererCanvasCull::was_sdf_used() {
 RID RendererCanvasCull::canvas_allocate() {
 	return canvas_owner.allocate_rid();
 }
+
 void RendererCanvasCull::canvas_initialize(RID p_rid) {
 	canvas_owner.initialize_rid(p_rid);
 }
@@ -446,6 +447,7 @@ void RendererCanvasCull::canvas_set_parent(RID p_canvas, RID p_parent, float p_s
 RID RendererCanvasCull::canvas_item_allocate() {
 	return canvas_item_owner.allocate_rid();
 }
+
 void RendererCanvasCull::canvas_item_initialize(RID p_rid) {
 	canvas_item_owner.initialize_rid(p_rid);
 }
@@ -1733,6 +1735,7 @@ void RendererCanvasCull::canvas_item_set_canvas_group_mode(RID p_item, RS::Canva
 RID RendererCanvasCull::canvas_light_allocate() {
 	return canvas_light_owner.allocate_rid();
 }
+
 void RendererCanvasCull::canvas_light_initialize(RID p_rid) {
 	canvas_light_owner.initialize_rid(p_rid);
 	RendererCanvasRender::Light *clight = canvas_light_owner.get_or_null(p_rid);
@@ -1929,6 +1932,7 @@ void RendererCanvasCull::canvas_light_set_shadow_smooth(RID p_light, float p_smo
 RID RendererCanvasCull::canvas_light_occluder_allocate() {
 	return canvas_light_occluder_owner.allocate_rid();
 }
+
 void RendererCanvasCull::canvas_light_occluder_initialize(RID p_rid) {
 	return canvas_light_occluder_owner.initialize_rid(p_rid);
 }
@@ -2011,6 +2015,7 @@ void RendererCanvasCull::canvas_light_occluder_set_light_mask(RID p_occluder, in
 RID RendererCanvasCull::canvas_occluder_polygon_allocate() {
 	return canvas_light_occluder_polygon_owner.allocate_rid();
 }
+
 void RendererCanvasCull::canvas_occluder_polygon_initialize(RID p_rid) {
 	canvas_light_occluder_polygon_owner.initialize_rid(p_rid);
 	LightOccluderPolygon *occluder_poly = canvas_light_occluder_polygon_owner.get_or_null(p_rid);
@@ -2058,6 +2063,7 @@ void RendererCanvasCull::canvas_set_shadow_texture_size(int p_size) {
 RID RendererCanvasCull::canvas_texture_allocate() {
 	return RSG::texture_storage->canvas_texture_allocate();
 }
+
 void RendererCanvasCull::canvas_texture_initialize(RID p_rid) {
 	RSG::texture_storage->canvas_texture_initialize(p_rid);
 }
@@ -2083,6 +2089,7 @@ void RendererCanvasCull::canvas_item_set_default_texture_filter(RID p_item, RS::
 	ERR_FAIL_COND(!ci);
 	ci->texture_filter = p_filter;
 }
+
 void RendererCanvasCull::canvas_item_set_default_texture_repeat(RID p_item, RS::CanvasItemTextureRepeat p_repeat) {
 	Item *ci = canvas_item_owner.get_or_null(p_item);
 	ERR_FAIL_COND(!ci);

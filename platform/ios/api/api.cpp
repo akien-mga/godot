@@ -43,6 +43,7 @@ void unregister_ios_api() {
 #else
 
 void register_ios_api() {}
+
 void unregister_ios_api() {}
 
 #endif

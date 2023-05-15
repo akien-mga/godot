@@ -225,6 +225,7 @@ double GPUParticles2D::get_lifetime() const {
 int GPUParticles2D::get_trail_sections() const {
 	return trail_sections;
 }
+
 int GPUParticles2D::get_trail_section_subdivisions() const {
 	return trail_section_subdivisions;
 }

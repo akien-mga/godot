@@ -1250,6 +1250,7 @@ Color LightStorage::reflection_probe_get_ambient_color(RID p_probe) const {
 
 	return reflection_probe->ambient_color;
 }
+
 float LightStorage::reflection_probe_get_ambient_color_energy(RID p_probe) const {
 	const ReflectionProbe *reflection_probe = reflection_probe_owner.get_or_null(p_probe);
 	ERR_FAIL_COND_V(!reflection_probe, 0);
@@ -2362,6 +2363,7 @@ void LightStorage::update_directional_shadow_atlas() {
 		directional_shadow.fb = RD::get_singleton()->framebuffer_create(fb_tex);
 	}
 }
+
 void LightStorage::directional_shadow_atlas_set_size(int p_size, bool p_16_bits) {
 	p_size = nearest_power_of_2_templated(p_size);
 

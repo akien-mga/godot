@@ -60,6 +60,7 @@ void CanvasGroup::set_use_mipmaps(bool p_use_mipmaps) {
 	use_mipmaps = p_use_mipmaps;
 	RS::get_singleton()->canvas_item_set_canvas_group_mode(get_canvas_item(), RS::CANVAS_GROUP_MODE_TRANSPARENT, clear_margin, true, fit_margin, use_mipmaps);
 }
+
 bool CanvasGroup::is_using_mipmaps() const {
 	return use_mipmaps;
 }
@@ -83,6 +84,7 @@ void CanvasGroup::_bind_methods() {
 CanvasGroup::CanvasGroup() {
 	set_fit_margin(10.0); //sets things
 }
+
 CanvasGroup::~CanvasGroup() {
 	RS::get_singleton()->canvas_item_set_canvas_group_mode(get_canvas_item(), RS::CANVAS_GROUP_MODE_DISABLED);
 }

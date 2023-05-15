@@ -69,6 +69,7 @@ public:
 
 		return false;
 	}
+
 	void _get_property_list(List<PropertyInfo> *p_list) const {
 		for (const PropertyInfo &E : properties) {
 			if (!importer->get_option_visibility(base_options_path, E.name, values)) {
@@ -504,6 +505,7 @@ void ImportDock::_advanced_options() {
 		params->importer->show_advanced_options(params->paths[0]);
 	}
 }
+
 void ImportDock::_reimport() {
 	for (int i = 0; i < params->paths.size(); i++) {
 		Ref<ConfigFile> config;

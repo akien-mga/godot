@@ -3224,6 +3224,7 @@ void SkyMaterialData::update_parameters(const HashMap<StringName, Variant> &p_pa
 
 SkyMaterialData::~SkyMaterialData() {
 }
+
 GLES3::MaterialData *GLES3::_create_sky_material_func(ShaderData *p_shader) {
 	SkyMaterialData *material_data = memnew(SkyMaterialData);
 	material_data->shader_data = static_cast<SkyShaderData *>(p_shader);

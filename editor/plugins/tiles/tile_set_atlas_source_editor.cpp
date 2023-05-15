@@ -432,14 +432,17 @@ void TileSetAtlasSourceEditor::AtlasTileProxyObject::_get_property_list(List<Pro
 	struct PropertyId {
 		int occurence_id = 0;
 		String property;
+
 		bool operator<(const PropertyId &p_other) const {
 			return occurence_id == p_other.occurence_id ? property < p_other.property : occurence_id < p_other.occurence_id;
 		}
 	};
+
 	struct PLData {
 		int uses = 0;
 		PropertyInfo property_info;
 	};
+
 	RBMap<PropertyId, PLData> usage;
 
 	List<PLData *> data_list;

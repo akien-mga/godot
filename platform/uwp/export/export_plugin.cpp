@@ -42,6 +42,7 @@
 String EditorExportPlatformUWP::get_name() const {
 	return "UWP";
 }
+
 String EditorExportPlatformUWP::get_os_name() const {
 	return "UWP";
 }

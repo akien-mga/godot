@@ -34,6 +34,7 @@
 
 uint8_t MIDIDriver::last_received_message = 0x00;
 MIDIDriver *MIDIDriver::singleton = nullptr;
+
 MIDIDriver *MIDIDriver::get_singleton() {
 	return singleton;
 }

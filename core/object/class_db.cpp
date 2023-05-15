@@ -1330,6 +1330,7 @@ bool ClassDB::has_method(const StringName &p_class, const StringName &p_method, 
 void ClassDB::bind_method_custom(const StringName &p_class, MethodBind *p_method) {
 	_bind_method_custom(p_class, p_method, false);
 }
+
 void ClassDB::bind_compatibility_method_custom(const StringName &p_class, MethodBind *p_method) {
 	_bind_method_custom(p_class, p_method, true);
 }
@@ -1681,6 +1682,7 @@ void ClassDB::unregister_extension_class(const StringName &p_class) {
 }
 
 HashMap<StringName, ClassDB::NativeStruct> ClassDB::native_structs;
+
 void ClassDB::register_native_struct(const StringName &p_name, const String &p_code, uint64_t p_current_size) {
 	NativeStruct ns;
 	ns.ccode = p_code;

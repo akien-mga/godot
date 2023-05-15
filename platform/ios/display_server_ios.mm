@@ -157,6 +157,7 @@ void DisplayServerIOS::window_set_rect_changed_callback(const Callable &p_callab
 void DisplayServerIOS::window_set_window_event_callback(const Callable &p_callable, WindowID p_window) {
 	window_event_callback = p_callable;
 }
+
 void DisplayServerIOS::window_set_input_event_callback(const Callable &p_callable, WindowID p_window) {
 	input_event_callback = p_callable;
 }

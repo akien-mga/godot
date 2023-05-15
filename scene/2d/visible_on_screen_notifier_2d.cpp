@@ -51,6 +51,7 @@ void VisibleOnScreenNotifier2D::_visibility_enter() {
 	emit_signal(SceneStringNames::get_singleton()->screen_entered);
 	_screen_enter();
 }
+
 void VisibleOnScreenNotifier2D::_visibility_exit() {
 	if (!is_inside_tree() || Engine::get_singleton()->is_editor_hint()) {
 		return;
@@ -129,6 +130,7 @@ void VisibleOnScreenEnabler2D::set_enable_mode(EnableMode p_mode) {
 		_update_enable_mode(is_on_screen());
 	}
 }
+
 VisibleOnScreenEnabler2D::EnableMode VisibleOnScreenEnabler2D::get_enable_mode() {
 	return enable_mode;
 }
@@ -147,6 +149,7 @@ void VisibleOnScreenEnabler2D::set_enable_node_path(NodePath p_path) {
 		}
 	}
 }
+
 NodePath VisibleOnScreenEnabler2D::get_enable_node_path() {
 	return enable_node_path;
 }
@@ -171,6 +174,7 @@ void VisibleOnScreenEnabler2D::_update_enable_mode(bool p_enable) {
 		}
 	}
 }
+
 void VisibleOnScreenEnabler2D::_notification(int p_what) {
 	switch (p_what) {
 		case NOTIFICATION_ENTER_TREE: {

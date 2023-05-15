@@ -74,6 +74,7 @@ struct _generate_contacts_Pair {
 	bool a = false;
 	int idx = 0;
 	real_t d = 0.0;
+
 	_FORCE_INLINE_ bool operator<(const _generate_contacts_Pair &l) const { return d < l.d; }
 };
 

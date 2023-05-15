@@ -82,6 +82,7 @@ void ResourceImporterMP3::get_import_options(const String &p_path, List<ImportOp
 bool ResourceImporterMP3::has_advanced_options() const {
 	return true;
 }
+
 void ResourceImporterMP3::show_advanced_options(const String &p_path) {
 	Ref<AudioStreamMP3> mp3_stream = import_mp3(p_path);
 	if (mp3_stream.is_valid()) {

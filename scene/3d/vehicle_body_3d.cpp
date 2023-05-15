@@ -45,6 +45,7 @@ public:
 	real_t getDiagonal() const { return m_Adiag; }
 
 	btVehicleJacobianEntry() {}
+
 	//constraint between two different rigidbodies
 	btVehicleJacobianEntry(
 			const Basis &world2A,
@@ -657,6 +658,7 @@ real_t VehicleBody3D::_calc_rolling_friction(btVehicleWheelContactPoint &contact
 }
 
 static const real_t sideFrictionStiffness2 = real_t(1.0);
+
 void VehicleBody3D::_update_friction(PhysicsDirectBodyState3D *s) {
 	//calculate the impulse, so that the wheels don't move sidewards
 	int numWheel = wheels.size();

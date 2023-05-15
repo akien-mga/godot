@@ -133,6 +133,7 @@ class CMMNotificationClient : public IMMNotificationClient {
 
 public:
 	CMMNotificationClient() {}
+
 	virtual ~CMMNotificationClient() {
 		if ((_pEnumerator) != nullptr) {
 			(_pEnumerator)->Release();

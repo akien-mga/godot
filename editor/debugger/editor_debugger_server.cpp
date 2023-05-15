@@ -47,6 +47,7 @@ public:
 	static EditorDebuggerServer *create(const String &p_protocol);
 
 	virtual void poll() override {}
+
 	virtual String get_uri() const override;
 	virtual Error start(const String &p_uri) override;
 	virtual void stop() override;

@@ -423,6 +423,7 @@ void DynamicBVH::get_elements(List<ID> *r_elements) {
 int DynamicBVH::get_leaf_count() const {
 	return total_leaves;
 }
+
 int DynamicBVH::get_max_depth() const {
 	if (bvh_root) {
 		int depth = 1;

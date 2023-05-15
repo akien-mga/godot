@@ -195,6 +195,7 @@ RID GodotPhysicsDirectBodyState2D::get_contact_collider(int p_contact_idx) const
 	ERR_FAIL_INDEX_V(p_contact_idx, body->contact_count, RID());
 	return body->contacts[p_contact_idx].collider;
 }
+
 Vector2 GodotPhysicsDirectBodyState2D::get_contact_collider_position(int p_contact_idx) const {
 	ERR_FAIL_INDEX_V(p_contact_idx, body->contact_count, Vector2());
 	return body->contacts[p_contact_idx].collider_pos;

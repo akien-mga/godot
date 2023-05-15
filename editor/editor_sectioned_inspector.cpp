@@ -85,6 +85,7 @@ class SectionedInspectorFilter : public Object {
 		r_ret = edited->get(name, &valid);
 		return valid;
 	}
+
 	void _get_property_list(List<PropertyInfo> *p_list) const {
 		if (!edited) {
 			return;

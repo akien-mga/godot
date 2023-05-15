@@ -381,6 +381,7 @@ void AcceptDialog::_bind_methods() {
 }
 
 bool AcceptDialog::swap_cancel_ok = false;
+
 void AcceptDialog::set_swap_cancel_ok(bool p_swap) {
 	swap_cancel_ok = p_swap;
 }

@@ -66,7 +66,9 @@ struct ScopedLocalRef {
 	T local_ref;
 
 	_FORCE_INLINE_ T get() const { return local_ref; }
+
 	_FORCE_INLINE_ operator T() const { return local_ref; }
+
 	_FORCE_INLINE_ operator jvalue() const { return (jvalue)local_ref; }
 
 	_FORCE_INLINE_ operator bool() const { return local_ref != nullptr; }

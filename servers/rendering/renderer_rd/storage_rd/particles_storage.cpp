@@ -365,11 +365,13 @@ void ParticlesStorage::particles_set_pre_process_time(RID p_particles, double p_
 	ERR_FAIL_COND(!particles);
 	particles->pre_process_time = p_time;
 }
+
 void ParticlesStorage::particles_set_explosiveness_ratio(RID p_particles, real_t p_ratio) {
 	Particles *particles = particles_owner.get_or_null(p_particles);
 	ERR_FAIL_COND(!particles);
 	particles->explosiveness = p_ratio;
 }
+
 void ParticlesStorage::particles_set_randomness_ratio(RID p_particles, real_t p_ratio) {
 	Particles *particles = particles_owner.get_or_null(p_particles);
 	ERR_FAIL_COND(!particles);
@@ -389,6 +391,7 @@ void ParticlesStorage::particles_set_speed_scale(RID p_particles, double p_scale
 
 	particles->speed_scale = p_scale;
 }
+
 void ParticlesStorage::particles_set_use_local_coordinates(RID p_particles, bool p_enable) {
 	Particles *particles = particles_owner.get_or_null(p_particles);
 	ERR_FAIL_COND(!particles);
@@ -1313,6 +1316,7 @@ void ParticlesStorage::_particles_update_buffers(Particles *particles) {
 		}
 	}
 }
+
 void ParticlesStorage::update_particles() {
 	while (particle_update_list) {
 		//use transform feedback to process particles
@@ -1658,6 +1662,7 @@ MaterialStorage::MaterialData *ParticlesStorage::_create_particles_material_func
 	//update will happen later anyway so do nothing.
 	return material_data;
 }
+
 ////////
 
 /* PARTICLES COLLISION API */
@@ -1665,6 +1670,7 @@ MaterialStorage::MaterialData *ParticlesStorage::_create_particles_material_func
 RID ParticlesStorage::particles_collision_allocate() {
 	return particles_collision_owner.allocate_rid();
 }
+
 void ParticlesStorage::particles_collision_initialize(RID p_rid) {
 	particles_collision_owner.initialize_rid(p_rid, ParticlesCollision());
 }

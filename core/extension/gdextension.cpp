@@ -164,6 +164,7 @@ protected:
 			return arguments_info[p_arg].type;
 		}
 	}
+
 	virtual PropertyInfo _gen_argument_type_info(int p_arg) const override {
 		if (p_arg < 0) {
 			return return_value_info;
@@ -193,6 +194,7 @@ public:
 		r_error.expected = ce.expected;
 		return ret;
 	}
+
 	virtual void validated_call(Object *p_object, const Variant **p_args, Variant *r_ret) const override {
 		ERR_FAIL_COND_MSG(vararg, "Validated methods don't have ptrcall support. This is most likely an engine bug.");
 		GDExtensionClassInstancePtr extension_instance = is_static() ? nullptr : p_object->_get_extension_instance();
@@ -332,6 +334,7 @@ void GDExtension::_register_extension_class(GDExtensionClassLibraryPtr p_library
 
 	ClassDB::register_extension_class(&extension->gdextension);
 }
+
 void GDExtension::_register_extension_class_method(GDExtensionClassLibraryPtr p_library, GDExtensionConstStringNamePtr p_class_name, const GDExtensionClassMethodInfo *p_method_info) {
 	GDExtension *self = reinterpret_cast<GDExtension *>(p_library);
 
@@ -346,6 +349,7 @@ void GDExtension::_register_extension_class_method(GDExtensionClassLibraryPtr p_
 
 	ClassDB::bind_method_custom(class_name, method);
 }
+
 void GDExtension::_register_extension_class_integer_constant(GDExtensionClassLibraryPtr p_library, GDExtensionConstStringNamePtr p_class_name, GDExtensionConstStringNamePtr p_enum_name, GDExtensionConstStringNamePtr p_constant_name, GDExtensionInt p_constant_value, GDExtensionBool p_is_bitfield) {
 	GDExtension *self = reinterpret_cast<GDExtension *>(p_library);
 
@@ -485,6 +489,7 @@ void GDExtension::initialize_library(InitializationLevel p_level) {
 
 	initialization.initialize(initialization.userdata, GDExtensionInitializationLevel(p_level));
 }
+
 void GDExtension::deinitialize_library(InitializationLevel p_level) {
 	ERR_FAIL_COND(library == nullptr);
 	ERR_FAIL_COND(p_level > int32_t(level_initialized));

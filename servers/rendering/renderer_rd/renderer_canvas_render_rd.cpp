@@ -1610,6 +1610,7 @@ void RendererCanvasRenderRD::_update_shadow_atlas() {
 		state.shadow_fb = RD::get_singleton()->framebuffer_create(fb_textures);
 	}
 }
+
 void RendererCanvasRenderRD::light_update_shadow(RID p_rid, int p_shadow_index, const Transform2D &p_light_xform, int p_light_mask, float p_near, float p_far, LightOccluderInstance *p_occluders) {
 	CanvasLight *cl = canvas_light_owner.get_or_null(p_rid);
 	ERR_FAIL_COND(!cl->shadow.enabled);

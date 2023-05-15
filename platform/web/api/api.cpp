@@ -109,11 +109,14 @@ Variant JavaScriptBridge::_create_object_bind(const Variant **p_args, int p_argc
 bool JavaScriptBridge::pwa_needs_update() const {
 	return false;
 }
+
 Error JavaScriptBridge::pwa_update() {
 	return ERR_UNAVAILABLE;
 }
+
 void JavaScriptBridge::force_fs_sync() {
 }
+
 void JavaScriptBridge::download_buffer(Vector<uint8_t> p_arr, const String &p_name, const String &p_mime) {
 }
 #endif

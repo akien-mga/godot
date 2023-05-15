@@ -1056,6 +1056,7 @@ bool Variant::initialize_ref(Object *p_object) {
 	}
 	return true;
 }
+
 void Variant::reference(const Variant &p_variant) {
 	switch (type) {
 		case NIL:
@@ -3711,6 +3712,7 @@ void Variant::register_types() {
 	_register_variant_destructors();
 	_register_variant_utility_functions();
 }
+
 void Variant::unregister_types() {
 	_unregister_variant_operators();
 	_unregister_variant_methods();

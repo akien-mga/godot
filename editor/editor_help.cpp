@@ -70,9 +70,11 @@ protected:
 
 public:
 	String get_version_hash() const { return version_hash; }
+
 	void set_version_hash(const String &p_version_hash) { version_hash = p_version_hash; }
 
 	Array get_classes() const { return classes; }
+
 	void set_classes(const Array &p_classes) { classes = p_classes; }
 };
 

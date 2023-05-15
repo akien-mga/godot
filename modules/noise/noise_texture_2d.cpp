@@ -272,6 +272,7 @@ void NoiseTexture2D::set_in_3d_space(bool p_enable) {
 	in_3d_space = p_enable;
 	_queue_update();
 }
+
 bool NoiseTexture2D::is_in_3d_space() const {
 	return in_3d_space;
 }
@@ -310,6 +311,7 @@ void NoiseTexture2D::set_seamless_blend_skirt(real_t p_blend_skirt) {
 	seamless_blend_skirt = p_blend_skirt;
 	_queue_update();
 }
+
 real_t NoiseTexture2D::get_seamless_blend_skirt() {
 	return seamless_blend_skirt;
 }

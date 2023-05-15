@@ -76,6 +76,7 @@ public class GodotEditText extends EditText {
 
 	private static class EditHandler extends Handler {
 		private final WeakReference<GodotEditText> mEdit;
+
 		public EditHandler(GodotEditText edit) {
 			mEdit = new WeakReference<>(edit);
 		}

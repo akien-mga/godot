@@ -787,6 +787,7 @@ bool EditorProperty::is_cache_valid() const {
 	}
 	return true;
 }
+
 void EditorProperty::update_cache() {
 	cache.clear();
 	if (object && property != StringName()) {
@@ -797,6 +798,7 @@ void EditorProperty::update_cache() {
 		}
 	}
 }
+
 Variant EditorProperty::get_drag_data(const Point2 &p_point) {
 	if (property == StringName()) {
 		return Variant();
@@ -3595,6 +3597,7 @@ void EditorInspector::_update_inspector_bg() {
 		add_theme_style_override("panel", get_theme_stylebox(SNAME("panel"), SNAME("Tree")));
 	}
 }
+
 void EditorInspector::set_sub_inspector(bool p_enable) {
 	sub_inspector = p_enable;
 	if (!is_inside_tree()) {

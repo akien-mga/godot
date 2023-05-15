@@ -100,6 +100,7 @@
 static uint64_t _clock_start = 0;
 #if defined(__APPLE__)
 static double _clock_scale = 0;
+
 static void _setup_clock() {
 	mach_timebase_info_data_t info;
 	kern_return_t ret = mach_timebase_info(&info);

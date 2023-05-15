@@ -58,6 +58,7 @@ protected:
 			return false;
 		}
 	}
+
 	bool _get(const StringName &p_name, Variant &r_ret) const {
 		if (values.has(p_name)) {
 			r_ret = values[p_name];
@@ -67,6 +68,7 @@ protected:
 			return false;
 		}
 	}
+
 	void _get_property_list(List<PropertyInfo> *p_list) const {
 		if (importer.is_null()) {
 			return;

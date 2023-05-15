@@ -1389,6 +1389,7 @@ void CharacterBody2D::_move_and_slide_floating(double p_delta) {
 		first_slide = false;
 	}
 }
+
 void CharacterBody2D::apply_floor_snap() {
 	_apply_floor_snap();
 }

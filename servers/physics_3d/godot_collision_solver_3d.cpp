@@ -36,6 +36,7 @@
 #include "gjk_epa.h"
 
 #define collision_solver sat_calculate_penetration
+
 //#define collision_solver gjk_epa_calculate_penetration
 
 bool GodotCollisionSolver3D::solve_static_world_boundary(const GodotShape3D *p_shape_A, const Transform3D &p_transform_A, const GodotShape3D *p_shape_B, const Transform3D &p_transform_B, CallbackResult p_result_callback, void *p_userdata, bool p_swap_result, real_t p_margin) {

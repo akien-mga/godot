@@ -722,6 +722,7 @@ uint32_t RenderingServer::mesh_surface_get_format_vertex_stride(BitField<ArrayFo
 	mesh_surface_make_offsets_from_format(p_format, p_vertex_len, 0, offsets, vstr, astr, sstr);
 	return vstr;
 }
+
 uint32_t RenderingServer::mesh_surface_get_format_attribute_stride(BitField<ArrayFormat> p_format, int p_vertex_len) const {
 	p_format = int64_t(p_format) & ~ARRAY_FORMAT_INDEX;
 	uint32_t offsets[ARRAY_MAX];
@@ -731,6 +732,7 @@ uint32_t RenderingServer::mesh_surface_get_format_attribute_stride(BitField<Arra
 	mesh_surface_make_offsets_from_format(p_format, p_vertex_len, 0, offsets, vstr, astr, sstr);
 	return astr;
 }
+
 uint32_t RenderingServer::mesh_surface_get_format_skin_stride(BitField<ArrayFormat> p_format, int p_vertex_len) const {
 	p_format = int64_t(p_format) & ~ARRAY_FORMAT_INDEX;
 	uint32_t offsets[ARRAY_MAX];
@@ -1494,9 +1496,11 @@ static Vector<Ref<Image>> _get_imgvec(const TypedArray<Image> &p_layers) {
 	}
 	return images;
 }
+
 RID RenderingServer::_texture_2d_layered_create(const TypedArray<Image> &p_layers, TextureLayeredType p_layered_type) {
 	return texture_2d_layered_create(_get_imgvec(p_layers), p_layered_type);
 }
+
 RID RenderingServer::_texture_3d_create(Image::Format p_format, int p_width, int p_height, int p_depth, bool p_mipmaps, const TypedArray<Image> &p_data) {
 	return texture_3d_create(p_format, p_width, p_height, p_depth, p_mipmaps, _get_imgvec(p_data));
 }
@@ -1581,6 +1585,7 @@ static RS::SurfaceData _dict_to_surf(const Dictionary &p_dictionary) {
 
 	return sd;
 }
+
 RID RenderingServer::_mesh_create_from_surfaces(const TypedArray<Dictionary> &p_surfaces, int p_blend_shape_count) {
 	Vector<RS::SurfaceData> surfaces;
 	for (int i = 0; i < p_surfaces.size(); i++) {
@@ -1588,9 +1593,11 @@ RID RenderingServer::_mesh_create_from_surfaces(const TypedArray<Dictionary> &p_
 	}
 	return mesh_create_from_surfaces(surfaces);
 }
+
 void RenderingServer::_mesh_add_surface(RID p_mesh, const Dictionary &p_surface) {
 	mesh_add_surface(p_mesh, _dict_to_surf(p_surface));
 }
+
 Dictionary RenderingServer::_mesh_get_surface(RID p_mesh, int p_idx) {
 	RS::SurfaceData sd = mesh_get_surface(p_mesh, p_idx);
 

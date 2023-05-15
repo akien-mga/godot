@@ -777,6 +777,7 @@ EditorPlugin::AfterGUIInput GridMapEditor::forward_spatial_input_event(Camera3D 
 struct _CGMEItemSort {
 	String name;
 	int id = 0;
+
 	_FORCE_INLINE_ bool operator<(const _CGMEItemSort &r_it) const { return name < r_it.name; }
 };
 

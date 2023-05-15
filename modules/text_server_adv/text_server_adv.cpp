@@ -875,6 +875,7 @@ class DistancePixelConversion {
 public:
 	_FORCE_INLINE_ explicit DistancePixelConversion(double range) :
 			invRange(1 / range) {}
+
 	_FORCE_INLINE_ void operator()(float *pixels, const msdfgen::MultiAndTrueDistance &distance) const {
 		pixels[0] = float(invRange * distance.r + .5);
 		pixels[1] = float(invRange * distance.g + .5);

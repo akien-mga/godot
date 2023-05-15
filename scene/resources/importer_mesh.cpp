@@ -204,14 +204,17 @@ Mesh::PrimitiveType ImporterMesh::get_surface_primitive_type(int p_surface) {
 	ERR_FAIL_INDEX_V(p_surface, surfaces.size(), Mesh::PRIMITIVE_MAX);
 	return surfaces[p_surface].primitive;
 }
+
 Array ImporterMesh::get_surface_arrays(int p_surface) const {
 	ERR_FAIL_INDEX_V(p_surface, surfaces.size(), Array());
 	return surfaces[p_surface].arrays;
 }
+
 String ImporterMesh::get_surface_name(int p_surface) const {
 	ERR_FAIL_INDEX_V(p_surface, surfaces.size(), String());
 	return surfaces[p_surface].name;
 }
+
 void ImporterMesh::set_surface_name(int p_surface, const String &p_name) {
 	ERR_FAIL_INDEX(p_surface, surfaces.size());
 	surfaces.write[p_surface].name = p_name;
@@ -223,10 +226,12 @@ Array ImporterMesh::get_surface_blend_shape_arrays(int p_surface, int p_blend_sh
 	ERR_FAIL_INDEX_V(p_blend_shape, surfaces[p_surface].blend_shape_data.size(), Array());
 	return surfaces[p_surface].blend_shape_data[p_blend_shape].arrays;
 }
+
 int ImporterMesh::get_surface_lod_count(int p_surface) const {
 	ERR_FAIL_INDEX_V(p_surface, surfaces.size(), 0);
 	return surfaces[p_surface].lods.size();
 }
+
 Vector<int> ImporterMesh::get_surface_lod_indices(int p_surface, int p_lod) const {
 	ERR_FAIL_INDEX_V(p_surface, surfaces.size(), Vector<int>());
 	ERR_FAIL_INDEX_V(p_lod, surfaces[p_surface].lods.size(), Vector<int>());
@@ -866,6 +871,7 @@ void ImporterMesh::_set_data(const Dictionary &p_data) {
 		}
 	}
 }
+
 Dictionary ImporterMesh::_get_data() const {
 	Dictionary data;
 	if (blend_shapes.size()) {

@@ -3201,6 +3201,7 @@ RID TextureStorage::render_target_get_sdf_framebuffer(RID p_render_target) {
 
 	return rt->sdf_buffer_write_fb;
 }
+
 void TextureStorage::render_target_sdf_process(RID p_render_target) {
 	RenderTarget *rt = render_target_owner.get_or_null(p_render_target);
 	ERR_FAIL_COND(!rt);
@@ -3411,6 +3412,7 @@ RID TextureStorage::render_target_get_framebuffer_uniform_set(RID p_render_targe
 	ERR_FAIL_COND_V(!rt, RID());
 	return rt->framebuffer_uniform_set;
 }
+
 RID TextureStorage::render_target_get_backbuffer_uniform_set(RID p_render_target) {
 	RenderTarget *rt = render_target_owner.get_or_null(p_render_target);
 	ERR_FAIL_COND_V(!rt, RID());

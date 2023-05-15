@@ -68,6 +68,7 @@ void EditorNativeShaderSourceVisualizer::_inspect_shader(RID p_shader) {
 void EditorNativeShaderSourceVisualizer::_bind_methods() {
 	ClassDB::bind_method("_inspect_shader", &EditorNativeShaderSourceVisualizer::_inspect_shader);
 }
+
 EditorNativeShaderSourceVisualizer::EditorNativeShaderSourceVisualizer() {
 	add_to_group("_native_shader_source_visualizer");
 	set_title(TTR("Native Shader Source Inspector"));

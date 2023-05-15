@@ -37,6 +37,7 @@
 /// Resources
 
 CryptoKey *(*CryptoKey::_create)() = nullptr;
+
 CryptoKey *CryptoKey::create() {
 	if (_create) {
 		return _create();
@@ -53,6 +54,7 @@ void CryptoKey::_bind_methods() {
 }
 
 X509Certificate *(*X509Certificate::_create)() = nullptr;
+
 X509Certificate *X509Certificate::create() {
 	if (_create) {
 		return _create();
@@ -115,6 +117,7 @@ void HMACContext::_bind_methods() {
 }
 
 HMACContext *(*HMACContext::_create)() = nullptr;
+
 HMACContext *HMACContext::create() {
 	if (_create) {
 		return _create();
@@ -126,6 +129,7 @@ HMACContext *HMACContext::create() {
 
 void (*Crypto::_load_default_certificates)(String p_path) = nullptr;
 Crypto *(*Crypto::_create)() = nullptr;
+
 Crypto *Crypto::create() {
 	if (_create) {
 		return _create();

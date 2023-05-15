@@ -77,6 +77,7 @@ public:
 	}
 
 	std::string name() { return std::string(sym->Name); }
+
 	std::string undecorated_name() {
 		if (*sym->Name == '\0') {
 			return "<couldn't map PC to fn name>";

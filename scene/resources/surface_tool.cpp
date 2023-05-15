@@ -1260,6 +1260,7 @@ void SurfaceTool::set_skin_weight_count(SkinWeightCount p_weights) {
 	ERR_FAIL_COND(begun);
 	skin_weights = p_weights;
 }
+
 SurfaceTool::SkinWeightCount SurfaceTool::get_skin_weight_count() const {
 	return skin_weights;
 }
@@ -1274,10 +1275,12 @@ void SurfaceTool::set_custom_format(int p_channel_index, CustomFormat p_format) 
 Mesh::PrimitiveType SurfaceTool::get_primitive_type() const {
 	return primitive;
 }
+
 SurfaceTool::CustomFormat SurfaceTool::get_custom_format(int p_channel_index) const {
 	ERR_FAIL_INDEX_V(p_channel_index, RS::ARRAY_CUSTOM_COUNT, CUSTOM_MAX);
 	return last_custom_format[p_channel_index];
 }
+
 void SurfaceTool::optimize_indices_for_cache() {
 	ERR_FAIL_COND(optimize_vertex_cache_func == nullptr);
 	ERR_FAIL_COND(index_array.size() == 0);
@@ -1303,6 +1306,7 @@ AABB SurfaceTool::get_aabb() const {
 
 	return aabb;
 }
+
 Vector<int> SurfaceTool::generate_lod(float p_threshold, int p_target_index_count) {
 	Vector<int> lod;
 

@@ -50,10 +50,12 @@
 static String make_regex_gds_os_property_set(String name_set) {
 	return String("\\bOS\\.") + name_set + "\\s*\\((.*)\\)";
 }
+
 // Find "OS.property = x", capturing x into $1 or $2.
 static String make_regex_gds_os_property_assign(String name) {
 	return String("\\bOS\\.") + name + "\\s*=\\s*([^#]+)";
 }
+
 // Find "OS.property" OR "OS.get_property()" / "OS.is_property()".
 static String make_regex_gds_os_property_get(String name, String get) {
 	return String("\\bOS\\.(") + get + "_)?" + name + "(\\s*\\(\\s*\\))?";
@@ -250,6 +252,7 @@ public:
 			}
 		}
 	}
+
 	~RegExContainer() {
 		for (RegEx *regex : color_regexes) {
 			memdelete(regex);
@@ -998,6 +1001,7 @@ bool ProjectConverter3To4::test_conversion(RegExContainer &reg_container) {
 	}
 	valid = valid && (got == expected);
 }
+
 {
 	String base = "r.";
 	String expected = "r.";

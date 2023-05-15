@@ -5096,6 +5096,7 @@ struct _AnimMoveRestore {
 	Variant key;
 	float transition = 0;
 };
+
 // Used for undo/redo.
 
 void AnimationTrackEditor::_clear_key_edit() {

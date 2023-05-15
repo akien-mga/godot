@@ -4503,6 +4503,7 @@ bool Tree::is_column_expanding(int p_column) const {
 
 	return columns[p_column].expand;
 }
+
 int Tree::get_column_expand_ratio(int p_column) const {
 	ERR_FAIL_INDEX_V(p_column, columns.size(), 1);
 

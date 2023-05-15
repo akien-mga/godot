@@ -2793,6 +2793,7 @@ EditorPropertyQuaternion::EditorPropertyQuaternion() {
 		set_label_reference(spin[0]); //show text and buttons around this
 	}
 }
+
 ///////////////////// VECTOR4 /////////////////////////
 
 void EditorPropertyVector4::_set_read_only(bool p_read_only) {
@@ -3439,6 +3440,7 @@ EditorPropertyProjection::EditorPropertyProjection() {
 	}
 	set_bottom_editor(g);
 }
+
 ////////////// COLOR PICKER //////////////////////
 
 void EditorPropertyColor::_set_read_only(bool p_read_only) {

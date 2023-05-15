@@ -602,6 +602,7 @@ RID NavigationServer2D::obstacle_create() {
 	RID obstacle = NavigationServer3D::get_singleton()->obstacle_create();
 	return obstacle;
 }
+
 void FORWARD_2(obstacle_set_map, RID, p_obstacle, RID, p_map, rid_to_rid, rid_to_rid);
 RID FORWARD_1_C(obstacle_get_map, RID, p_obstacle, rid_to_rid);
 void FORWARD_2(obstacle_set_position, RID, p_obstacle, Vector2, p_position, rid_to_rid, v2_to_v3);

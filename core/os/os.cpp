@@ -294,6 +294,7 @@ Error OS::shell_show_in_file_manager(String p_path, bool p_open_folder) {
 	}
 	return shell_open(p_path);
 }
+
 // implement these with the canvas?
 
 uint64_t OS::get_static_memory_usage() const {

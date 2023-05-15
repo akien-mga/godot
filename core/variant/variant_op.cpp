@@ -56,12 +56,15 @@ public:
 		*r_ret = Vector2(a.x, a.y) * b;
 		r_valid = true;
 	}
+
 	static inline void validated_evaluate(const Variant *left, const Variant *right, Variant *r_ret) {
 		*VariantGetInternalPtr<Vector2>::get_ptr(r_ret) = Vector2(VariantGetInternalPtr<Vector2i>::get_ptr(left)->x, VariantGetInternalPtr<Vector2i>::get_ptr(left)->y) * *VariantGetInternalPtr<double>::get_ptr(right);
 	}
+
 	static void ptr_evaluate(const void *left, const void *right, void *r_ret) {
 		PtrToArg<Vector2>::encode(Vector2(PtrToArg<Vector2i>::convert(left).x, PtrToArg<Vector2i>::convert(left).y) * PtrToArg<double>::convert(right), r_ret);
 	}
+
 	static Variant::Type get_return_type() { return GetTypeInfo<Vector2>::VARIANT_TYPE; }
 };
 
@@ -74,12 +77,15 @@ public:
 		*r_ret = Vector2(a.x, a.y) * b;
 		r_valid = true;
 	}
+
 	static inline void validated_evaluate(const Variant *left, const Variant *right, Variant *r_ret) {
 		*VariantGetInternalPtr<Vector2>::get_ptr(r_ret) = Vector2(VariantGetInternalPtr<Vector2i>::get_ptr(right)->x, VariantGetInternalPtr<Vector2i>::get_ptr(right)->y) * *VariantGetInternalPtr<double>::get_ptr(left);
 	}
+
 	static void ptr_evaluate(const void *left, const void *right, void *r_ret) {
 		PtrToArg<Vector2>::encode(Vector2(PtrToArg<Vector2i>::convert(right).x, PtrToArg<Vector2i>::convert(right).y) * PtrToArg<double>::convert(left), r_ret);
 	}
+
 	static Variant::Type get_return_type() { return GetTypeInfo<Vector2>::VARIANT_TYPE; }
 };
 
@@ -97,12 +103,15 @@ public:
 		*r_ret = Vector2(a.x, a.y) / b;
 		r_valid = true;
 	}
+
 	static inline void validated_evaluate(const Variant *left, const Variant *right, Variant *r_ret) {
 		*VariantGetInternalPtr<Vector2>::get_ptr(r_ret) = Vector2(VariantGetInternalPtr<Vector2i>::get_ptr(left)->x, VariantGetInternalPtr<Vector2i>::get_ptr(left)->y) / *VariantGetInternalPtr<double>::get_ptr(right);
 	}
+
 	static void ptr_evaluate(const void *left, const void *right, void *r_ret) {
 		PtrToArg<Vector2>::encode(Vector2(PtrToArg<Vector2i>::convert(left).x, PtrToArg<Vector2i>::convert(left).y) / PtrToArg<double>::convert(right), r_ret);
 	}
+
 	static Variant::Type get_return_type() { return GetTypeInfo<Vector2>::VARIANT_TYPE; }
 };
 
@@ -115,12 +124,15 @@ public:
 		*r_ret = Vector3(a.x, a.y, a.z) * b;
 		r_valid = true;
 	}
+
 	static inline void validated_evaluate(const Variant *left, const Variant *right, Variant *r_ret) {
 		*VariantGetInternalPtr<Vector3>::get_ptr(r_ret) = Vector3(VariantGetInternalPtr<Vector3i>::get_ptr(left)->x, VariantGetInternalPtr<Vector3i>::get_ptr(left)->y, VariantGetInternalPtr<Vector3i>::get_ptr(left)->z) * *VariantGetInternalPtr<double>::get_ptr(right);
 	}
+
 	static void ptr_evaluate(const void *left, const void *right, void *r_ret) {
 		PtrToArg<Vector3>::encode(Vector3(PtrToArg<Vector3i>::convert(left).x, PtrToArg<Vector3i>::convert(left).y, PtrToArg<Vector3i>::convert(left).z) * PtrToArg<double>::convert(right), r_ret);
 	}
+
 	static Variant::Type get_return_type() { return GetTypeInfo<Vector3>::VARIANT_TYPE; }
 };
 
@@ -133,12 +145,15 @@ public:
 		*r_ret = Vector3(a.x, a.y, a.z) * b;
 		r_valid = true;
 	}
+
 	static inline void validated_evaluate(const Variant *left, const Variant *right, Variant *r_ret) {
 		*VariantGetInternalPtr<Vector3>::get_ptr(r_ret) = Vector3(VariantGetInternalPtr<Vector3i>::get_ptr(right)->x, VariantGetInternalPtr<Vector3i>::get_ptr(right)->y, VariantGetInternalPtr<Vector3i>::get_ptr(right)->z) * *VariantGetInternalPtr<double>::get_ptr(left);
 	}
+
 	static void ptr_evaluate(const void *left, const void *right, void *r_ret) {
 		PtrToArg<Vector3>::encode(Vector3(PtrToArg<Vector3i>::convert(right).x, PtrToArg<Vector3i>::convert(right).y, PtrToArg<Vector3i>::convert(right).z) * PtrToArg<double>::convert(left), r_ret);
 	}
+
 	static Variant::Type get_return_type() { return GetTypeInfo<Vector3>::VARIANT_TYPE; }
 };
 
@@ -156,12 +171,15 @@ public:
 		*r_ret = Vector3(a.x, a.y, a.z) / b;
 		r_valid = true;
 	}
+
 	static inline void validated_evaluate(const Variant *left, const Variant *right, Variant *r_ret) {
 		*VariantGetInternalPtr<Vector3>::get_ptr(r_ret) = Vector3(VariantGetInternalPtr<Vector3i>::get_ptr(left)->x, VariantGetInternalPtr<Vector3i>::get_ptr(left)->y, VariantGetInternalPtr<Vector3i>::get_ptr(left)->z) / *VariantGetInternalPtr<double>::get_ptr(right);
 	}
+
 	static void ptr_evaluate(const void *left, const void *right, void *r_ret) {
 		PtrToArg<Vector3>::encode(Vector3(PtrToArg<Vector3i>::convert(left).x, PtrToArg<Vector3i>::convert(left).y, PtrToArg<Vector3i>::convert(left).z) / PtrToArg<double>::convert(right), r_ret);
 	}
+
 	static Variant::Type get_return_type() { return GetTypeInfo<Vector3>::VARIANT_TYPE; }
 };
 
@@ -176,12 +194,15 @@ public:
 		*r_ret = Vector4(a.x, a.y, a.z, a.w) * b;
 		r_valid = true;
 	}
+
 	static inline void validated_evaluate(const Variant *left, const Variant *right, Variant *r_ret) {
 		*VariantGetInternalPtr<Vector4>::get_ptr(r_ret) = Vector4(VariantGetInternalPtr<Vector4i>::get_ptr(left)->x, VariantGetInternalPtr<Vector4i>::get_ptr(left)->y, VariantGetInternalPtr<Vector4i>::get_ptr(left)->z, VariantGetInternalPtr<Vector4i>::get_ptr(left)->w) * *VariantGetInternalPtr<double>::get_ptr(right);
 	}
+
 	static void ptr_evaluate(const void *left, const void *right, void *r_ret) {
 		PtrToArg<Vector4>::encode(Vector4(PtrToArg<Vector4i>::convert(left).x, PtrToArg<Vector4i>::convert(left).y, PtrToArg<Vector4i>::convert(left).z, PtrToArg<Vector4i>::convert(left).w) * PtrToArg<double>::convert(right), r_ret);
 	}
+
 	static Variant::Type get_return_type() { return GetTypeInfo<Vector4>::VARIANT_TYPE; }
 };
 
@@ -194,12 +215,15 @@ public:
 		*r_ret = Vector4(a.x, a.y, a.z, a.w) * b;
 		r_valid = true;
 	}
+
 	static inline void validated_evaluate(const Variant *left, const Variant *right, Variant *r_ret) {
 		*VariantGetInternalPtr<Vector4>::get_ptr(r_ret) = Vector4(VariantGetInternalPtr<Vector4i>::get_ptr(right)->x, VariantGetInternalPtr<Vector4i>::get_ptr(right)->y, VariantGetInternalPtr<Vector4i>::get_ptr(right)->z, VariantGetInternalPtr<Vector4i>::get_ptr(right)->w) * *VariantGetInternalPtr<double>::get_ptr(left);
 	}
+
 	static void ptr_evaluate(const void *left, const void *right, void *r_ret) {
 		PtrToArg<Vector4>::encode(Vector4(PtrToArg<Vector4i>::convert(right).x, PtrToArg<Vector4i>::convert(right).y, PtrToArg<Vector4i>::convert(right).z, PtrToArg<Vector4i>::convert(right).w) * PtrToArg<double>::convert(left), r_ret);
 	}
+
 	static Variant::Type get_return_type() { return GetTypeInfo<Vector4>::VARIANT_TYPE; }
 };
 

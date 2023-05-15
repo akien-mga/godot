@@ -50,6 +50,7 @@ struct _ObjectDebugLock {
 		obj = p_obj;
 		obj->_lock_index.ref();
 	}
+
 	~_ObjectDebugLock() {
 		obj->_lock_index.unref();
 	}

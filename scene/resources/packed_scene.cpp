@@ -1935,6 +1935,7 @@ void PackedScene::set_path(const String &p_path, bool p_take_over) {
 void PackedScene::reset_state() {
 	clear();
 }
+
 void PackedScene::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("pack", "path"), &PackedScene::pack);
 	ClassDB::bind_method(D_METHOD("instantiate", "edit_state"), &PackedScene::instantiate, DEFVAL(GEN_EDIT_STATE_DISABLED));

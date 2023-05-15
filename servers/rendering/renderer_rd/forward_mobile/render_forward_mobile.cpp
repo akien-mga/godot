@@ -59,6 +59,7 @@ RendererRD::ForwardID RenderForwardMobile::ForwardIDStorageMobile::allocate_forw
 
 	return index;
 }
+
 void RenderForwardMobile::ForwardIDStorageMobile::free_forward_id(RendererRD::ForwardIDType p_type, RendererRD::ForwardID p_id) {
 	ERR_FAIL_INDEX(p_id, (RendererRD::ForwardID)forward_id_allocators[p_type].allocations.size());
 	forward_id_allocators[p_type].allocations[p_id] = false;
@@ -2707,6 +2708,7 @@ void RenderForwardMobile::_geometry_instance_dependency_changed(Dependency::Depe
 		} break;
 	}
 }
+
 void RenderForwardMobile::_geometry_instance_dependency_deleted(const RID &p_dependency, DependencyTracker *p_tracker) {
 	static_cast<RenderGeometryInstance *>(p_tracker->userdata)->_mark_dirty();
 	static_cast<GeometryInstanceForwardMobile *>(p_tracker->userdata)->data->dirty_dependencies = true;

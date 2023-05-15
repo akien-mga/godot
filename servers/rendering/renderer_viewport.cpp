@@ -1288,6 +1288,7 @@ void RendererViewport::viewport_set_default_canvas_item_texture_filter(RID p_vie
 
 	viewport->texture_filter = p_filter;
 }
+
 void RendererViewport::viewport_set_default_canvas_item_texture_repeat(RID p_viewport, RS::CanvasItemTextureRepeat p_repeat) {
 	ERR_FAIL_COND_MSG(p_repeat == RS::CANVAS_ITEM_TEXTURE_REPEAT_DEFAULT, "Viewport does not accept DEFAULT as texture repeat (it's the topmost choice already).)");
 	Viewport *viewport = viewport_owner.get_or_null(p_viewport);
@@ -1403,9 +1404,11 @@ void RendererViewport::call_set_vsync_mode(DisplayServer::VSyncMode p_mode, Disp
 int RendererViewport::get_total_objects_drawn() const {
 	return total_objects_drawn;
 }
+
 int RendererViewport::get_total_vertices_drawn() const {
 	return total_vertices_drawn;
 }
+
 int RendererViewport::get_total_draw_calls_used() const {
 	return total_draw_calls_used;
 }

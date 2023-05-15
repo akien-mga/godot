@@ -112,6 +112,7 @@ RID Material::get_shader_rid() const {
 	GDVIRTUAL_REQUIRED_CALL(_get_shader_rid, ret);
 	return ret;
 }
+
 Shader::Mode Material::get_shader_mode() const {
 	Shader::Mode ret = Shader::MODE_MAX;
 	GDVIRTUAL_REQUIRED_CALL(_get_shader_mode, ret);
@@ -458,6 +459,7 @@ Shader::Mode ShaderMaterial::get_shader_mode() const {
 		return Shader::MODE_SPATIAL;
 	}
 }
+
 RID ShaderMaterial::get_shader_rid() const {
 	if (shader.is_valid()) {
 		return shader->get_rid();

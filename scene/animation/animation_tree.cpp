@@ -956,6 +956,7 @@ static void _call_object(Object *p_object, const StringName &p_method, const Vec
 		p_object->callp(p_method, argptrs, argcount, ce);
 	}
 }
+
 void AnimationTree::_process_graph(double p_delta) {
 	_update_properties(); //if properties need updating, update them
 

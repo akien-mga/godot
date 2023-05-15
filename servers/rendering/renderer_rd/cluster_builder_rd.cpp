@@ -216,6 +216,7 @@ ClusterBuilderSharedDataRD::ClusterBuilderSharedDataRD() {
 		box_index_array = RD::get_singleton()->index_array_create(box_index_buffer, 0, box_triangle_count * 3);
 	}
 }
+
 ClusterBuilderSharedDataRD::~ClusterBuilderSharedDataRD() {
 	RD::get_singleton()->free(sphere_vertex_buffer);
 	RD::get_singleton()->free(sphere_index_buffer);

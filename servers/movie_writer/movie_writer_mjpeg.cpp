@@ -34,6 +34,7 @@
 uint32_t MovieWriterMJPEG::get_audio_mix_rate() const {
 	return mix_rate;
 }
+
 AudioServer::SpeakerMode MovieWriterMJPEG::get_audio_speaker_mode() const {
 	return speaker_mode;
 }

@@ -52,6 +52,7 @@
 #endif
 
 AudioDriver *AudioDriver::singleton = nullptr;
+
 AudioDriver *AudioDriver::get_singleton() {
 	return singleton;
 }

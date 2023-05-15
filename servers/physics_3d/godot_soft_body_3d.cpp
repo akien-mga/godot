@@ -705,6 +705,7 @@ public:
 	// Next dependence in the list.
 	LinkDeps *next;
 };
+
 typedef LinkDeps *LinkDepsPtr;
 
 void GodotSoftBody3D::reoptimize_link_order() {

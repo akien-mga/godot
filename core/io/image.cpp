@@ -2362,6 +2362,7 @@ void Image::initialize_data(const char **p_xpm) {
 		line++;
 	}
 }
+
 #define DETECT_ALPHA_MAX_THRESHOLD 254
 #define DETECT_ALPHA_MIN_THRESHOLD 2
 

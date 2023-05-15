@@ -358,6 +358,7 @@ void TileSet::set_tile_shape(TileSet::TileShape p_shape) {
 	notify_property_list_changed();
 	emit_changed();
 }
+
 TileSet::TileShape TileSet::get_tile_shape() const {
 	return tile_shape;
 }
@@ -366,6 +367,7 @@ void TileSet::set_tile_layout(TileSet::TileLayout p_layout) {
 	tile_layout = p_layout;
 	emit_changed();
 }
+
 TileSet::TileLayout TileSet::get_tile_layout() const {
 	return tile_layout;
 }
@@ -381,6 +383,7 @@ void TileSet::set_tile_offset_axis(TileSet::TileOffsetAxis p_alignment) {
 	tile_meshes_dirty = true;
 	emit_changed();
 }
+
 TileSet::TileOffsetAxis TileSet::get_tile_offset_axis() const {
 	return tile_offset_axis;
 }
@@ -392,6 +395,7 @@ void TileSet::set_tile_size(Size2i p_size) {
 	tile_meshes_dirty = true;
 	emit_changed();
 }
+
 Size2i TileSet::get_tile_size() const {
 	return tile_size;
 }
@@ -1756,6 +1760,7 @@ Vector<Vector<Ref<Texture2D>>> TileSet::generate_terrains_icons(Size2i p_size) {
 		Ref<Texture2D> texture;
 		Rect2i region;
 	};
+
 	Vector<Vector<Ref<Texture2D>>> output;
 	LocalVector<LocalVector<Count>> counts;
 	output.resize(get_terrain_sets_count());
@@ -5155,6 +5160,7 @@ void TileData::set_flip_h(bool p_flip_h) {
 	flip_h = p_flip_h;
 	emit_signal(SNAME("changed"));
 }
+
 bool TileData::get_flip_h() const {
 	return flip_h;
 }
@@ -5174,6 +5180,7 @@ void TileData::set_transpose(bool p_transpose) {
 	transpose = p_transpose;
 	emit_signal(SNAME("changed"));
 }
+
 bool TileData::get_transpose() const {
 	return transpose;
 }
@@ -5191,6 +5198,7 @@ void TileData::set_material(Ref<Material> p_material) {
 	material = p_material;
 	emit_signal(SNAME("changed"));
 }
+
 Ref<Material> TileData::get_material() const {
 	return material;
 }
@@ -5199,6 +5207,7 @@ void TileData::set_modulate(Color p_modulate) {
 	modulate = p_modulate;
 	emit_signal(SNAME("changed"));
 }
+
 Color TileData::get_modulate() const {
 	return modulate;
 }
@@ -5207,6 +5216,7 @@ void TileData::set_z_index(int p_z_index) {
 	z_index = p_z_index;
 	emit_signal(SNAME("changed"));
 }
+
 int TileData::get_z_index() const {
 	return z_index;
 }
@@ -5215,6 +5225,7 @@ void TileData::set_y_sort_origin(int p_y_sort_origin) {
 	y_sort_origin = p_y_sort_origin;
 	emit_signal(SNAME("changed"));
 }
+
 int TileData::get_y_sort_origin() const {
 	return y_sort_origin;
 }
@@ -5441,6 +5452,7 @@ void TileData::set_probability(float p_probability) {
 	probability = p_probability;
 	emit_signal(SNAME("changed"));
 }
+
 float TileData::get_probability() const {
 	return probability;
 }

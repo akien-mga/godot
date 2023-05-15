@@ -61,6 +61,7 @@ GLManager_X11::GLDisplay::~GLDisplay() {
 }
 
 static bool ctxErrorOccurred = false;
+
 static int ctxErrorHandler(Display *dpy, XErrorEvent *ev) {
 	ctxErrorOccurred = true;
 	return 0;

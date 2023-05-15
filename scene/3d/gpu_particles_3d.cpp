@@ -497,6 +497,7 @@ void GPUParticles3D::set_transform_align(TransformAlign p_align) {
 	transform_align = p_align;
 	RS::get_singleton()->particles_set_transform_align(particles, RS::ParticlesTransformAlign(transform_align));
 }
+
 GPUParticles3D::TransformAlign GPUParticles3D::get_transform_align() const {
 	return transform_align;
 }

@@ -418,6 +418,7 @@ ScriptInstance::~ScriptInstance() {
 }
 
 ScriptCodeCompletionCache *ScriptCodeCompletionCache::singleton = nullptr;
+
 ScriptCodeCompletionCache::ScriptCodeCompletionCache() {
 	singleton = this;
 }

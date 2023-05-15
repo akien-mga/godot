@@ -1403,6 +1403,7 @@ void CSharpLanguage::set_instance_binding(Object *p_object, void *p_binding) {
 bool CSharpLanguage::has_instance_binding(Object *p_object) {
 	return p_object->has_instance_binding(get_singleton());
 }
+
 void CSharpLanguage::tie_native_managed_to_unmanaged(GCHandleIntPtr p_gchandle_intptr, Object *p_unmanaged, const StringName *p_native_name, bool p_ref_counted) {
 	// This method should not fail
 

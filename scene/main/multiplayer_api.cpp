@@ -69,6 +69,7 @@ Ref<MultiplayerAPI> MultiplayerAPI::create_default_interface() {
 #define ENCODE_16 1 << 6
 #define ENCODE_32 2 << 6
 #define ENCODE_64 3 << 6
+
 Error MultiplayerAPI::encode_and_compress_variant(const Variant &p_variant, uint8_t *r_buffer, int &r_len, bool p_allow_object_decoding) {
 	// Unreachable because `VARIANT_MAX` == 38 and `ENCODE_VARIANT_MASK` == 77
 	CRASH_COND(p_variant.get_type() > VARIANT_META_TYPE_MASK);

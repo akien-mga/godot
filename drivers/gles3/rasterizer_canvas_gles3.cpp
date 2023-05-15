@@ -1504,6 +1504,7 @@ void RasterizerCanvasGLES3::_enable_attributes(uint32_t p_start, bool p_primitiv
 		glVertexAttribDivisor(i, p_rate);
 	}
 }
+
 RID RasterizerCanvasGLES3::light_create() {
 	CanvasLight canvas_light;
 	return canvas_light_owner.make_rid(canvas_light);
@@ -2435,6 +2436,7 @@ RendererCanvasRender::PolygonID RasterizerCanvasGLES3::request_polygon(const Vec
 
 	return id;
 }
+
 void RasterizerCanvasGLES3::free_polygon(PolygonID p_polygon) {
 	PolygonBuffers *pb_ptr = polygon_buffers.polygons.getptr(p_polygon);
 	ERR_FAIL_COND(!pb_ptr);
@@ -2479,6 +2481,7 @@ void RasterizerCanvasGLES3::_allocate_instance_data_buffer() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
+
 void RasterizerCanvasGLES3::_allocate_instance_buffer() {
 	state.current_instance_buffer_index++;
 

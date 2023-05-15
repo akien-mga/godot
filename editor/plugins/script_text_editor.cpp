@@ -1861,6 +1861,7 @@ void ScriptTextEditor::_text_edit_gui_input(const Ref<InputEvent> &ev) {
 
 			int begin = -1;
 			int end = -1;
+
 			enum EXPRESSION_PATTERNS {
 				NOT_PARSED,
 				RGBA_PARAMETER, // Color(float,float,float) or Color(float,float,float,float)

@@ -1362,15 +1362,19 @@ static GDScriptCompletionIdentifier _type_from_property(const PropertyInfo &p_pr
 }
 
 #define MAX_COMPLETION_RECURSION 100
+
 struct RecursionCheck {
 	int *counter;
+
 	_FORCE_INLINE_ bool check() {
 		return (*counter) > MAX_COMPLETION_RECURSION;
 	}
+
 	RecursionCheck(int *p_counter) :
 			counter(p_counter) {
 		(*counter)++;
 	}
+
 	~RecursionCheck() {
 		(*counter)--;
 	}

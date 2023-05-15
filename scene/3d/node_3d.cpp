@@ -219,6 +219,7 @@ void Node3D::_notification(int p_what) {
 void Node3D::set_basis(const Basis &p_basis) {
 	set_transform(Transform3D(p_basis, data.local_transform.origin));
 }
+
 void Node3D::set_quaternion(const Quaternion &p_quaternion) {
 	if (data.dirty & DIRTY_EULER_ROTATION_AND_SCALE) {
 		// We need the scale part, so if these are dirty, update it
@@ -304,6 +305,7 @@ Transform3D Node3D::get_transform() const {
 
 	return data.local_transform;
 }
+
 Transform3D Node3D::get_global_transform() const {
 	ERR_FAIL_COND_V(!is_inside_tree(), Transform3D());
 

@@ -118,6 +118,7 @@ template <class R, class T, class... P>
 static _FORCE_INLINE_ void vc_validated_call(R (T::*method)(P...) const, Variant *base, const Variant **p_args, Variant *r_ret) {
 	call_with_validated_variant_args_retc(base, method, p_args, r_ret);
 }
+
 template <class T, class... P>
 static _FORCE_INLINE_ void vc_validated_call(void (T::*method)(P...), Variant *base, const Variant **p_args, Variant *r_ret) {
 	call_with_validated_variant_args(base, method, p_args);
@@ -139,6 +140,7 @@ static _FORCE_INLINE_ void vc_convert_validated_call(R (T::*method)(P...) const,
 	T converted(static_cast<T>(*VariantGetInternalPtr<From>::get_ptr(base)));
 	call_with_validated_variant_args_retc_helper<T, R, P...>(&converted, method, p_args, r_ret, BuildIndexSequence<sizeof...(P)>{});
 }
+
 template <class From, class T, class... P>
 static _FORCE_INLINE_ void vc_convert_validated_call(void (T::*method)(P...), Variant *base, const Variant **p_args, Variant *r_ret) {
 	T converted(static_cast<T>(*VariantGetInternalPtr<From>::get_ptr(base)));
@@ -219,6 +221,7 @@ template <class R, class T, class... P>
 static _FORCE_INLINE_ int vc_get_argument_count(R (T::*method)(P...)) {
 	return sizeof...(P);
 }
+
 template <class R, class T, class... P>
 static _FORCE_INLINE_ int vc_get_argument_count(R (T::*method)(P...) const) {
 	return sizeof...(P);
@@ -248,6 +251,7 @@ template <class R, class T, class... P>
 static _FORCE_INLINE_ Variant::Type vc_get_argument_type(R (T::*method)(P...), int p_arg) {
 	return call_get_argument_type<P...>(p_arg);
 }
+
 template <class R, class T, class... P>
 static _FORCE_INLINE_ Variant::Type vc_get_argument_type(R (T::*method)(P...) const, int p_arg) {
 	return call_get_argument_type<P...>(p_arg);
@@ -307,6 +311,7 @@ template <class R, class T, class... P>
 static _FORCE_INLINE_ bool vc_has_return_type(R (T::*method)(P...)) {
 	return true;
 }
+
 template <class R, class T, class... P>
 static _FORCE_INLINE_ bool vc_has_return_type(R (T::*method)(P...) const) {
 	return true;
@@ -336,6 +341,7 @@ template <class R, class T, class... P>
 static _FORCE_INLINE_ bool vc_is_const(R (T::*method)(P...)) {
 	return false;
 }
+
 template <class R, class T, class... P>
 static _FORCE_INLINE_ bool vc_is_const(R (T::*method)(P...) const) {
 	return true;
@@ -355,6 +361,7 @@ template <class R, class T, class... P>
 static _FORCE_INLINE_ Variant::Type vc_get_base_type(R (T::*method)(P...)) {
 	return GetTypeInfo<T>::VARIANT_TYPE;
 }
+
 template <class R, class T, class... P>
 static _FORCE_INLINE_ Variant::Type vc_get_base_type(R (T::*method)(P...) const) {
 	return GetTypeInfo<T>::VARIANT_TYPE;
@@ -780,54 +787,63 @@ struct _VariantCall {
 		const uint8_t *r = p_instance->ptr();
 		return r[p_offset];
 	}
+
 	static int64_t func_PackedByteArray_decode_s8(PackedByteArray *p_instance, int64_t p_offset) {
 		uint64_t size = p_instance->size();
 		ERR_FAIL_COND_V(p_offset < 0 || p_offset > int64_t(size) - 1, 0);
 		const uint8_t *r = p_instance->ptr();
 		return *((const int8_t *)&r[p_offset]);
 	}
+
 	static int64_t func_PackedByteArray_decode_u16(PackedByteArray *p_instance, int64_t p_offset) {
 		uint64_t size = p_instance->size();
 		ERR_FAIL_COND_V(p_offset < 0 || p_offset > (int64_t(size) - 2), 0);
 		const uint8_t *r = p_instance->ptr();
 		return decode_uint16(&r[p_offset]);
 	}
+
 	static int64_t func_PackedByteArray_decode_s16(PackedByteArray *p_instance, int64_t p_offset) {
 		uint64_t size = p_instance->size();
 		ERR_FAIL_COND_V(p_offset < 0 || p_offset > (int64_t(size) - 2), 0);
 		const uint8_t *r = p_instance->ptr();
 		return (int16_t)decode_uint16(&r[p_offset]);
 	}
+
 	static int64_t func_PackedByteArray_decode_u32(PackedByteArray *p_instance, int64_t p_offset) {
 		uint64_t size = p_instance->size();
 		ERR_FAIL_COND_V(p_offset < 0 || p_offset > (int64_t(size) - 4), 0);
 		const uint8_t *r = p_instance->ptr();
 		return decode_uint32(&r[p_offset]);
 	}
+
 	static int64_t func_PackedByteArray_decode_s32(PackedByteArray *p_instance, int64_t p_offset) {
 		uint64_t size = p_instance->size();
 		ERR_FAIL_COND_V(p_offset < 0 || p_offset > (int64_t(size) - 4), 0);
 		const uint8_t *r = p_instance->ptr();
 		return (int32_t)decode_uint32(&r[p_offset]);
 	}
+
 	static int64_t func_PackedByteArray_decode_u64(PackedByteArray *p_instance, int64_t p_offset) {
 		uint64_t size = p_instance->size();
 		ERR_FAIL_COND_V(p_offset < 0 || p_offset > (int64_t(size) - 8), 0);
 		const uint8_t *r = p_instance->ptr();
 		return (int64_t)decode_uint64(&r[p_offset]);
 	}
+
 	static int64_t func_PackedByteArray_decode_s64(PackedByteArray *p_instance, int64_t p_offset) {
 		uint64_t size = p_instance->size();
 		ERR_FAIL_COND_V(p_offset < 0 || p_offset > (int64_t(size) - 8), 0);
 		const uint8_t *r = p_instance->ptr();
 		return (int64_t)decode_uint64(&r[p_offset]);
 	}
+
 	static double func_PackedByteArray_decode_half(PackedByteArray *p_instance, int64_t p_offset) {
 		uint64_t size = p_instance->size();
 		ERR_FAIL_COND_V(p_offset < 0 || p_offset > (int64_t(size) - 2), 0);
 		const uint8_t *r = p_instance->ptr();
 		return Math::half_to_float(decode_uint16(&r[p_offset]));
 	}
+
 	static double func_PackedByteArray_decode_float(PackedByteArray *p_instance, int64_t p_offset) {
 		uint64_t size = p_instance->size();
 		ERR_FAIL_COND_V(p_offset < 0 || p_offset > (int64_t(size) - 4), 0);
@@ -938,6 +954,7 @@ struct _VariantCall {
 		uint8_t *w = p_instance->ptrw();
 		*((uint8_t *)&w[p_offset]) = p_value;
 	}
+
 	static void func_PackedByteArray_encode_s8(PackedByteArray *p_instance, int64_t p_offset, int64_t p_value) {
 		uint64_t size = p_instance->size();
 		ERR_FAIL_COND(p_offset < 0 || p_offset > int64_t(size) - 1);
@@ -951,6 +968,7 @@ struct _VariantCall {
 		uint8_t *w = p_instance->ptrw();
 		encode_uint16((uint16_t)p_value, &w[p_offset]);
 	}
+
 	static void func_PackedByteArray_encode_s16(PackedByteArray *p_instance, int64_t p_offset, int64_t p_value) {
 		uint64_t size = p_instance->size();
 		ERR_FAIL_COND(p_offset < 0 || p_offset > int64_t(size) - 2);
@@ -964,6 +982,7 @@ struct _VariantCall {
 		uint8_t *w = p_instance->ptrw();
 		encode_uint32((uint32_t)p_value, &w[p_offset]);
 	}
+
 	static void func_PackedByteArray_encode_s32(PackedByteArray *p_instance, int64_t p_offset, int64_t p_value) {
 		uint64_t size = p_instance->size();
 		ERR_FAIL_COND(p_offset < 0 || p_offset > int64_t(size) - 4);
@@ -977,6 +996,7 @@ struct _VariantCall {
 		uint8_t *w = p_instance->ptrw();
 		encode_uint64((uint64_t)p_value, &w[p_offset]);
 	}
+
 	static void func_PackedByteArray_encode_s64(PackedByteArray *p_instance, int64_t p_offset, int64_t p_value) {
 		uint64_t size = p_instance->size();
 		ERR_FAIL_COND(p_offset < 0 || p_offset > int64_t(size) - 8);
@@ -990,18 +1010,21 @@ struct _VariantCall {
 		uint8_t *w = p_instance->ptrw();
 		encode_uint16(Math::make_half_float(p_value), &w[p_offset]);
 	}
+
 	static void func_PackedByteArray_encode_float(PackedByteArray *p_instance, int64_t p_offset, double p_value) {
 		uint64_t size = p_instance->size();
 		ERR_FAIL_COND(p_offset < 0 || p_offset > int64_t(size) - 4);
 		uint8_t *w = p_instance->ptrw();
 		encode_float(p_value, &w[p_offset]);
 	}
+
 	static void func_PackedByteArray_encode_double(PackedByteArray *p_instance, int64_t p_offset, double p_value) {
 		uint64_t size = p_instance->size();
 		ERR_FAIL_COND(p_offset < 0 || p_offset > int64_t(size) - 8);
 		uint8_t *w = p_instance->ptrw();
 		encode_double(p_value, &w[p_offset]);
 	}
+
 	static int64_t func_PackedByteArray_encode_var(PackedByteArray *p_instance, int64_t p_offset, const Variant &p_value, bool p_allow_objects) {
 		uint64_t size = p_instance->size();
 		ERR_FAIL_COND_V(p_offset < 0, -1);

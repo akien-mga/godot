@@ -50,54 +50,63 @@ RID GodotPhysicsServer3D::world_boundary_shape_create() {
 	shape->set_self(rid);
 	return rid;
 }
+
 RID GodotPhysicsServer3D::separation_ray_shape_create() {
 	GodotShape3D *shape = memnew(GodotSeparationRayShape3D);
 	RID rid = shape_owner.make_rid(shape);
 	shape->set_self(rid);
 	return rid;
 }
+
 RID GodotPhysicsServer3D::sphere_shape_create() {
 	GodotShape3D *shape = memnew(GodotSphereShape3D);
 	RID rid = shape_owner.make_rid(shape);
 	shape->set_self(rid);
 	return rid;
 }
+
 RID GodotPhysicsServer3D::box_shape_create() {
 	GodotShape3D *shape = memnew(GodotBoxShape3D);
 	RID rid = shape_owner.make_rid(shape);
 	shape->set_self(rid);
 	return rid;
 }
+
 RID GodotPhysicsServer3D::capsule_shape_create() {
 	GodotShape3D *shape = memnew(GodotCapsuleShape3D);
 	RID rid = shape_owner.make_rid(shape);
 	shape->set_self(rid);
 	return rid;
 }
+
 RID GodotPhysicsServer3D::cylinder_shape_create() {
 	GodotShape3D *shape = memnew(GodotCylinderShape3D);
 	RID rid = shape_owner.make_rid(shape);
 	shape->set_self(rid);
 	return rid;
 }
+
 RID GodotPhysicsServer3D::convex_polygon_shape_create() {
 	GodotShape3D *shape = memnew(GodotConvexPolygonShape3D);
 	RID rid = shape_owner.make_rid(shape);
 	shape->set_self(rid);
 	return rid;
 }
+
 RID GodotPhysicsServer3D::concave_polygon_shape_create() {
 	GodotShape3D *shape = memnew(GodotConcavePolygonShape3D);
 	RID rid = shape_owner.make_rid(shape);
 	shape->set_self(rid);
 	return rid;
 }
+
 RID GodotPhysicsServer3D::heightmap_shape_create() {
 	GodotShape3D *shape = memnew(GodotHeightMapShape3D);
 	RID rid = shape_owner.make_rid(shape);
 	shape->set_self(rid);
 	return rid;
 }
+
 RID GodotPhysicsServer3D::custom_shape_create() {
 	ERR_FAIL_V(RID());
 }
@@ -509,6 +518,7 @@ void GodotPhysicsServer3D::body_set_shape(RID p_body, int p_shape_idx, RID p_sha
 
 	body->set_shape(p_shape_idx, shape);
 }
+
 void GodotPhysicsServer3D::body_set_shape_transform(RID p_body, int p_shape_idx, const Transform3D &p_transform) {
 	GodotBody3D *body = body_owner.get_or_null(p_body);
 	ERR_FAIL_COND(!body);
@@ -1771,6 +1781,7 @@ void GodotPhysicsServer3D::_shape_col_cbk(const Vector3 &p_point_A, int p_index_
 }
 
 GodotPhysicsServer3D *GodotPhysicsServer3D::godot_singleton = nullptr;
+
 GodotPhysicsServer3D::GodotPhysicsServer3D(bool p_using_threads) {
 	godot_singleton = this;
 	GodotBroadPhase3D::create_func = GodotBroadPhase3DBVH::_create;

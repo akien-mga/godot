@@ -338,6 +338,7 @@ void Dictionary::make_read_only() {
 		_p->read_only = memnew(Variant);
 	}
 }
+
 bool Dictionary::is_read_only() const {
 	return _p->read_only != nullptr;
 }

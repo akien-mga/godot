@@ -39,12 +39,14 @@ void AudioStreamPlayback::start(double p_from_pos) {
 	}
 	ERR_FAIL_MSG("AudioStreamPlayback::start unimplemented!");
 }
+
 void AudioStreamPlayback::stop() {
 	if (GDVIRTUAL_CALL(_stop)) {
 		return;
 	}
 	ERR_FAIL_MSG("AudioStreamPlayback::stop unimplemented!");
 }
+
 bool AudioStreamPlayback::is_playing() const {
 	bool ret;
 	if (GDVIRTUAL_CALL(_is_playing, ret)) {
@@ -66,6 +68,7 @@ double AudioStreamPlayback::get_playback_position() const {
 	}
 	ERR_FAIL_V_MSG(0, "AudioStreamPlayback::get_playback_position unimplemented!");
 }
+
 void AudioStreamPlayback::seek(double p_time) {
 	GDVIRTUAL_CALL(_seek, p_time);
 }
@@ -90,6 +93,7 @@ void AudioStreamPlayback::_bind_methods() {
 	GDVIRTUAL_BIND(_mix, "buffer", "rate_scale", "frames");
 	GDVIRTUAL_BIND(_tag_used_streams);
 }
+
 //////////////////////////////
 
 void AudioStreamPlaybackResampled::begin_resample() {
@@ -108,6 +112,7 @@ int AudioStreamPlaybackResampled::_mix_internal(AudioFrame *p_buffer, int p_fram
 	GDVIRTUAL_REQUIRED_CALL(_mix_resampled, p_buffer, p_frames, ret);
 	return ret;
 }
+
 float AudioStreamPlaybackResampled::get_stream_sampling_rate() {
 	float ret = 0;
 	GDVIRTUAL_REQUIRED_CALL(_get_stream_sampling_rate, ret);
@@ -186,6 +191,7 @@ Ref<AudioStreamPlayback> AudioStream::instantiate_playback() {
 	}
 	ERR_FAIL_V_MSG(Ref<AudioStreamPlayback>(), "Method must be implemented!");
 }
+
 String AudioStream::get_stream_name() const {
 	String ret;
 	GDVIRTUAL_CALL(_get_stream_name, ret);
@@ -241,9 +247,11 @@ void AudioStream::tag_used(float p_offset) {
 uint64_t AudioStream::get_tagged_frame() const {
 	return tagged_frame;
 }
+
 uint32_t AudioStream::get_tagged_frame_count() const {
 	return offset_count;
 }
+
 float AudioStream::get_tagged_frame_offset(int p_index) const {
 	ERR_FAIL_INDEX_V(p_index, MAX_TAGGED_OFFSETS, 0);
 	return tagged_offsets[p_index];
@@ -822,4 +830,5 @@ int AudioStreamPlaybackRandomizer::mix(AudioFrame *p_buffer, float p_rate_scale,
 AudioStreamPlaybackRandomizer::~AudioStreamPlaybackRandomizer() {
 	randomizer->playbacks.erase(this);
 }
+
 /////////////////////////////////////////////

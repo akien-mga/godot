@@ -49,6 +49,7 @@
 #endif // TOOLS_ENABLED
 
 static HashMap<StringName, Variant::Type> builtin_types;
+
 Variant::Type GDScriptParser::get_builtin_type(const StringName &p_type) {
 	if (builtin_types.is_empty()) {
 		for (int i = 1; i < Variant::VARIANT_MAX; i++) {
@@ -3392,12 +3393,14 @@ void GDScriptParser::get_class_doc_comment(int p_line, String &p_brief, String &
 
 	int line = p_line;
 	bool in_codeblock = false;
+
 	enum Mode {
 		BRIEF,
 		DESC,
 		TUTORIALS,
 		DONE,
 	};
+
 	Mode mode = BRIEF;
 
 	if (p_inner_class) {

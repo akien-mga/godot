@@ -354,6 +354,7 @@ bool JoypadMacOS::configure_joypad(IOHIDDeviceRef p_device_ref, joypad *p_joy) {
 			return false;               \
 		}                               \
 	}
+
 bool joypad::config_force_feedback(io_service_t p_service) {
 	HRESULT ret = FFCreateDevice(p_service, &ff_device);
 	ERR_FAIL_COND_V(ret != FF_OK, false);
@@ -373,9 +374,11 @@ bool joypad::config_force_feedback(io_service_t p_service) {
 	ff_device = nullptr;
 	return false;
 }
+
 #undef FF_ERR
 
 #define TEST_FF(ff) (features.supportedEffects & (ff))
+
 bool joypad::check_ff_features() {
 	FFCAPABILITIES features;
 	HRESULT ret = FFDeviceGetForceFeedbackCapabilities(ff_device, &features);

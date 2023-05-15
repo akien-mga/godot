@@ -696,6 +696,7 @@ const char *ResourceImporterTexture::compression_formats[] = {
 	"etc2_astc",
 	nullptr
 };
+
 String ResourceImporterTexture::get_import_settings_string() const {
 	String s;
 

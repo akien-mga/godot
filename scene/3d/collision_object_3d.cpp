@@ -594,6 +594,7 @@ void CollisionObject3D::shape_owner_set_transform(uint32_t p_owner, const Transf
 
 	_update_shape_data(p_owner);
 }
+
 Transform3D CollisionObject3D::shape_owner_get_transform(uint32_t p_owner) const {
 	ERR_FAIL_COND_V(!shapes.has(p_owner), Transform3D());
 

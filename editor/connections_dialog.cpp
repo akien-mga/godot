@@ -230,6 +230,7 @@ void ConnectDialog::_remove_bind() {
 	cdbinds->params.remove_at(idx);
 	cdbinds->notify_changed();
 }
+
 /*
  * Automatically generates a name for the callback method.
  */

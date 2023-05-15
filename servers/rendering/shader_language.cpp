@@ -3709,6 +3709,7 @@ bool ShaderLanguage::is_float_type(DataType p_type) {
 		}
 	}
 }
+
 bool ShaderLanguage::is_sampler_type(DataType p_type) {
 	return p_type > TYPE_MAT4 && p_type < TYPE_STRUCT;
 }
@@ -9926,18 +9927,23 @@ void ShaderLanguage::_check_warning_accums() {
 		}
 	}
 }
+
 List<ShaderWarning>::Element *ShaderLanguage::get_warnings_ptr() {
 	return warnings.front();
 }
+
 void ShaderLanguage::enable_warning_checking(bool p_enabled) {
 	check_warnings = p_enabled;
 }
+
 bool ShaderLanguage::is_warning_checking_enabled() const {
 	return check_warnings;
 }
+
 void ShaderLanguage::set_warning_flags(uint32_t p_flags) {
 	warning_flags = p_flags;
 }
+
 uint32_t ShaderLanguage::get_warning_flags() const {
 	return warning_flags;
 }

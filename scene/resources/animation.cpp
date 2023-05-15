@@ -4325,6 +4325,7 @@ void Animation::optimize(real_t p_allowed_velocity_err, real_t p_allowed_angular
 }
 
 #define print_animc(m_str)
+
 //#define print_animc(m_str) print_line(m_str);
 
 struct AnimationCompressionDataState {
@@ -4335,6 +4336,7 @@ struct AnimationCompressionDataState {
 
 	uint32_t components = 3;
 	LocalVector<uint8_t> data; // Committed packets.
+
 	struct PacketData {
 		int32_t data[3] = { 0, 0, 0 };
 		uint32_t frame = 0;
@@ -5111,6 +5113,7 @@ bool Animation::_pos_scale_interpolate_compressed(uint32_t p_compressed_track, d
 
 	return true;
 }
+
 bool Animation::_blend_shape_interpolate_compressed(uint32_t p_compressed_track, double p_time, float &r_ret) const {
 	Vector3i current;
 	Vector3i next;
@@ -5389,10 +5392,12 @@ Quaternion Animation::_uncompress_quaternion(const Vector3i &p_value) const {
 	float angle = (float(p_value.z) / 65535.0) * 2.0 * Math_PI;
 	return Quaternion(axis, angle);
 }
+
 Vector3 Animation::_uncompress_pos_scale(uint32_t p_compressed_track, const Vector3i &p_value) const {
 	Vector3 pos_norm(float(p_value.x) / 65535.0, float(p_value.y) / 65535.0, float(p_value.z) / 65535.0);
 	return compression.bounds[p_compressed_track].position + pos_norm * compression.bounds[p_compressed_track].size;
 }
+
 float Animation::_uncompress_blend_shape(const Vector3i &p_value) const {
 	float bsn = float(p_value.x) / 65535.0;
 	return (bsn * 2.0 - 1.0) * float(Compression::BLEND_SHAPE_RANGE);

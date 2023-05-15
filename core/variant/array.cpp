@@ -165,9 +165,11 @@ bool Array::operator<(const Array &p_array) const {
 bool Array::operator<=(const Array &p_array) const {
 	return !operator>(p_array);
 }
+
 bool Array::operator>(const Array &p_array) const {
 	return p_array < *this;
 }
+
 bool Array::operator>=(const Array &p_array) const {
 	return !operator<(p_array);
 }

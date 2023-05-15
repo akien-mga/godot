@@ -126,6 +126,7 @@ protected:
 		r_ret = RS::get_singleton()->global_shader_parameter_get(p_name);
 		return r_ret.get_type() != Variant::NIL;
 	}
+
 	void _get_property_list(List<PropertyInfo> *p_list) const {
 		Vector<StringName> variables;
 		variables = RS::get_singleton()->global_shader_parameter_get_list();

@@ -362,6 +362,7 @@ Variant ResourceFormatImporter::get_resource_metadata(const String &p_path) cons
 
 	return pat.metadata;
 }
+
 void ResourceFormatImporter::get_classes_used(const String &p_path, HashSet<StringName> *r_classes) {
 	PathAndType pat;
 	Error err = _get_path_and_type(p_path, pat);

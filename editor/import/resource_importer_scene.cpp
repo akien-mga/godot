@@ -152,10 +152,12 @@ Variant EditorScenePostImportPlugin::get_option_value(const StringName &p_name) 
 	}
 	return Variant();
 }
+
 void EditorScenePostImportPlugin::add_import_option(const String &p_name, Variant p_default_value) {
 	ERR_FAIL_COND_MSG(current_option_list == nullptr, "add_import_option() can only be called from get_import_options()");
 	add_import_option_advanced(p_default_value.get_type(), p_name, p_default_value);
 }
+
 void EditorScenePostImportPlugin::add_import_option_advanced(Variant::Type p_type, const String &p_name, Variant p_default_value, PropertyHint p_hint, const String &p_hint_string, int p_usage_flags) {
 	ERR_FAIL_COND_MSG(current_option_list == nullptr, "add_import_option_advanced() can only be called from get_import_options()");
 	current_option_list->push_back(ResourceImporter::ImportOption(PropertyInfo(p_type, p_name, p_hint, p_hint_string, p_usage_flags), p_default_value));
@@ -166,6 +168,7 @@ void EditorScenePostImportPlugin::get_internal_import_options(InternalImportCate
 	GDVIRTUAL_CALL(_get_internal_import_options, p_category);
 	current_option_list = nullptr;
 }
+
 Variant EditorScenePostImportPlugin::get_internal_option_visibility(InternalImportCategory p_category, bool p_for_animation, const String &p_option, const HashMap<StringName, Variant> &p_options) const {
 	current_options = &p_options;
 	Variant ret;
@@ -173,6 +176,7 @@ Variant EditorScenePostImportPlugin::get_internal_option_visibility(InternalImpo
 	current_options = nullptr;
 	return ret;
 }
+
 Variant EditorScenePostImportPlugin::get_internal_option_update_view_required(InternalImportCategory p_category, const String &p_option, const HashMap<StringName, Variant> &p_options) const {
 	current_options = &p_options;
 	Variant ret;
@@ -192,6 +196,7 @@ void EditorScenePostImportPlugin::get_import_options(const String &p_path, List<
 	GDVIRTUAL_CALL(_get_import_options, p_path);
 	current_option_list = nullptr;
 }
+
 Variant EditorScenePostImportPlugin::get_option_visibility(const String &p_path, bool p_for_animation, const String &p_option, const HashMap<StringName, Variant> &p_options) const {
 	current_options = &p_options;
 	Variant ret;
@@ -205,6 +210,7 @@ void EditorScenePostImportPlugin::pre_process(Node *p_scene, const HashMap<Strin
 	GDVIRTUAL_CALL(_pre_process, p_scene);
 	current_options = nullptr;
 }
+
 void EditorScenePostImportPlugin::post_process(Node *p_scene, const HashMap<StringName, Variant> &p_options) {
 	current_options = &p_options;
 	GDVIRTUAL_CALL(_post_process, p_scene);
@@ -379,6 +385,7 @@ void _rescale_importer_mesh(Vector3 p_scale, Ref<ImporterMesh> p_mesh, bool is_s
 
 	const int surf_count = p_mesh->get_surface_count();
 	const int blendshape_count = p_mesh->get_blend_shape_count();
+
 	struct LocalSurfData {
 		Mesh::PrimitiveType prim = {};
 		Array arr;
@@ -2575,6 +2582,7 @@ Vector<Ref<EditorScenePostImportPlugin>> ResourceImporterScene::post_importer_pl
 bool ResourceImporterScene::ResourceImporterScene::has_advanced_options() const {
 	return true;
 }
+
 void ResourceImporterScene::ResourceImporterScene::show_advanced_options(const String &p_path) {
 	SceneImportSettings::get_singleton()->open_settings(p_path, animation_importer);
 }

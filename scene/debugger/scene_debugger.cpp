@@ -561,6 +561,7 @@ void SceneDebuggerTree::deserialize(const Array &p_arr) {
 
 /// LiveEditor
 LiveEditor *LiveEditor::singleton = nullptr;
+
 LiveEditor *LiveEditor::get_singleton() {
 	return singleton;
 }

@@ -287,6 +287,7 @@ void NoiseTexture3D::set_seamless_blend_skirt(real_t p_blend_skirt) {
 	seamless_blend_skirt = p_blend_skirt;
 	_queue_update();
 }
+
 real_t NoiseTexture3D::get_seamless_blend_skirt() {
 	return seamless_blend_skirt;
 }

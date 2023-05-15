@@ -1789,6 +1789,7 @@ void TextureStorage::_create_render_target_backbuffer(RenderTarget *rt) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	}
 }
+
 void GLES3::TextureStorage::copy_scene_to_backbuffer(RenderTarget *rt, const bool uses_screen_texture, const bool uses_depth_texture) {
 	if (rt->backbuffer != 0 && rt->backbuffer_depth != 0) {
 		return;
@@ -1847,6 +1848,7 @@ void GLES3::TextureStorage::copy_scene_to_backbuffer(RenderTarget *rt, const boo
 		}
 	}
 }
+
 void TextureStorage::_clear_render_target(RenderTarget *rt) {
 	// there is nothing to clear when DIRECT_TO_SCREEN is used
 	if (rt->direct_to_screen) {
@@ -2170,6 +2172,7 @@ bool TextureStorage::render_target_is_clear_requested(RID p_render_target) {
 	ERR_FAIL_COND_V(!rt, false);
 	return rt->clear_requested;
 }
+
 Color TextureStorage::render_target_get_clear_request_color(RID p_render_target) {
 	RenderTarget *rt = render_target_owner.get_or_null(p_render_target);
 	ERR_FAIL_COND_V(!rt, Color());
@@ -2363,6 +2366,7 @@ GLuint TextureStorage::render_target_get_sdf_framebuffer(RID p_render_target) {
 
 	return rt->sdf_texture_write_fb;
 }
+
 void TextureStorage::render_target_sdf_process(RID p_render_target) {
 	CopyEffects *copy_effects = CopyEffects::get_singleton();
 

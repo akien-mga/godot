@@ -183,16 +183,20 @@ struct _FaceClassify {
 	struct _Link {
 		int face = -1;
 		int edge = -1;
+
 		void clear() {
 			face = -1;
 			edge = -1;
 		}
+
 		_Link() {}
 	};
+
 	bool valid = false;
 	int group = -1;
 	_Link links[3];
 	Face3 face;
+
 	_FaceClassify() {}
 };
 

@@ -35,6 +35,7 @@
 uint32_t MovieWriterPNGWAV::get_audio_mix_rate() const {
 	return mix_rate;
 }
+
 AudioServer::SpeakerMode MovieWriterPNGWAV::get_audio_speaker_mode() const {
 	return speaker_mode;
 }

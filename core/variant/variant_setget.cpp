@@ -193,6 +193,7 @@ Variant::ValidatedSetter Variant::get_member_validated_setter(Variant::Type p_ty
 
 	return nullptr;
 }
+
 Variant::ValidatedGetter Variant::get_member_validated_getter(Variant::Type p_type, const StringName &p_member) {
 	ERR_FAIL_INDEX_V(p_type, Variant::VARIANT_MAX, nullptr);
 
@@ -634,6 +635,7 @@ struct VariantIndexedSetGet_Array {
 		*value = (*VariantGetInternalPtr<Array>::get_ptr(base))[index];
 		*oob = false;
 	}
+
 	static void ptr_get(const void *base, int64_t index, void *member) {
 		/* avoid ptrconvert for performance*/
 		const Array &v = *reinterpret_cast<const Array *>(base);
@@ -643,6 +645,7 @@ struct VariantIndexedSetGet_Array {
 		OOB_TEST(index, v.size());
 		PtrToArg<Variant>::encode(v[index], member);
 	}
+
 	static void set(Variant *base, int64_t index, const Variant *value, bool *valid, bool *oob) {
 		if (VariantGetInternalPtr<Array>::get_ptr(base)->is_read_only()) {
 			*valid = false;
@@ -662,6 +665,7 @@ struct VariantIndexedSetGet_Array {
 		*oob = false;
 		*valid = true;
 	}
+
 	static void validated_set(Variant *base, int64_t index, const Variant *value, bool *oob) {
 		if (VariantGetInternalPtr<Array>::get_ptr(base)->is_read_only()) {
 			*oob = true;
@@ -678,6 +682,7 @@ struct VariantIndexedSetGet_Array {
 		VariantGetInternalPtr<Array>::get_ptr(base)->set(index, *value);
 		*oob = false;
 	}
+
 	static void ptr_set(void *base, int64_t index, const void *member) {
 		/* avoid ptrconvert for performance*/
 		Array &v = *reinterpret_cast<Array *>(base);
@@ -687,8 +692,11 @@ struct VariantIndexedSetGet_Array {
 		OOB_TEST(index, v.size());
 		v.set(index, PtrToArg<Variant>::convert(member));
 	}
+
 	static Variant::Type get_index_type() { return Variant::NIL; }
+
 	static uint32_t get_index_usage() { return PROPERTY_USAGE_NIL_IS_VARIANT; }
+
 	static uint64_t get_indexed_size(const Variant *base) { return 0; }
 };
 
@@ -706,6 +714,7 @@ struct VariantIndexedSetGet_String {
 		*value = String(&result, 1);
 		*oob = false;
 	}
+
 	static void ptr_get(const void *base, int64_t index, void *member) {
 		/* avoid ptrconvert for performance*/
 		const String &v = *reinterpret_cast<const String *>(base);
@@ -716,6 +725,7 @@ struct VariantIndexedSetGet_String {
 		char32_t c = v[index];
 		PtrToArg<String>::encode(String(&c, 1), member);
 	}
+
 	static void set(Variant *base, int64_t index, const Variant *value, bool *valid, bool *oob) {
 		if (value->get_type() != Variant::STRING) {
 			*oob = false;
@@ -741,6 +751,7 @@ struct VariantIndexedSetGet_String {
 		*oob = false;
 		*valid = true;
 	}
+
 	static void validated_set(Variant *base, int64_t index, const Variant *value, bool *oob) {
 		int64_t length = VariantGetInternalPtr<String>::get_ptr(base)->length();
 		if (index < 0) {
@@ -759,6 +770,7 @@ struct VariantIndexedSetGet_String {
 		}
 		*oob = false;
 	}
+
 	static void ptr_set(void *base, int64_t index, const void *member) {
 		/* avoid ptrconvert for performance*/
 		String &v = *reinterpret_cast<String *>(base);
@@ -773,8 +785,11 @@ struct VariantIndexedSetGet_String {
 			v.set(index, m.unicode_at(0));
 		}
 	}
+
 	static Variant::Type get_index_type() { return Variant::STRING; }
+
 	static uint32_t get_index_usage() { return PROPERTY_USAGE_DEFAULT; }
+
 	static uint64_t get_indexed_size(const Variant *base) { return VariantInternal::get_string(base)->length(); }
 };
 
@@ -939,6 +954,7 @@ Variant::ValidatedIndexedSetter Variant::get_member_validated_indexed_setter(Var
 	ERR_FAIL_INDEX_V(p_type, Variant::VARIANT_MAX, nullptr);
 	return variant_indexed_setters_getters[p_type].validated_setter;
 }
+
 Variant::ValidatedIndexedGetter Variant::get_member_validated_indexed_getter(Variant::Type p_type) {
 	ERR_FAIL_INDEX_V(p_type, Variant::VARIANT_MAX, nullptr);
 	return variant_indexed_setters_getters[p_type].validated_getter;
@@ -948,6 +964,7 @@ Variant::PTRIndexedSetter Variant::get_member_ptr_indexed_setter(Variant::Type p
 	ERR_FAIL_INDEX_V(p_type, Variant::VARIANT_MAX, nullptr);
 	return variant_indexed_setters_getters[p_type].ptr_setter;
 }
+
 Variant::PTRIndexedGetter Variant::get_member_ptr_indexed_getter(Variant::Type p_type) {
 	ERR_FAIL_INDEX_V(p_type, Variant::VARIANT_MAX, nullptr);
 	return variant_indexed_setters_getters[p_type].ptr_getter;
@@ -961,6 +978,7 @@ void Variant::set_indexed(int64_t p_index, const Variant &p_value, bool &r_valid
 		r_oob = false;
 	}
 }
+
 Variant Variant::get_indexed(int64_t p_index, bool &r_valid, bool &r_oob) const {
 	if (likely(variant_indexed_setters_getters[type].valid)) {
 		Variant ret;
@@ -992,6 +1010,7 @@ struct VariantKeyedSetGetDictionary {
 		*value = *ptr;
 		*r_valid = true;
 	}
+
 	static void ptr_get(const void *base, const void *key, void *value) {
 		/* avoid ptrconvert for performance*/
 		const Dictionary &v = *reinterpret_cast<const Dictionary *>(base);
@@ -999,6 +1018,7 @@ struct VariantKeyedSetGetDictionary {
 		NULL_TEST(ptr);
 		PtrToArg<Variant>::encode(*ptr, value);
 	}
+
 	static void set(Variant *base, const Variant *key, const Variant *value, bool *r_valid) {
 		if (VariantGetInternalPtr<Dictionary>::get_ptr(base)->is_read_only()) {
 			*r_valid = false;
@@ -1007,6 +1027,7 @@ struct VariantKeyedSetGetDictionary {
 		(*VariantGetInternalPtr<Dictionary>::get_ptr(base))[*key] = *value;
 		*r_valid = true;
 	}
+
 	static void ptr_set(void *base, const void *key, const void *value) {
 		Dictionary &v = *reinterpret_cast<Dictionary *>(base);
 		v[PtrToArg<Variant>::convert(key)] = PtrToArg<Variant>::convert(value);
@@ -1016,6 +1037,7 @@ struct VariantKeyedSetGetDictionary {
 		*r_valid = true;
 		return VariantGetInternalPtr<Dictionary>::get_ptr(base)->has(*key);
 	}
+
 	static uint32_t ptr_has(const void *base, const void *key) {
 		/* avoid ptrconvert for performance*/
 		const Dictionary &v = *reinterpret_cast<const Dictionary *>(base);
@@ -1034,12 +1056,14 @@ struct VariantKeyedSetGetObject {
 		}
 		*value = obj->getvar(*key, r_valid);
 	}
+
 	static void ptr_get(const void *base, const void *key, void *value) {
 		const Object *obj = PtrToArg<Object *>::convert(base);
 		NULL_TEST(obj);
 		Variant v = obj->getvar(PtrToArg<Variant>::convert(key));
 		PtrToArg<Variant>::encode(v, value);
 	}
+
 	static void set(Variant *base, const Variant *key, const Variant *value, bool *r_valid) {
 		Object *obj = base->get_validated_object();
 
@@ -1049,6 +1073,7 @@ struct VariantKeyedSetGetObject {
 		}
 		obj->setvar(*key, *value, r_valid);
 	}
+
 	static void ptr_set(void *base, const void *key, const void *value) {
 		Object *obj = PtrToArg<Object *>::convert(base);
 		NULL_TEST(obj);
@@ -1066,6 +1091,7 @@ struct VariantKeyedSetGetObject {
 		obj->getvar(*key, &exists);
 		return exists;
 	}
+
 	static uint32_t ptr_has(const void *base, const void *key) {
 		const Object *obj = PtrToArg<Object *>::convert(base);
 		ERR_FAIL_COND_V(!obj, false);
@@ -1109,6 +1135,7 @@ static void register_keyed_setters_getters() {
 	register_keyed_member<VariantKeyedSetGetDictionary>(Variant::DICTIONARY);
 	register_keyed_member<VariantKeyedSetGetObject>(Variant::OBJECT);
 }
+
 bool Variant::is_keyed(Variant::Type p_type) {
 	ERR_FAIL_INDEX_V(p_type, VARIANT_MAX, false);
 	return variant_keyed_setters_getters[p_type].valid;
@@ -1118,10 +1145,12 @@ Variant::ValidatedKeyedSetter Variant::get_member_validated_keyed_setter(Variant
 	ERR_FAIL_INDEX_V(p_type, VARIANT_MAX, nullptr);
 	return variant_keyed_setters_getters[p_type].validated_setter;
 }
+
 Variant::ValidatedKeyedGetter Variant::get_member_validated_keyed_getter(Variant::Type p_type) {
 	ERR_FAIL_INDEX_V(p_type, VARIANT_MAX, nullptr);
 	return variant_keyed_setters_getters[p_type].validated_getter;
 }
+
 Variant::ValidatedKeyedChecker Variant::get_member_validated_keyed_checker(Variant::Type p_type) {
 	ERR_FAIL_INDEX_V(p_type, VARIANT_MAX, nullptr);
 	return variant_keyed_setters_getters[p_type].validated_checker;
@@ -1131,10 +1160,12 @@ Variant::PTRKeyedSetter Variant::get_member_ptr_keyed_setter(Variant::Type p_typ
 	ERR_FAIL_INDEX_V(p_type, VARIANT_MAX, nullptr);
 	return variant_keyed_setters_getters[p_type].ptr_setter;
 }
+
 Variant::PTRKeyedGetter Variant::get_member_ptr_keyed_getter(Variant::Type p_type) {
 	ERR_FAIL_INDEX_V(p_type, VARIANT_MAX, nullptr);
 	return variant_keyed_setters_getters[p_type].ptr_getter;
 }
+
 Variant::PTRKeyedChecker Variant::get_member_ptr_keyed_checker(Variant::Type p_type) {
 	ERR_FAIL_INDEX_V(p_type, VARIANT_MAX, nullptr);
 	return variant_keyed_setters_getters[p_type].ptr_checker;
@@ -1147,6 +1178,7 @@ void Variant::set_keyed(const Variant &p_key, const Variant &p_value, bool &r_va
 		r_valid = false;
 	}
 }
+
 Variant Variant::get_keyed(const Variant &p_key, bool &r_valid) const {
 	if (likely(variant_keyed_setters_getters[type].valid)) {
 		Variant ret;
@@ -1157,6 +1189,7 @@ Variant Variant::get_keyed(const Variant &p_key, bool &r_valid) const {
 		return Variant();
 	}
 }
+
 bool Variant::has_key(const Variant &p_key, bool &r_valid) const {
 	if (likely(variant_keyed_setters_getters[type].valid)) {
 		return variant_keyed_setters_getters[type].validated_checker(this, &p_key, &r_valid);
@@ -1931,6 +1964,7 @@ void Variant::_register_variant_setters_getters() {
 	register_indexed_setters_getters();
 	register_keyed_setters_getters();
 }
+
 void Variant::_unregister_variant_setters_getters() {
 	unregister_named_setters_getters();
 	unregister_indexed_setters_getters();

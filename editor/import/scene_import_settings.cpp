@@ -95,6 +95,7 @@ class SceneImportSettingsData : public Object {
 		}
 		return false;
 	}
+
 	bool _get(const StringName &p_name, Variant &r_ret) const {
 		if (settings) {
 			if (settings->has(p_name)) {
@@ -108,6 +109,7 @@ class SceneImportSettingsData : public Object {
 		}
 		return false;
 	}
+
 	void _get_property_list(List<PropertyInfo> *p_list) const {
 		if (hide_options) {
 			return;

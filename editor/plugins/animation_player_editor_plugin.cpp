@@ -238,6 +238,7 @@ String AnimationPlayerEditor::_get_current() const {
 	}
 	return current;
 }
+
 void AnimationPlayerEditor::_play_bw_pressed() {
 	String current = _get_current();
 	if (!current.is_empty()) {

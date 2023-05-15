@@ -266,6 +266,7 @@ StringName GDScript::get_instance_base_type() const {
 struct _GDScriptMemberSort {
 	int index = 0;
 	StringName name;
+
 	_FORCE_INLINE_ bool operator<(const _GDScriptMemberSort &p_member) const { return index < p_member.index; }
 };
 
@@ -1314,6 +1315,7 @@ void GDScript::_save_orphaned_subclasses(GDScript::ClearData *p_clear_data) {
 		ObjectID id;
 		String fully_qualified_name;
 	};
+
 	Vector<ClassRefWithName> weak_subclasses;
 	// collect subclasses ObjectID and name
 	for (KeyValue<StringName, Ref<GDScript>> &E : subclasses) {

@@ -2127,12 +2127,14 @@ void PointMesh::_create_mesh_array(Array &p_arr) const {
 PointMesh::PointMesh() {
 	primitive_type = PRIMITIVE_POINTS;
 }
+
 // TUBE TRAIL
 
 void TubeTrailMesh::set_radius(const float p_radius) {
 	radius = p_radius;
 	_request_update();
 }
+
 float TubeTrailMesh::get_radius() const {
 	return radius;
 }
@@ -2142,6 +2144,7 @@ void TubeTrailMesh::set_radial_steps(const int p_radial_steps) {
 	radial_steps = p_radial_steps;
 	_request_update();
 }
+
 int TubeTrailMesh::get_radial_steps() const {
 	return radial_steps;
 }
@@ -2151,6 +2154,7 @@ void TubeTrailMesh::set_sections(const int p_sections) {
 	sections = p_sections;
 	_request_update();
 }
+
 int TubeTrailMesh::get_sections() const {
 	return sections;
 }
@@ -2159,6 +2163,7 @@ void TubeTrailMesh::set_section_length(float p_section_length) {
 	section_length = p_section_length;
 	_request_update();
 }
+
 float TubeTrailMesh::get_section_length() const {
 	return section_length;
 }
@@ -2168,6 +2173,7 @@ void TubeTrailMesh::set_section_rings(const int p_section_rings) {
 	section_rings = p_section_rings;
 	_request_update();
 }
+
 int TubeTrailMesh::get_section_rings() const {
 	return section_rings;
 }
@@ -2203,6 +2209,7 @@ void TubeTrailMesh::set_curve(const Ref<Curve> &p_curve) {
 	}
 	_request_update();
 }
+
 Ref<Curve> TubeTrailMesh::get_curve() const {
 	return curve;
 }
@@ -2210,6 +2217,7 @@ Ref<Curve> TubeTrailMesh::get_curve() const {
 void TubeTrailMesh::_curve_changed() {
 	_request_update();
 }
+
 int TubeTrailMesh::get_builtin_bind_pose_count() const {
 	return sections + 1;
 }
@@ -2491,6 +2499,7 @@ void RibbonTrailMesh::set_shape(Shape p_shape) {
 	shape = p_shape;
 	_request_update();
 }
+
 RibbonTrailMesh::Shape RibbonTrailMesh::get_shape() const {
 	return shape;
 }
@@ -2499,6 +2508,7 @@ void RibbonTrailMesh::set_size(const float p_size) {
 	size = p_size;
 	_request_update();
 }
+
 float RibbonTrailMesh::get_size() const {
 	return size;
 }
@@ -2508,6 +2518,7 @@ void RibbonTrailMesh::set_sections(const int p_sections) {
 	sections = p_sections;
 	_request_update();
 }
+
 int RibbonTrailMesh::get_sections() const {
 	return sections;
 }
@@ -2516,6 +2527,7 @@ void RibbonTrailMesh::set_section_length(float p_section_length) {
 	section_length = p_section_length;
 	_request_update();
 }
+
 float RibbonTrailMesh::get_section_length() const {
 	return section_length;
 }
@@ -2525,6 +2537,7 @@ void RibbonTrailMesh::set_section_segments(const int p_section_segments) {
 	section_segments = p_section_segments;
 	_request_update();
 }
+
 int RibbonTrailMesh::get_section_segments() const {
 	return section_segments;
 }
@@ -2542,6 +2555,7 @@ void RibbonTrailMesh::set_curve(const Ref<Curve> &p_curve) {
 	}
 	_request_update();
 }
+
 Ref<Curve> RibbonTrailMesh::get_curve() const {
 	return curve;
 }
@@ -2549,6 +2563,7 @@ Ref<Curve> RibbonTrailMesh::get_curve() const {
 void RibbonTrailMesh::_curve_changed() {
 	_request_update();
 }
+
 int RibbonTrailMesh::get_builtin_bind_pose_count() const {
 	return sections + 1;
 }

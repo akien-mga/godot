@@ -351,11 +351,15 @@ struct GodotTestCaseListener : public doctest::IReporter {
 	}
 
 	void report_query(const doctest::QueryData &) override {}
+
 	void test_case_exception(const doctest::TestCaseException &) override {}
+
 	void subcase_end() override {}
 
 	void log_assert(const doctest::AssertData &in) override {}
+
 	void log_message(const doctest::MessageData &) override {}
+
 	void test_case_skipped(const doctest::TestCaseData &) override {}
 };
 

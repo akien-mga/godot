@@ -612,6 +612,7 @@ Error Main::test_setup() {
 
 	return OK;
 }
+
 // The order is the same as in `Main::cleanup()`.
 void Main::test_cleanup() {
 	ERR_FAIL_COND(!_start_success);

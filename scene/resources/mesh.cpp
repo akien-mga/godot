@@ -2293,6 +2293,7 @@ ArrayMesh::~ArrayMesh() {
 		RenderingServer::get_singleton()->free(mesh);
 	}
 }
+
 ///////////////
 
 void PlaceholderMesh::_bind_methods() {

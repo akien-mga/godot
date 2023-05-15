@@ -509,6 +509,7 @@ void EditorPlugin::remove_resource_conversion_plugin(const Ref<EditorResourceCon
 void EditorPlugin::_editor_project_settings_changed() {
 	emit_signal(SNAME("project_settings_changed"));
 }
+
 void EditorPlugin::_notification(int p_what) {
 	switch (p_what) {
 		case NOTIFICATION_ENTER_TREE: {

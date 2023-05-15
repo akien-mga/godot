@@ -388,6 +388,7 @@ struct MeshInstance3DEditorEdgeSort {
 	}
 
 	MeshInstance3DEditorEdgeSort() {}
+
 	MeshInstance3DEditorEdgeSort(const Vector2 &p_a, const Vector2 &p_b) {
 		if (p_a < p_b) {
 			a = p_a;
