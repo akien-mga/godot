@@ -103,6 +103,11 @@ jobs:
       - name: Setup GCC problem matcher
         uses: ammaraskar/gcc-problem-matcher@master
 
+      - name: Check disk usage
+        run: |
+          df -h
+          du -s *
+
       - name: Compilation
         uses: ./.github/actions/godot-build
         with:
@@ -110,6 +115,11 @@ jobs:
           platform: linuxbsd
           target: ${{ matrix.target }}
           tests: ${{ matrix.tests }}
+
+      - name: Check disk usage
+        run: |
+          df -h
+          du -s *
 
       - name: Generate C# glue
         if: ${{ matrix.build-mono }}
@@ -120,6 +130,11 @@ jobs:
         if: ${{ matrix.build-mono }}
         run: |
           ./modules/mono/build_scripts/build_assemblies.py --godot-output-dir=./bin --godot-platform=linuxbsd
+
+      - name: Check disk usage
+        run: |
+          df -h
+          du -s *
 
       # Execute unit tests for the editor
       - name: Unit tests
@@ -177,6 +192,11 @@ jobs:
           xvfb-run ${{ matrix.bin }} 40 --audio-driver Dummy --path test_project 2>&1 | tee sanitizers_log.txt || true
           misc/scripts/check_ci_log.py sanitizers_log.txt
 
+      - name: Check disk usage
+        run: |
+          df -h
+          du -s *
+
       # Checkout godot-cpp
       - name: Checkout godot-cpp
         if: ${{ matrix.godot-cpp-test }}
@@ -195,6 +215,11 @@ jobs:
           cp -f gdextension_interface.h godot-cpp/gdextension/
           cp -f extension_api.json godot-cpp/gdextension/
 
+      - name: Check disk usage
+        run: |
+          df -h
+          du -s *
+
       # Build godot-cpp test extension
       - name: Build godot-cpp test extension
         if: ${{ matrix.godot-cpp-test }}
@@ -202,6 +227,11 @@ jobs:
           cd godot-cpp/test
           scons target=template_debug dev_build=yes
           cd ../..
+
+      - name: Check disk usage
+        run: |
+          df -h
+          du -s *
 
       - name: Check for GDExtension compatibility
         if: ${{ matrix.compat }}
