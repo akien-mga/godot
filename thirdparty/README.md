@@ -96,7 +96,7 @@ Files extracted from upstream source:
 ## directx_headers
 
 - Upstream: https://github.com/microsoft/DirectX-Headers
-- Version: 1.606.3 (fd329244e62201bf959331d28514928fc1d45005, 2022)
+- Version: 1.610.0 (2b8cd08a930a39ce27245d072ab4baf54a696d12, 2023)
 - License: MIT
 
 Files extracted from upstream source:

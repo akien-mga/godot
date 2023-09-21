@@ -5,21 +5,28 @@ from pathlib import Path
 
 Import("env")
 
-env_d3d12_rd = env.Clone()
+# DirectX Headers (must take precedence over Windows SDKs).
 
-thirdparty_obj = []
-
-
-# DirectX Headers (must take precedence over Windows SDK's).
-
-env.Prepend(CPPPATH=["#thirdparty/directx_headers"])
-env_d3d12_rd.Prepend(CPPPATH=["#thirdparty/directx_headers"])
+# Treat thirdparty headers as system headers to avoid raising warnings. Not supported on MSVC.
+if not env.msvc:
+    env.Append(CPPFLAGS=["-isystem", Dir("#thirdparty/directx_headers").path])
+else:
+    env.Prepend(CPPPATH=["#thirdparty/directx_headers"])
 
 
 # Direct3D 12 Memory Allocator.
 
-env.Append(CPPPATH=["#thirdparty/d3d12ma"])
-env_d3d12_rd.Append(CPPPATH=["#thirdparty/d3d12ma"])
+if not env.msvc:
+    env.Append(CPPFLAGS=["-isystem", Dir("#thirdparty/d3d12ma").path])
+else:
+    env.Append(CPPPATH=["#thirdparty/d3d12ma"])
+
+
+# Clone environment for local lib, after setting above include paths.
+
+env_d3d12_rd = env.Clone()
+
+thirdparty_obj = []
 
 
 # Agility SDK.
@@ -32,7 +39,10 @@ if env["AGILITY_SDK_PATH"] != "":
 
 if env["PIX_PATH"] != "":
     env_d3d12_rd.Append(CPPDEFINES=["PIX_ENABLED"])
-    env_d3d12_rd.Append(CPPPATH=[env["PIX_PATH"] + "/Include"])
+    if not env.msvc:
+        env_d3d12_rd.Append(CPPFLAGS=["-isystem", Dir(env["PIX_PATH"] + "/Include").path])
+    else:
+        env_d3d12_rd.Append(CPPPATH=[env["PIX_PATH"] + "/Include"])
 
 
 # Mesa (SPIR-V to DXIL functionality).
@@ -149,7 +159,6 @@ extra_defines += [
     ("PACKAGE_BUGREPORT", '\\"https://gitlab.freedesktop.org/mesa/mesa/-/issues\\"'),
     "PIPE_SUBSYSTEM_WINDOWS_USER",
     "_USE_MATH_DEFINES",
-    ("_Static_assert", "static_assert"),
 ]
 
 if env.msvc:
@@ -168,13 +177,12 @@ if env.msvc:
     env_thirdparty_mesa.Append(CFLAGS=["/std:c11"])
     env_thirdparty_mesa.Append(CXXFLAGS=["/std:c++17"])
 else:
-    env_thirdparty_mesa.Append(
-        CPPDEFINES=[
-            ("__MSVCRT_VERSION__", 0x0700),
-        ]
-    )
+    extra_defines += [
+        ("__MSVCRT_VERSION__", 0x0700),
+        "HAVE_STRUCT_TIMESPEC",
+    ]
     env_thirdparty_mesa.Append(CFLAGS=["-std=c11"])
-    env_thirdparty_mesa.Append(CXXFLAGS=["-std=cpp++17"])
+    env_thirdparty_mesa.Append(CXXFLAGS=["-std=c++17"])
 
 env_thirdparty_mesa.Append(CPPDEFINES=extra_defines)
 
