@@ -672,7 +672,7 @@ with the provided patch.
 ## openxr
 
 - Upstream: https://github.com/KhronosGroup/OpenXR-SDK
-- Version: 1.0.30 (55224479ab13db8ebc8ab1e3d49197bce6201b0b, 2023)
+- Version: 1.0.29 (90734c5b713bfde15eeb95a767e22a29dcbbd312, 2023)
 - License: Apache 2.0
 
 Files extracted from upstream source:
