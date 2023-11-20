@@ -52,7 +52,7 @@ class ScriptServer {
 
 	static ScriptLanguage *_languages[MAX_LANGUAGES];
 	static int _language_count;
-	static bool languages_ready;
+	static SafeFlag languages_ready;
 	static Mutex languages_mutex;
 
 	static bool scripting_enabled;

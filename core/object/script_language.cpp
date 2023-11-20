@@ -39,7 +39,7 @@
 
 ScriptLanguage *ScriptServer::_languages[MAX_LANGUAGES];
 int ScriptServer::_language_count = 0;
-bool ScriptServer::languages_ready = false;
+SafeFlag ScriptServer::languages_ready;
 Mutex ScriptServer::languages_mutex;
 
 bool ScriptServer::scripting_enabled = true;
@@ -239,7 +239,7 @@ void ScriptServer::init_languages() {
 
 	{
 		MutexLock lock(languages_mutex);
-		languages_ready = true;
+		languages_ready.set();
 	}
 }
 
@@ -261,7 +261,7 @@ void ScriptServer::finish_languages() {
 
 	{
 		MutexLock lock(languages_mutex);
-		languages_ready = false;
+		languages_ready.clear();
 	}
 
 	global_classes_clear();
@@ -269,7 +269,7 @@ void ScriptServer::finish_languages() {
 
 bool ScriptServer::are_languages_initialized() {
 	MutexLock lock(languages_mutex);
-	return languages_ready;
+	return languages_ready.is_set();
 }
 
 void ScriptServer::set_reload_scripts_on_save(bool p_enable) {
@@ -282,7 +282,7 @@ bool ScriptServer::is_reload_scripts_on_save_enabled() {
 
 void ScriptServer::thread_enter() {
 	MutexLock lock(languages_mutex);
-	if (!languages_ready) {
+	if (!languages_ready.is_set()) {
 		return;
 	}
 	for (int i = 0; i < _language_count; i++) {
@@ -292,7 +292,7 @@ void ScriptServer::thread_enter() {
 
 void ScriptServer::thread_exit() {
 	MutexLock lock(languages_mutex);
-	if (!languages_ready) {
+	if (!languages_ready.is_set()) {
 		return;
 	}
 	for (int i = 0; i < _language_count; i++) {
