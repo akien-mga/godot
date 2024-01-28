@@ -1,0 +1,139 @@
+#!/usr/bin/env python
+from misc.utility.scons_hints import *
+
+Import("env")
+Import("env_modules")
+
+env_dotnet = env_modules.Clone()
+
+
+def is_desktop(platform: str) -> bool:
+    return platform in ["windows", "macos", "linuxbsd"]
+
+
+def is_mobile(platform: str) -> bool:
+    return platform in ["android", "ios"]
+
+
+def is_browser(platform: str) -> bool:
+    return platform in ["web"]
+
+
+def is_hostfxr_supported(platform: str) -> bool:
+    return is_desktop(platform)
+
+
+def is_monovm_supported(platform: str) -> bool:
+    return is_desktop(platform) or is_mobile(platform)
+
+
+def is_nativeaot_supported(platform: str) -> bool:
+    return is_desktop(platform) or is_mobile(platform)
+
+
+def get_godot_dotnet_package_version() -> str:
+    from methods import get_version_info
+    
+    version_info = get_version_info("")
+
+    version_str = "{major}.{minor}.{patch}".format(**version_info)
+    version_status = version_info["status"]
+    if version_status == "stable":
+        # For stable versions, use the latest revision version available.
+        version_str += ".*"
+    else:
+        # Pre-releases and development builds.
+
+        # If version was overridden to be e.g. "beta3", we insert a dot between
+        # "beta" and "3" to follow SemVer 2.0.
+        import re
+
+        match = re.search(r"[\d]+$", version_status)
+        if match:
+            pos = match.start()
+            version_status_prefix = version_status[:pos]
+            version_status_number = version_status[pos:]
+
+            # "dev" pre-releases always use the "alpha" label in the .NET packages.
+            if version_status_prefix == "dev":
+                version_status_prefix = "alpha"
+
+            version_status = f"{version_status_prefix}.{version_status_number}"
+        else:
+            # If the version status is not numbered, it must be a development build.
+            # Development builds always use the "dev" label in the .NET packages.
+            version_status = "dev"
+
+        version_str += f"-{version_status}"
+
+    return version_str
+
+
+# Configure .NET
+
+platform = env["platform"]
+
+if is_hostfxr_supported(platform):
+    env_dotnet.Append(CPPDEFINES=["DOTNET_HOSTFXR_ENABLED"])
+if is_monovm_supported(platform):
+    env_dotnet.Append(CPPDEFINES=["DOTNET_MONOVM_ENABLED"])
+if is_nativeaot_supported(platform):
+    env_dotnet.Append(CPPDEFINES=["DOTNET_NATIVEAOT_ENABLED"])
+
+if env.editor_build:
+    if not is_desktop(platform):
+        raise RuntimeError(
+            f".NET module does not currently support building the editor for this platform: {platform}."
+        )
+
+# Add sources.
+
+env_dotnet.add_source_files(env.modules_sources, "*.cpp")
+env_dotnet.add_source_files(env.modules_sources, "extension/*.cpp")
+env_dotnet.add_source_files(env.modules_sources, "runtime/*.cpp")
+env_dotnet.add_source_files(env.modules_sources, "runtime/**/*.cpp")
+env_dotnet.add_source_files(env.modules_sources, "utils/*.cpp")
+
+if env.editor_build:
+    env_dotnet.add_source_files(env.modules_sources, "editor/*.cpp")
+
+
+# Add RestoreEditorPackages.proj
+def make_proj(target, source, env):
+    from pathlib import Path
+
+    src_path = Path(str(source[0]))
+    src_name = src_path.stem
+
+    version_str = str(source[1])
+
+    proj = ""
+    with open(str(source[0]), "r", newline="\r\n", encoding="utf-8") as file:
+        file_str = file.read()
+        file_str = file_str.replace(
+            "<_GodotPackagesVersion>*-*</_GodotPackagesVersion>",
+            f"<_GodotPackagesVersion>{version_str}</_GodotPackagesVersion>",
+        )
+        proj += "".join(f"\\{hex(x)[1:]}" for x in bytes(file_str, "utf-8"))
+
+    import methods
+
+    with methods.generated_wrapper(str(target[0])) as file:
+        file.write(
+            f"""\
+#include "core/typedefs.h"
+
+#ifdef TOOLS_ENABLED
+static const char *_{src_name}_proj = "{proj}";
+#endif // TOOLS_ENABLED
+"""
+        )
+
+
+version_str = get_godot_dotnet_package_version()
+
+env_dotnet.CommandNoCache(
+    "editor/RestoreEditorPackages.proj.gen.h",
+    ["editor/RestoreEditorPackages.proj", env_dotnet.Value(version_str)],
+    env_dotnet.Run(make_proj),
+)
