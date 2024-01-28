@@ -90,7 +90,7 @@ const PackedStringArray ProjectSettings::_get_supported_features() {
 	features.append("LibGodot");
 #endif
 
-#ifdef MODULE_MONO_ENABLED
+#if defined(MODULE_MONO_ENABLED) || defined(MODULE_DOTNET_ENABLED)
 	features.append("C#");
 #endif
 	// Allow pinning to a specific patch number or build type by marking

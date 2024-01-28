@@ -148,6 +148,8 @@
 /modules/mono/                                @godotengine/dotnet
 /modules/mono/doc_classes/                    @godotengine/dotnet @godotengine/documentation
 /modules/mono/icons/                          @godotengine/dotnet @godotengine/usability
+/modules/dotnet/                              @godotengine/dotnet
+/modules/dotnet/icons/                        @godotengine/dotnet @godotengine/usability
 
 ## Text
 /modules/freetype/                            @godotengine/buildsystem
