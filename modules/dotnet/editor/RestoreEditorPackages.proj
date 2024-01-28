@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.Build.NoTargets/3.7.56">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework Condition="$([MSBuild]::IsOSPlatform(`Windows`))">net9.0-windows</TargetFramework>
+    <OutputPath>$(MSBuildThisFileDirectory)</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <_GodotPackagesVersion>*-*</_GodotPackagesVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Godot.EditorIntegration" Version="$(_GodotPackagesVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Condition="$([MSBuild]::IsOSPlatform(`Windows`))" Include="Godot.EditorIntegration.OpenVisualStudio" Version="$(_GodotPackagesVersion)" />
+  </ItemGroup>
+
+</Project>
