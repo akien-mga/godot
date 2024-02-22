@@ -160,3 +160,14 @@ Validate extension JSON: JSON file: Field was added in a way that breaks compati
 Validate extension JSON: JSON file: Field was added in a way that breaks compatibility 'classes/RenderSceneBuffersRD/methods/get_velocity_texture': arguments
 
 MSAA flag was added, compatibility functions exist for these.
+
+
+GH-81746
+--------
+Validate extension JSON: API was removed: classes/EditorSceneFormatImporterFBX
+
+Renamed to EditorSceneFormatImporterFBX2GLTF.
+
+The compat breakage was deemed necessary as this is a class most users wouldn't
+use directly, and the name needs to be disambiguated with the new
+EditorSceneFormatImporterUFBX.
