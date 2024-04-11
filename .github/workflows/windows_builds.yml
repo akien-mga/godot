@@ -16,7 +16,6 @@ concurrency:
 
 jobs:
   build-windows:
-    # Windows 10 with latest image
     runs-on: "windows-latest"
     name: ${{ matrix.name }}
     strategy:
@@ -24,6 +23,7 @@ jobs:
       matrix:
         include:
           - name: Editor (target=editor, tests=yes)
+            os: "windows-2019"
             cache-name: windows-editor
             target: editor
             tests: true
@@ -32,6 +32,7 @@ jobs:
             bin: "./bin/godot.windows.editor.x86_64.exe"
 
           - name: Template (target=template_release)
+            os: "windows-2022"
             cache-name: windows-template
             target: template_release
             tests: false
