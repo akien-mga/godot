@@ -296,6 +296,7 @@ void (*type_init_function_table[])(Variant *) = {
 		&&OPCODE_ITERATE_BEGIN_PACKED_VECTOR2_ARRAY,   \
 		&&OPCODE_ITERATE_BEGIN_PACKED_VECTOR3_ARRAY,   \
 		&&OPCODE_ITERATE_BEGIN_PACKED_COLOR_ARRAY,     \
+		&&OPCODE_ITERATE_BEGIN_PACKED_VECTOR4_ARRAY,   \
 		&&OPCODE_ITERATE_BEGIN_OBJECT,                 \
 		&&OPCODE_ITERATE,                              \
 		&&OPCODE_ITERATE_INT,                          \
@@ -316,6 +317,7 @@ void (*type_init_function_table[])(Variant *) = {
 		&&OPCODE_ITERATE_PACKED_VECTOR2_ARRAY,         \
 		&&OPCODE_ITERATE_PACKED_VECTOR3_ARRAY,         \
 		&&OPCODE_ITERATE_PACKED_COLOR_ARRAY,           \
+		&&OPCODE_ITERATE_PACKED_VECTOR4_ARRAY,         \
 		&&OPCODE_ITERATE_OBJECT,                       \
 		&&OPCODE_STORE_GLOBAL,                         \
 		&&OPCODE_STORE_NAMED_GLOBAL,                   \
@@ -356,12 +358,10 @@ void (*type_init_function_table[])(Variant *) = {
 		&&OPCODE_TYPE_ADJUST_PACKED_VECTOR2_ARRAY,     \
 		&&OPCODE_TYPE_ADJUST_PACKED_VECTOR3_ARRAY,     \
 		&&OPCODE_TYPE_ADJUST_PACKED_COLOR_ARRAY,       \
+		&&OPCODE_TYPE_ADJUST_PACKED_VECTOR4_ARRAY,     \
 		&&OPCODE_ASSERT,                               \
 		&&OPCODE_BREAKPOINT,                           \
 		&&OPCODE_LINE,                                 \
-		&&OPCODE_ITERATE_PACKED_VECTOR4_ARRAY,         \
-		&&OPCODE_ITERATE_BEGIN_PACKED_VECTOR4_ARRAY,   \
-		&&OPCODE_TYPE_ADJUST_PACKED_VECTOR4_ARRAY,     \
 		&&OPCODE_END                                   \
 	};                                                 \
 	static_assert((sizeof(switch_table_ops) / sizeof(switch_table_ops[0]) == (OPCODE_END + 1)), "Opcodes in jump table aren't the same as opcodes in enum.");

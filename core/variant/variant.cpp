@@ -1793,7 +1793,7 @@ String Variant::stringify(int recursion_count) const {
 			return stringify_vector(operator PackedColorArray(), recursion_count);
 		}
 		case PACKED_VECTOR4_ARRAY: {
-			return stringify_vector(operator Vector<Vector4>(), recursion_count);
+			return stringify_vector(operator PackedVector4Array(), recursion_count);
 		}
 		case PACKED_STRING_ARRAY: {
 			return stringify_vector(operator PackedStringArray(), recursion_count);
@@ -2316,11 +2316,11 @@ Variant::operator PackedColorArray() const {
 	}
 }
 
-Variant::operator Vector<Vector4>() const {
+Variant::operator PackedVector4Array() const {
 	if (type == PACKED_VECTOR4_ARRAY) {
 		return static_cast<PackedArrayRef<Vector4> *>(_data.packed_array)->array;
 	} else {
-		return _convert_array_from_variant<Vector<Vector4>>(*this);
+		return _convert_array_from_variant<PackedVector4Array>(*this);
 	}
 }
 
@@ -2684,6 +2684,11 @@ Variant::Variant(const PackedColorArray &p_color_array) {
 	_data.packed_array = PackedArrayRef<Color>::create(p_color_array);
 }
 
+Variant::Variant(const PackedVector4Array &p_vector4_array) {
+	type = PACKED_VECTOR4_ARRAY;
+	_data.packed_array = PackedArrayRef<Vector4>::create(p_vector4_array);
+}
+
 /* helpers */
 Variant::Variant(const Vector<::RID> &p_array) {
 	type = ARRAY;
@@ -2707,11 +2712,6 @@ Variant::Variant(const Vector<Plane> &p_array) {
 	for (int i = 0; i < p_array.size(); i++) {
 		plane_array->operator[](i) = Variant(p_array[i]);
 	}
-}
-
-Variant::Variant(const Vector<Vector4> &p_vector4_array) {
-	type = PACKED_VECTOR4_ARRAY;
-	_data.packed_array = PackedArrayRef<Vector4>::create(p_vector4_array);
 }
 
 Variant::Variant(const Vector<Face3> &p_face_array) {
@@ -3236,7 +3236,7 @@ uint32_t Variant::recursive_hash(int recursion_count) const {
 		} break;
 		case PACKED_VECTOR4_ARRAY: {
 			uint32_t hash = HASH_MURMUR3_SEED;
-			const Vector<Vector4> &arr = PackedArrayRef<Vector4>::get_array(_data.packed_array);
+			const PackedVector4Array &arr = PackedArrayRef<Vector4>::get_array(_data.packed_array);
 			int len = arr.size();
 
 			if (likely(len)) {

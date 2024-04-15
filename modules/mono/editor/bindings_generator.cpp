@@ -3512,8 +3512,8 @@ bool BindingsGenerator::_arg_default_value_is_assignable_to_type(const Variant &
 		case Variant::PACKED_STRING_ARRAY:
 		case Variant::PACKED_VECTOR2_ARRAY:
 		case Variant::PACKED_VECTOR3_ARRAY:
-		case Variant::PACKED_COLOR_ARRAY:
 		case Variant::PACKED_VECTOR4_ARRAY:
+		case Variant::PACKED_COLOR_ARRAY:
 		case Variant::CALLABLE:
 		case Variant::SIGNAL:
 			return p_arg_type.name == Variant::get_type_name(p_val.get_type());

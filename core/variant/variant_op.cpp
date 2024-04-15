@@ -1058,9 +1058,7 @@ void Variant::_register_variant_operators() {
 
 	register_op<OperatorEvaluatorInArrayFind<Vector2, PackedVector2Array>>(Variant::OP_IN, Variant::VECTOR2, Variant::PACKED_VECTOR2_ARRAY);
 	register_op<OperatorEvaluatorInArrayFind<Vector3, PackedVector3Array>>(Variant::OP_IN, Variant::VECTOR3, Variant::PACKED_VECTOR3_ARRAY);
-
 	register_op<OperatorEvaluatorInArrayFind<Color, PackedColorArray>>(Variant::OP_IN, Variant::COLOR, Variant::PACKED_COLOR_ARRAY);
-
 	register_op<OperatorEvaluatorInArrayFind<Vector4, PackedVector4Array>>(Variant::OP_IN, Variant::VECTOR4, Variant::PACKED_VECTOR4_ARRAY);
 
 	register_op<OperatorEvaluatorObjectHasPropertyString>(Variant::OP_IN, Variant::STRING, Variant::OBJECT);

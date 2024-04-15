@@ -31,9 +31,12 @@
 #ifndef VECTOR4_H
 #define VECTOR4_H
 
-#include "core/math/vector4i.h"
+#include "core/error/error_macros.h"
+#include "core/math/math_defs.h"
+#include "core/typedefs.h"
 
 class String;
+struct Vector4i;
 
 struct _NO_DISCARD_ Vector4 {
 	static const int AXIS_COUNT = 4;

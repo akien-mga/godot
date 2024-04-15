@@ -141,7 +141,7 @@ struct NamesCache {
 	StringName vector3_type = StaticCString::create("Vector3");
 
 	// Object not included as it must be checked for all derived classes
-	static constexpr int nullable_types_count = 17;
+	static constexpr int nullable_types_count = 18;
 	StringName nullable_types[nullable_types_count] = {
 		string_type,
 		string_name_type,
@@ -161,6 +161,7 @@ struct NamesCache {
 		StaticCString::create(_STR(PackedVector2Array)),
 		StaticCString::create(_STR(PackedVector3Array)),
 		StaticCString::create(_STR(PackedColorArray)),
+		StaticCString::create(_STR(PackedVector4Array)),
 	};
 
 	bool is_nullable_type(const StringName &p_type) const {

@@ -1926,8 +1926,20 @@ void ResourceFormatSaverBinaryInstance::write_variant(Ref<FileAccess> f, const V
 			for (int i = 0; i < len; i++) {
 				save_unicode_string(f, r[i]);
 			}
-
 		} break;
+
+		case Variant::PACKED_VECTOR2_ARRAY: {
+			f->store_32(VARIANT_PACKED_VECTOR2_ARRAY);
+			Vector<Vector2> arr = p_property;
+			int len = arr.size();
+			f->store_32(len);
+			const Vector2 *r = arr.ptr();
+			for (int i = 0; i < len; i++) {
+				f->store_real(r[i].x);
+				f->store_real(r[i].y);
+			}
+		} break;
+
 		case Variant::PACKED_VECTOR3_ARRAY: {
 			f->store_32(VARIANT_PACKED_VECTOR3_ARRAY);
 			Vector<Vector3> arr = p_property;
@@ -1939,20 +1951,8 @@ void ResourceFormatSaverBinaryInstance::write_variant(Ref<FileAccess> f, const V
 				f->store_real(r[i].y);
 				f->store_real(r[i].z);
 			}
-
 		} break;
-		case Variant::PACKED_VECTOR2_ARRAY: {
-			f->store_32(VARIANT_PACKED_VECTOR2_ARRAY);
-			Vector<Vector2> arr = p_property;
-			int len = arr.size();
-			f->store_32(len);
-			const Vector2 *r = arr.ptr();
-			for (int i = 0; i < len; i++) {
-				f->store_real(r[i].x);
-				f->store_real(r[i].y);
-			}
 
-		} break;
 		case Variant::PACKED_COLOR_ARRAY: {
 			f->store_32(VARIANT_PACKED_COLOR_ARRAY);
 			Vector<Color> arr = p_property;
