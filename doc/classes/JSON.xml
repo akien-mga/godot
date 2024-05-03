@@ -44,7 +44,7 @@
 			<param index="1" name="allow_classes" type="bool" default="false" />
 			<param index="2" name="allow_scripts" type="bool" default="false" />
 			<description>
-				Converts a native engine type to a JSON compliant dictionary.
+				Converts a native engine type to a JSON-compliant dictionary.
 				By default, classes and scripts are ignored for security reasons, unless [param allow_classes] or [param allow_scripts] are specified.
 			</description>
 		</method>
@@ -140,7 +140,7 @@
 			<param index="1" name="allow_classes" type="bool" default="false" />
 			<param index="2" name="allow_scripts" type="bool" default="false" />
 			<description>
-				Converts a JSON compliant dictionary that was creaated with [method from_native] back to native engine types.
+				Converts a JSON-compliant dictionary that was created with [method from_native] back to native engine types.
 				By default, classes and scripts are ignored for security reasons, unless [param allow_classes] or [param allow_scripts] are specified.
 			</description>
 		</method>
