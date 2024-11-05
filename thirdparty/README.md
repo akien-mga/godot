@@ -20,8 +20,13 @@ Files extracted from upstream source:
 ## certs
 
 - Upstream: Mozilla, via https://github.com/bagder/ca-bundle
-- Version: git (8b263a18fca98ea371e54227837321c5cdaa1ba7, 2021)
+- Version: git (4d3fe6683f651d96be1bbef316b201e9b33b274d, 2024)
 - License: MPL 2.0
+
+Files extracted from upstream source:
+
+- `ca-bundle.crt` renamed to `ca-certificates.crt`
+- `certdata.txt` (as MPL source form)
 
 
 ## cvtt
