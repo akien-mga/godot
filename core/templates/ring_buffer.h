@@ -64,16 +64,9 @@ public:
 			end = MIN(end, size());
 			int total = end - pos;
 			const T *read = data.ptr();
-#if defined(__GNUC__) && !defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstringop-overflow="
-#endif
 			for (int i = 0; i < total; i++) {
 				p_buf[dst++] = read[pos + i];
 			}
-#if defined(__GNUC__) && !defined(__clang__)
-#pragma GCC diagnostic pop
-#endif
 			to_read -= total;
 			pos = 0;
 		}
@@ -100,16 +93,9 @@ public:
 			int end = pos + to_read;
 			end = MIN(end, size());
 			int total = end - pos;
-#if defined(__GNUC__) && !defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstringop-overflow="
-#endif
 			for (int i = 0; i < total; i++) {
 				p_buf[dst++] = data[pos + i];
 			}
-#if defined(__GNUC__) && !defined(__clang__)
-#pragma GCC diagnostic pop
-#endif
 			to_read -= total;
 			pos = 0;
 		}

@@ -112,6 +112,7 @@ jobs:
 
       - name: Free disk space on runner
         run: |
+          gcc -v
           echo "Disk usage before:" && df -h
           sudo rm -rf /usr/local/lib/android
           echo "Disk usage after:" && df -h
