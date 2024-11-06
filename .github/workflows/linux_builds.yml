@@ -17,7 +17,8 @@ concurrency:
 
 jobs:
   build-linux:
-    runs-on: ubuntu-20.04
+    # If unspecified, stay one LTS before latest to increase portability of Linux artifacts.
+    runs-on: ${{ matrix.os || 'ubuntu-22.04' }}
     name: ${{ matrix.name }}
     strategy:
       fail-fast: false
@@ -60,6 +61,7 @@ jobs:
             artifact: false
             # Test our oldest supported SCons/Python versions on one arbitrary editor build.
             legacy-scons: true
+            os: ubuntu-20.04
 
           - name: Editor with ThreadSanitizer (target=editor, tests=yes, dev_build=yes, use_tsan=yes, use_llvm=yes, linker=lld)
             cache-name: linux-editor-thread-sanitizer
