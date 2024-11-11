@@ -4962,8 +4962,8 @@ String EditorNode::_get_system_info() const {
 	// `replace` is necessary, because `capitalize` introduces a whitespace between "x" and "11".
 	display_session_type = OS::get_singleton()->get_environment("XDG_SESSION_TYPE").capitalize().replace(" ", "");
 #endif // LINUXBSD_ENABLED
-	String driver_name = OS::get_singleton()->get_current_rendering_driver_name().to_lower();
-	String rendering_method = OS::get_singleton()->get_current_rendering_method().to_lower();
+	String driver_name = RenderingServer::get_singleton()->get_current_rendering_driver_name().to_lower();
+	String rendering_method = RenderingServer::get_singleton()->get_current_rendering_method().to_lower();
 
 	const String rendering_device_name = RenderingServer::get_singleton()->get_video_adapter_name();
 
@@ -5009,7 +5009,7 @@ String EditorNode::_get_system_info() const {
 	} else if (driver_name == "opengl3_es") {
 		driver_name = "OpenGL ES 3";
 	} else if (driver_name == "opengl3") {
-		if (OS::get_singleton()->get_gles_over_gl()) {
+		if (RenderingServer::get_singleton()->get_gles_over_gl()) {
 			driver_name = "OpenGL 3";
 		} else {
 			driver_name = "OpenGL ES 3";
@@ -7457,12 +7457,11 @@ EditorNode::EditorNode() {
 		title_bar->add_child(right_menu_spacer);
 	}
 
-	String current_renderer_ps = GLOBAL_GET("rendering/renderer/rendering_method");
-	current_renderer_ps = current_renderer_ps.to_lower();
-	String current_renderer_os = OS::get_singleton()->get_current_rendering_method().to_lower();
+	String current_renderer_ps = String(GLOBAL_GET("rendering/renderer/rendering_method")).to_lower();
+	String current_renderer_rs = RenderingServer::get_singleton()->get_current_rendering_method().to_lower();
 
 	// Add the renderers name to the UI.
-	if (current_renderer_ps == current_renderer_os) {
+	if (current_renderer_ps == current_renderer_rs) {
 		renderer->connect(SceneStringName(item_selected), callable_mp(this, &EditorNode::_renderer_selected));
 		// As we are doing string comparisons, keep in standard case to prevent problems with capitals
 		// "vulkan" in particular uses lowercase "v" in the code, and uppercase in the UI.
@@ -7480,8 +7479,8 @@ EditorNode::EditorNode() {
 		}
 	} else {
 		// It's an CLI-overridden rendering method.
-		_add_renderer_entry(current_renderer_os, true);
-		renderer->set_item_metadata(0, current_renderer_os);
+		_add_renderer_entry(current_renderer_rs, true);
+		renderer->set_item_metadata(0, current_renderer_rs);
 		renderer->select(0);
 		renderer_current = 0;
 	}

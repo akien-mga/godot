@@ -68,6 +68,11 @@ class RenderingServer : public Object {
 	int mm_policy = 0;
 	bool render_loop_enabled = true;
 
+	String _current_rendering_driver_name;
+	String _current_rendering_method;
+
+	bool _is_gles_over_gl = false;
+
 	Array _get_array_from_surface(uint64_t p_format, Vector<uint8_t> p_vertex_data, Vector<uint8_t> p_attrib_data, Vector<uint8_t> p_skin_data, int p_vertex_len, Vector<uint8_t> p_index_data, int p_index_len, const AABB &p_aabb, const Vector4 &p_uv_scale) const;
 
 	const Vector2 SMALL_VEC2 = Vector2(CMP_EPSILON, CMP_EPSILON);
@@ -1774,6 +1779,14 @@ public:
 
 	virtual bool is_low_end() const = 0;
 
+	void set_current_rendering_driver_name(const String &p_driver_name) { _current_rendering_driver_name = p_driver_name; }
+	void set_current_rendering_method(const String &p_name) { _current_rendering_method = p_name; }
+	String get_current_rendering_driver_name() const { return _current_rendering_driver_name; }
+	String get_current_rendering_method() const { return _current_rendering_method; }
+
+	void set_gles_over_gl(bool p_enabled) { _is_gles_over_gl = p_enabled; }
+	bool get_gles_over_gl() const { return _is_gles_over_gl; }
+
 	virtual void set_print_gpu_profile(bool p_enable) = 0;
 
 	virtual Size2i get_maximum_viewport_size() const = 0;
@@ -1786,9 +1799,6 @@ public:
 
 	virtual bool is_on_render_thread() = 0;
 	virtual void call_on_render_thread(const Callable &p_callable) = 0;
-
-	String get_current_rendering_driver_name() const;
-	String get_current_rendering_method() const;
 
 #ifdef TOOLS_ENABLED
 	virtual void get_argument_options(const StringName &p_function, int p_idx, List<String> *r_options) const override;

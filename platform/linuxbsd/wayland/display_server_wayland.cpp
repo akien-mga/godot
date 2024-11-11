@@ -1362,8 +1362,8 @@ DisplayServerWayland::DisplayServerWayland(const String &p_rendering_driver, Win
 			if (fallback_to_opengl3 && rendering_driver != "opengl3") {
 				WARN_PRINT("Your video card drivers seem not to support the required Vulkan version, switching to OpenGL 3.");
 				rendering_driver = "opengl3";
-				OS::get_singleton()->set_current_rendering_method("gl_compatibility");
-				OS::get_singleton()->set_current_rendering_driver_name(rendering_driver);
+				RenderingServer::get_singleton()->set_current_rendering_method("gl_compatibility");
+				RenderingServer::get_singleton()->set_current_rendering_driver_name(rendering_driver);
 			} else
 #endif // GLES3_ENABLED
 			{
@@ -1450,7 +1450,7 @@ DisplayServerWayland::DisplayServerWayland(const String &p_rendering_driver, Win
 				if (fallback) {
 					WARN_PRINT("Your video card drivers seem not to support the required OpenGL version, switching to OpenGLES.");
 					rendering_driver = "opengl3_es";
-					OS::get_singleton()->set_current_rendering_driver_name(rendering_driver);
+					RenderingServer::get_singleton()->set_current_rendering_driver_name(rendering_driver);
 				} else {
 					r_error = ERR_UNAVAILABLE;
 

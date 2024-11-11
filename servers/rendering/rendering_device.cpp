@@ -35,6 +35,7 @@
 
 #include "core/config/project_settings.h"
 #include "core/io/dir_access.h"
+#include "servers/rendering_server.h"
 
 // TODO: Thread safety
 // - Roll back thread safe attribute for RID_Owner members after the read-only/atomic update scheme is implemented.
@@ -6101,7 +6102,7 @@ Error RenderingDevice::initialize(RenderingContextDriver *p_context, DisplayServ
 	if (is_main_instance) {
 		// Only the singleton instance with a display should print this information.
 		String rendering_method;
-		if (OS::get_singleton()->get_current_rendering_method() == "mobile") {
+		if (RenderingServer::get_singleton()->get_current_rendering_method() == "mobile") {
 			rendering_method = "Forward Mobile";
 		} else {
 			rendering_method = "Forward+";
@@ -6247,7 +6248,7 @@ Error RenderingDevice::initialize(RenderingContextDriver *p_context, DisplayServ
 	if (is_main_instance && project_pipeline_cache_enable) {
 		// Only the instance that is not a local device and is also the singleton is allowed to manage a pipeline cache.
 		pipeline_cache_file_path = vformat("user://vulkan/pipelines.%s.%s",
-				OS::get_singleton()->get_current_rendering_method(),
+				RenderingServer::get_singleton()->get_current_rendering_method(),
 				device.name.validate_filename().replace(" ", "_").to_lower());
 		if (Engine::get_singleton()->is_editor_hint()) {
 			pipeline_cache_file_path += ".editor";

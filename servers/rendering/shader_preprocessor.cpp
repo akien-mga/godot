@@ -1335,7 +1335,7 @@ Error ShaderPreprocessor::preprocess(const String &p_code, const String &p_filen
 		static HashMap<StringName, String> defines;
 
 		if (defines.is_empty()) {
-			const String rendering_method = OS::get_singleton()->get_current_rendering_method();
+			const String rendering_method = RenderingServer::get_singleton()->get_current_rendering_method();
 
 			if (rendering_method == "forward_plus") {
 				defines["CURRENT_RENDERER"] = _MKSTR(2);

@@ -204,7 +204,7 @@ void ShaderRD::_build_variant_code(StringBuilder &builder, uint32_t p_variant, c
 				builder.append("#define NO_IMAGE_ATOMICS\n");
 #endif
 
-				builder.append(String("#define RENDER_DRIVER_") + OS::get_singleton()->get_current_rendering_driver_name().to_upper() + "\n");
+				builder.append(String("#define RENDER_DRIVER_") + RenderingServer::get_singleton()->get_current_rendering_driver_name().to_upper() + "\n");
 				builder.append("#define samplerExternalOES sampler2D\n");
 				builder.append("#define textureExternalOES texture2D\n");
 			} break;

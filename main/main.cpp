@@ -2386,8 +2386,8 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 	// always convert to lower case for consistency in the code
 	rendering_driver = rendering_driver.to_lower();
 
-	OS::get_singleton()->set_current_rendering_driver_name(rendering_driver);
-	OS::get_singleton()->set_current_rendering_method(rendering_method);
+	RenderingServer::get_singleton()->set_current_rendering_driver_name(rendering_driver);
+	RenderingServer::get_singleton()->set_current_rendering_method(rendering_method);
 
 	if (use_custom_res) {
 		if (!force_res) {
@@ -2942,10 +2942,6 @@ Error Main::setup2(bool p_show_boot_logo) {
 				display_driver_idx = 0;
 			}
 		}
-
-		// Store this in a globally accessible place, so we can retrieve the rendering drivers
-		// list from the display driver for the editor UI.
-		OS::get_singleton()->set_display_driver_id(display_driver_idx);
 
 		Vector2i *window_position = nullptr;
 		Vector2i position = init_custom_pos;

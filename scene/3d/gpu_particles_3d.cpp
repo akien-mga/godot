@@ -384,12 +384,12 @@ PackedStringArray GPUParticles3D::get_configuration_warnings() const {
 		if ((dp_count || !skin.is_null()) && (missing_trails || no_materials)) {
 			warnings.push_back(RTR("Trails enabled, but one or more mesh materials are either missing or not set for trails rendering."));
 		}
-		if (OS::get_singleton()->get_current_rendering_method() == "gl_compatibility") {
+		if (RenderingServer::get_singleton()->get_current_rendering_method() == "gl_compatibility") {
 			warnings.push_back(RTR("Particle trails are only available when using the Forward+ or Mobile rendering backends."));
 		}
 	}
 
-	if (sub_emitter != NodePath() && OS::get_singleton()->get_current_rendering_method() == "gl_compatibility") {
+	if (sub_emitter != NodePath() && RenderingServer::get_singleton()->get_current_rendering_method() == "gl_compatibility") {
 		warnings.push_back(RTR("Particle sub-emitters are only available when using the Forward+ or Mobile rendering backends."));
 	}
 

@@ -656,8 +656,8 @@ DisplayServerAndroid::DisplayServerAndroid(const String &p_rendering_driver, Dis
 			if (fallback_to_opengl3 && rendering_driver != "opengl3") {
 				WARN_PRINT("Your device seem not to support Vulkan, switching to OpenGL 3.");
 				rendering_driver = "opengl3";
-				OS::get_singleton()->set_current_rendering_method("gl_compatibility");
-				OS::get_singleton()->set_current_rendering_driver_name(rendering_driver);
+				RenderingServer::get_singleton()->set_current_rendering_method("gl_compatibility");
+				RenderingServer::get_singleton()->set_current_rendering_driver_name(rendering_driver);
 			} else
 #endif
 			{

@@ -1128,7 +1128,7 @@ void Environment::_validate_property(PropertyInfo &p_property) const {
 		p_property.usage = PROPERTY_USAGE_NO_EDITOR;
 	}
 
-	if (OS::get_singleton()->get_current_rendering_method() == "gl_compatibility") {
+	if (RenderingServer::get_singleton()->get_current_rendering_method() == "gl_compatibility") {
 		// Hide glow properties we do not support in GL Compatibility.
 		if (p_property.name.begins_with("glow_levels") || p_property.name == "glow_normalized" || p_property.name == "glow_strength" || p_property.name == "glow_mix" || p_property.name == "glow_blend_mode" || p_property.name == "glow_map_strength" || p_property.name == "glow_map") {
 			p_property.usage = PROPERTY_USAGE_NO_EDITOR;
