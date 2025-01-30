@@ -199,18 +199,25 @@ void EditorResourcePicker::_update_menu_items() {
 
 	// Add options for creating specific subtypes of the base resource type.
 	if (is_editable()) {
-		set_create_options(edit_menu);
-
 		// Add an option to load a resource from a file using the QuickOpen dialog.
 		edit_menu->add_icon_item(get_editor_theme_icon(SNAME("Load")), TTR("Quick Load..."), OBJ_MENU_QUICKLOAD);
 		edit_menu->set_item_tooltip(-1, TTR("Opens a quick menu to select from a list of allowed Resource files."));
 
 		// Add an option to load a resource from a file using the regular file dialog.
 		edit_menu->add_icon_item(get_editor_theme_icon(SNAME("Load")), TTR("Load..."), OBJ_MENU_LOAD);
+
+		edit_menu->add_separator();
+
+		// Populates relevant "New..." type entries for the given resource.
+		set_create_options(edit_menu);
 	}
 
 	// Add options for changing existing value of the resource.
 	if (edited_resource.is_valid()) {
+		if (edit_menu->get_item_count()) {
+			edit_menu->add_separator();
+		}
+
 		// Determine if the edited resource is part of another scene (foreign) which was imported
 		bool is_edited_resource_foreign_import = EditorNode::get_singleton()->is_resource_read_only(edited_resource, true);
 
@@ -520,10 +527,6 @@ void EditorResourcePicker::set_create_options(Object *p_menu_node) {
 			}
 
 			idx++;
-		}
-
-		if (edit_menu->get_item_count()) {
-			edit_menu->add_separator();
 		}
 	}
 }
