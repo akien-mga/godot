@@ -51,7 +51,8 @@ Error GDExtensionDotNetLoader::open_library(const String &p_path) {
 Error GDExtensionDotNetLoader::initialize(GDExtensionInterfaceGetProcAddress p_get_proc_address, const Ref<GDExtension> &p_extension, GDExtensionInitialization *r_initialization) {
 #ifdef TOOLS_ENABLED
 	if (runtime->supports_reloading()) {
-		p_extension->set_reloadable(true);
+		// TODO(@raulsntos): Godot .NET bindings don't support reloading yet.
+		// p_extension->set_reloadable(true);
 	}
 #endif
 
