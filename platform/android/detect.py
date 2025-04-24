@@ -206,25 +206,23 @@ def configure(env: "SConsEnvironment"):
     if get_min_sdk_version(env["ndk_platform"]) >= 24:
         env.Append(CPPDEFINES=[("_FILE_OFFSET_BITS", 64)])
 
-    if env["arch"] == "x86_32":
-        # The NDK adds this if targeting API < 24, so we can drop it when Godot targets it at least
-        env.Append(CCFLAGS=["-mstackrealign"])
-        if has_swappy:
+    if has_swappy:
+        if env["arch"] == "x86_32":
             env.Append(LIBPATH=["#thirdparty/swappy-frame-pacing/x86"])
-    elif env["arch"] == "x86_64":
-        if has_swappy:
+        elif env["arch"] == "x86_64":
             env.Append(LIBPATH=["#thirdparty/swappy-frame-pacing/x86_64"])
-    elif env["arch"] == "arm32":
+        elif env["arch"] == "arm32":
+            env.Append(LIBPATH=["#thirdparty/swappy-frame-pacing/armeabi-v7a"])
+        elif env["arch"] == "arm64":
+            env.Append(LIBPATH=["#thirdparty/swappy-frame-pacing/arm64-v8a"])
+
+    if env["arch"] == "arm32":
         env.Append(CCFLAGS=["-march=armv7-a", "-mfloat-abi=softfp"])
         env.Append(CPPDEFINES=["__ARM_ARCH_7__", "__ARM_ARCH_7A__"])
         env.Append(CPPDEFINES=["__ARM_NEON__"])
-        if has_swappy:
-            env.Append(LIBPATH=["#thirdparty/swappy-frame-pacing/armeabi-v7a"])
     elif env["arch"] == "arm64":
         env.Append(CCFLAGS=["-mfix-cortex-a53-835769"])
         env.Append(CPPDEFINES=["__ARM_ARCH_8A__"])
-        if has_swappy:
-            env.Append(LIBPATH=["#thirdparty/swappy-frame-pacing/arm64-v8a"])
 
     env.Append(CCFLAGS=["-ffp-contract=off"])
 

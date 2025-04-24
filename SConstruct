@@ -161,6 +161,7 @@ opts = Variables(customs, ARGUMENTS)
 opts.Add((["platform", "p"], "Target platform (%s)" % "|".join(platform_list), ""))
 opts.Add(EnumVariable("target", "Compilation target", "editor", ("editor", "template_release", "template_debug")))
 opts.Add(EnumVariable("arch", "CPU architecture", "auto", ["auto"] + architectures, architecture_aliases))
+opts.Add(BoolVariable("default_arch_flags", "Set default target architecture flags", True))
 opts.Add(BoolVariable("dev_build", "Developer build with dev-only debugging code (DEV_ENABLED)", False))
 opts.Add(
     EnumVariable(
@@ -714,11 +715,39 @@ elif env.msvc:
         Exit(255)
 
 # Default architecture flags.
-if env["arch"] == "x86_32":
+if env["default_arch_flags"]:
     if env.msvc:
-        env.Append(CCFLAGS=["/arch:SSE2"])
+        # https://learn.microsoft.com/en-us/cpp/build/reference/arch-minimum-cpu-architecture
+        if env["arch"] == "x86_64":
+            # Default, but make explicit.
+            env.Append(CCFLAGS=["/arch:SSE2"])
+        elif env["arch"] == "x86_32":
+            # Default, but make explicit.
+            env.Append(CCFLAGS=["/arch:SSE2"])
+        elif env["arch"] == "arm64":
+            # Default, for compatibility with Windows 10 on ARM64.
+            # Windows 11 on ARM64 targets armv8.1 as baseline.
+            env.Append(CCFLAGS=["/arch:armv8.0"])
     else:
-        env.Append(CCFLAGS=["-msse2", "-mfpmath=sse"])
+        if env["arch"] == "x86_64":
+            env.Append(CCFLAGS=["-march=x86-64", "-mtune=generic"])
+        elif env["arch"] == "x86_32":
+            env.Append(CCFLAGS=["-march=i686", "-mtune=generic", "-msse2", "-mfpmath=sse", "-mstackrealign"])
+        elif env["arch"] == "arm64":
+            pass
+        elif env["arch"] == "arm32":
+            pass
+        elif env["arch"] == "ppc64":
+            env.Append(CCFLAGS=["-mcpu=power8", "-mtune=power8"])
+        elif env["arch"] == "ppc32":
+            pass
+        elif env["arch"] == "rv64":
+            # G = General-purpose extensions, C = Compression extension (very common).
+            env.Append(CCFLAGS=["-march=rv64gc"])
+        elif env["arch"] == "loongarch64":
+            pass
+        elif env["arch"] == "wasm32":
+            pass
 
 # Explicitly specify colored output.
 if methods.using_gcc(env):

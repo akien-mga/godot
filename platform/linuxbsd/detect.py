@@ -93,11 +93,6 @@ def configure(env: "SConsEnvironment"):
         env.Append(CCFLAGS=["-m64"])
         env.Append(LINKFLAGS=["-m64"])
 
-    # CPU architecture flags.
-    if env["arch"] == "rv64":
-        # G = General-purpose extensions, C = Compression extension (very common).
-        env.Append(CCFLAGS=["-march=rv64gc"])
-
     ## Compiler configuration
 
     if "CXX" in env and "clang" in os.path.basename(env["CXX"]):
