@@ -251,9 +251,6 @@ def configure(env: "SConsEnvironment"):
     if env["brotli"] and not env["builtin_brotli"]:
         env.ParseConfig("pkg-config libbrotlicommon libbrotlidec --cflags --libs")
 
-    if env["builtin_sdl"]:
-        env.Append(CPPDEFINES=["SDL_ENABLED"])
-
     # Sound and video libraries
     # Keep the order as it triggers chained dependencies (ogg needed by others, etc.)
 
@@ -396,6 +393,18 @@ def configure(env: "SConsEnvironment"):
                 env.Append(CPPDEFINES=["UDEV_ENABLED"])
     else:
         env["udev"] = False  # Linux specific
+
+    if env["sdl"]:
+        if env["builtin_sdl"]:
+            env.Append(CPPDEFINES=["SDL_ENABLED"])
+        elif os.system("pkg-config --exists fontconfig") == 0:  # 0 means found
+            env.ParseConfig("pkg-config sdl3 --cflags --libs")
+            env.Append(CPPDEFINES=["SDL_ENABLED"])
+        else:
+            print_warning(
+                "SDL3 development libraries not found, and `builtin_sdl` was explicitly disabled. Disabling SDL input driver support."
+            )
+            env["sdl"] = False
 
     # Linkflags below this line should typically stay the last ones
     if not env["builtin_zlib"]:

@@ -32,18 +32,18 @@
 
 #ifdef SDL_ENABLED
 
-#include <iterator>
-
-#include "SDL3/SDL.h"
-#include "SDL3/SDL_error.h"
-#include "SDL3/SDL_events.h"
-#include "SDL3/SDL_gamepad.h"
-#include "SDL3/SDL_iostream.h"
-#include "SDL3/SDL_joystick.h"
-
 #include "core/input/default_controller_mappings.h"
 #include "core/os/time.h"
 #include "core/variant/dictionary.h"
+
+#include <iterator>
+
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_error.h>
+#include <SDL3/SDL_events.h>
+#include <SDL3/SDL_gamepad.h>
+#include <SDL3/SDL_iostream.h>
+#include <SDL3/SDL_joystick.h>
 
 JoypadSDL *JoypadSDL::singleton = nullptr;
 

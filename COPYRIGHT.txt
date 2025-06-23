@@ -543,12 +543,12 @@ License: Apache-2.0
 
 Files: thirdparty/sdl/*
 Comment: SDL
-Copyright: 1997-2025 Sam Lantinga
+Copyright: 1997-2025, Sam Lantinga
 License: Zlib
 
 Files: thirdparty/sdl/hidapi/*
 Comment: hidapi
-Copyright: 2010 Alan Ott, Signal 11 Software
+Copyright: 2010, Alan Ott, Signal 11 Software
 License: BSD-3-Clause
 
 Files: thirdparty/spirv-cross/*

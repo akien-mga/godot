@@ -61,7 +61,9 @@ if env["metal"]:
     SConscript("metal/SCsub")
 
 # Input drivers
-SConscript("sdl/SCsub")
+if env["sdl"] and env["platform"] in ["linuxbsd", "macos", "windows"]:
+    # TODO: Evaluate support for Android, iOS, and Web.
+    SConscript("sdl/SCsub")
 
 # Core dependencies
 SConscript("png/SCsub")

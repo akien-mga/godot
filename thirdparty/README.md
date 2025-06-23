@@ -455,7 +455,7 @@ Files extracted from upstream source:
 
 Files extracted from upstream source:
 
-- `AUTHORS.txt`, `LICENSE.txt`, `LICENSE-bsd.txt`, `README.md`, `VERSION`
+- `AUTHORS.txt`, `LICENSE.txt`, `LICENSE-bsd.txt`, `VERSION`
 - `hidapi/`
 - `linux/`
 - `mac/`
@@ -980,6 +980,7 @@ Files extracted from upstream source:
   - `SDL_opengles2_*.h` files
   - `SDL_test.h`
   - `SDL_test_*.h` files
+  - `SDK_vulkan.h`
 - `src/atomic/`
 - `src/audio/SDL_sysaudio.h`
 - `src/core/linux/`, `src/core/unix/`, `src/core/windows/` folders
@@ -1005,20 +1006,19 @@ Files extracted from upstream source:
 - `src/sensor/SDL_sensor_c.h`
 - `src/sensor/SDL_syssensor.h`
 - `src/stdlib/`
-- `src/thread/generic/`, `src/thread/pthread/`, `src/thread/windows/` folders, `.c` and `.h` files from `src/thread/` folder
+- `src/thread/pthread/`, `src/thread/windows/` folders, `.c` and `.h` files from `src/thread/` folder
 - `src/timer/unix/`, `src/timer/windows/` folders, `.c` and `.h` files from `src/timer/` folder
-- `src/video/SDL_surface_c.h`
-- `src/video/SDL_sysvideo.h`
 - `.c` and `.h` files from `src/` folder
 - `LICENSE.txt`
 
 Patches:
 
 - `0001-remove-unnecessary-subsystems.patch` (GH-106218)
+- `0002-msvc-constants-fpstrict.patch` (GH-106218)
 
 The SDL source code folder includes `hidapi` library inside of folder `thirdparty/sdl/hidapi/`.
 When the SDL library is updated, `hidapi` library should be updated as well. The files extracted from
-the library is described in the `hidapi` section of this REAME file. 
+the library is described in the `hidapi` section of this README file.
 
 
 ## spirv-cross

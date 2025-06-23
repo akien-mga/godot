@@ -480,7 +480,7 @@ def configure_msvc(env: "SConsEnvironment"):
         if not env["use_volk"]:
             LIBS += ["vulkan"]
 
-    if env["builtin_sdl"]:
+    if env["sdl"]:
         env.Append(CPPDEFINES=["SDL_ENABLED"])
 
     if env["d3d12"]:
@@ -870,7 +870,7 @@ def configure_mingw(env: "SConsEnvironment"):
         if not env["use_volk"]:
             env.Append(LIBS=["vulkan"])
 
-    if env["builtin_sdl"]:
+    if env["sdl"]:
         env.Append(CPPDEFINES=["SDL_ENABLED"])
 
     if env["d3d12"]:
