@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-VERSION=3.2.14
+VERSION=3.2.16
 
 target=$(dirname "$(realpath $0)")
 pushd $target

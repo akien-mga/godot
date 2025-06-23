@@ -1456,36 +1456,6 @@ bool SDL_PollEvent(SDL_Event *event)
     return SDL_WaitEventTimeoutNS(event, 0);
 }
 
-#ifndef SDL_PLATFORM_ANDROID
-
-static Sint64 SDL_events_get_polling_interval(void)
-{
-    Sint64 poll_intervalNS = SDL_MAX_SINT64;
-
-#ifndef SDL_JOYSTICK_DISABLED
-    if (SDL_WasInit(SDL_INIT_JOYSTICK) && SDL_update_joysticks) {
-        if (SDL_JoysticksOpened()) {
-            // If we have joysticks open, we need to poll rapidly for events
-            poll_intervalNS = SDL_min(poll_intervalNS, EVENT_POLL_INTERVAL_NS);
-        } else {
-            // If not, just poll every few seconds to enumerate new joysticks
-            poll_intervalNS = SDL_min(poll_intervalNS, ENUMERATION_POLL_INTERVAL_NS);
-        }
-    }
-#endif
-
-#ifndef SDL_SENSOR_DISABLED
-    if (SDL_WasInit(SDL_INIT_SENSOR) && SDL_update_sensors && SDL_SensorsOpened()) {
-        // If we have sensors open, we need to poll rapidly for events
-        poll_intervalNS = SDL_min(poll_intervalNS, EVENT_POLL_INTERVAL_NS);
-    }
-#endif
-
-    return poll_intervalNS;
-}
-
-#endif // !SDL_PLATFORM_ANDROID
-
 bool SDL_WaitEvent(SDL_Event *event)
 {
     return SDL_WaitEventTimeoutNS(event, -1);
