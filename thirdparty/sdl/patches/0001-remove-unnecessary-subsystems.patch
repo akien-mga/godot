@@ -804,26 +804,6 @@
      return false;
  }
  
---- a/thirdparty/sdl/video/SDL_surface_c.h
-+++ b/thirdparty/sdl/video/SDL_surface_c.h
-@@ -25,8 +25,6 @@
- 
- // Useful functions and variables from SDL_surface.c
- 
--#include "SDL_blit.h"
--
- // Surface internal flags
- typedef Uint32 SDL_SurfaceDataFlags;
- 
-@@ -77,7 +75,7 @@ struct SDL_Surface
-     SDL_Rect clip_rect;
- 
-     /** info for fast blit mapping to other surfaces */
--    SDL_BlitMap map;
-+    //SDL_BlitMap map;
- };
- 
- // Surface functions
 --- a/thirdparty/sdl/core/linux/SDL_system_theme.c
 +++ b/thirdparty/sdl/core/linux/SDL_system_theme.c
 @@ -22,7 +22,7 @@

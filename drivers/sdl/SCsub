@@ -99,11 +99,9 @@ if env["builtin_sdl"]:
     # HIDAPI
     thirdparty_sources += [
         "hidapi/SDL_hidapi.c",
-        "joystick/hidapi/SDL_hidapi_8bitdo.c",
         "joystick/hidapi/SDL_hidapi_combined.c",
         "joystick/hidapi/SDL_hidapi_gamecube.c",
         "joystick/hidapi/SDL_hidapijoystick.c",
-        "joystick/hidapi/SDL_hidapi_lg4ff.c",
         "joystick/hidapi/SDL_hidapi_luna.c",
         "joystick/hidapi/SDL_hidapi_ps3.c",
         "joystick/hidapi/SDL_hidapi_ps4.c",

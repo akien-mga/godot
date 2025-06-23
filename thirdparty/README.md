@@ -455,11 +455,7 @@ Files extracted from upstream source:
 
 Files extracted from upstream source:
 
-- `AUTHORS.txt`, `LICENSE.txt`, `LICENSE-bsd.txt`, `VERSION`
-- `hidapi/`
-- `linux/`
-- `mac/`
-- `windows/`
+- See `thirdparty/sdl/update-sdl.sh`
 
 The source code of this library is being bundled with SDL's source code files.
 The files of hidapi are stored in `thirdparty/sdl/hidapi/` folder.
@@ -968,48 +964,7 @@ Files extracted from upstream source:
 
 Files extracted from upstream source:
 
-- `include/build_config/SDL_build_config.h`
-- `.h` files from `include/SDL3/`, except for:
-  - `SDL_egl.h`
-  - `SDL_gpu.h`
-  - `SDL_oldnames.h`
-  - `SDL_opengl.h`
-  - `SDL_opengl_glext.h`
-  - `SDL_opengles.h`
-  - `SDL_opengles2.h`
-  - `SDL_opengles2_*.h` files
-  - `SDL_test.h`
-  - `SDL_test_*.h` files
-  - `SDK_vulkan.h`
-- `src/atomic/`
-- `src/audio/SDL_sysaudio.h`
-- `src/core/linux/`, `src/core/unix/`, `src/core/windows/` folders
-- `src/events/SDL_events.c`
-- `src/events/SDL_events_c.h`
-- `src/events/SDL_eventwatch.c`
-- `src/events/SDL_eventwatch_c.h`
-- `src/events/SDL_mouse_c.h`
-- `src/haptic/darwin/`, `src/haptic/linux/` and `src/haptic/windows/` folders, `.c` and `.h` files from `src/haptic/` folder
-- `src/io/SDL_iostream.c`
-- `src/io/SDL_iostream_c.h`
-- `src/io/SDL_sysasyncio.h`
-- `.c` and `.h` files from `src/joystick/` folder and following `src/joystick/` subfolders:
-	- `src/joystick/apple/`
-	- `src/joystick/darwin/`
-	- `src/joystick/hidapi/`
-	- `src/joystick/linux/`
-	- `src/joystick/windows/`
-- `src/libm/`
-- `src/loadso/dlopen/`
-- `src/sensor/dummy/`
-- `src/sensor/SDL_sensor.c`
-- `src/sensor/SDL_sensor_c.h`
-- `src/sensor/SDL_syssensor.h`
-- `src/stdlib/`
-- `src/thread/pthread/`, `src/thread/windows/` folders, `.c` and `.h` files from `src/thread/` folder
-- `src/timer/unix/`, `src/timer/windows/` folders, `.c` and `.h` files from `src/timer/` folder
-- `.c` and `.h` files from `src/` folder
-- `LICENSE.txt`
+- See `thirdparty/sdl/update-sdl.sh`
 
 Patches:
 
@@ -1017,8 +972,7 @@ Patches:
 - `0002-msvc-constants-fpstrict.patch` (GH-106218)
 
 The SDL source code folder includes `hidapi` library inside of folder `thirdparty/sdl/hidapi/`.
-When the SDL library is updated, `hidapi` library should be updated as well. The files extracted from
-the library is described in the `hidapi` section of this README file.
+Its version and license is described in this file under `hidapi`.
 
 
 ## spirv-cross
