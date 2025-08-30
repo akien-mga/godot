@@ -33,9 +33,11 @@
 #include "dotnet_module.h"
 
 #ifdef TOOLS_ENABLED
+#include "editor/dotnet_source_code_plugin.h"
 #include "editor/editor_internal.h"
 
 #include "editor/editor_node.h"
+#include "editor/extension/extension_source_code_manager.h"
 #endif
 
 using namespace DotNet;
@@ -45,6 +47,10 @@ DotNetModule *module = nullptr;
 #ifdef TOOLS_ENABLED
 static void _editor_init() {
 	DotNetModule::register_editor_settings();
+
+	Ref<DotNetSourceCodePlugin> source_code_plugin;
+	source_code_plugin.instantiate();
+	ExtensionSourceCodeManager::get_singleton()->add_plugin(source_code_plugin);
 }
 #endif
 

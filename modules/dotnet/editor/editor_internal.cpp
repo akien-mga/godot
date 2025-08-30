@@ -32,6 +32,7 @@
 
 #include "../utils/dirs_utils.h"
 #include "../utils/macos_utils.h"
+#include "dotnet_source_code_plugin.h"
 
 #include "core/extension/gdextension.h"
 #include "editor/editor_node.h"
@@ -66,6 +67,14 @@ void _get_project_csproj_path(GDExtensionUninitializedStringPtr r_dest) {
 
 void _get_project_assembly_name(GDExtensionUninitializedStringNamePtr r_dest) {
 	memnew_placement(r_dest, String(Dirs::get_project_assembly_name()));
+}
+
+void _register_dotnet_source_code_plugin(EditorExtensionSourceCodePlugin *p_object) {
+	DotNetSourceCodePlugin::get_singleton()->set_dotnet_source_code_plugin(p_object);
+}
+
+void _unregister_dotnet_source_code_plugin(EditorExtensionSourceCodePlugin *p_object) {
+	DotNetSourceCodePlugin::get_singleton()->unset_dotnet_source_code_plugin(p_object);
 }
 
 void _progress_add_task(GDExtensionStringPtr p_task, GDExtensionStringPtr p_label, GDExtensionInt p_steps, GDExtensionBool p_can_cancel) {
@@ -145,6 +154,8 @@ void register_functions() {
 	REGISTER_INTERFACE_FUNC(get_project_sln_path);
 	REGISTER_INTERFACE_FUNC(get_project_csproj_path);
 	REGISTER_INTERFACE_FUNC(get_project_assembly_name);
+	REGISTER_INTERFACE_FUNC(register_dotnet_source_code_plugin);
+	REGISTER_INTERFACE_FUNC(unregister_dotnet_source_code_plugin);
 	REGISTER_INTERFACE_FUNC(progress_add_task);
 	REGISTER_INTERFACE_FUNC(progress_task_step);
 	REGISTER_INTERFACE_FUNC(progress_end_task);
