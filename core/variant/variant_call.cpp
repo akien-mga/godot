@@ -2004,6 +2004,7 @@ static void _register_variant_builtin_methods_string() {
 	bind_string_method(filecasecmp_to, sarray("to"), varray());
 	bind_string_method(filenocasecmp_to, sarray("to"), varray());
 	bind_string_method(length, sarray(), varray());
+	bind_string_method(size, sarray(), varray());
 	bind_string_method(substr, sarray("from", "len"), varray(-1));
 	bind_string_methodv(get_slice, static_cast<String (String::*)(const String &, int) const>(&String::get_slice), sarray("delimiter", "slice"), varray());
 	bind_string_method(get_slicec, sarray("delimiter", "slice"), varray());
