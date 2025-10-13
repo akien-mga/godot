@@ -30,6 +30,7 @@
 
 #include "dotnet_source_code_plugin.h"
 
+#include "core/config/project_settings.h"
 #include "core/extension/gdextension.h"
 #include "editor/editor_node.h"
 #include "scene/main/window.h"
@@ -85,6 +86,12 @@ String DotNetSourceCodePlugin::get_source_path(const StringName &p_class_name) c
 	return dotnet_source_code_plugin->get_source_path(p_class_name);
 }
 
+StringName DotNetSourceCodePlugin::get_class_name_from_source_path(const String &p_source_path) const {
+	REQUIRES_DOTNET_EDITOR_INTEGRATION_V(StringName());
+	const String &path = ProjectSettings::get_singleton()->globalize_path(p_source_path);
+	return dotnet_source_code_plugin->get_class_name_from_source_path(path);
+}
+
 bool DotNetSourceCodePlugin::overrides_external_editor() const {
 	REQUIRES_DOTNET_EDITOR_INTEGRATION_V(false);
 	return dotnet_source_code_plugin->overrides_external_editor();
@@ -92,7 +99,8 @@ bool DotNetSourceCodePlugin::overrides_external_editor() const {
 
 Error DotNetSourceCodePlugin::open_in_external_editor(const String &p_source_path, int p_line, int p_col) const {
 	REQUIRES_DOTNET_EDITOR_INTEGRATION_V(ERR_UNAVAILABLE);
-	dotnet_source_code_plugin->open_in_external_editor(p_source_path, p_line, p_col);
+	const String &path = ProjectSettings::get_singleton()->globalize_path(p_source_path);
+	dotnet_source_code_plugin->open_in_external_editor(path, p_line, p_col);
 	return OK;
 }
 
