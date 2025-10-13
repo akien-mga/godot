@@ -65,6 +65,7 @@ protected:
 	virtual bool can_handle_object(const Object *p_object) const override;
 
 	virtual String get_source_path(const StringName &p_class_name) const override;
+	virtual StringName get_class_name_from_source_path(const String &p_source_path) const override;
 
 	virtual bool overrides_external_editor() const override;
 	virtual Error open_in_external_editor(const String &p_source_path, int p_line, int p_col) const override;
