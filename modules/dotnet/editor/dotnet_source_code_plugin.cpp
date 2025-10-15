@@ -30,13 +30,13 @@
 
 #include "dotnet_source_code_plugin.h"
 
+#include "../extension/gdextension_dotnet_loader.h"
+#include "../runtime/dotnet_runtime.h"
+
 #include "core/config/project_settings.h"
 #include "core/extension/gdextension.h"
 #include "editor/editor_node.h"
 #include "scene/main/window.h"
-
-#include "../extension/gdextension_dotnet_loader.h"
-#include "../runtime/dotnet_runtime.h"
 
 namespace DotNet {
 
@@ -46,16 +46,16 @@ DotNetSourceCodePlugin *DotNetSourceCodePlugin::get_singleton() {
 	return singleton;
 }
 
-#define REQUIRES_DOTNET_EDITOR_INTEGRATION                           \
-	if (dotnet_source_code_plugin == nullptr) {                      \
+#define REQUIRES_DOTNET_EDITOR_INTEGRATION \
+	if (dotnet_source_code_plugin == nullptr) { \
 		ERR_PRINT_ONCE(".NET editor integration is not available."); \
-		return;                                                      \
+		return; \
 	}
 
-#define REQUIRES_DOTNET_EDITOR_INTEGRATION_V(ret)                    \
-	if (dotnet_source_code_plugin == nullptr) {                      \
+#define REQUIRES_DOTNET_EDITOR_INTEGRATION_V(ret) \
+	if (dotnet_source_code_plugin == nullptr) { \
 		ERR_PRINT_ONCE(".NET editor integration is not available."); \
-		return ret;                                                  \
+		return ret; \
 	}
 
 void DotNetSourceCodePlugin::set_dotnet_source_code_plugin(EditorExtensionSourceCodePlugin *p_source_code_plugin) {
@@ -110,6 +110,12 @@ String DotNetSourceCodePlugin::get_language_name() const {
 
 Ref<Texture2D> DotNetSourceCodePlugin::get_language_icon() const {
 	return EditorNode::get_singleton()->get_window()->get_editor_theme_icon("CSharpClass");
+}
+
+PackedStringArray DotNetSourceCodePlugin::get_language_extensions() const {
+	PackedStringArray extensions;
+	extensions.push_back("cs");
+	return extensions;
 }
 
 void DotNetSourceCodePlugin::configure_select_path_dialog(int p_path_index, EditorFileDialog *p_dialog) const {

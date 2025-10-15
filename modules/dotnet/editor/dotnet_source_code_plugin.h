@@ -72,6 +72,7 @@ protected:
 
 	virtual String get_language_name() const override;
 	virtual Ref<Texture2D> get_language_icon() const override;
+	virtual PackedStringArray get_language_extensions() const override;
 
 	virtual void configure_select_path_dialog(int p_path_index, EditorFileDialog *p_dialog) const override;
 	virtual String adjust_path(int p_path_index, const String &p_class_name, const String &p_base_path, const String &p_old_path) const override;
