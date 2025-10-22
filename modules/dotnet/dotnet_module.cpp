@@ -67,7 +67,9 @@ bool DotNetModule::should_initialize() {
 	}
 	// If we can find a C# project or solution in the workspace,
 	// assume the Godot project uses C# and needs to initialize the module.
-	return FileAccess::exists(Dirs::get_project_csproj_path()) || FileAccess::exists(Dirs::get_project_sln_path());
+	// return FileAccess::exists(Dirs::get_project_csproj_path()) || FileAccess::exists(Dirs::get_project_sln_path());
+	// TODO(@raulsntos): Actually, we always initialize the module since we haven't implemented editor unification yet.
+	return true;
 #else
 	// The exported project was built with .NET support,
 	// so it needs to initialize the module.
