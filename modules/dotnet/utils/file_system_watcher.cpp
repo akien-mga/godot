@@ -58,6 +58,8 @@ void FileSystemWatcher::poll_file_system() {
 		last_modified_time = current_modified_time;
 	}
 	last_file_exists = current_file_exists;
+
+	_start_timer();
 }
 
 void FileSystemWatcher::start() {
@@ -68,6 +70,10 @@ void FileSystemWatcher::start() {
 		last_modified_time = FileAccess::get_modified_time(path);
 	}
 
+	_start_timer();
+}
+
+void FileSystemWatcher::_start_timer() {
 	timer = SceneTree::get_singleton()->create_timer(0.5);
 	timer->connect(SNAME("timeout"), callable_mp(this, &FileSystemWatcher::poll_file_system));
 }

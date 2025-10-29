@@ -62,6 +62,7 @@ public:
 
 private:
 #ifdef TOOLS_ENABLED
+	void _start_fs_watcher();
 	void on_project_assembly_changed(FileSystemWatcher::FileSystemChange change_type);
 
 	bool try_restore_editor_packages(const String &p_editor_assemblies_path);

@@ -117,7 +117,9 @@ void DotNetModule::initialize() {
 #ifdef TOOLS_ENABLED
 	fs_watcher.instantiate();
 	fs_watcher->path = assemblies_dir.path_join(assembly_name + ".dll");
-	fs_watcher->callable = callable_mp(this, &DotNetModule::on_project_assembly_changed).bind(assembly_name, assemblies_dir);
+	fs_watcher->callable = callable_mp(this, &DotNetModule::on_project_assembly_changed);
+	// TODO(@raulsntos): Don't start the watcher because we don't support reloading yet, so this will just print errors when the DLL changes.
+	// callable_mp(this, &DotNetModule::_start_fs_watcher).call_deferred();
 
 	should_load_project_assembly = FileAccess::exists(fs_watcher->path);
 #endif
@@ -167,6 +169,10 @@ void DotNetModule::register_project_settings() {
 }
 
 #ifdef TOOLS_ENABLED
+void DotNetModule::_start_fs_watcher() {
+	fs_watcher->start();
+}
+
 void DotNetModule::on_project_assembly_changed(FileSystemWatcher::FileSystemChange change_type) {
 	DEV_ASSERT(runtime_manager != nullptr);
 

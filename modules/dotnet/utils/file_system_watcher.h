@@ -56,6 +56,9 @@ public:
 	Callable callable;
 
 	void start();
+
+private:
+	void _start_timer();
 };
 
 } // namespace DotNet
