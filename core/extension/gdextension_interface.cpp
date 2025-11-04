@@ -1333,7 +1333,10 @@ static void gdextension_object_method_bind_call(GDExtensionMethodBindPtr p_metho
 	const Variant **args = (const Variant **)p_args;
 	Callable::CallError error;
 
-	memnew_placement(r_return, Variant(mb->call(o, args, p_arg_count, error)));
+	Variant ret = mb->call(o, args, p_arg_count, error);
+	if (r_return != nullptr) {
+		memnew_placement(r_return, Variant(ret));
+	}
 
 	if (r_error) {
 		r_error->error = (GDExtensionCallErrorType)(error.error);
