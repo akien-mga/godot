@@ -16,3 +16,6 @@ env_thirdparty = env.Clone()
 env_thirdparty.disable_warnings()
 
 env_thirdparty.add_source_files(env.servers_sources, thirdparty_sources)
+
+env.Prepend(CPPPATH=["#thirdparty/spirv/include"])
+env.Append(CPPDEFINES=["SPIRV_REFLECT_USE_SYSTEM_SPIRV_H"])

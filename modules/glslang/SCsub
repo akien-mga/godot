@@ -63,6 +63,7 @@ if env["builtin_glslang"]:
     thirdparty_sources = [thirdparty_dir + file for file in thirdparty_sources]
 
     env_glslang.Prepend(CPPPATH=[thirdparty_dir, "#thirdparty"])
+    env_glslang.Prepend(CPPPATH=["#thirdparty/spirv/include/spirv/unified1"])
 
     env_glslang.Append(CPPDEFINES=[("ENABLE_OPT", 0)])
 
