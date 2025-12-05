@@ -180,7 +180,7 @@ FT_BEGIN_HEADER
    *
    *   Define this macro if you want to enable this 'feature'.
    */
-#define FT_CONFIG_OPTION_USE_LZW
+/* #define FT_CONFIG_OPTION_USE_LZW */
 
 
   /**************************************************************************
@@ -761,7 +761,7 @@ FT_BEGIN_HEADER
    * Define `TT_CONFIG_OPTION_BDF` if you want to include support for an
    * embedded 'BDF~' table within SFNT-based bitmap formats.
    */
-#define TT_CONFIG_OPTION_BDF
+/* #define TT_CONFIG_OPTION_BDF */
 
 
   /**************************************************************************

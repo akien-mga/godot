@@ -23,7 +23,7 @@
 #include "sfobjs.c"
 #include "sfwoff.c"
 #include "sfwoff2.c"
-#include "ttbdf.c"
+//#include "ttbdf.c"
 #include "ttcmap.c"
 #include "ttcolr.c"
 #include "ttcpal.c"

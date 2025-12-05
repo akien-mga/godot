@@ -60,7 +60,7 @@ FT_TRACE_DEF( sfdriver )  /* SFNT font driver        (sfdriver.c) */
 FT_TRACE_DEF( sfobjs )    /* SFNT object handler     (sfobjs.c)   */
 FT_TRACE_DEF( sfwoff )    /* WOFF format handler     (sfwoff.c)   */
 FT_TRACE_DEF( sfwoff2 )   /* WOFF2 format handler    (sfwoff2.c)  */
-FT_TRACE_DEF( ttbdf )     /* TrueType embedded BDF   (ttbdf.c)    */
+//FT_TRACE_DEF( ttbdf )     /* TrueType embedded BDF   (ttbdf.c)    */
 FT_TRACE_DEF( ttcmap )    /* charmap handler         (ttcmap.c)   */
 FT_TRACE_DEF( ttcolr )    /* glyph layer table       (ttcolr.c)   */
 FT_TRACE_DEF( ttcpal )    /* color palette table     (ttcpal.c)   */
@@ -124,12 +124,12 @@ FT_TRACE_DEF( cidparse )
 FT_TRACE_DEF( winfnt )
 
   /* PCF font components */
-FT_TRACE_DEF( pcfdriver )
-FT_TRACE_DEF( pcfread )
+//FT_TRACE_DEF( pcfdriver )
+//FT_TRACE_DEF( pcfread )
 
   /* BDF font components */
-FT_TRACE_DEF( bdfdriver )
-FT_TRACE_DEF( bdflib )
+//FT_TRACE_DEF( bdfdriver )
+//FT_TRACE_DEF( bdflib )
 
   /* PFR font component */
 FT_TRACE_DEF( pfr )
