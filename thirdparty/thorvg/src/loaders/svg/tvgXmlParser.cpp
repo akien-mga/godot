@@ -475,14 +475,11 @@ bool simpleXmlParseW3CAttribute(const char* buf, unsigned bufLength, simpleXMLAt
     if (!buf) return false;
 
     end = buf + bufLength;
+    key = (char*)alloca(end - buf + 1);
+    val = (char*)alloca(end - buf + 1);
 
     if (buf == end) return true;
 
-    char* key_buf = (char*)malloc(end - buf + 1);
-    char* val_buf = (char*)malloc(end - buf + 1);
-
-    key = key_buf;
-    val = val_buf;
     do {
         char* sep = (char*)strchr(buf, ':');
         next = (char*)strchr(buf, ';');
@@ -490,11 +487,7 @@ bool simpleXmlParseW3CAttribute(const char* buf, unsigned bufLength, simpleXMLAt
         if (auto src = strstr(buf, "src")) {//src tag from css font-face contains extra semicolon
             if (src < sep) {
                 if (next + 1 < end) next = (char*)strchr(next + 1, ';');
-                else {
-                    free(key_buf);
-                    free(val_buf);
-                    return true;
-                }
+                else return true;
             }
         }
 
@@ -540,9 +533,6 @@ bool simpleXmlParseW3CAttribute(const char* buf, unsigned bufLength, simpleXMLAt
         if (!next) break;
         buf = next + 1;
     } while (true);
-
-    free(key_buf);
-    free(val_buf);
 
     return true;
 }
