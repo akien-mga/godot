@@ -37,6 +37,8 @@
 #include "core/templates/self_list.h"
 #include "scene/resources/mesh.h"
 
+#include <cstdlib>
+
 #undef Window
 
 class PackedScene;
