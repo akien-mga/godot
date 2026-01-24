@@ -38,6 +38,7 @@
 
 #ifdef TOOLS_ENABLED
 #include "editor/RestoreEditorPackages.proj.gen.h"
+#include "runtime/hostfxr/hostfxr_dotnet_runtime.h"
 
 #include "core/config/engine.h"
 #include "core/io/dir_access.h"
@@ -93,6 +94,14 @@ void DotNetModule::initialize() {
 	//    Needs the 'Godot.PluginLoader' assembly restored from the editor packages,
 	//    and should load the 'Godot.EditorIntegration' assembly.
 #ifdef TOOLS_ENABLED
+	String dotnet_sdk_path;
+	if (!HostFxrDotNetRuntime::try_find_dotnet_sdk(dotnet_sdk_path)) {
+		OS::get_singleton()->alert(TTR("Could not find a .NET SDK installation required for .NET support.\nPlease install the .NET SDK from https://get.dot.net and restart Godot."), TTR(".NET SDK not found"));
+		CRASH_NOW_MSG(".NET: .NET SDK installation not found.");
+	}
+
+	print_verbose(vformat(".NET: .NET SDK installation found at '%s'.", dotnet_sdk_path));
+
 	const String editor_assemblies_dir = Dirs::get_editor_assemblies_path();
 	if (!try_restore_editor_packages(editor_assemblies_dir)) {
 		OS::get_singleton()->alert(TTR("Failed to restore .NET editor integration. Check the console output for more details."), TTR("Failed to restore .NET editor integration"));

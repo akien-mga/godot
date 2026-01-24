@@ -66,8 +66,12 @@ public:
 	GDExtensionInitializationFunction get_extension_entry_point(const Ref<GDExtensionDotNetConfig> &p_extension_config) override;
 	void close_extension(const Ref<GDExtensionDotNetConfig> &p_extension_config) override;
 
+#ifdef TOOLS_ENABLED
+	static bool try_find_dotnet_sdk(String &r_dotnet_sdk);
+#endif
+
 private:
-	bool try_get_dotnet_root_from_command_line(String &r_dotnet_root);
+	static bool try_get_dotnet_root_from_command_line(String &r_dotnet_root);
 	String find_hostfxr();
 	bool try_load_hostfxr(void *&r_hostfxr_dll_handle);
 

@@ -203,6 +203,24 @@ void HostFxrDotNetRuntime::close_extension(const Ref<GDExtensionDotNetConfig> &p
 }
 
 #ifdef TOOLS_ENABLED
+bool HostFxrDotNetRuntime::try_find_dotnet_sdk(String &r_dotnet_sdk) {
+	String hostfxr_path;
+
+	if (HostFxrResolver::try_get_path(r_dotnet_sdk, hostfxr_path)) {
+		return true;
+	}
+
+	// hostfxr_resolver doesn't look for dotnet in PATH. If it fails, we try to use the dotnet
+	// executable in PATH to find the dotnet root.
+	if (try_get_dotnet_root_from_command_line(r_dotnet_sdk)) {
+		return true;
+	}
+
+	return false;
+}
+#endif
+
+#ifdef TOOLS_ENABLED
 bool HostFxrDotNetRuntime::try_get_dotnet_root_from_command_line(String &r_dotnet_root) {
 	String pipe;
 	List<String> args;
