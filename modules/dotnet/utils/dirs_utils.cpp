@@ -163,6 +163,12 @@ String get_project_assemblies_path() {
 	return _Dirs::get_singleton().project_assemblies_path;
 }
 
+#ifdef TOOLS_ENABLED
+void invalidate_cached_directories() {
+	_Dirs::get_singleton().project_assemblies_path = "";
+}
+#endif
+
 String get_project_sln_path() {
 	String slnParentDir = ProjectSettings::get_singleton()->get_setting("dotnet/project/solution_directory", "");
 

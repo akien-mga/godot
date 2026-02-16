@@ -57,6 +57,15 @@ String get_project_assemblies_path();
 
 #ifdef TOOLS_ENABLED
 /**
+ * Invalidates the cached project assemblies path so that the next call to
+ * `get_project_assemblies_path()` re-computes it from the current project settings.
+ * Must be called after changing `dotnet/project/assembly_name`.
+ */
+void invalidate_cached_directories();
+#endif
+
+#ifdef TOOLS_ENABLED
+/**
  * Retrieves the output path for the given C# project.
  * This is the path that contains the build output (assemblies).
  */

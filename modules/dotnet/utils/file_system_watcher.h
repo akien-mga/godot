@@ -39,6 +39,7 @@ namespace DotNet {
 class FileSystemWatcher : public RefCounted {
 private:
 	Ref<SceneTreeTimer> timer;
+	String path;
 
 	bool last_file_exists = false;
 	uint64_t last_modified_time = 0;
@@ -52,8 +53,10 @@ public:
 		FILE_SYSTEM_CHANGE_MODIFY,
 	};
 
-	String path;
 	Callable callable;
+
+	String get_path() const { return path; }
+	void set_path(const String &p_new_path);
 
 	void start();
 

@@ -30,6 +30,7 @@
 
 #include "editor_internal.h"
 
+#include "../dotnet_module.h"
 #include "../utils/dirs_utils.h"
 #include "../utils/macos_utils.h"
 #include "dotnet_source_code_plugin.h"
@@ -43,6 +44,21 @@
 
 namespace DotNet {
 namespace EditorInternal {
+
+void _module_fail_initialization(GDExtensionStringPtr p_error_message) {
+	String *error_message = (String *)p_error_message;
+	DotNetModule *module = DotNetModule::get_singleton();
+	if (module != nullptr) {
+		module->fail_initialization(*error_message);
+	}
+}
+
+void _module_complete_initialization() {
+	DotNetModule *module = DotNetModule::get_singleton();
+	if (module != nullptr) {
+		module->complete_initialization();
+	}
+}
 
 void _get_editor_assemblies_path(GDExtensionUninitializedStringNamePtr r_dest) {
 	memnew_placement(r_dest, String(Dirs::get_editor_assemblies_path()));
@@ -145,9 +161,28 @@ void _editor_shortcut_override(GDExtensionConstStringPtr p_path, GDExtensionCons
 	ED_SHORTCUT_OVERRIDE(*path, *feature, (Key)p_keycode, p_physical);
 }
 
+void _set_dotnet_sdk_info(GDExtensionStringPtr p_version, GDExtensionStringPtr p_path) {
+	String *version = (String *)p_version;
+	String *path = (String *)p_path;
+	DotNetModule *module = DotNetModule::get_singleton();
+	if (module != nullptr) {
+		module->set_dotnet_sdk_info(*version, *path);
+	}
+}
+
+void _set_editor_integration_version(GDExtensionStringPtr p_version) {
+	String *version = (String *)p_version;
+	DotNetModule *module = DotNetModule::get_singleton();
+	if (module != nullptr) {
+		module->set_editor_integration_version(*version);
+	}
+}
+
 #define REGISTER_INTERFACE_FUNC(m_name) GDExtension::register_interface_function(#m_name, (GDExtensionInterfaceFunctionPtr) & _##m_name)
 
 void register_functions() {
+	REGISTER_INTERFACE_FUNC(module_fail_initialization);
+	REGISTER_INTERFACE_FUNC(module_complete_initialization);
 	REGISTER_INTERFACE_FUNC(get_editor_assemblies_path);
 	REGISTER_INTERFACE_FUNC(get_project_assemblies_path);
 	REGISTER_INTERFACE_FUNC(get_project_output_path);
@@ -166,6 +201,8 @@ void register_functions() {
 	REGISTER_INTERFACE_FUNC(editor_def);
 	REGISTER_INTERFACE_FUNC(editor_def_shortcut);
 	REGISTER_INTERFACE_FUNC(editor_shortcut_override);
+	REGISTER_INTERFACE_FUNC(set_dotnet_sdk_info);
+	REGISTER_INTERFACE_FUNC(set_editor_integration_version);
 }
 
 } // namespace EditorInternal

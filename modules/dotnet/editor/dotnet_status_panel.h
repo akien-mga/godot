@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  file_system_watcher.cpp                                               */
+/*  dotnet_status_panel.h                                                 */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                             GODOT ENGINE                               */
@@ -28,71 +28,36 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-#include "file_system_watcher.h"
+#pragma once
 
-#include "core/io/file_access.h"
-#include "core/object/callable_mp.h"
+#include "scene/gui/popup.h"
+
+class Label;
+class Button;
+class VBoxContainer;
 
 namespace DotNet {
 
-void FileSystemWatcher::poll_file_system() {
-	ERR_FAIL_COND_MSG(path.is_empty(), "Path to watch can't be empty.");
+class DotNetStatusPanel : public PopupPanel {
+	GDCLASS(DotNetStatusPanel, PopupPanel);
 
-	if (callable.is_null()) {
-		// No one is watching.
-		return;
-	}
+private:
+	Label *status_label = nullptr;
+	VBoxContainer *details = nullptr;
+	Button *enable_button = nullptr;
 
-	bool current_file_exists = FileAccess::exists(path);
-	if (last_file_exists && !current_file_exists) {
-		// File was deleted.
-		callable.call((uint64_t)FILE_SYSTEM_CHANGE_DELETE);
-	} else if (!last_file_exists && current_file_exists) {
-		// File was created.
-		callable.call((uint64_t)FILE_SYSTEM_CHANGE_CREATE);
-	} else if (last_file_exists && current_file_exists) {
-		uint64_t current_modified_time = FileAccess::get_modified_time(path);
-		if (last_modified_time != current_modified_time) {
-			// File was modified.
-			callable.call((uint64_t)FILE_SYSTEM_CHANGE_MODIFY);
-		}
-		last_modified_time = current_modified_time;
-	}
-	last_file_exists = current_file_exists;
+	void _initialize_module();
+	void _update_content();
 
-	_start_timer();
-}
+	void _select_project();
+	void _load_project(const String &p_path);
+	void _open_url(const String &p_url);
+	void _copy_to_clipboard(const String &p_text);
 
-void FileSystemWatcher::set_path(const String &p_new_path) {
-	ERR_FAIL_COND_MSG(p_new_path.is_empty(), "Path to watch can't be empty.");
+public:
+	void refresh();
 
-	if (timer.is_null()) {
-		// If the timer hasn't been started yet, changing the path is enough.
-		path = p_new_path;
-		return;
-	}
-
-	// Stop the timer before changing the path to avoid triggering file system events for the new path, and restart it.
-	timer->disconnect(SNAME("timeout"), callable_mp(this, &FileSystemWatcher::poll_file_system));
-	timer.unref();
-	path = p_new_path;
-	start();
-}
-
-void FileSystemWatcher::start() {
-	ERR_FAIL_COND_MSG(path.is_empty(), "Path to watch can't be empty.");
-
-	last_file_exists = FileAccess::exists(path);
-	if (last_file_exists) {
-		last_modified_time = FileAccess::get_modified_time(path);
-	}
-
-	_start_timer();
-}
-
-void FileSystemWatcher::_start_timer() {
-	timer = SceneTree::get_singleton()->create_timer(0.5);
-	timer->connect(SNAME("timeout"), callable_mp(this, &FileSystemWatcher::poll_file_system));
-}
+	DotNetStatusPanel();
+};
 
 } // namespace DotNet

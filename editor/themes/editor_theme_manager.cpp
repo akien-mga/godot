@@ -233,6 +233,8 @@ Ref<EditorTheme> EditorThemeManager::_create_base_theme(const Ref<EditorTheme> &
 	_populate_text_editor_styles(theme, config);
 	_populate_visual_shader_styles(theme, config);
 
+	_populate_dotnet_styles(theme, config);
+
 	OS::get_singleton()->benchmark_end_measure(get_benchmark_key(), "Create Base Theme");
 	return theme;
 }
@@ -679,6 +681,26 @@ void EditorThemeManager::_populate_visual_shader_styles(const Ref<EditorTheme> &
 		ed_settings->set_initial_value("editors/visual_editors/category_colors/particle_color", gn_bg_color, true);
 	}
 }
+
+void EditorThemeManager::_populate_dotnet_styles(const Ref<EditorTheme> &p_theme, ThemeConfiguration &p_config) {
+	// .NET Welcome Dialog
+	{
+		Ref<StyleBoxFlat> dotnet_welcome_step_style = p_config.content_panel_style->duplicate();
+		dotnet_welcome_step_style->set_bg_color(p_config.dark_color_2);
+		dotnet_welcome_step_style->set_corner_radius_all(p_config.corner_radius * EDSCALE);
+		p_theme->set_type_variation("DotNetWelcomeDialogStep", "FoldableContainer");
+		p_theme->set_stylebox(SceneStringName(panel), "DotNetWelcomeDialogStep", dotnet_welcome_step_style);
+
+		Color recommended_panel_color = p_config.accent_color;
+		recommended_panel_color.set_s(recommended_panel_color.get_s() * 1.5);
+		Ref<StyleBoxFlat> recommended_panel_style = p_config.button_style->duplicate();
+		recommended_panel_style->set_bg_color(recommended_panel_color);
+		recommended_panel_style->set_content_margin_all(2 * EDSCALE);
+		p_theme->set_type_variation("RecommendedPanelContainer", "PanelContainer");
+		p_theme->set_stylebox(SceneStringName(panel), "RecommendedPanelContainer", recommended_panel_style);
+	}
+}
+
 
 void EditorThemeManager::_reset_dirty_flag() {
 	outdated_cache_dirty = true;
