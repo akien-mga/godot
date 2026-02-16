@@ -30,7 +30,7 @@
 
 #include "dotnet_status_panel.h"
 
-#include "welcome_dialog.h"
+// #include "welcome_dialog.h"
 
 #include "../dotnet_module.h"
 #include "dotnet_project_selector_dialog.h"
@@ -61,9 +61,10 @@ void DotNetStatusPanel::_initialize_module() {
 		return;
 	}
 
-	WelcomeDialog *welcome_dialog = WelcomeDialog::get_singleton();
-	DEV_ASSERT(welcome_dialog != nullptr);
-	welcome_dialog->popup_centered();
+	// WelcomeDialog *welcome_dialog = WelcomeDialog::get_singleton();
+	// DEV_ASSERT(welcome_dialog != nullptr);
+	// welcome_dialog->popup_centered();
+	module->initialize();
 }
 
 void DotNetStatusPanel::_select_project() {

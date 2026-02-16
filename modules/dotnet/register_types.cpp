@@ -37,7 +37,7 @@
 #include "editor/dotnet_source_code_plugin.h"
 #include "editor/dotnet_status_indicator.h"
 #include "editor/editor_internal.h"
-#include "editor/welcome_dialog.h"
+// #include "editor/welcome_dialog.h"
 
 #include "editor/editor_node.h"
 #include "editor/extension/extension_source_code_manager.h"
@@ -57,8 +57,8 @@ static void _editor_init() {
 	source_code_plugin.instantiate();
 	ExtensionSourceCodeManager::get_singleton()->add_plugin(source_code_plugin);
 
-	DotNet::WelcomeDialog *welcome_dialog = memnew(DotNet::WelcomeDialog);
-	EditorNode::get_singleton()->add_child(welcome_dialog);
+	// DotNet::WelcomeDialog *welcome_dialog = memnew(DotNet::WelcomeDialog);
+	// EditorNode::get_singleton()->add_child(welcome_dialog);
 
 	DotNet::DotNetStatusIndicator *status_indicator = memnew(DotNet::DotNetStatusIndicator);
 	EditorNode::get_bottom_panel()->add_status_indicator(status_indicator);
