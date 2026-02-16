@@ -33,11 +33,16 @@
 #include "dotnet_module.h"
 
 #ifdef TOOLS_ENABLED
+#include "core/object/callable_mp.h"
 #include "editor/dotnet_source_code_plugin.h"
+#include "editor/dotnet_status_indicator.h"
 #include "editor/editor_internal.h"
+#include "editor/welcome_dialog.h"
 
 #include "editor/editor_node.h"
 #include "editor/extension/extension_source_code_manager.h"
+#include "editor/gui/editor_bottom_panel.h"
+#include "editor/settings/editor_command_palette.h"
 #endif
 
 using namespace DotNet;
@@ -51,6 +56,37 @@ static void _editor_init() {
 	Ref<DotNetSourceCodePlugin> source_code_plugin;
 	source_code_plugin.instantiate();
 	ExtensionSourceCodeManager::get_singleton()->add_plugin(source_code_plugin);
+
+	DotNet::WelcomeDialog *welcome_dialog = memnew(DotNet::WelcomeDialog);
+	EditorNode::get_singleton()->add_child(welcome_dialog);
+
+	DotNet::DotNetStatusIndicator *status_indicator = memnew(DotNet::DotNetStatusIndicator);
+	EditorNode::get_bottom_panel()->add_status_indicator(status_indicator);
+
+	// Set the initial status.
+	status_indicator->update();
+
+	// TODO(@raulsntos): Disabled for now since the Welcome Dialog implementation is not finished yet. We'll continue to automatically initialize without confirmation on startup for now.
+	// // If the module hasn't been initialized yet and isn't in the process of initializing,
+	// // but there is a .csproj file, show the welcome dialog automatically.
+	// if (module->get_init_state() == DotNetModule::InitState::DISABLED) {
+	// 	if (FileAccess::exists(Dirs::get_project_csproj_path())) {
+	// 		EditorFileSystem *efs = EditorFileSystem::get_singleton();
+	// 		if (efs != nullptr) {
+	// 			efs->connect(SNAME("filesystem_changed"),
+	// 					callable_mp((Window *)welcome_dialog, &Window::popup_centered).bind(Size2()),
+	// 					Object::CONNECT_ONE_SHOT);
+	// 		}
+	// 	}
+	// }
+
+	// Command palette shortcuts.
+	EditorCommandPalette *command_palette = EditorCommandPalette::get_singleton();
+	if (command_palette != nullptr) {
+		// TODO(@raulsntos): Use `callable_mp((Window *)welcome_dialog, &Window::popup_centered).bind(Size2())` instead once the Welcome Dialog is implemented, this ensures the Welcome Dialog is always shown regardless of whether the .NET features are enabled or not, so the command can serve as a way to reopen the Welcome Dialog.
+		command_palette->add_command(TTRC("Enable .NET Features"), "dotnet/enable", callable_mp_static(&DotNetModule::request_enable_dotnet_features));
+		command_palette->add_command(TTRC("Toggle .NET Status Panel"), "dotnet/toggle_status_panel", callable_mp(status_indicator, &DotNet::DotNetStatusIndicator::toggle_status_panel));
+	}
 }
 #endif
 

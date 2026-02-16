@@ -268,6 +268,17 @@ void EditorBottomPanel::_on_button_visibility_changed(Button *p_button, EditorDo
 	}
 }
 
+void EditorBottomPanel::add_status_indicator(Control *p_indicator) {
+	ERR_FAIL_NULL(p_indicator);
+	bottom_hbox->add_child(p_indicator);
+}
+
+void EditorBottomPanel::remove_status_indicator(Control *p_indicator) {
+	ERR_FAIL_NULL(p_indicator);
+	ERR_FAIL_COND(p_indicator->get_parent() != bottom_hbox);
+	bottom_hbox->remove_child(p_indicator);
+}
+
 EditorBottomPanel::EditorBottomPanel() :
 		DockTabContainer(EditorDock::DOCK_SLOT_BOTTOM) {
 	layout = EditorDock::DOCK_LAYOUT_HORIZONTAL;

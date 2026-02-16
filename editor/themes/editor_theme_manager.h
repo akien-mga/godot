@@ -215,6 +215,8 @@ private:
 	static void _populate_text_editor_styles(const Ref<EditorTheme> &p_theme, ThemeConfiguration &p_config);
 	static void _populate_visual_shader_styles(const Ref<EditorTheme> &p_theme, ThemeConfiguration &p_config);
 
+	static void _populate_dotnet_styles(const Ref<EditorTheme> &p_theme, ThemeConfiguration &p_config);
+
 	static void _reset_dirty_flag();
 
 public:

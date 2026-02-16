@@ -147,6 +147,11 @@
 #include "modules/mono/editor/bindings_generator.h"
 #endif
 
+#if defined(MODULE_DOTNET_ENABLED) && defined(TOOLS_ENABLED)
+#include "modules/dotnet/dotnet_module.h"
+#include "modules/dotnet/utils/dirs_utils.h"
+#endif
+
 #ifdef MODULE_GDSCRIPT_ENABLED
 #include "modules/gdscript/gdscript.h"
 #if defined(TOOLS_ENABLED) && !defined(GDSCRIPT_NO_LSP)
@@ -230,6 +235,10 @@ static bool restore_editor_window_layout = true;
 static int converter_max_kb_file = 4 * 1024; // 4MB
 static int converter_max_line_length = 100000;
 #endif // DISABLE_DEPRECATED
+
+#if defined(TOOLS_ENABLED) && defined(MODULE_DOTNET_ENABLED)
+static bool enable_dotnet_features = false;
+#endif
 
 HashMap<Main::CLIScope, Vector<String>> forwardable_cli_arguments;
 #endif
@@ -566,6 +575,9 @@ void Main::print_help(const char *p_binary) {
 #if defined(MODULE_GDSCRIPT_ENABLED) && !defined(GDSCRIPT_NO_LSP)
 	print_help_option("--lsp-port <port>", "Use the specified port for the GDScript Language Server Protocol. Recommended port range [1024, 49151].\n", CLI_OPTION_AVAILABILITY_EDITOR);
 #endif // MODULE_GDSCRIPT_ENABLED && !GDSCRIPT_NO_LSP
+#ifdef MODULE_DOTNET_ENABLED
+	print_help_option("--enable-dotnet-features", "Enable .NET features in the editor (implies --headless), fetch required dependencies and exit.\n", CLI_OPTION_AVAILABILITY_EDITOR);
+#endif // MODULE_DOTNET_ENABLED
 #endif
 	print_help_option("--quit", "Quit after the first iteration.\n");
 	print_help_option("--quit-after <int>", "Quit after the given number of iterations. Set to 0 to disable.\n");
@@ -1472,6 +1484,15 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 			audio_driver = NULL_AUDIO_DRIVER;
 			display_driver = NULL_DISPLAY_DRIVER;
 
+#if defined(TOOLS_ENABLED) && defined(MODULE_DOTNET_ENABLED)
+		} else if (arg == "--enable-dotnet-features") {
+			enable_dotnet_features = true;
+
+			// This also implies headless mode.
+			audio_driver = NULL_AUDIO_DRIVER;
+			display_driver = NULL_DISPLAY_DRIVER;
+#endif
+
 		} else if (arg == "--embedded") { // Enable embedded mode.
 #ifdef MACOS_ENABLED
 			display_driver = EMBEDDED_DISPLAY_DRIVER;
@@ -2223,6 +2244,21 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 	if (!OS::get_singleton()->_verbose_stdout) { // Not manually overridden.
 		OS::get_singleton()->_verbose_stdout = GLOBAL_GET("debug/settings/stdout/verbose_stdout");
 	}
+
+#if defined(TOOLS_ENABLED) && defined(MODULE_DOTNET_ENABLED)
+	if (enable_dotnet_features) {
+		const String &editor_assemblies_dir = DotNet::Dirs::get_editor_assemblies_path();
+		if (!DotNet::DotNetModule::try_restore_editor_packages(editor_assemblies_dir)) {
+			ERR_PRINT(TTR("Failed to restore .NET editor packages."));
+			exit_err = FAILED;
+			goto error;
+		} else {
+			print_line(TTR(".NET features enabled successfully."));
+			exit_err = ERR_HELP; // Hack to force an early exit in `main()` with a success code.
+			goto error;
+		}
+	}
+#endif // TOOLS_ENABLED && MODULE_DOTNET_ENABLED
 
 	register_early_core_singletons();
 	initialize_modules(MODULE_INITIALIZATION_LEVEL_CORE);

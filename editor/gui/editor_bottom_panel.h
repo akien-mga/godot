@@ -104,6 +104,9 @@ public:
 	void set_bottom_panel_offset(int p_offset);
 	int get_bottom_panel_offset();
 
+	void add_status_indicator(Control *p_indicator);
+	void remove_status_indicator(Control *p_indicator);
+
 	EditorBottomPanel();
 	~EditorBottomPanel();
 };
