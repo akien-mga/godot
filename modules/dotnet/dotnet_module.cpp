@@ -39,7 +39,7 @@
 #ifdef TOOLS_ENABLED
 #include "editor/RestoreEditorPackages.proj.gen.h"
 #include "editor/dotnet_status_indicator.h"
-#include "editor/welcome_dialog.h"
+// #include "editor/welcome_dialog.h"
 #include "runtime/hostfxr/hostfxr_dotnet_runtime.h"
 
 #include "core/config/engine.h"
@@ -320,9 +320,10 @@ void DotNetModule::request_enable_dotnet_features() {
 
 	// If the welcome dialog is not available, this method was called too early.
 	// Wait until the editor has finished all initialization steps.
-	DotNet::WelcomeDialog *welcome_dialog = DotNet::WelcomeDialog::get_singleton();
-	DEV_ASSERT(welcome_dialog != nullptr);
-	welcome_dialog->popup_centered();
+	// DotNet::WelcomeDialog *welcome_dialog = DotNet::WelcomeDialog::get_singleton();
+	// DEV_ASSERT(welcome_dialog != nullptr);
+	// welcome_dialog->popup_centered();
+	module->initialize();
 }
 #endif
 

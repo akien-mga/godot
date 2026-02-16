@@ -30,6 +30,8 @@
 
 #pragma once
 
+#error Welcome Dialog is disabled as it's a work in progress and should not be used for now.
+
 #include "editor/inspector/editor_inspector.h"
 #include "scene/gui/box_container.h"
 #include "scene/gui/button.h"

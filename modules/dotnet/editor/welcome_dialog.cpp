@@ -28,6 +28,7 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
+#if false
 #include "welcome_dialog.h"
 
 #include "../dotnet_module.h"
@@ -599,3 +600,4 @@ WelcomeDialog::~WelcomeDialog() {
 }
 
 } // namespace DotNet
+#endif
