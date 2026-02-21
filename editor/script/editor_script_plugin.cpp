@@ -31,6 +31,8 @@
 #include "editor_script_plugin.h"
 
 #include "core/io/resource_loader.h"
+#include "core/object/script.h"
+#include "core/object/script_server.h"
 #include "editor/editor_interface.h"
 #include "editor/script/editor_script.h"
 #include "editor/settings/editor_command_palette.h"

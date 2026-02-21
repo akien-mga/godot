@@ -50,7 +50,8 @@
 #include "core/config/project_settings.h"
 #include "core/core_constants.h"
 #include "core/io/file_access.h"
-
+#include "core/object/placeholder_script_instance.h"
+#include "core/object/script_server.h"
 #include "scene/resources/packed_scene.h"
 #include "scene/scene_string_names.h"
 

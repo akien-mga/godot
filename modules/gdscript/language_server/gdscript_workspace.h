@@ -30,10 +30,11 @@
 
 #pragma once
 
-#include "core/error/error_macros.h"
 #include "gdscript_extend_parser.h"
 #include "godot_lsp.h"
 
+#include "core/error/error_macros.h"
+#include "core/object/script_language.h"
 #include "core/variant/variant.h"
 
 class GDScriptWorkspace : public RefCounted {

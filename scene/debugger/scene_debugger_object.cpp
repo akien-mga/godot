@@ -33,7 +33,8 @@
 #include "scene_debugger_object.h"
 
 #include "core/io/marshalls.h"
-#include "core/object/script_language.h"
+#include "core/object/script.h"
+#include "core/object/script_instance.h"
 #include "scene/main/node.h"
 
 SceneDebuggerObject::SceneDebuggerObject(Object *p_obj) {

@@ -36,7 +36,7 @@ STATIC_ASSERT_INCOMPLETE_TYPE(class, String);
 
 #include "container_type_validate.h"
 #include "core/math/math_funcs.h"
-#include "core/object/script_language.h"
+#include "core/object/script.h"
 #include "core/templates/hashfuncs.h"
 #include "core/templates/vector.h"
 #include "core/variant/callable.h"

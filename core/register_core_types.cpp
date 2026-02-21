@@ -72,7 +72,9 @@
 #include "core/math/random_number_generator.h"
 #include "core/math/triangle_mesh.h"
 #include "core/object/class_db.h"
+#include "core/object/script.h"
 #include "core/object/script_backtrace.h"
+#include "core/object/script_language.h"
 #include "core/object/script_language_extension.h"
 #include "core/object/undo_redo.h"
 #include "core/object/worker_thread_pool.h"
@@ -81,6 +83,7 @@
 #include "core/string/optimized_translation.h"
 #include "core/string/translation.h"
 #include "core/string/translation_server.h"
+
 #ifndef DISABLE_DEPRECATED
 #include "core/io/packed_data_container.h"
 #endif

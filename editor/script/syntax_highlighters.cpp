@@ -31,7 +31,9 @@
 #include "syntax_highlighters.h"
 
 #include "core/config/project_settings.h"
+#include "core/object/script.h"
 #include "core/object/script_language.h"
+#include "core/object/script_server.h"
 #include "editor/settings/editor_settings.h"
 
 String EditorSyntaxHighlighter::_get_name() const {

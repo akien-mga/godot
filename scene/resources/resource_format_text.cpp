@@ -33,7 +33,7 @@
 #include "core/config/project_settings.h"
 #include "core/io/dir_access.h"
 #include "core/io/missing_resource.h"
-#include "core/object/script_language.h"
+#include "core/object/script.h"
 #include "scene/property_utils.h"
 
 void ResourceLoaderText::_printerr() {

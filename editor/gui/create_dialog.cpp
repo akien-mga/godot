@@ -32,6 +32,8 @@
 
 #include "core/io/resource_loader.h"
 #include "core/object/class_db.h"
+#include "core/object/script.h"
+#include "core/object/script_server.h"
 #include "editor/doc/editor_help.h"
 #include "editor/editor_node.h"
 #include "editor/editor_string_names.h"

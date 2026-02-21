@@ -36,6 +36,7 @@
 #include "core/config/project_settings.h"
 #include "core/io/resource_loader.h"
 #include "core/math/math_defs.h"
+#include "core/object/script_server.h"
 #include "scene/main/multiplayer_api.h"
 
 #ifdef DEBUG_ENABLED

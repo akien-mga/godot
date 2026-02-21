@@ -33,7 +33,7 @@
 #include "gdscript_utility_functions.h"
 
 #include "core/object/ref_counted.h"
-#include "core/object/script_language.h"
+#include "core/object/script.h"
 #include "core/os/thread.h"
 #include "core/string/string_name.h"
 #include "core/templates/pair.h"

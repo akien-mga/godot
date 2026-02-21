@@ -38,6 +38,7 @@
 #include "core/io/dir_access.h"
 #include "core/io/resource_importer.h"
 #include "core/object/script_language.h"
+#include "core/object/script_server.h"
 #include "core/string/translation_server.h"
 #include "editor/export/editor_export_platform.h"
 #include "editor/settings/editor_settings.h"

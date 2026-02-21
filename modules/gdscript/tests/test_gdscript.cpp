@@ -38,6 +38,7 @@
 
 #include "core/config/project_settings.h"
 #include "core/io/file_access.h"
+#include "core/object/script_server.h"
 #include "core/os/os.h"
 #include "core/string/string_builder.h"
 

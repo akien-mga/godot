@@ -32,7 +32,7 @@
 
 #include "core/io/logger.h"
 #include "core/object/object_id.h"
-#include "core/object/script_language.h"
+#include "core/object/script_server.h"
 #include "core/os/os.h"
 #include "core/string/ustring.h"
 

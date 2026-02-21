@@ -38,7 +38,8 @@
 
 #include "core/config/engine.h"
 #include "core/config/project_settings.h"
-
+#include "core/object/placeholder_script_instance.h"
+#include "core/object/script_server.h"
 #include "scene/scene_string_names.h"
 
 bool GDScriptCompiler::_is_class_member_property(CodeGen &codegen, const StringName &p_name) {

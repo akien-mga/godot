@@ -31,7 +31,7 @@
 #include "crash_handler_windows.h"
 
 #include "core/config/project_settings.h"
-#include "core/object/script_language.h"
+#include "core/object/script_server.h"
 #include "core/os/main_loop.h"
 #include "core/os/os.h"
 #include "core/string/print_string.h"

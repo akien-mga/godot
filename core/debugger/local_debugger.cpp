@@ -31,6 +31,8 @@
 #include "local_debugger.h"
 
 #include "core/debugger/script_debugger.h"
+#include "core/object/script_language.h"
+#include "core/object/script_server.h"
 #include "core/os/main_loop.h"
 #include "core/os/os.h"
 

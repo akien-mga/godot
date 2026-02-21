@@ -34,7 +34,6 @@
 #include "core/config/project_settings.h"
 #include "core/input/input.h"
 #include "core/input/input_map.h"
-#include "core/object/script_language.h"
 #include "core/os/keyboard.h"
 #include "core/os/os.h"
 #include "core/string/alt_codes.h"

@@ -32,7 +32,8 @@
 
 #include "core/core_bind.h"
 #include "core/io/compression.h"
-#include "core/object/script_language.h"
+#include "core/object/placeholder_script_instance.h"
+#include "core/object/script.h"
 #include "scene/debugger/scene_debugger_object.h"
 
 #if defined(MODULE_GDSCRIPT_ENABLED) && defined(DEBUG_ENABLED)

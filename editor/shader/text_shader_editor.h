@@ -30,6 +30,7 @@
 
 #pragma once
 
+#include "core/object/script_language.h"
 #include "editor/gui/code_editor.h"
 #include "editor/shader/shader_editor.h"
 #include "scene/gui/menu_button.h"

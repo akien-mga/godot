@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include "core/object/script_language.h"
+#include "core/object/script.h"
 #include "editor/animation/animation_tree_editor_plugin.h"
 #include "editor/inspector/editor_inspector.h"
 #include "scene/animation/animation_blend_tree.h"

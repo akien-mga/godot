@@ -33,7 +33,7 @@
 #include "core/io/resource.h"
 #include "core/object/class_db.h"
 #include "core/object/object.h"
-#include "core/object/script_language.h"
+#include "core/variant/typed_array.h"
 
 class Control;
 class CreateDialog;
@@ -52,6 +52,7 @@ class Mesh;
 class Node;
 class PropertySelector;
 class SceneTreeDialog;
+class Script;
 class ScriptEditor;
 class SubViewport;
 class Texture2D;

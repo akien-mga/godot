@@ -32,7 +32,8 @@
 #include "core/config/project_settings.h"
 #include "core/io/file_access.h"
 #include "core/io/resource_loader.h"
-#include "core/object/script_language.h"
+#include "core/object/script.h"
+#include "core/object/script_server.h"
 
 Ref<ResourceFormatSaver> ResourceSaver::saver[MAX_SAVERS];
 

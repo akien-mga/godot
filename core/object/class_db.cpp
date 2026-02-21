@@ -32,7 +32,8 @@
 
 #include "core/config/engine.h"
 #include "core/io/resource_loader.h"
-#include "core/object/script_language.h"
+#include "core/object/script.h"
+#include "core/object/script_server.h"
 #include "core/templates/sort_array.h"
 #include "core/version.h"
 

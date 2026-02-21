@@ -35,6 +35,7 @@
 #include "core/debugger/engine_profiler.h"
 #include "core/io/resource_loader.h"
 #include "core/object/script_language.h"
+#include "core/object/script_server.h"
 #include "servers/display/display_server.h"
 
 #define CHECK_SIZE(arr, expected, what) ERR_FAIL_COND_V_MSG((uint32_t)arr.size() < (uint32_t)(expected), false, String("Malformed ") + what + " message from script debugger, message too short. Expected size: " + itos(expected) + ", actual size: " + itos(arr.size()))

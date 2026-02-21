@@ -33,6 +33,7 @@
 #include "core/config/project_settings.h"
 #include "core/debugger/debugger_marshalls.h"
 #include "core/debugger/remote_debugger.h"
+#include "core/object/script_server.h"
 #include "core/string/ustring.h"
 #include "core/variant/typed_dictionary.h"
 #include "core/version.h"

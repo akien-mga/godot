@@ -52,6 +52,8 @@
 #include "core/debugger/engine_debugger.h"
 #include "core/debugger/script_debugger.h"
 #include "core/io/file_access.h"
+#include "core/object/placeholder_script_instance.h"
+#include "core/object/script_server.h"
 #include "core/os/mutex.h"
 #include "core/os/os.h"
 #include "core/os/thread.h"

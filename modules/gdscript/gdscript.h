@@ -37,8 +37,12 @@
 #include "core/doc_data.h"
 #include "core/io/resource_loader.h"
 #include "core/io/resource_saver.h"
+#include "core/object/script.h"
+#include "core/object/script_instance.h"
 #include "core/object/script_language.h"
 #include "core/templates/rb_set.h"
+
+class PlaceHolderScriptInstance;
 
 class GDScriptNativeClass : public RefCounted {
 	GDCLASS(GDScriptNativeClass, RefCounted);

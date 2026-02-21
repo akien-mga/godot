@@ -40,7 +40,8 @@
 #include "core/io/file_access.h"
 #include "core/io/resource_loader.h"
 #include "core/object/class_db.h"
-#include "core/object/script_language.h"
+#include "core/object/script.h"
+#include "core/object/script_server.h"
 #include "core/templates/hash_map.h"
 #include "scene/main/node.h"
 

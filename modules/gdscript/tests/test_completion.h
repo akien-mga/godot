@@ -42,6 +42,7 @@
 #include "core/io/dir_access.h"
 #include "core/io/file_access.h"
 #include "core/object/script_language.h"
+#include "core/object/script_server.h"
 #include "core/variant/dictionary.h"
 #include "core/variant/variant.h"
 #include "editor/settings/editor_settings.h"

@@ -34,6 +34,7 @@
 #include "core/io/image.h"
 #include "core/io/resource_loader.h"
 #include "core/object/script_language.h"
+#include "core/object/script_server.h"
 #include "editor/file_system/editor_paths.h"
 #include "editor/settings/editor_settings.h"
 #include "editor/themes/editor_scale.h"

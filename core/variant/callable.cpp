@@ -33,7 +33,7 @@
 #include "core/object/message_queue.h"
 #include "core/object/object.h"
 #include "core/object/ref_counted.h"
-#include "core/object/script_language.h"
+#include "core/object/script.h"
 #include "core/variant/callable_bind.h"
 #include "core/variant/variant_callable.h"
 

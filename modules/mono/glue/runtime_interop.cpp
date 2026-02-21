@@ -44,6 +44,7 @@
 #include "core/io/marshalls.h"
 #include "core/object/class_db.h"
 #include "core/object/method_bind.h"
+#include "core/object/script_language.h"
 #include "core/os/os.h"
 #include "core/string/string_name.h"
 

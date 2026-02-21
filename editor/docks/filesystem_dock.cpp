@@ -35,6 +35,8 @@
 #include "core/io/dir_access.h"
 #include "core/io/file_access.h"
 #include "core/io/resource_loader.h"
+#include "core/object/script.h"
+#include "core/object/script_server.h"
 #include "core/os/keyboard.h"
 #include "core/os/os.h"
 #include "core/templates/list.h"

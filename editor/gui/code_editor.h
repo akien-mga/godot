@@ -30,6 +30,7 @@
 
 #pragma once
 
+#include "core/object/script_language.h"
 #include "scene/gui/box_container.h"
 #include "scene/gui/code_edit.h"
 #include "scene/gui/dialogs.h"

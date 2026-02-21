@@ -40,6 +40,7 @@
 #include "core/variant/typed_array.h"
 
 class MainLoop;
+class ScriptLanguage;
 
 namespace CoreBind {
 

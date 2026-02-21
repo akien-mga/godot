@@ -30,16 +30,16 @@
 
 #pragma once
 
-#include "core/object/script_language.h"
 #include "editor/debugger/editor_debugger_server.h"
 #include "editor/docks/editor_dock.h"
 
 class Button;
 class DebugAdapterParser;
 class EditorDebuggerPlugin;
-class EditorDebuggerTree;
 class EditorDebuggerRemoteObjects;
+class EditorDebuggerTree;
 class MenuButton;
+class Script;
 class ScriptEditorDebugger;
 class TabContainer;
 class UndoRedo;

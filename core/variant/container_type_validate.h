@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include "core/object/script_language.h"
+#include "core/object/script.h"
 #include "core/variant/variant.h"
 
 struct ContainerType {

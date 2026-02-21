@@ -32,7 +32,7 @@
 
 #include "core/config/engine.h"
 #include "core/io/file_access.h"
-#include "core/object/script_language.h"
+#include "core/object/script.h"
 #include "core/variant/container_type_validate.h"
 
 const char *JSON::tk_name[TK_MAX] = {

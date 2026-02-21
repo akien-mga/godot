@@ -33,6 +33,7 @@
 #include "core/io/config_file.h"
 #include "core/io/dir_access.h"
 #include "core/object/script_language.h"
+#include "core/object/script_server.h"
 #include "editor/editor_node.h"
 #include "editor/file_system/editor_file_system.h"
 #include "editor/gui/editor_validation_panel.h"

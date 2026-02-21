@@ -35,7 +35,8 @@
 #include "gdscript_language_protocol.h"
 
 #include "core/config/project_settings.h"
-#include "core/object/script_language.h"
+#include "core/object/script.h"
+#include "core/object/script_server.h"
 #include "editor/doc/doc_tools.h"
 #include "editor/doc/editor_help.h"
 #include "editor/editor_node.h"

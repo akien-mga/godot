@@ -32,6 +32,8 @@
 
 #include "scene/resources/syntax_highlighter.h"
 
+class ScriptLanguage;
+
 class EditorSyntaxHighlighter : public SyntaxHighlighter {
 	GDCLASS(EditorSyntaxHighlighter, SyntaxHighlighter)
 

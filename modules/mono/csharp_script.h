@@ -47,6 +47,7 @@
 class CSharpScript;
 class CSharpInstance;
 class CSharpLanguage;
+class PlaceHolderScriptInstance;
 
 template <typename TScriptInstance, typename TScriptLanguage>
 TScriptInstance *cast_script_instance(ScriptInstance *p_inst) {

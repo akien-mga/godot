@@ -44,6 +44,9 @@
 #include "core/core_constants.h"
 #include "core/io/file_access.h"
 #include "core/math/expression.h"
+#include "core/object/script.h"
+#include "core/object/script_language.h"
+#include "core/object/script_server.h"
 #include "core/variant/container_type_validate.h"
 
 #ifdef TOOLS_ENABLED

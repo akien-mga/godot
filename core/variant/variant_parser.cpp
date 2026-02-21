@@ -33,7 +33,7 @@
 #include "core/crypto/crypto_core.h"
 #include "core/io/resource_loader.h"
 #include "core/io/resource_uid.h"
-#include "core/object/script_language.h"
+#include "core/object/script.h"
 #include "core/string/string_buffer.h"
 
 char32_t VariantParser::Stream::get_char() {
