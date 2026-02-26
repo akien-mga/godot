@@ -67,14 +67,6 @@ public:
 		return singleton;
 	}
 
-	enum ProgressState {
-		PROGRESS_STATE_NOPROGRESS,
-		PROGRESS_STATE_INDETERMINATE,
-		PROGRESS_STATE_NORMAL,
-		PROGRESS_STATE_ERROR,
-		PROGRESS_STATE_PAUSED,
-	};
-
 	enum HandleType {
 		DISPLAY_HANDLE,
 		WINDOW_HANDLE,
@@ -475,7 +467,7 @@ public:
 
 	virtual void window_request_attention(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
 	virtual void window_set_taskbar_progress_value(float p_value, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) {}
-	virtual void window_set_taskbar_progress_state(ProgressState p_state, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) {}
+	virtual void window_set_taskbar_progress_state(DisplayServerEnums::ProgressState p_state, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) {}
 	virtual void window_move_to_foreground(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
 	virtual bool window_is_focused(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
 
@@ -876,4 +868,4 @@ VARIANT_ENUM_CAST(DisplayServer::CursorShape)
 VARIANT_ENUM_CAST_EXT(DisplayServerEnums::VSyncMode, DisplayServer::VSyncMode)
 VARIANT_ENUM_CAST(DisplayServer::TTSUtteranceEvent)
 VARIANT_ENUM_CAST(DisplayServer::FileDialogMode)
-VARIANT_ENUM_CAST(DisplayServer::ProgressState)
+VARIANT_ENUM_CAST_EXT(DisplayServerEnums::ProgressState, DisplayServer::ProgressState)

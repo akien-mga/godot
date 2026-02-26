@@ -634,7 +634,7 @@ void Window::set_taskbar_progress_value(float p_value) {
 	}
 }
 
-void Window::set_taskbar_progress_state(DisplayServer::ProgressState p_state) {
+void Window::set_taskbar_progress_state(DisplayServerEnums::ProgressState p_state) {
 	ERR_MAIN_THREAD_GUARD;
 	if (window_id != DisplayServerEnums::INVALID_WINDOW_ID) {
 		DisplayServer::get_singleton()->window_set_taskbar_progress_state(p_state);

@@ -639,7 +639,7 @@ void DisplayServerMacOSEmbedded::window_set_taskbar_progress_value(float p_value
 	// Not supported.
 }
 
-void DisplayServerMacOSEmbedded::window_set_taskbar_progress_state(ProgressState p_state, DisplayServerEnums::WindowID p_window) {
+void DisplayServerMacOSEmbedded::window_set_taskbar_progress_state(DisplayServerEnums::ProgressState p_state, DisplayServerEnums::WindowID p_window) {
 	// Not supported.
 }
 

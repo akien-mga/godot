@@ -2937,7 +2937,7 @@ void DisplayServerWindows::window_set_taskbar_progress_value(float p_value, Disp
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
 	wd.progress_value = p_value;
-	if (wd.progress_state == PROGRESS_STATE_NOPROGRESS) {
+	if (wd.progress_state == DisplayServerEnums::PROGRESS_STATE_NOPROGRESS) {
 		return;
 	}
 	if (taskbar == nullptr) {
@@ -2952,7 +2952,7 @@ void DisplayServerWindows::window_set_taskbar_progress_value(float p_value, Disp
 	taskbar->SetProgressValue(wd.hWnd, Math::round(p_value * 100000), 100000);
 }
 
-void DisplayServerWindows::window_set_taskbar_progress_state(ProgressState p_state, DisplayServerEnums::WindowID p_window) {
+void DisplayServerWindows::window_set_taskbar_progress_state(DisplayServerEnums::ProgressState p_state, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2969,19 +2969,19 @@ void DisplayServerWindows::window_set_taskbar_progress_state(ProgressState p_sta
 
 	TBPFLAG tbpf = TBPF_NOPROGRESS;
 	switch (p_state) {
-		case PROGRESS_STATE_NOPROGRESS:
+		case DisplayServerEnums::PROGRESS_STATE_NOPROGRESS:
 			tbpf = TBPF_NOPROGRESS;
 			break;
-		case PROGRESS_STATE_INDETERMINATE:
+		case DisplayServerEnums::PROGRESS_STATE_INDETERMINATE:
 			tbpf = TBPF_INDETERMINATE;
 			break;
-		case PROGRESS_STATE_ERROR:
+		case DisplayServerEnums::PROGRESS_STATE_ERROR:
 			tbpf = TBPF_ERROR;
 			break;
-		case PROGRESS_STATE_PAUSED:
+		case DisplayServerEnums::PROGRESS_STATE_PAUSED:
 			tbpf = TBPF_PAUSED;
 			break;
-		case PROGRESS_STATE_NORMAL:
+		case DisplayServerEnums::PROGRESS_STATE_NORMAL:
 			tbpf = TBPF_NORMAL;
 			break;
 		default:
@@ -2989,7 +2989,7 @@ void DisplayServerWindows::window_set_taskbar_progress_state(ProgressState p_sta
 	}
 
 	taskbar->SetProgressState(wd.hWnd, tbpf);
-	if (p_state != PROGRESS_STATE_INDETERMINATE) {
+	if (p_state != DisplayServerEnums::PROGRESS_STATE_INDETERMINATE) {
 		taskbar->SetProgressValue(wd.hWnd, Math::round(wd.progress_value * 100000), 100000);
 	}
 }

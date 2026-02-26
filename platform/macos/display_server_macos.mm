@@ -2631,7 +2631,7 @@ void DisplayServerMacOS::window_set_taskbar_progress_value(float p_value, Displa
 	[dock_progress setValue:p_value];
 }
 
-void DisplayServerMacOS::window_set_taskbar_progress_state(ProgressState p_state, DisplayServerEnums::WindowID p_window) {
+void DisplayServerMacOS::window_set_taskbar_progress_state(DisplayServerEnums::ProgressState p_state, DisplayServerEnums::WindowID p_window) {
 	ERR_FAIL_COND(p_window != DisplayServerEnums::MAIN_WINDOW_ID);
 
 	if (!dock_progress) {
