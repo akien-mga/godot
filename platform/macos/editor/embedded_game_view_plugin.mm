@@ -84,7 +84,7 @@ bool GameViewDebuggerMacOS::_msg_window_set_ime_active(const Array &p_args) {
 	ERR_FAIL_COND_V_MSG(p_args.size() != 1, false, "window_set_ime_active: invalid number of arguments.");
 
 	bool active = p_args[0];
-	DisplayServer::WindowID wid = embedded_process->get_window()->get_window_id();
+	DisplayServerEnums::WindowID wid = embedded_process->get_window()->get_window_id();
 	DisplayServer::get_singleton()->window_set_ime_active(active, wid);
 	return true;
 }
@@ -94,7 +94,7 @@ bool GameViewDebuggerMacOS::_msg_window_set_ime_position(const Array &p_args) {
 
 	Point2i pos = p_args[0];
 	Point2i xpos = embedded_process->get_layer_host()->get_global_transform_with_canvas().xform(pos);
-	DisplayServer::WindowID wid = embedded_process->get_window()->get_window_id();
+	DisplayServerEnums::WindowID wid = embedded_process->get_window()->get_window_id();
 	DisplayServer::get_singleton()->window_set_ime_position(xpos, wid);
 	return true;
 }

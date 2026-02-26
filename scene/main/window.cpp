@@ -299,7 +299,7 @@ void Window::_validate_property(PropertyInfo &p_property) const {
 
 //
 
-Window *Window::get_from_id(DisplayServer::WindowID p_window_id) {
+Window *Window::get_from_id(DisplayServerEnums::WindowID p_window_id) {
 	if (p_window_id == DisplayServer::INVALID_WINDOW_ID) {
 		return nullptr;
 	}
@@ -1102,7 +1102,7 @@ void Window::_make_transient() {
 	Window *window = nullptr;
 
 	if (!is_embedded() && transient_to_focused) {
-		DisplayServer::WindowID focused_window_id = DisplayServer::get_singleton()->get_focused_window();
+		DisplayServerEnums::WindowID focused_window_id = DisplayServer::get_singleton()->get_focused_window();
 		if (focused_window_id != DisplayServer::INVALID_WINDOW_ID) {
 			window = Window::get_from_id(focused_window_id);
 		}
@@ -1851,7 +1851,7 @@ Rect2i Window::get_nonclient_area() const {
 	return nonclient_area;
 }
 
-DisplayServer::WindowID Window::get_window_id() const {
+DisplayServerEnums::WindowID Window::get_window_id() const {
 	ERR_READ_THREAD_GUARD_V(DisplayServer::INVALID_WINDOW_ID);
 	if (get_embedder()) {
 #ifdef TOOLS_ENABLED
@@ -2050,7 +2050,7 @@ void Window::popup_centered_clamped(const Size2i &p_size, float p_fallback_ratio
 	if (is_embedded()) {
 		parent_rect = get_embedder()->get_visible_rect();
 	} else {
-		DisplayServer::WindowID parent_id = get_parent_visible_window()->get_window_id();
+		DisplayServerEnums::WindowID parent_id = get_parent_visible_window()->get_window_id();
 		int parent_screen = DisplayServer::get_singleton()->window_get_current_screen(parent_id);
 		parent_rect.position = DisplayServer::get_singleton()->screen_get_position(parent_screen);
 		parent_rect.size = DisplayServer::get_singleton()->screen_get_size(parent_screen);
@@ -2092,7 +2092,7 @@ void Window::popup_centered(const Size2i &p_minsize) {
 	if (is_embedded()) {
 		parent_rect = get_embedder()->get_visible_rect();
 	} else {
-		DisplayServer::WindowID parent_id = get_parent_visible_window()->get_window_id();
+		DisplayServerEnums::WindowID parent_id = get_parent_visible_window()->get_window_id();
 		int parent_screen = DisplayServer::get_singleton()->window_get_current_screen(parent_id);
 		parent_rect.position = DisplayServer::get_singleton()->screen_get_position(parent_screen);
 		parent_rect.size = DisplayServer::get_singleton()->screen_get_size(parent_screen);
@@ -2129,7 +2129,7 @@ void Window::popup_centered_ratio(float p_ratio) {
 	if (is_embedded()) {
 		parent_rect = get_embedder()->get_visible_rect();
 	} else {
-		DisplayServer::WindowID parent_id = get_parent_visible_window()->get_window_id();
+		DisplayServerEnums::WindowID parent_id = get_parent_visible_window()->get_window_id();
 		int parent_screen = DisplayServer::get_singleton()->window_get_current_screen(parent_id);
 		parent_rect.position = DisplayServer::get_singleton()->screen_get_position(parent_screen);
 		parent_rect.size = DisplayServer::get_singleton()->screen_get_size(parent_screen);

@@ -222,7 +222,7 @@ void DisplayServerWindows::_set_mouse_mode_impl(MouseMode p_mode) {
 
 	if (windows.has(MAIN_WINDOW_ID) && (p_mode == MOUSE_MODE_CAPTURED || p_mode == MOUSE_MODE_CONFINED || p_mode == MOUSE_MODE_CONFINED_HIDDEN)) {
 		// Mouse is grabbed (captured or confined).
-		WindowID window_id = _get_focused_window_or_popup();
+		DisplayServerEnums::WindowID window_id = _get_focused_window_or_popup();
 		if (!windows.has(window_id)) {
 			window_id = MAIN_WINDOW_ID;
 		}
@@ -268,8 +268,8 @@ void DisplayServerWindows::_set_mouse_mode_impl(MouseMode p_mode) {
 	}
 }
 
-DisplayServer::WindowID DisplayServerWindows::_get_focused_window_or_popup() const {
-	const List<WindowID>::Element *E = popup_list.back();
+DisplayServerEnums::WindowID DisplayServerWindows::_get_focused_window_or_popup() const {
+	const List<DisplayServerEnums::WindowID>::Element *E = popup_list.back();
 	if (E) {
 		return E->get();
 	}
@@ -278,7 +278,7 @@ DisplayServer::WindowID DisplayServerWindows::_get_focused_window_or_popup() con
 }
 
 bool DisplayServerWindows::_has_moving_window() const {
-	for (const KeyValue<WindowID, WindowData> &E : windows) {
+	for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 		if (E.value.move_timer_id) {
 			return true;
 		}
@@ -286,7 +286,7 @@ bool DisplayServerWindows::_has_moving_window() const {
 	return false;
 }
 
-void DisplayServerWindows::_register_raw_input_devices(WindowID p_target_window) {
+void DisplayServerWindows::_register_raw_input_devices(DisplayServerEnums::WindowID p_target_window) {
 	use_raw_input = true;
 
 	RAWINPUTDEVICE rid[2] = {};
@@ -374,11 +374,11 @@ void DisplayServerWindows::tts_stop() {
 	tts->stop();
 }
 
-Error DisplayServerWindows::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, WindowID p_window_id) {
+Error DisplayServerWindows::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	return _file_dialog_with_options_show(p_title, p_current_directory, String(), p_filename, p_show_hidden, p_mode, p_filters, TypedArray<Dictionary>(), p_callback, false, p_window_id);
 }
 
-Error DisplayServerWindows::file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, WindowID p_window_id) {
+Error DisplayServerWindows::file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	return _file_dialog_with_options_show(p_title, p_current_directory, p_root, p_filename, p_show_hidden, p_mode, p_filters, p_options, p_callback, true, p_window_id);
 }
 
@@ -799,7 +799,7 @@ void DisplayServerWindows::_thread_fd_monitor(void *p_ud) {
 	}
 }
 
-Error DisplayServerWindows::_file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, bool p_options_in_cb, WindowID p_window_id) {
+Error DisplayServerWindows::_file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, bool p_options_in_cb, DisplayServerEnums::WindowID p_window_id) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_INDEX_V(int(p_mode), FILE_DIALOG_MODE_SAVE_MAX, FAILED);
@@ -945,7 +945,7 @@ bool DisplayServerWindows::mouse_is_mode_override_enabled() const {
 void DisplayServerWindows::warp_mouse(const Point2i &p_position) {
 	_THREAD_SAFE_METHOD_
 
-	WindowID window_id = _get_focused_window_or_popup();
+	DisplayServerEnums::WindowID window_id = _get_focused_window_or_popup();
 
 	if (!windows.has(window_id)) {
 		return; // No focused window?
@@ -1739,23 +1739,23 @@ bool DisplayServerWindows::screen_is_kept_on() const {
 	return keep_screen_on;
 }
 
-Vector<DisplayServer::WindowID> DisplayServerWindows::get_window_list() const {
+Vector<DisplayServerEnums::WindowID> DisplayServerWindows::get_window_list() const {
 	_THREAD_SAFE_METHOD_
 
-	Vector<DisplayServer::WindowID> ret;
-	for (const KeyValue<WindowID, WindowData> &E : windows) {
+	Vector<DisplayServerEnums::WindowID> ret;
+	for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 		ret.push_back(E.key);
 	}
 	return ret;
 }
 
-DisplayServer::WindowID DisplayServerWindows::get_window_at_screen_position(const Point2i &p_position) const {
+DisplayServerEnums::WindowID DisplayServerWindows::get_window_at_screen_position(const Point2i &p_position) const {
 	Point2i offset = _get_screens_origin();
 	POINT p;
 	p.x = p_position.x + offset.x;
 	p.y = p_position.y + offset.y;
 	HWND hwnd = WindowFromPoint(p);
-	for (const KeyValue<WindowID, WindowData> &E : windows) {
+	for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 		if (E.value.hWnd == hwnd) {
 			return E.key;
 		}
@@ -1764,7 +1764,7 @@ DisplayServer::WindowID DisplayServerWindows::get_window_at_screen_position(cons
 	return INVALID_WINDOW_ID;
 }
 
-DisplayServer::WindowID DisplayServerWindows::create_sub_window(WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, WindowID p_transient_parent) {
+DisplayServerEnums::WindowID DisplayServerWindows::create_sub_window(WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
 	_THREAD_SAFE_METHOD_
 
 	bool no_redirection_bitmap = false;
@@ -1772,7 +1772,7 @@ DisplayServer::WindowID DisplayServerWindows::create_sub_window(WindowMode p_mod
 	no_redirection_bitmap = OS::get_singleton()->is_layered_allowed() && rendering_driver == "d3d12";
 #endif
 
-	WindowID window_id = window_id_counter;
+	DisplayServerEnums::WindowID window_id = window_id_counter;
 	Error err = _create_window(window_id, p_mode, p_flags, p_rect, p_exclusive, p_transient_parent, NULL, no_redirection_bitmap);
 	ERR_FAIL_COND_V_MSG(err != OK, INVALID_WINDOW_ID, "Failed to create sub window.");
 	++window_id_counter;
@@ -1856,7 +1856,7 @@ DisplayServer::WindowID DisplayServerWindows::create_sub_window(WindowMode p_mod
 	return window_id;
 }
 
-bool DisplayServerWindows::_is_always_on_top_recursive(WindowID p_window) const {
+bool DisplayServerWindows::_is_always_on_top_recursive(DisplayServerEnums::WindowID p_window) const {
 	ERR_FAIL_COND_V(!windows.has(p_window), false);
 
 	const WindowData &wd = windows[p_window];
@@ -1871,7 +1871,7 @@ bool DisplayServerWindows::_is_always_on_top_recursive(WindowID p_window) const 
 	return false;
 }
 
-void DisplayServerWindows::show_window(WindowID p_id) {
+void DisplayServerWindows::show_window(DisplayServerEnums::WindowID p_id) {
 	ERR_FAIL_COND(!windows.has(p_id));
 
 	WindowData &wd = windows[p_id];
@@ -1904,7 +1904,7 @@ void DisplayServerWindows::show_window(WindowID p_id) {
 	}
 }
 
-void DisplayServerWindows::delete_sub_window(WindowID p_window) {
+void DisplayServerWindows::delete_sub_window(DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -1947,7 +1947,7 @@ void DisplayServerWindows::delete_sub_window(WindowID p_window) {
 	}
 }
 
-void DisplayServerWindows::gl_window_make_current(DisplayServer::WindowID p_window_id) {
+void DisplayServerWindows::gl_window_make_current(DisplayServerEnums::WindowID p_window_id) {
 #if defined(GLES3_ENABLED)
 	if (gl_manager_angle) {
 		gl_manager_angle->window_make_current(p_window_id);
@@ -1958,7 +1958,7 @@ void DisplayServerWindows::gl_window_make_current(DisplayServer::WindowID p_wind
 #endif
 }
 
-int64_t DisplayServerWindows::window_get_native_handle(HandleType p_handle_type, WindowID p_window) const {
+int64_t DisplayServerWindows::window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
 	ERR_FAIL_COND_V(!windows.has(p_window), 0);
 	switch (p_handle_type) {
 		case DISPLAY_HANDLE: {
@@ -2003,49 +2003,49 @@ int64_t DisplayServerWindows::window_get_native_handle(HandleType p_handle_type,
 	}
 }
 
-void DisplayServerWindows::window_attach_instance_id(ObjectID p_instance, WindowID p_window) {
+void DisplayServerWindows::window_attach_instance_id(ObjectID p_instance, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
 	windows[p_window].instance_id = p_instance;
 }
 
-ObjectID DisplayServerWindows::window_get_attached_instance_id(WindowID p_window) const {
+ObjectID DisplayServerWindows::window_get_attached_instance_id(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), ObjectID());
 	return windows[p_window].instance_id;
 }
 
-void DisplayServerWindows::window_set_rect_changed_callback(const Callable &p_callable, WindowID p_window) {
+void DisplayServerWindows::window_set_rect_changed_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
 	windows[p_window].rect_changed_callback = p_callable;
 }
 
-void DisplayServerWindows::window_set_window_event_callback(const Callable &p_callable, WindowID p_window) {
+void DisplayServerWindows::window_set_window_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
 	windows[p_window].event_callback = p_callable;
 }
 
-void DisplayServerWindows::window_set_input_event_callback(const Callable &p_callable, WindowID p_window) {
+void DisplayServerWindows::window_set_input_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
 	windows[p_window].input_event_callback = p_callable;
 }
 
-void DisplayServerWindows::window_set_input_text_callback(const Callable &p_callable, WindowID p_window) {
+void DisplayServerWindows::window_set_input_text_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
 	windows[p_window].input_text_callback = p_callable;
 }
 
-void DisplayServerWindows::window_set_drop_files_callback(const Callable &p_callable, WindowID p_window) {
+void DisplayServerWindows::window_set_drop_files_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2059,14 +2059,14 @@ void DisplayServerWindows::window_set_drop_files_callback(const Callable &p_call
 	}
 }
 
-void DisplayServerWindows::window_set_title(const String &p_title, WindowID p_window) {
+void DisplayServerWindows::window_set_title(const String &p_title, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
 	SetWindowTextW(windows[p_window].hWnd, (LPCWSTR)(p_title.utf16().get_data()));
 }
 
-Size2i DisplayServerWindows::window_get_title_size(const String &p_title, WindowID p_window) const {
+Size2i DisplayServerWindows::window_get_title_size(const String &p_title, DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	Size2i size;
@@ -2109,7 +2109,7 @@ Size2i DisplayServerWindows::window_get_title_size(const String &p_title, Window
 	return size;
 }
 
-void DisplayServerWindows::window_set_mouse_passthrough(const Vector<Vector2> &p_region, WindowID p_window) {
+void DisplayServerWindows::window_set_mouse_passthrough(const Vector<Vector2> &p_region, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2117,7 +2117,7 @@ void DisplayServerWindows::window_set_mouse_passthrough(const Vector<Vector2> &p
 	_update_window_mouse_passthrough(p_window);
 }
 
-void DisplayServerWindows::_update_window_mouse_passthrough(WindowID p_window) {
+void DisplayServerWindows::_update_window_mouse_passthrough(DisplayServerEnums::WindowID p_window) {
 	ERR_FAIL_COND(!windows.has(p_window));
 
 	const WindowData &wd = windows[p_window];
@@ -2153,7 +2153,7 @@ void DisplayServerWindows::_update_window_mouse_passthrough(WindowID p_window) {
 	}
 }
 
-int DisplayServerWindows::window_get_current_screen(WindowID p_window) const {
+int DisplayServerWindows::window_get_current_screen(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), INVALID_SCREEN);
@@ -2163,7 +2163,7 @@ int DisplayServerWindows::window_get_current_screen(WindowID p_window) const {
 	return data.screen;
 }
 
-void DisplayServerWindows::window_set_current_screen(int p_screen, WindowID p_window) {
+void DisplayServerWindows::window_set_current_screen(int p_screen, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2206,7 +2206,7 @@ void DisplayServerWindows::window_set_current_screen(int p_screen, WindowID p_wi
 	}
 }
 
-Point2i DisplayServerWindows::window_get_position(WindowID p_window) const {
+Point2i DisplayServerWindows::window_get_position(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), Point2i());
@@ -2225,7 +2225,7 @@ Point2i DisplayServerWindows::window_get_position(WindowID p_window) const {
 	return Point2i(point.x, point.y) - _get_screens_origin();
 }
 
-Point2i DisplayServerWindows::window_get_position_with_decorations(WindowID p_window) const {
+Point2i DisplayServerWindows::window_get_position_with_decorations(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), Point2i());
@@ -2243,7 +2243,7 @@ Point2i DisplayServerWindows::window_get_position_with_decorations(WindowID p_wi
 	return Point2i();
 }
 
-void DisplayServerWindows::_update_real_mouse_position(WindowID p_window) {
+void DisplayServerWindows::_update_real_mouse_position(DisplayServerEnums::WindowID p_window) {
 	ERR_FAIL_COND(!windows.has(p_window));
 
 	POINT mouse_pos;
@@ -2257,7 +2257,7 @@ void DisplayServerWindows::_update_real_mouse_position(WindowID p_window) {
 	}
 }
 
-void DisplayServerWindows::window_set_position(const Point2i &p_position, WindowID p_window) {
+void DisplayServerWindows::window_set_position(const Point2i &p_position, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2290,7 +2290,7 @@ void DisplayServerWindows::window_set_position(const Point2i &p_position, Window
 	_update_real_mouse_position(p_window);
 }
 
-void DisplayServerWindows::window_set_exclusive(WindowID p_window, bool p_exclusive) {
+void DisplayServerWindows::window_set_exclusive(DisplayServerEnums::WindowID p_window, bool p_exclusive) {
 	_THREAD_SAFE_METHOD_
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
@@ -2307,7 +2307,7 @@ void DisplayServerWindows::window_set_exclusive(WindowID p_window, bool p_exclus
 	}
 }
 
-void DisplayServerWindows::window_set_transient(WindowID p_window, WindowID p_parent) {
+void DisplayServerWindows::window_set_transient(DisplayServerEnums::WindowID p_window, DisplayServerEnums::WindowID p_parent) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(p_window == p_parent);
@@ -2346,7 +2346,7 @@ void DisplayServerWindows::window_set_transient(WindowID p_window, WindowID p_pa
 	}
 }
 
-void DisplayServerWindows::window_set_max_size(const Size2i p_size, WindowID p_window) {
+void DisplayServerWindows::window_set_max_size(const Size2i p_size, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2364,7 +2364,7 @@ void DisplayServerWindows::window_set_max_size(const Size2i p_size, WindowID p_w
 	wd.max_size = p_size;
 }
 
-Size2i DisplayServerWindows::window_get_max_size(WindowID p_window) const {
+Size2i DisplayServerWindows::window_get_max_size(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), Size2i());
@@ -2372,7 +2372,7 @@ Size2i DisplayServerWindows::window_get_max_size(WindowID p_window) const {
 	return wd.max_size;
 }
 
-void DisplayServerWindows::window_set_min_size(const Size2i p_size, WindowID p_window) {
+void DisplayServerWindows::window_set_min_size(const Size2i p_size, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2390,7 +2390,7 @@ void DisplayServerWindows::window_set_min_size(const Size2i p_size, WindowID p_w
 	wd.min_size = p_size;
 }
 
-Size2i DisplayServerWindows::window_get_min_size(WindowID p_window) const {
+Size2i DisplayServerWindows::window_get_min_size(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), Size2i());
@@ -2398,7 +2398,7 @@ Size2i DisplayServerWindows::window_get_min_size(WindowID p_window) const {
 	return wd.min_size;
 }
 
-void DisplayServerWindows::window_set_size(const Size2i p_size, WindowID p_window) {
+void DisplayServerWindows::window_set_size(const Size2i p_size, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2429,7 +2429,7 @@ void DisplayServerWindows::window_set_size(const Size2i p_size, WindowID p_windo
 	MoveWindow(wd.hWnd, rect.left, rect.top, w, h, TRUE);
 }
 
-Size2i DisplayServerWindows::window_get_size(WindowID p_window) const {
+Size2i DisplayServerWindows::window_get_size(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), Size2i());
@@ -2448,7 +2448,7 @@ Size2i DisplayServerWindows::window_get_size(WindowID p_window) const {
 	return Size2();
 }
 
-Size2i DisplayServerWindows::window_get_size_with_decorations(WindowID p_window) const {
+Size2i DisplayServerWindows::window_get_size_with_decorations(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), Size2i());
@@ -2549,7 +2549,7 @@ void DisplayServerWindows::_get_window_style(bool p_main_window, bool p_initiali
 	}
 }
 
-void DisplayServerWindows::_update_window_style(WindowID p_window, bool p_repaint) {
+void DisplayServerWindows::_update_window_style(DisplayServerEnums::WindowID p_window, bool p_repaint) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2585,7 +2585,7 @@ void DisplayServerWindows::_update_window_style(WindowID p_window, bool p_repain
 	}
 }
 
-void DisplayServerWindows::window_set_mode(WindowMode p_mode, WindowID p_window) {
+void DisplayServerWindows::window_set_mode(WindowMode p_mode, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2733,7 +2733,7 @@ void DisplayServerWindows::window_set_mode(WindowMode p_mode, WindowID p_window)
 	_update_window_mouse_passthrough(p_window);
 }
 
-DisplayServer::WindowMode DisplayServerWindows::window_get_mode(WindowID p_window) const {
+DisplayServer::WindowMode DisplayServerWindows::window_get_mode(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), WINDOW_MODE_WINDOWED);
@@ -2754,7 +2754,7 @@ DisplayServer::WindowMode DisplayServerWindows::window_get_mode(WindowID p_windo
 	}
 }
 
-bool DisplayServerWindows::window_is_maximize_allowed(WindowID p_window) const {
+bool DisplayServerWindows::window_is_maximize_allowed(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), false);
@@ -2764,7 +2764,7 @@ bool DisplayServerWindows::window_is_maximize_allowed(WindowID p_window) const {
 	return (style & WS_MAXIMIZEBOX) == WS_MAXIMIZEBOX;
 }
 
-void DisplayServerWindows::window_set_flag(WindowFlags p_flag, bool p_enabled, WindowID p_window) {
+void DisplayServerWindows::window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2870,7 +2870,7 @@ void DisplayServerWindows::window_set_flag(WindowFlags p_flag, bool p_enabled, W
 	}
 }
 
-bool DisplayServerWindows::window_get_flag(WindowFlags p_flag, WindowID p_window) const {
+bool DisplayServerWindows::window_get_flag(WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), false);
@@ -2916,7 +2916,7 @@ bool DisplayServerWindows::window_get_flag(WindowFlags p_flag, WindowID p_window
 	return false;
 }
 
-void DisplayServerWindows::window_request_attention(WindowID p_window) {
+void DisplayServerWindows::window_request_attention(DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2931,7 +2931,7 @@ void DisplayServerWindows::window_request_attention(WindowID p_window) {
 	FlashWindowEx(&info);
 }
 
-void DisplayServerWindows::window_set_taskbar_progress_value(float p_value, WindowID p_window) {
+void DisplayServerWindows::window_set_taskbar_progress_value(float p_value, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2952,7 +2952,7 @@ void DisplayServerWindows::window_set_taskbar_progress_value(float p_value, Wind
 	taskbar->SetProgressValue(wd.hWnd, Math::round(p_value * 100000), 100000);
 }
 
-void DisplayServerWindows::window_set_taskbar_progress_state(ProgressState p_state, WindowID p_window) {
+void DisplayServerWindows::window_set_taskbar_progress_state(ProgressState p_state, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2994,7 +2994,7 @@ void DisplayServerWindows::window_set_taskbar_progress_state(ProgressState p_sta
 	}
 }
 
-void DisplayServerWindows::window_move_to_foreground(WindowID p_window) {
+void DisplayServerWindows::window_move_to_foreground(DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -3005,7 +3005,7 @@ void DisplayServerWindows::window_move_to_foreground(WindowID p_window) {
 	}
 }
 
-bool DisplayServerWindows::window_is_focused(WindowID p_window) const {
+bool DisplayServerWindows::window_is_focused(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), false);
@@ -3014,11 +3014,11 @@ bool DisplayServerWindows::window_is_focused(WindowID p_window) const {
 	return wd.window_focused;
 }
 
-DisplayServerWindows::WindowID DisplayServerWindows::get_focused_window() const {
+DisplayServerEnums::WindowID DisplayServerWindows::get_focused_window() const {
 	return last_focused_window;
 }
 
-bool DisplayServerWindows::window_can_draw(WindowID p_window) const {
+bool DisplayServerWindows::window_can_draw(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), false);
@@ -3029,7 +3029,7 @@ bool DisplayServerWindows::window_can_draw(WindowID p_window) const {
 bool DisplayServerWindows::can_any_window_draw() const {
 	_THREAD_SAFE_METHOD_
 
-	for (const KeyValue<WindowID, WindowData> &E : windows) {
+	for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 		if (!E.value.minimized) {
 			return true;
 		}
@@ -3081,7 +3081,7 @@ int DisplayServerWindows::accessibility_screen_reader_active() const {
 Vector2i DisplayServerWindows::ime_get_selection() const {
 	_THREAD_SAFE_METHOD_
 
-	DisplayServer::WindowID window_id = _get_focused_window_or_popup();
+	DisplayServerEnums::WindowID window_id = _get_focused_window_or_popup();
 	const WindowData &wd = windows[window_id];
 	if (!wd.ime_active) {
 		return Vector2i();
@@ -3113,7 +3113,7 @@ Vector2i DisplayServerWindows::ime_get_selection() const {
 String DisplayServerWindows::ime_get_text() const {
 	_THREAD_SAFE_METHOD_
 
-	DisplayServer::WindowID window_id = _get_focused_window_or_popup();
+	DisplayServerEnums::WindowID window_id = _get_focused_window_or_popup();
 	const WindowData &wd = windows[window_id];
 	if (!wd.ime_active) {
 		return String();
@@ -3130,7 +3130,7 @@ String DisplayServerWindows::ime_get_text() const {
 	return ret;
 }
 
-void DisplayServerWindows::window_set_ime_active(const bool p_active, WindowID p_window) {
+void DisplayServerWindows::window_set_ime_active(const bool p_active, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -3148,7 +3148,7 @@ void DisplayServerWindows::window_set_ime_active(const bool p_active, WindowID p
 	}
 }
 
-void DisplayServerWindows::window_set_ime_position(const Point2i &p_pos, WindowID p_window) {
+void DisplayServerWindows::window_set_ime_position(const Point2i &p_pos, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -3411,7 +3411,7 @@ DisplayServerWindows::ScreenHdrData DisplayServerWindows::_get_screen_hdr_data(i
 	return data;
 }
 
-void DisplayServerWindows::_update_hdr_output_for_window(WindowID p_window, const WindowData &p_window_data, ScreenHdrData p_screen_data) {
+void DisplayServerWindows::_update_hdr_output_for_window(DisplayServerEnums::WindowID p_window, const WindowData &p_window_data, ScreenHdrData p_screen_data) {
 #ifdef RD_ENABLED
 	if (rendering_context) {
 		bool current_hdr_enabled = rendering_context->window_get_hdr_output_enabled(p_window);
@@ -3443,7 +3443,7 @@ void DisplayServerWindows::_update_hdr_output_for_window(WindowID p_window, cons
 
 void DisplayServerWindows::_update_hdr_output_for_tracked_windows() {
 	hdr_output_cache.clear();
-	for (const KeyValue<WindowID, WindowData> &E : windows) {
+	for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 		if (E.value.hdr_output_requested) {
 			int screen = window_get_current_screen(E.key);
 
@@ -3460,7 +3460,7 @@ void DisplayServerWindows::_update_hdr_output_for_tracked_windows() {
 	}
 }
 
-Error DisplayServerWindows::embed_process(WindowID p_window, OS::ProcessID p_pid, const Rect2i &p_rect, bool p_visible, bool p_grab_focus) {
+Error DisplayServerWindows::embed_process(DisplayServerEnums::WindowID p_window, OS::ProcessID p_pid, const Rect2i &p_rect, bool p_visible, bool p_grab_focus) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), FAILED);
@@ -3618,7 +3618,7 @@ Error DisplayServerWindows::dialog_show(String p_title, String p_description, Ve
 		buttons.push_back(s.utf16());
 	}
 
-	WindowID window_id = _get_focused_window_or_popup();
+	DisplayServerEnums::WindowID window_id = _get_focused_window_or_popup();
 	if (!windows.has(window_id)) {
 		window_id = MAIN_WINDOW_ID;
 	}
@@ -4287,7 +4287,7 @@ void DisplayServerWindows::set_native_icon(const String &p_filename) {
 	int err = 0;
 	SetLastError(err);
 
-	for (const KeyValue<WindowID, WindowData> &E : windows) {
+	for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 		SendMessage(E.value.hWnd, WM_SETICON, ICON_SMALL, (LPARAM)icon_small);
 		SendMessage(E.value.hWnd, WM_SETICON, ICON_BIG, (LPARAM)icon_big);
 	}
@@ -4350,12 +4350,12 @@ void DisplayServerWindows::set_icon(const Ref<Image> &p_icon) {
 		icon_big = CreateIconFromResourceEx(icon_bmp, icon_len, TRUE, 0x00030000, 0, 0, LR_DEFAULTSIZE);
 		ERR_FAIL_NULL(icon_big);
 
-		for (const KeyValue<WindowID, WindowData> &E : windows) {
+		for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 			SendMessage(E.value.hWnd, WM_SETICON, ICON_SMALL, (LPARAM)icon_big);
 			SendMessage(E.value.hWnd, WM_SETICON, ICON_BIG, (LPARAM)icon_big);
 		}
 	} else {
-		for (const KeyValue<WindowID, WindowData> &E : windows) {
+		for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 			SendMessage(E.value.hWnd, WM_SETICON, ICON_SMALL, 0);
 			SendMessage(E.value.hWnd, WM_SETICON, ICON_BIG, 0);
 		}
@@ -4571,7 +4571,7 @@ void DisplayServerWindows::delete_status_indicator(IndicatorID p_id) {
 	indicators.erase(p_id);
 }
 
-void DisplayServerWindows::window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_mode, WindowID p_window) {
+void DisplayServerWindows::window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 #if defined(RD_ENABLED)
 	if (rendering_context) {
@@ -4589,7 +4589,7 @@ void DisplayServerWindows::window_set_vsync_mode(DisplayServer::VSyncMode p_vsyn
 #endif
 }
 
-DisplayServer::VSyncMode DisplayServerWindows::window_get_vsync_mode(WindowID p_window) const {
+DisplayServer::VSyncMode DisplayServerWindows::window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 #if defined(RD_ENABLED)
 	if (rendering_context) {
@@ -4608,7 +4608,7 @@ DisplayServer::VSyncMode DisplayServerWindows::window_get_vsync_mode(WindowID p_
 	return DisplayServer::VSYNC_ENABLED;
 }
 
-bool DisplayServerWindows::window_is_hdr_output_supported(WindowID p_window) const {
+bool DisplayServerWindows::window_is_hdr_output_supported(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 #if defined(RD_ENABLED)
@@ -4623,7 +4623,7 @@ bool DisplayServerWindows::window_is_hdr_output_supported(WindowID p_window) con
 	return data.hdr_supported;
 }
 
-void DisplayServerWindows::window_request_hdr_output(const bool p_enable, WindowID p_window) {
+void DisplayServerWindows::window_request_hdr_output(const bool p_enable, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 #if defined(RD_ENABLED)
@@ -4638,14 +4638,14 @@ void DisplayServerWindows::window_request_hdr_output(const bool p_enable, Window
 	_update_hdr_output_for_window(p_window, wd, data);
 }
 
-bool DisplayServerWindows::window_is_hdr_output_requested(WindowID p_window) const {
+bool DisplayServerWindows::window_is_hdr_output_requested(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	const WindowData &wd = windows[p_window];
 	return wd.hdr_output_requested;
 }
 
-bool DisplayServerWindows::window_is_hdr_output_enabled(WindowID p_window) const {
+bool DisplayServerWindows::window_is_hdr_output_enabled(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 #if defined(RD_ENABLED)
@@ -4657,7 +4657,7 @@ bool DisplayServerWindows::window_is_hdr_output_enabled(WindowID p_window) const
 	return false;
 }
 
-void DisplayServerWindows::window_set_hdr_output_reference_luminance(const float p_reference_luminance, WindowID p_window) {
+void DisplayServerWindows::window_set_hdr_output_reference_luminance(const float p_reference_luminance, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	WindowData &wd = windows[p_window];
@@ -4683,14 +4683,14 @@ void DisplayServerWindows::window_set_hdr_output_reference_luminance(const float
 	}
 }
 
-float DisplayServerWindows::window_get_hdr_output_reference_luminance(WindowID p_window) const {
+float DisplayServerWindows::window_get_hdr_output_reference_luminance(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	const WindowData &wd = windows[p_window];
 	return wd.hdr_output_reference_luminance;
 }
 
-float DisplayServerWindows::window_get_hdr_output_current_reference_luminance(WindowID p_window) const {
+float DisplayServerWindows::window_get_hdr_output_current_reference_luminance(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 #if defined(RD_ENABLED)
@@ -4702,7 +4702,7 @@ float DisplayServerWindows::window_get_hdr_output_current_reference_luminance(Wi
 	return 0.0f;
 }
 
-void DisplayServerWindows::window_set_hdr_output_max_luminance(const float p_max_luminance, WindowID p_window) {
+void DisplayServerWindows::window_set_hdr_output_max_luminance(const float p_max_luminance, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	WindowData &wd = windows[p_window];
@@ -4728,14 +4728,14 @@ void DisplayServerWindows::window_set_hdr_output_max_luminance(const float p_max
 	}
 }
 
-float DisplayServerWindows::window_get_hdr_output_max_luminance(WindowID p_window) const {
+float DisplayServerWindows::window_get_hdr_output_max_luminance(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	const WindowData &wd = windows[p_window];
 	return wd.hdr_output_max_luminance;
 }
 
-float DisplayServerWindows::window_get_hdr_output_current_max_luminance(WindowID p_window) const {
+float DisplayServerWindows::window_get_hdr_output_current_max_luminance(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 #if defined(RD_ENABLED)
@@ -4747,7 +4747,7 @@ float DisplayServerWindows::window_get_hdr_output_current_max_luminance(WindowID
 	return 0.0f;
 }
 
-float DisplayServerWindows::window_get_output_max_linear_value(WindowID p_window) const {
+float DisplayServerWindows::window_get_output_max_linear_value(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 #if defined(RD_ENABLED)
@@ -4759,7 +4759,7 @@ float DisplayServerWindows::window_get_output_max_linear_value(WindowID p_window
 	return 1.0f; // SDR
 }
 
-void DisplayServerWindows::window_start_drag(WindowID p_window) {
+void DisplayServerWindows::window_start_drag(DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -4791,7 +4791,7 @@ void DisplayServerWindows::window_start_drag(WindowID p_window) {
 	}
 }
 
-void DisplayServerWindows::window_start_resize(WindowResizeEdge p_edge, WindowID p_window) {
+void DisplayServerWindows::window_start_resize(WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_INDEX(int(p_edge), WINDOW_EDGE_MAX);
@@ -4874,7 +4874,7 @@ bool DisplayServerWindows::is_window_transparency_available() const {
 // This one tells whether the event comes from touchscreen (and not from pen).
 #define IsTouchEvent(dw) (IsPenEvent(dw) && ((dw) & 0x80))
 
-void DisplayServerWindows::_touch_event(WindowID p_window, bool p_pressed, float p_x, float p_y, int idx) {
+void DisplayServerWindows::_touch_event(DisplayServerEnums::WindowID p_window, bool p_pressed, float p_x, float p_y, int idx) {
 	if (touch_state.has(idx) == p_pressed) {
 		return;
 	}
@@ -4895,7 +4895,7 @@ void DisplayServerWindows::_touch_event(WindowID p_window, bool p_pressed, float
 	Input::get_singleton()->parse_input_event(event);
 }
 
-void DisplayServerWindows::_drag_event(WindowID p_window, float p_x, float p_y, int idx) {
+void DisplayServerWindows::_drag_event(DisplayServerEnums::WindowID p_window, float p_x, float p_y, int idx) {
 	RBMap<int, Vector2>::Element *curr = touch_state.find(idx);
 	if (!curr) {
 		return;
@@ -4936,7 +4936,7 @@ void DisplayServerWindows::_dispatch_input_event(const Ref<InputEvent> &p_event)
 	in_dispatch_input_event = true;
 
 	{
-		List<WindowID>::Element *E = popup_list.back();
+		List<DisplayServerEnums::WindowID>::Element *E = popup_list.back();
 		if (E && Object::cast_to<InputEventKey>(*p_event)) {
 			// Redirect keyboard input to active popup.
 			if (windows.has(E->get())) {
@@ -4962,7 +4962,7 @@ void DisplayServerWindows::_dispatch_input_event(const Ref<InputEvent> &p_event)
 	} else {
 		// Send to all windows. Copy all pending callbacks, since callback can erase window.
 		Vector<Callable> cbs;
-		for (KeyValue<WindowID, WindowData> &E : windows) {
+		for (KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 			Callable callable = E.value.input_event_callback;
 			if (callable.is_valid()) {
 				cbs.push_back(callable);
@@ -4985,8 +4985,8 @@ LRESULT CALLBACK MouseProc(int code, WPARAM wParam, LPARAM lParam) {
 	}
 }
 
-DisplayServer::WindowID DisplayServerWindows::window_get_active_popup() const {
-	const List<WindowID>::Element *E = popup_list.back();
+DisplayServerEnums::WindowID DisplayServerWindows::window_get_active_popup() const {
+	const List<DisplayServerEnums::WindowID>::Element *E = popup_list.back();
 	if (E) {
 		return E->get();
 	} else {
@@ -4994,7 +4994,7 @@ DisplayServer::WindowID DisplayServerWindows::window_get_active_popup() const {
 	}
 }
 
-void DisplayServerWindows::window_set_popup_safe_rect(WindowID p_window, const Rect2i &p_rect) {
+void DisplayServerWindows::window_set_popup_safe_rect(DisplayServerEnums::WindowID p_window, const Rect2i &p_rect) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -5002,7 +5002,7 @@ void DisplayServerWindows::window_set_popup_safe_rect(WindowID p_window, const R
 	wd.parent_safe_rect = p_rect;
 }
 
-Rect2i DisplayServerWindows::window_get_popup_safe_rect(WindowID p_window) const {
+Rect2i DisplayServerWindows::window_get_popup_safe_rect(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), Rect2i());
@@ -5010,13 +5010,13 @@ Rect2i DisplayServerWindows::window_get_popup_safe_rect(WindowID p_window) const
 	return wd.parent_safe_rect;
 }
 
-void DisplayServerWindows::popup_open(WindowID p_window) {
+void DisplayServerWindows::popup_open(DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	bool has_popup_ancestor = false;
-	WindowID transient_root = p_window;
+	DisplayServerEnums::WindowID transient_root = p_window;
 	while (true) {
-		WindowID parent = windows[transient_root].transient_parent;
+		DisplayServerEnums::WindowID parent = windows[transient_root].transient_parent;
 		if (parent == INVALID_WINDOW_ID) {
 			break;
 		} else {
@@ -5034,8 +5034,8 @@ void DisplayServerWindows::popup_open(WindowID p_window) {
 	WindowData &wd = windows[p_window];
 	if (wd.is_popup || (has_popup_ancestor && !ignores_input)) {
 		// Find current popup parent, or root popup if new window is not transient.
-		List<WindowID>::Element *C = nullptr;
-		List<WindowID>::Element *E = popup_list.back();
+		List<DisplayServerEnums::WindowID>::Element *C = nullptr;
+		List<DisplayServerEnums::WindowID>::Element *E = popup_list.back();
 		while (E) {
 			if (wd.transient_parent != E->get() || wd.transient_parent == INVALID_WINDOW_ID) {
 				C = E;
@@ -5053,13 +5053,13 @@ void DisplayServerWindows::popup_open(WindowID p_window) {
 	}
 }
 
-void DisplayServerWindows::popup_close(WindowID p_window) {
+void DisplayServerWindows::popup_close(DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
-	List<WindowID>::Element *E = popup_list.find(p_window);
+	List<DisplayServerEnums::WindowID>::Element *E = popup_list.find(p_window);
 	while (E) {
-		List<WindowID>::Element *F = E->next();
-		WindowID win_id = E->get();
+		List<DisplayServerEnums::WindowID>::Element *F = E->next();
+		DisplayServerEnums::WindowID win_id = E->get();
 		popup_list.erase(E);
 
 		if (win_id != p_window) {
@@ -5108,8 +5108,8 @@ LRESULT DisplayServerWindows::MouseProc(int code, WPARAM wParam, LPARAM lParam) 
 			case WM_MBUTTONDOWN: {
 				MOUSEHOOKSTRUCT *ms = (MOUSEHOOKSTRUCT *)lParam;
 				Point2i pos = Point2i(ms->pt.x, ms->pt.y) - _get_screens_origin();
-				List<WindowID>::Element *C = nullptr;
-				List<WindowID>::Element *E = popup_list.back();
+				List<DisplayServerEnums::WindowID>::Element *C = nullptr;
+				List<DisplayServerEnums::WindowID>::Element *E = popup_list.back();
 				// Find top popup to close.
 				while (E) {
 					// Popup window area.
@@ -5184,13 +5184,13 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 		}
 	}
 
-	WindowID window_id = INVALID_WINDOW_ID;
+	DisplayServerEnums::WindowID window_id = INVALID_WINDOW_ID;
 	bool window_created = false;
 
 	// Check whether window exists
 	// FIXME this is O(n), where n is the set of currently open windows and subwindows
-	// we should have a secondary map from HWND to WindowID or even WindowData* alias, if we want to eliminate all the map lookups below
-	for (const KeyValue<WindowID, WindowData> &E : windows) {
+	// we should have a secondary map from HWND to DisplayServerEnums::WindowID or even WindowData* alias, if we want to eliminate all the map lookups below
+	for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 		if (E.value.hWnd == hWnd) {
 			window_id = E.key;
 			window_created = true;
@@ -5717,8 +5717,8 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			uint64_t delta = OS::get_singleton()->get_ticks_msec() - time_since_popup;
 			if (delta > 250) {
 				Point2i pos = Point2i(coords.x, coords.y) - _get_screens_origin();
-				List<WindowID>::Element *C = nullptr;
-				List<WindowID>::Element *E = popup_list.back();
+				List<DisplayServerEnums::WindowID>::Element *C = nullptr;
+				List<DisplayServerEnums::WindowID>::Element *E = popup_list.back();
 				// Find top popup to close.
 				while (E) {
 					// Popup window area.
@@ -5926,7 +5926,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 				}
 			}
 
-			DisplayServer::WindowID over_id = get_window_at_screen_position(mouse_get_position());
+			DisplayServerEnums::WindowID over_id = get_window_at_screen_position(mouse_get_position());
 			if (windows.has(over_id) && !Rect2(window_get_position(over_id), Point2(windows[over_id].width, windows[over_id].height)).has_point(mouse_get_position())) {
 				// Don't consider the windowborder as part of the window.
 				over_id = INVALID_WINDOW_ID;
@@ -5959,7 +5959,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 				break;
 			}
 
-			DisplayServer::WindowID receiving_window_id = window_id;
+			DisplayServerEnums::WindowID receiving_window_id = window_id;
 			if (!windows[window_id].no_focus) {
 				receiving_window_id = _get_focused_window_or_popup();
 				if (receiving_window_id == INVALID_WINDOW_ID) {
@@ -6574,7 +6574,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	}
 }
 
-void DisplayServerWindows::_process_activate_event(WindowID p_window_id) {
+void DisplayServerWindows::_process_activate_event(DisplayServerEnums::WindowID p_window_id) {
 	WindowData &wd = windows[p_window_id];
 	if (wd.activate_state == WA_ACTIVE || wd.activate_state == WA_CLICKACTIVE) {
 		last_focused_window = p_window_id;
@@ -6775,7 +6775,7 @@ void DisplayServerWindows::_process_key_events() {
 }
 
 void DisplayServerWindows::_update_tablet_ctx(const String &p_old_driver, const String &p_new_driver) {
-	for (KeyValue<WindowID, WindowData> &E : windows) {
+	for (KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 		WindowData &wd = E.value;
 		wd.block_mm = false;
 		if ((p_old_driver == "wintab") && wintab_available && wd.wtctx) {
@@ -6813,7 +6813,7 @@ void DisplayServerWindows::_update_tablet_ctx(const String &p_old_driver, const 
 	}
 }
 
-Error DisplayServerWindows::_create_window(WindowID p_window_id, WindowMode p_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, WindowID p_transient_parent, HWND p_parent_hwnd, bool p_no_redirection_bitmap) {
+Error DisplayServerWindows::_create_window(DisplayServerEnums::WindowID p_window_id, WindowMode p_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent, HWND p_parent_hwnd, bool p_no_redirection_bitmap) {
 	DWORD dwExStyle;
 	DWORD dwStyle;
 
@@ -6867,7 +6867,7 @@ Error DisplayServerWindows::_create_window(WindowID p_window_id, WindowMode p_mo
 		AdjustWindowRectEx(&WindowRect, dwStyle, FALSE, dwExStyle);
 	}
 
-	WindowID id = p_window_id;
+	DisplayServerEnums::WindowID id = p_window_id;
 	{
 		WindowData *wd_transient_parent = nullptr;
 		HWND owner_hwnd = nullptr;
@@ -7065,7 +7065,7 @@ Error DisplayServerWindows::_create_window(WindowID p_window_id, WindowMode p_mo
 	return OK;
 }
 
-void DisplayServerWindows::_destroy_window(WindowID p_window_id) {
+void DisplayServerWindows::_destroy_window(DisplayServerEnums::WindowID p_window_id) {
 	WindowData &wd = windows[p_window_id];
 
 	IPropertyStore *prop_store;
@@ -7092,7 +7092,7 @@ void DisplayServerWindows::_destroy_window(WindowID p_window_id) {
 }
 
 #ifdef RD_ENABLED
-Error DisplayServerWindows::_create_rendering_context_window(WindowID p_window_id, const String &p_rendering_driver) {
+Error DisplayServerWindows::_create_rendering_context_window(DisplayServerEnums::WindowID p_window_id, const String &p_rendering_driver) {
 	DEV_ASSERT(rendering_context != nullptr);
 
 	WindowData &wd = windows[p_window_id];
@@ -7127,7 +7127,7 @@ Error DisplayServerWindows::_create_rendering_context_window(WindowID p_window_i
 	return OK;
 }
 
-void DisplayServerWindows::_destroy_rendering_context_window(WindowID p_window_id) {
+void DisplayServerWindows::_destroy_rendering_context_window(DisplayServerEnums::WindowID p_window_id) {
 	DEV_ASSERT(rendering_context != nullptr);
 
 	WindowData &wd = windows[p_window_id];
@@ -7139,7 +7139,7 @@ void DisplayServerWindows::_destroy_rendering_context_window(WindowID p_window_i
 #endif
 
 #ifdef GLES3_ENABLED
-Error DisplayServerWindows::_create_gl_window(WindowID p_window_id) {
+Error DisplayServerWindows::_create_gl_window(DisplayServerEnums::WindowID p_window_id) {
 	if (gl_manager_native) {
 		WindowData &wd = windows[p_window_id];
 

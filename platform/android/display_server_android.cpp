@@ -222,7 +222,7 @@ void DisplayServerAndroid::emit_input_dialog_callback(String p_text) {
 	}
 }
 
-Error DisplayServerAndroid::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, WindowID p_window_id) {
+Error DisplayServerAndroid::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	GodotJavaWrapper *godot_java = OS_Android::get_singleton()->get_godot_java();
 	ERR_FAIL_NULL_V(godot_java, FAILED);
 	file_picker_callback = p_callback;
@@ -421,23 +421,23 @@ bool DisplayServerAndroid::has_hardware_keyboard() const {
 	return godot_io_java->has_hardware_keyboard();
 }
 
-void DisplayServerAndroid::window_set_window_event_callback(const Callable &p_callable, DisplayServer::WindowID p_window) {
+void DisplayServerAndroid::window_set_window_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	window_event_callback = p_callable;
 }
 
-void DisplayServerAndroid::window_set_input_event_callback(const Callable &p_callable, DisplayServer::WindowID p_window) {
+void DisplayServerAndroid::window_set_input_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	input_event_callback = p_callable;
 }
 
-void DisplayServerAndroid::window_set_input_text_callback(const Callable &p_callable, DisplayServer::WindowID p_window) {
+void DisplayServerAndroid::window_set_input_text_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	input_text_callback = p_callable;
 }
 
-void DisplayServerAndroid::window_set_rect_changed_callback(const Callable &p_callable, DisplayServer::WindowID p_window) {
+void DisplayServerAndroid::window_set_rect_changed_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	rect_changed_callback = p_callable;
 }
 
-void DisplayServerAndroid::window_set_drop_files_callback(const Callable &p_callable, DisplayServer::WindowID p_window) {
+void DisplayServerAndroid::window_set_drop_files_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	// Not supported on Android.
 }
 
@@ -468,17 +468,17 @@ void DisplayServerAndroid::_dispatch_input_events(const Ref<InputEvent> &p_event
 	DisplayServerAndroid::get_singleton()->send_input_event(p_event);
 }
 
-Vector<DisplayServer::WindowID> DisplayServerAndroid::get_window_list() const {
-	Vector<WindowID> ret;
+Vector<DisplayServerEnums::WindowID> DisplayServerAndroid::get_window_list() const {
+	Vector<DisplayServerEnums::WindowID> ret;
 	ret.push_back(MAIN_WINDOW_ID);
 	return ret;
 }
 
-DisplayServer::WindowID DisplayServerAndroid::get_window_at_screen_position(const Point2i &p_position) const {
+DisplayServerEnums::WindowID DisplayServerAndroid::get_window_at_screen_position(const Point2i &p_position) const {
 	return MAIN_WINDOW_ID;
 }
 
-int64_t DisplayServerAndroid::window_get_native_handle(HandleType p_handle_type, WindowID p_window) const {
+int64_t DisplayServerAndroid::window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
 	ERR_FAIL_COND_V(p_window != MAIN_WINDOW_ID, 0);
 	switch (p_handle_type) {
 		case WINDOW_HANDLE: {
@@ -515,76 +515,76 @@ int64_t DisplayServerAndroid::window_get_native_handle(HandleType p_handle_type,
 	}
 }
 
-void DisplayServerAndroid::window_attach_instance_id(ObjectID p_instance, DisplayServer::WindowID p_window) {
+void DisplayServerAndroid::window_attach_instance_id(ObjectID p_instance, DisplayServerEnums::WindowID p_window) {
 	window_attached_instance_id = p_instance;
 }
 
-ObjectID DisplayServerAndroid::window_get_attached_instance_id(DisplayServer::WindowID p_window) const {
+ObjectID DisplayServerAndroid::window_get_attached_instance_id(DisplayServerEnums::WindowID p_window) const {
 	return window_attached_instance_id;
 }
 
-void DisplayServerAndroid::window_set_title(const String &p_title, DisplayServer::WindowID p_window) {
+void DisplayServerAndroid::window_set_title(const String &p_title, DisplayServerEnums::WindowID p_window) {
 	// Not supported on Android.
 }
 
-int DisplayServerAndroid::window_get_current_screen(DisplayServer::WindowID p_window) const {
+int DisplayServerAndroid::window_get_current_screen(DisplayServerEnums::WindowID p_window) const {
 	ERR_FAIL_COND_V(p_window != MAIN_WINDOW_ID, INVALID_SCREEN);
 	return 0;
 }
 
-void DisplayServerAndroid::window_set_current_screen(int p_screen, DisplayServer::WindowID p_window) {
+void DisplayServerAndroid::window_set_current_screen(int p_screen, DisplayServerEnums::WindowID p_window) {
 	// Not supported on Android.
 }
 
-Point2i DisplayServerAndroid::window_get_position(DisplayServer::WindowID p_window) const {
+Point2i DisplayServerAndroid::window_get_position(DisplayServerEnums::WindowID p_window) const {
 	return Point2i();
 }
 
-Point2i DisplayServerAndroid::window_get_position_with_decorations(DisplayServer::WindowID p_window) const {
+Point2i DisplayServerAndroid::window_get_position_with_decorations(DisplayServerEnums::WindowID p_window) const {
 	return Point2i();
 }
 
-void DisplayServerAndroid::window_set_position(const Point2i &p_position, DisplayServer::WindowID p_window) {
+void DisplayServerAndroid::window_set_position(const Point2i &p_position, DisplayServerEnums::WindowID p_window) {
 	// Not supported on Android.
 }
 
-void DisplayServerAndroid::window_set_transient(DisplayServer::WindowID p_window, DisplayServer::WindowID p_parent) {
+void DisplayServerAndroid::window_set_transient(DisplayServerEnums::WindowID p_window, DisplayServerEnums::WindowID p_parent) {
 	// Not supported on Android.
 }
 
-void DisplayServerAndroid::window_set_max_size(const Size2i p_size, DisplayServer::WindowID p_window) {
+void DisplayServerAndroid::window_set_max_size(const Size2i p_size, DisplayServerEnums::WindowID p_window) {
 	// Not supported on Android.
 }
 
-Size2i DisplayServerAndroid::window_get_max_size(DisplayServer::WindowID p_window) const {
+Size2i DisplayServerAndroid::window_get_max_size(DisplayServerEnums::WindowID p_window) const {
 	return Size2i();
 }
 
-void DisplayServerAndroid::window_set_min_size(const Size2i p_size, DisplayServer::WindowID p_window) {
+void DisplayServerAndroid::window_set_min_size(const Size2i p_size, DisplayServerEnums::WindowID p_window) {
 	// Not supported on Android.
 }
 
-Size2i DisplayServerAndroid::window_get_min_size(DisplayServer::WindowID p_window) const {
+Size2i DisplayServerAndroid::window_get_min_size(DisplayServerEnums::WindowID p_window) const {
 	return Size2i();
 }
 
-void DisplayServerAndroid::window_set_size(const Size2i p_size, DisplayServer::WindowID p_window) {
+void DisplayServerAndroid::window_set_size(const Size2i p_size, DisplayServerEnums::WindowID p_window) {
 	// Not supported on Android.
 }
 
-Size2i DisplayServerAndroid::window_get_size(DisplayServer::WindowID p_window) const {
+Size2i DisplayServerAndroid::window_get_size(DisplayServerEnums::WindowID p_window) const {
 	return OS_Android::get_singleton()->get_display_size();
 }
 
-Size2i DisplayServerAndroid::window_get_size_with_decorations(DisplayServer::WindowID p_window) const {
+Size2i DisplayServerAndroid::window_get_size_with_decorations(DisplayServerEnums::WindowID p_window) const {
 	return OS_Android::get_singleton()->get_display_size();
 }
 
-void DisplayServerAndroid::window_set_mode(DisplayServer::WindowMode p_mode, DisplayServer::WindowID p_window) {
+void DisplayServerAndroid::window_set_mode(DisplayServer::WindowMode p_mode, DisplayServerEnums::WindowID p_window) {
 	OS_Android::get_singleton()->get_godot_java()->enable_immersive_mode(p_mode == WINDOW_MODE_FULLSCREEN || p_mode == WINDOW_MODE_EXCLUSIVE_FULLSCREEN);
 }
 
-DisplayServer::WindowMode DisplayServerAndroid::window_get_mode(DisplayServer::WindowID p_window) const {
+DisplayServer::WindowMode DisplayServerAndroid::window_get_mode(DisplayServerEnums::WindowID p_window) const {
 	if (OS_Android::get_singleton()->get_godot_java()->is_in_immersive_mode()) {
 		return WINDOW_MODE_FULLSCREEN;
 	} else {
@@ -592,15 +592,15 @@ DisplayServer::WindowMode DisplayServerAndroid::window_get_mode(DisplayServer::W
 	}
 }
 
-bool DisplayServerAndroid::window_is_maximize_allowed(DisplayServer::WindowID p_window) const {
+bool DisplayServerAndroid::window_is_maximize_allowed(DisplayServerEnums::WindowID p_window) const {
 	return false;
 }
 
-void DisplayServerAndroid::window_set_flag(DisplayServer::WindowFlags p_flag, bool p_enabled, DisplayServer::WindowID p_window) {
+void DisplayServerAndroid::window_set_flag(DisplayServer::WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
 	// Not supported on Android.
 }
 
-bool DisplayServerAndroid::window_get_flag(DisplayServer::WindowFlags p_flag, DisplayServer::WindowID p_window) const {
+bool DisplayServerAndroid::window_get_flag(DisplayServer::WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
 	ERR_FAIL_COND_V(p_window != MAIN_WINDOW_ID, false);
 	switch (p_flag) {
 		case WindowFlags::WINDOW_FLAG_TRANSPARENT:
@@ -611,19 +611,19 @@ bool DisplayServerAndroid::window_get_flag(DisplayServer::WindowFlags p_flag, Di
 	}
 }
 
-void DisplayServerAndroid::window_request_attention(DisplayServer::WindowID p_window) {
+void DisplayServerAndroid::window_request_attention(DisplayServerEnums::WindowID p_window) {
 	// Not supported on Android.
 }
 
-void DisplayServerAndroid::window_move_to_foreground(DisplayServer::WindowID p_window) {
+void DisplayServerAndroid::window_move_to_foreground(DisplayServerEnums::WindowID p_window) {
 	// Not supported on Android.
 }
 
-bool DisplayServerAndroid::window_is_focused(WindowID p_window) const {
+bool DisplayServerAndroid::window_is_focused(DisplayServerEnums::WindowID p_window) const {
 	return true;
 }
 
-bool DisplayServerAndroid::window_can_draw(DisplayServer::WindowID p_window) const {
+bool DisplayServerAndroid::window_can_draw(DisplayServerEnums::WindowID p_window) const {
 	return true;
 }
 
@@ -962,7 +962,7 @@ void DisplayServerAndroid::cursor_set_custom_image(const Ref<Resource> &p_cursor
 	_cursor_set_shape_helper(p_shape, true);
 }
 
-void DisplayServerAndroid::window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_mode, WindowID p_window) {
+void DisplayServerAndroid::window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window) {
 #if defined(RD_ENABLED)
 	if (rendering_context_global) {
 		rendering_context_global->window_set_vsync_mode(p_window, p_vsync_mode);
@@ -970,7 +970,7 @@ void DisplayServerAndroid::window_set_vsync_mode(DisplayServer::VSyncMode p_vsyn
 #endif
 }
 
-DisplayServer::VSyncMode DisplayServerAndroid::window_get_vsync_mode(WindowID p_window) const {
+DisplayServer::VSyncMode DisplayServerAndroid::window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const {
 #if defined(RD_ENABLED)
 	if (rendering_context_global) {
 		return rendering_context_global->window_get_vsync_mode(p_window);

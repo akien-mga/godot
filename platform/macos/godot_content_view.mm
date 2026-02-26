@@ -49,7 +49,7 @@
 	return self;
 }
 
-- (void)setWindowID:(DisplayServerMacOS::WindowID)wid {
+- (void)setWindowID:(DisplayServerEnums::WindowID)wid {
 	window_id = wid;
 }
 
@@ -157,7 +157,7 @@
 	return self;
 }
 
-- (void)setWindowID:(DisplayServerMacOS::WindowID)wid {
+- (void)setWindowID:(DisplayServerEnums::WindowID)wid {
 	window_id = wid;
 	[layer_delegate setWindowID:window_id];
 }

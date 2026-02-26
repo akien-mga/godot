@@ -610,41 +610,41 @@ int DisplayServer::get_screen_from_rect(const Rect2 &p_rect) const {
 	return pos_screen;
 }
 
-DisplayServer::WindowID DisplayServer::create_sub_window(WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, WindowID p_transient_parent) {
+DisplayServerEnums::WindowID DisplayServer::create_sub_window(WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
 	ERR_FAIL_V_MSG(INVALID_WINDOW_ID, "Sub-windows not supported by this display server.");
 }
 
-void DisplayServer::show_window(WindowID p_id) {
+void DisplayServer::show_window(DisplayServerEnums::WindowID p_id) {
 	ERR_FAIL_MSG("Sub-windows not supported by this display server.");
 }
 
-void DisplayServer::delete_sub_window(WindowID p_id) {
+void DisplayServer::delete_sub_window(DisplayServerEnums::WindowID p_id) {
 	ERR_FAIL_MSG("Sub-windows not supported by this display server.");
 }
 
-void DisplayServer::window_set_exclusive(WindowID p_window, bool p_exclusive) {
+void DisplayServer::window_set_exclusive(DisplayServerEnums::WindowID p_window, bool p_exclusive) {
 	// Do nothing, if not supported.
 }
 
-void DisplayServer::window_set_mouse_passthrough(const Vector<Vector2> &p_region, WindowID p_window) {
+void DisplayServer::window_set_mouse_passthrough(const Vector<Vector2> &p_region, DisplayServerEnums::WindowID p_window) {
 	ERR_FAIL_MSG("Mouse passthrough not supported by this display server.");
 }
 
-void DisplayServer::gl_window_make_current(DisplayServer::WindowID p_window_id) {
+void DisplayServer::gl_window_make_current(DisplayServerEnums::WindowID p_window_id) {
 	// noop except in gles
 }
 
-void DisplayServer::window_set_ime_active(const bool p_active, WindowID p_window) {
+void DisplayServer::window_set_ime_active(const bool p_active, DisplayServerEnums::WindowID p_window) {
 	WARN_PRINT("IME not supported by this display server.");
 }
 
-void DisplayServer::window_set_ime_position(const Point2i &p_pos, WindowID p_window) {
+void DisplayServer::window_set_ime_position(const Point2i &p_pos, DisplayServerEnums::WindowID p_window) {
 	WARN_PRINT("IME not supported by this display server.");
 }
 
 #ifndef DISABLE_DEPRECATED
 
-RID DisplayServer::accessibility_create_element(WindowID p_window, AccessibilityRole p_role) {
+RID DisplayServer::accessibility_create_element(DisplayServerEnums::WindowID p_window, AccessibilityRole p_role) {
 	if (AccessibilityServer::get_singleton()) {
 		return AccessibilityServer::get_singleton()->create_element(p_window, (AccessibilityServerEnums::AccessibilityRole)p_role);
 	} else {
@@ -708,7 +708,7 @@ void DisplayServer::accessibility_update_set_focus(const RID &p_id) {
 	}
 }
 
-RID DisplayServer::accessibility_get_window_root(DisplayServer::WindowID p_window_id) const {
+RID DisplayServer::accessibility_get_window_root(DisplayServerEnums::WindowID p_window_id) const {
 	if (AccessibilityServer::get_singleton()) {
 		return AccessibilityServer::get_singleton()->get_window_root(p_window_id);
 	} else {
@@ -716,31 +716,31 @@ RID DisplayServer::accessibility_get_window_root(DisplayServer::WindowID p_windo
 	}
 }
 
-void DisplayServer::accessibility_set_window_rect(DisplayServer::WindowID p_window_id, const Rect2 &p_rect_out, const Rect2 &p_rect_in) {
+void DisplayServer::accessibility_set_window_rect(DisplayServerEnums::WindowID p_window_id, const Rect2 &p_rect_out, const Rect2 &p_rect_in) {
 	if (AccessibilityServer::get_singleton()) {
 		AccessibilityServer::get_singleton()->set_window_rect(p_window_id, p_rect_out, p_rect_in);
 	}
 }
 
-void DisplayServer::accessibility_set_window_focused(DisplayServer::WindowID p_window_id, bool p_focused) {
+void DisplayServer::accessibility_set_window_focused(DisplayServerEnums::WindowID p_window_id, bool p_focused) {
 	if (AccessibilityServer::get_singleton()) {
 		AccessibilityServer::get_singleton()->set_window_focused(p_window_id, p_focused);
 	}
 }
 
-void DisplayServer::accessibility_set_window_callbacks(DisplayServer::WindowID p_window_id, const Callable &p_activate_callable, const Callable &p_deativate_callable) {
+void DisplayServer::accessibility_set_window_callbacks(DisplayServerEnums::WindowID p_window_id, const Callable &p_activate_callable, const Callable &p_deativate_callable) {
 	if (AccessibilityServer::get_singleton()) {
 		AccessibilityServer::get_singleton()->set_window_callbacks(p_window_id, p_activate_callable, p_deativate_callable);
 	}
 }
 
-void DisplayServer::accessibility_window_activation_completed(DisplayServer::WindowID p_window_id) {
+void DisplayServer::accessibility_window_activation_completed(DisplayServerEnums::WindowID p_window_id) {
 	if (AccessibilityServer::get_singleton()) {
 		AccessibilityServer::get_singleton()->window_activation_completed(p_window_id);
 	}
 }
 
-void DisplayServer::accessibility_window_deactivation_completed(DisplayServer::WindowID p_window_id) {
+void DisplayServer::accessibility_window_deactivation_completed(DisplayServerEnums::WindowID p_window_id) {
 	if (AccessibilityServer::get_singleton()) {
 		AccessibilityServer::get_singleton()->window_deactivation_completed(p_window_id);
 	}
@@ -1159,7 +1159,7 @@ bool DisplayServer::get_swap_cancel_ok() {
 void DisplayServer::enable_for_stealing_focus(OS::ProcessID pid) {
 }
 
-Error DisplayServer::embed_process(WindowID p_window, OS::ProcessID p_pid, const Rect2i &p_rect, bool p_visible, bool p_grab_focus) {
+Error DisplayServer::embed_process(DisplayServerEnums::WindowID p_window, OS::ProcessID p_pid, const Rect2i &p_rect, bool p_visible, bool p_grab_focus) {
 	WARN_PRINT("Embedded process not supported by this display server.");
 	return ERR_UNAVAILABLE;
 }
@@ -1189,12 +1189,12 @@ Error DisplayServer::dialog_input_text(String p_title, String p_description, Str
 	return ERR_UNAVAILABLE;
 }
 
-Error DisplayServer::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, WindowID p_window_id) {
+Error DisplayServer::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	WARN_PRINT("Native dialogs not supported by this display server.");
 	return ERR_UNAVAILABLE;
 }
 
-Error DisplayServer::file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, WindowID p_window_id) {
+Error DisplayServer::file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	WARN_PRINT("Native dialogs not supported by this display server.");
 	return ERR_UNAVAILABLE;
 }
@@ -1285,67 +1285,67 @@ void DisplayServer::delete_status_indicator(IndicatorID p_id) {
 	WARN_PRINT("Status indicator not supported by this display server.");
 }
 
-int64_t DisplayServer::window_get_native_handle(HandleType p_handle_type, WindowID p_window) const {
+int64_t DisplayServer::window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
 	WARN_PRINT("Native handle not supported by this display server.");
 	return 0;
 }
 
-void DisplayServer::window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_mode, WindowID p_window) {
+void DisplayServer::window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window) {
 	WARN_PRINT("Changing the V-Sync mode is not supported by this display server.");
 }
 
-DisplayServer::VSyncMode DisplayServer::window_get_vsync_mode(WindowID p_window) const {
+DisplayServer::VSyncMode DisplayServer::window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const {
 	WARN_PRINT("Changing the V-Sync mode is not supported by this display server.");
 	return VSyncMode::VSYNC_ENABLED;
 }
 
-bool DisplayServer::window_is_hdr_output_supported(WindowID p_window) const {
+bool DisplayServer::window_is_hdr_output_supported(DisplayServerEnums::WindowID p_window) const {
 	return false;
 }
 
-void DisplayServer::window_request_hdr_output(const bool p_enable, WindowID p_window) {
+void DisplayServer::window_request_hdr_output(const bool p_enable, DisplayServerEnums::WindowID p_window) {
 	if (p_enable) {
 		WARN_PRINT_ED("HDR output is not supported by this display server.");
 	}
 }
 
-bool DisplayServer::window_is_hdr_output_requested(WindowID p_window) const {
+bool DisplayServer::window_is_hdr_output_requested(DisplayServerEnums::WindowID p_window) const {
 	return false;
 }
 
-bool DisplayServer::window_is_hdr_output_enabled(WindowID p_window) const {
+bool DisplayServer::window_is_hdr_output_enabled(DisplayServerEnums::WindowID p_window) const {
 	return false;
 }
 
-void DisplayServer::window_set_hdr_output_reference_luminance(const float p_reference_luminance, WindowID p_window) {
+void DisplayServer::window_set_hdr_output_reference_luminance(const float p_reference_luminance, DisplayServerEnums::WindowID p_window) {
 	WARN_PRINT_ED("HDR output is not supported by this display server.");
 }
 
-float DisplayServer::window_get_hdr_output_reference_luminance(WindowID p_window) const {
+float DisplayServer::window_get_hdr_output_reference_luminance(DisplayServerEnums::WindowID p_window) const {
 	return -1.0f;
 }
 
-float DisplayServer::window_get_hdr_output_current_reference_luminance(WindowID p_window) const {
+float DisplayServer::window_get_hdr_output_current_reference_luminance(DisplayServerEnums::WindowID p_window) const {
 	return 0.0f;
 }
 
-void DisplayServer::window_set_hdr_output_max_luminance(const float p_max_luminance, WindowID p_window) {
+void DisplayServer::window_set_hdr_output_max_luminance(const float p_max_luminance, DisplayServerEnums::WindowID p_window) {
 	WARN_PRINT_ED("HDR output is not supported by this display server.");
 }
 
-float DisplayServer::window_get_hdr_output_max_luminance(WindowID p_window) const {
+float DisplayServer::window_get_hdr_output_max_luminance(DisplayServerEnums::WindowID p_window) const {
 	return -1.0f;
 }
 
-float DisplayServer::window_get_hdr_output_current_max_luminance(WindowID p_window) const {
+float DisplayServer::window_get_hdr_output_current_max_luminance(DisplayServerEnums::WindowID p_window) const {
 	return 0.0f;
 }
 
-float DisplayServer::window_get_output_max_linear_value(WindowID p_window) const {
+float DisplayServer::window_get_output_max_linear_value(DisplayServerEnums::WindowID p_window) const {
 	return 1.0f;
 }
 
-DisplayServer::WindowID DisplayServer::get_focused_window() const {
+DisplayServerEnums::WindowID DisplayServer::get_focused_window() const {
 	return MAIN_WINDOW_ID; // Proper value for single windows.
 }
 

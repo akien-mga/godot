@@ -98,11 +98,11 @@ protected:
 	RenderingDevice *rendering_device = nullptr;
 #endif
 
-	virtual HDROutput &_get_hdr_output(WindowID p_window) = 0;
-	virtual const HDROutput &_get_hdr_output(WindowID p_window) const = 0;
+	virtual HDROutput &_get_hdr_output(DisplayServerEnums::WindowID p_window) = 0;
+	virtual const HDROutput &_get_hdr_output(DisplayServerEnums::WindowID p_window) const = 0;
 
 	constexpr float _calculate_current_reference_luminance(CGFloat p_max_potential_edr_value, CGFloat p_max_edr_value) const;
-	void _update_hdr_output(WindowID p_window, const HDROutput &p_hdr);
+	void _update_hdr_output(DisplayServerEnums::WindowID p_window, const HDROutput &p_hdr);
 
 public:
 	virtual bool tts_is_speaking() const override;
@@ -161,21 +161,21 @@ public:
 	virtual Key keyboard_get_label_from_physical(Key p_keycode) const override;
 	virtual void show_emoji_and_symbol_picker() const override;
 
-	virtual void window_get_edr_values(WindowID p_window, CGFloat *r_max_potential_edr_value = nullptr, CGFloat *r_max_edr_value = nullptr) const = 0;
-	virtual bool window_is_hdr_output_supported(WindowID p_window = MAIN_WINDOW_ID) const override;
-	virtual void window_request_hdr_output(const bool p_enable, WindowID p_window = MAIN_WINDOW_ID) override;
-	virtual bool window_is_hdr_output_requested(WindowID p_window = MAIN_WINDOW_ID) const override;
-	virtual bool window_is_hdr_output_enabled(WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual void window_get_edr_values(DisplayServerEnums::WindowID p_window, CGFloat *r_max_potential_edr_value = nullptr, CGFloat *r_max_edr_value = nullptr) const = 0;
+	virtual bool window_is_hdr_output_supported(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual void window_request_hdr_output(const bool p_enable, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual bool window_is_hdr_output_requested(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual bool window_is_hdr_output_enabled(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
 
-	virtual void window_set_hdr_output_reference_luminance(const float p_reference_luminance, WindowID p_window = MAIN_WINDOW_ID) override;
-	virtual float window_get_hdr_output_reference_luminance(WindowID p_window = MAIN_WINDOW_ID) const override;
-	virtual float window_get_hdr_output_current_reference_luminance(WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual void window_set_hdr_output_reference_luminance(const float p_reference_luminance, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual float window_get_hdr_output_reference_luminance(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual float window_get_hdr_output_current_reference_luminance(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
 
-	virtual void window_set_hdr_output_max_luminance(const float p_max_luminance, WindowID p_window = MAIN_WINDOW_ID) override;
-	virtual float window_get_hdr_output_max_luminance(WindowID p_window = MAIN_WINDOW_ID) const override;
-	virtual float window_get_hdr_output_current_max_luminance(WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual void window_set_hdr_output_max_luminance(const float p_max_luminance, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual float window_get_hdr_output_max_luminance(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual float window_get_hdr_output_current_max_luminance(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
 
-	virtual float window_get_output_max_linear_value(WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual float window_get_output_max_linear_value(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
 
 	DisplayServerMacOSBase();
 	~DisplayServerMacOSBase();

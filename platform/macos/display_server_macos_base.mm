@@ -543,7 +543,7 @@ void DisplayServerMacOSBase::emit_system_theme_changed() {
 
 // MARK: - HDR / EDR
 
-void DisplayServerMacOSBase::_update_hdr_output(WindowID p_window, const HDROutput &p_hdr) {
+void DisplayServerMacOSBase::_update_hdr_output(DisplayServerEnums::WindowID p_window, const HDROutput &p_hdr) {
 #ifdef RD_ENABLED
 	if (!rendering_context) {
 		return;
@@ -565,7 +565,7 @@ void DisplayServerMacOSBase::_update_hdr_output(WindowID p_window, const HDROutp
 #endif
 }
 
-bool DisplayServerMacOSBase::window_is_hdr_output_supported(WindowID p_window) const {
+bool DisplayServerMacOSBase::window_is_hdr_output_supported(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 #if defined(RD_ENABLED)
@@ -578,7 +578,7 @@ bool DisplayServerMacOSBase::window_is_hdr_output_supported(WindowID p_window) c
 	return max_potential_edr > 1.0f;
 }
 
-void DisplayServerMacOSBase::window_request_hdr_output(const bool p_enabled, WindowID p_window) {
+void DisplayServerMacOSBase::window_request_hdr_output(const bool p_enabled, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 #if defined(RD_ENABLED)
@@ -590,13 +590,13 @@ void DisplayServerMacOSBase::window_request_hdr_output(const bool p_enabled, Win
 	_update_hdr_output(p_window, hdr);
 }
 
-bool DisplayServerMacOSBase::window_is_hdr_output_requested(WindowID p_window) const {
+bool DisplayServerMacOSBase::window_is_hdr_output_requested(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	return _get_hdr_output(p_window).requested;
 }
 
-bool DisplayServerMacOSBase::window_is_hdr_output_enabled(WindowID p_window) const {
+bool DisplayServerMacOSBase::window_is_hdr_output_enabled(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 #if defined(RD_ENABLED)
@@ -608,11 +608,11 @@ bool DisplayServerMacOSBase::window_is_hdr_output_enabled(WindowID p_window) con
 	return false;
 }
 
-void DisplayServerMacOSBase::window_set_hdr_output_reference_luminance(const float p_reference_luminance, WindowID p_window) {
+void DisplayServerMacOSBase::window_set_hdr_output_reference_luminance(const float p_reference_luminance, DisplayServerEnums::WindowID p_window) {
 	ERR_PRINT_ONCE("Manually setting reference white luminance is not supported on Apple devices, as they provide a user-facing brightness setting that directly controls reference white luminance.");
 }
 
-float DisplayServerMacOSBase::window_get_hdr_output_reference_luminance(WindowID p_window) const {
+float DisplayServerMacOSBase::window_get_hdr_output_reference_luminance(DisplayServerEnums::WindowID p_window) const {
 	return -1.0f; // Always auto-adjusted by the OS on Apple platforms.
 }
 
@@ -620,7 +620,7 @@ constexpr float DisplayServerMacOSBase::_calculate_current_reference_luminance(C
 	return (p_max_potential_edr_value * HARDWARE_REFERENCE_LUMINANCE_NITS) / p_max_edr_value;
 }
 
-float DisplayServerMacOSBase::window_get_hdr_output_current_reference_luminance(WindowID p_window) const {
+float DisplayServerMacOSBase::window_get_hdr_output_current_reference_luminance(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 #if defined(RD_ENABLED)
@@ -631,7 +631,7 @@ float DisplayServerMacOSBase::window_get_hdr_output_current_reference_luminance(
 	return 200.0f;
 }
 
-void DisplayServerMacOSBase::window_set_hdr_output_max_luminance(const float p_max_luminance, WindowID p_window) {
+void DisplayServerMacOSBase::window_set_hdr_output_max_luminance(const float p_max_luminance, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	HDROutput &hdr = _get_hdr_output(p_window);
@@ -643,13 +643,13 @@ void DisplayServerMacOSBase::window_set_hdr_output_max_luminance(const float p_m
 	_update_hdr_output(p_window, hdr);
 }
 
-float DisplayServerMacOSBase::window_get_hdr_output_max_luminance(WindowID p_window) const {
+float DisplayServerMacOSBase::window_get_hdr_output_max_luminance(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	return _get_hdr_output(p_window).max_luminance;
 }
 
-float DisplayServerMacOSBase::window_get_hdr_output_current_max_luminance(WindowID p_window) const {
+float DisplayServerMacOSBase::window_get_hdr_output_current_max_luminance(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	const HDROutput &hdr = _get_hdr_output(p_window);
@@ -661,7 +661,7 @@ float DisplayServerMacOSBase::window_get_hdr_output_current_max_luminance(Window
 	return hdr.max_luminance;
 }
 
-float DisplayServerMacOSBase::window_get_output_max_linear_value(WindowID p_window) const {
+float DisplayServerMacOSBase::window_get_output_max_linear_value(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 #if defined(RD_ENABLED)

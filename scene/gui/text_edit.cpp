@@ -3422,7 +3422,7 @@ void TextEdit::_update_caches(bool p_invalidate_all) {
 }
 
 void TextEdit::_close_ime_window() {
-	DisplayServer::WindowID wid = get_window() ? get_window()->get_window_id() : DisplayServer::INVALID_WINDOW_ID;
+	DisplayServerEnums::WindowID wid = get_window() ? get_window()->get_window_id() : DisplayServer::INVALID_WINDOW_ID;
 	if (wid == DisplayServer::INVALID_WINDOW_ID || !DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_IME)) {
 		return;
 	}
@@ -3431,7 +3431,7 @@ void TextEdit::_close_ime_window() {
 }
 
 void TextEdit::_update_ime_window_position() {
-	DisplayServer::WindowID wid = get_window() ? get_window()->get_window_id() : DisplayServer::INVALID_WINDOW_ID;
+	DisplayServerEnums::WindowID wid = get_window() ? get_window()->get_window_id() : DisplayServer::INVALID_WINDOW_ID;
 	if (wid == DisplayServer::INVALID_WINDOW_ID || !DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_IME)) {
 		return;
 	}

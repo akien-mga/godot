@@ -262,7 +262,7 @@ constexpr static NSEventModifierFlags FLAGS = NSEventModifierFlagCommand | NSEve
 		return;
 	}
 
-	DisplayServer::WindowID window_id = ds->get_focused_window();
+	DisplayServerEnums::WindowID window_id = ds->get_focused_window();
 	NSEventModifierFlags flags = static_cast<NSEventModifierFlags>(mod);
 
 	for (const CGKeyCode key : modifiers) {

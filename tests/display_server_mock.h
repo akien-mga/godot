@@ -78,7 +78,7 @@ public:
 	virtual void clipboard_set_primary(const String &p_text) override { primary_clipboard_text = p_text; }
 	virtual String clipboard_get_primary() const override { return primary_clipboard_text; }
 
-	virtual Size2i window_get_size(WindowID p_window = MAIN_WINDOW_ID) const override {
+	virtual Size2i window_get_size(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override {
 		return Size2i(1920, 1080);
 	}
 
@@ -86,7 +86,7 @@ public:
 		cursor_shape = p_shape;
 	}
 
-	virtual void window_set_window_event_callback(const Callable &p_callable, WindowID p_window = MAIN_WINDOW_ID) override {
+	virtual void window_set_window_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override {
 		event_callback = p_callable;
 	}
 

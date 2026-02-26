@@ -115,7 +115,7 @@ public:
 	};
 
 private:
-	DisplayServer::WindowID window_id = DisplayServer::INVALID_WINDOW_ID;
+	DisplayServerEnums::WindowID window_id = DisplayServer::INVALID_WINDOW_ID;
 	bool initialized = false;
 
 	String title;
@@ -298,7 +298,7 @@ public:
 	};
 
 	static void set_root_layout_direction(int p_root_dir);
-	static Window *get_from_id(DisplayServer::WindowID p_window_id);
+	static Window *get_from_id(DisplayServerEnums::WindowID p_window_id);
 
 	RID get_accessibility_element() const override;
 	virtual RID get_focused_accessibility_element() const override;
@@ -535,7 +535,7 @@ public:
 	virtual bool is_attached_in_viewport() const override;
 
 	Rect2i get_parent_rect() const;
-	virtual DisplayServer::WindowID get_window_id() const override;
+	virtual DisplayServerEnums::WindowID get_window_id() const override;
 	static Window *get_focused_window() { return focused_window; }
 
 	virtual Size2 _get_contents_minimum_size() const;

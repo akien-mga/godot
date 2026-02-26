@@ -130,7 +130,7 @@ void EmbeddedProcessMacOS::display_state_changed() {
 	DisplayServerMacOSEmbeddedState state;
 	state.screen_max_scale = ds->screen_get_max_scale();
 	state.screen_dpi = ds->screen_get_dpi();
-	DisplayServer::WindowID wid = window->get_window_id();
+	DisplayServerEnums::WindowID wid = window->get_window_id();
 	state.screen_window_scale = ds->screen_get_scale(ds->window_get_current_screen(wid));
 	state.display_id = ds->window_get_display_id(wid);
 
@@ -149,7 +149,7 @@ void EmbeddedProcessMacOS::_try_embed_process() {
 		return;
 	}
 
-	DisplayServer::WindowID wid = window->get_window_id();
+	DisplayServerEnums::WindowID wid = window->get_window_id();
 	Error err = ds->embed_process_update(wid, this);
 	if (err == OK) {
 		layer_host->set_rect(get_adjusted_embedded_window_rect(get_rect()));

@@ -64,7 +64,7 @@ Error GLManagerLegacy_MacOS::create_context(GLWindow &win) {
 	return OK;
 }
 
-Error GLManagerLegacy_MacOS::window_create(DisplayServer::WindowID p_window_id, id p_view, int p_width, int p_height) {
+Error GLManagerLegacy_MacOS::window_create(DisplayServerEnums::WindowID p_window_id, id p_view, int p_width, int p_height) {
 	GLWindow win;
 	win.window_view = p_view;
 
@@ -78,7 +78,7 @@ Error GLManagerLegacy_MacOS::window_create(DisplayServer::WindowID p_window_id, 
 	return OK;
 }
 
-void GLManagerLegacy_MacOS::window_resize(DisplayServer::WindowID p_window_id, int p_width, int p_height) {
+void GLManagerLegacy_MacOS::window_resize(DisplayServerEnums::WindowID p_window_id, int p_width, int p_height) {
 	if (!windows.has(p_window_id)) {
 		return;
 	}
@@ -99,7 +99,7 @@ void GLManagerLegacy_MacOS::window_resize(DisplayServer::WindowID p_window_id, i
 	[win.context update];
 }
 
-void GLManagerLegacy_MacOS::window_destroy(DisplayServer::WindowID p_window_id) {
+void GLManagerLegacy_MacOS::window_destroy(DisplayServerEnums::WindowID p_window_id) {
 	if (!windows.has(p_window_id)) {
 		return;
 	}
@@ -120,7 +120,7 @@ void GLManagerLegacy_MacOS::release_current() {
 	current_window = DisplayServer::INVALID_WINDOW_ID;
 }
 
-void GLManagerLegacy_MacOS::window_make_current(DisplayServer::WindowID p_window_id) {
+void GLManagerLegacy_MacOS::window_make_current(DisplayServerEnums::WindowID p_window_id) {
 	if (current_window == p_window_id) {
 		return;
 	}
@@ -139,7 +139,7 @@ void GLManagerLegacy_MacOS::swap_buffers() {
 	[win.context flushBuffer];
 }
 
-void GLManagerLegacy_MacOS::window_set_per_pixel_transparency_enabled(DisplayServer::WindowID p_window_id, bool p_enabled) {
+void GLManagerLegacy_MacOS::window_set_per_pixel_transparency_enabled(DisplayServerEnums::WindowID p_window_id, bool p_enabled) {
 	if (!windows.has(p_window_id)) {
 		return;
 	}
@@ -176,7 +176,7 @@ bool GLManagerLegacy_MacOS::is_using_vsync() const {
 	return use_vsync;
 }
 
-NSOpenGLContext *GLManagerLegacy_MacOS::get_context(DisplayServer::WindowID p_window_id) {
+NSOpenGLContext *GLManagerLegacy_MacOS::get_context(DisplayServerEnums::WindowID p_window_id) {
 	if (!windows.has(p_window_id)) {
 		return nullptr;
 	}

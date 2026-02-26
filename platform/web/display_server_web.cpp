@@ -954,12 +954,12 @@ void DisplayServerWeb::_ime_callback(int p_type, const String &p_text) {
 	Input::get_singleton()->flush_buffered_events();
 }
 
-void DisplayServerWeb::window_set_ime_active(const bool p_active, WindowID p_window) {
+void DisplayServerWeb::window_set_ime_active(const bool p_active, DisplayServerEnums::WindowID p_window) {
 	ime_active = p_active;
 	godot_js_set_ime_active(p_active);
 }
 
-void DisplayServerWeb::window_set_ime_position(const Point2i &p_pos, WindowID p_window) {
+void DisplayServerWeb::window_set_ime_position(const Point2i &p_pos, DisplayServerEnums::WindowID p_window) {
 	godot_js_set_ime_position(p_pos.x, p_pos.y);
 }
 
@@ -1303,104 +1303,104 @@ float DisplayServerWeb::screen_get_refresh_rate(int p_screen) const {
 	return SCREEN_REFRESH_RATE_FALLBACK; // Web doesn't have much of a need for the screen refresh rate, and there's no native way to do so.
 }
 
-Vector<DisplayServer::WindowID> DisplayServerWeb::get_window_list() const {
-	Vector<WindowID> ret;
+Vector<DisplayServerEnums::WindowID> DisplayServerWeb::get_window_list() const {
+	Vector<DisplayServerEnums::WindowID> ret;
 	ret.push_back(MAIN_WINDOW_ID);
 	return ret;
 }
 
-DisplayServerWeb::WindowID DisplayServerWeb::get_window_at_screen_position(const Point2i &p_position) const {
+DisplayServerEnums::WindowID DisplayServerWeb::get_window_at_screen_position(const Point2i &p_position) const {
 	return MAIN_WINDOW_ID;
 }
 
-void DisplayServerWeb::window_attach_instance_id(ObjectID p_instance, WindowID p_window) {
+void DisplayServerWeb::window_attach_instance_id(ObjectID p_instance, DisplayServerEnums::WindowID p_window) {
 	window_attached_instance_id = p_instance;
 }
 
-ObjectID DisplayServerWeb::window_get_attached_instance_id(WindowID p_window) const {
+ObjectID DisplayServerWeb::window_get_attached_instance_id(DisplayServerEnums::WindowID p_window) const {
 	return window_attached_instance_id;
 }
 
-void DisplayServerWeb::window_set_rect_changed_callback(const Callable &p_callable, WindowID p_window) {
+void DisplayServerWeb::window_set_rect_changed_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	rect_changed_callback = p_callable;
 }
 
-void DisplayServerWeb::window_set_window_event_callback(const Callable &p_callable, WindowID p_window) {
+void DisplayServerWeb::window_set_window_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	window_event_callback = p_callable;
 }
 
-void DisplayServerWeb::window_set_input_event_callback(const Callable &p_callable, WindowID p_window) {
+void DisplayServerWeb::window_set_input_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	input_event_callback = p_callable;
 }
 
-void DisplayServerWeb::window_set_input_text_callback(const Callable &p_callable, WindowID p_window) {
+void DisplayServerWeb::window_set_input_text_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	input_text_callback = p_callable;
 }
 
-void DisplayServerWeb::window_set_drop_files_callback(const Callable &p_callable, WindowID p_window) {
+void DisplayServerWeb::window_set_drop_files_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	drop_files_callback = p_callable;
 }
 
-void DisplayServerWeb::window_set_title(const String &p_title, WindowID p_window) {
+void DisplayServerWeb::window_set_title(const String &p_title, DisplayServerEnums::WindowID p_window) {
 	godot_js_display_window_title_set(p_title.utf8().get_data());
 }
 
-int DisplayServerWeb::window_get_current_screen(WindowID p_window) const {
+int DisplayServerWeb::window_get_current_screen(DisplayServerEnums::WindowID p_window) const {
 	ERR_FAIL_COND_V(p_window != MAIN_WINDOW_ID, INVALID_SCREEN);
 	return 0;
 }
 
-void DisplayServerWeb::window_set_current_screen(int p_screen, WindowID p_window) {
+void DisplayServerWeb::window_set_current_screen(int p_screen, DisplayServerEnums::WindowID p_window) {
 	// Not implemented.
 }
 
-Point2i DisplayServerWeb::window_get_position(WindowID p_window) const {
+Point2i DisplayServerWeb::window_get_position(DisplayServerEnums::WindowID p_window) const {
 	return Point2i();
 }
 
-Point2i DisplayServerWeb::window_get_position_with_decorations(WindowID p_window) const {
+Point2i DisplayServerWeb::window_get_position_with_decorations(DisplayServerEnums::WindowID p_window) const {
 	return Point2i();
 }
 
-void DisplayServerWeb::window_set_position(const Point2i &p_position, WindowID p_window) {
+void DisplayServerWeb::window_set_position(const Point2i &p_position, DisplayServerEnums::WindowID p_window) {
 	// Not supported.
 }
 
-void DisplayServerWeb::window_set_transient(WindowID p_window, WindowID p_parent) {
+void DisplayServerWeb::window_set_transient(DisplayServerEnums::WindowID p_window, DisplayServerEnums::WindowID p_parent) {
 	// Not supported.
 }
 
-void DisplayServerWeb::window_set_max_size(const Size2i p_size, WindowID p_window) {
+void DisplayServerWeb::window_set_max_size(const Size2i p_size, DisplayServerEnums::WindowID p_window) {
 	// Not supported.
 }
 
-Size2i DisplayServerWeb::window_get_max_size(WindowID p_window) const {
+Size2i DisplayServerWeb::window_get_max_size(DisplayServerEnums::WindowID p_window) const {
 	return Size2i();
 }
 
-void DisplayServerWeb::window_set_min_size(const Size2i p_size, WindowID p_window) {
+void DisplayServerWeb::window_set_min_size(const Size2i p_size, DisplayServerEnums::WindowID p_window) {
 	// Not supported.
 }
 
-Size2i DisplayServerWeb::window_get_min_size(WindowID p_window) const {
+Size2i DisplayServerWeb::window_get_min_size(DisplayServerEnums::WindowID p_window) const {
 	return Size2i();
 }
 
-void DisplayServerWeb::window_set_size(const Size2i p_size, WindowID p_window) {
+void DisplayServerWeb::window_set_size(const Size2i p_size, DisplayServerEnums::WindowID p_window) {
 	godot_js_display_desired_size_set(p_size.x, p_size.y);
 }
 
-Size2i DisplayServerWeb::window_get_size(WindowID p_window) const {
+Size2i DisplayServerWeb::window_get_size(DisplayServerEnums::WindowID p_window) const {
 	int size[2];
 	godot_js_display_window_size_get(size, size + 1);
 	return Size2i(size[0], size[1]);
 }
 
-Size2i DisplayServerWeb::window_get_size_with_decorations(WindowID p_window) const {
+Size2i DisplayServerWeb::window_get_size_with_decorations(DisplayServerEnums::WindowID p_window) const {
 	return window_get_size(p_window);
 }
 
-void DisplayServerWeb::window_set_mode(WindowMode p_mode, WindowID p_window) {
+void DisplayServerWeb::window_set_mode(WindowMode p_mode, DisplayServerEnums::WindowID p_window) {
 	if (window_mode == p_mode) {
 		return;
 	}
@@ -1426,35 +1426,35 @@ void DisplayServerWeb::window_set_mode(WindowMode p_mode, WindowID p_window) {
 	}
 }
 
-DisplayServerWeb::WindowMode DisplayServerWeb::window_get_mode(WindowID p_window) const {
+DisplayServerWeb::WindowMode DisplayServerWeb::window_get_mode(DisplayServerEnums::WindowID p_window) const {
 	return window_mode;
 }
 
-bool DisplayServerWeb::window_is_maximize_allowed(WindowID p_window) const {
+bool DisplayServerWeb::window_is_maximize_allowed(DisplayServerEnums::WindowID p_window) const {
 	return false;
 }
 
-void DisplayServerWeb::window_set_flag(WindowFlags p_flag, bool p_enabled, WindowID p_window) {
+void DisplayServerWeb::window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
 	// Not supported.
 }
 
-bool DisplayServerWeb::window_get_flag(WindowFlags p_flag, WindowID p_window) const {
+bool DisplayServerWeb::window_get_flag(WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
 	return false;
 }
 
-void DisplayServerWeb::window_request_attention(WindowID p_window) {
+void DisplayServerWeb::window_request_attention(DisplayServerEnums::WindowID p_window) {
 	// Not supported.
 }
 
-void DisplayServerWeb::window_move_to_foreground(WindowID p_window) {
+void DisplayServerWeb::window_move_to_foreground(DisplayServerEnums::WindowID p_window) {
 	// Not supported.
 }
 
-bool DisplayServerWeb::window_is_focused(WindowID p_window) const {
+bool DisplayServerWeb::window_is_focused(DisplayServerEnums::WindowID p_window) const {
 	return true;
 }
 
-bool DisplayServerWeb::window_can_draw(WindowID p_window) const {
+bool DisplayServerWeb::window_can_draw(DisplayServerEnums::WindowID p_window) const {
 	return true;
 }
 
@@ -1462,7 +1462,7 @@ bool DisplayServerWeb::can_any_window_draw() const {
 	return true;
 }
 
-DisplayServer::VSyncMode DisplayServerWeb::window_get_vsync_mode(WindowID p_vsync_mode) const {
+DisplayServer::VSyncMode DisplayServerWeb::window_get_vsync_mode(DisplayServerEnums::WindowID p_vsync_mode) const {
 	return DisplayServer::VSYNC_ENABLED;
 }
 

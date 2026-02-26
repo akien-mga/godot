@@ -133,7 +133,7 @@ public:
 	virtual Error dialog_input_text(String p_title, String p_description, String p_partial, const Callable &p_callback) override;
 	void emit_input_dialog_callback(String p_text);
 
-	virtual Error file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, const FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, WindowID p_window_id) override;
+	virtual Error file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, const FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) override;
 	void emit_file_picker_callback(bool p_ok, const Vector<String> &p_selected_paths);
 
 	virtual Color get_accent_color() const override;
@@ -166,62 +166,62 @@ public:
 	virtual void set_hardware_keyboard_connection_change_callback(const Callable &p_callable) override;
 	void emit_hardware_keyboard_connection_changed(bool p_connected);
 
-	virtual void window_set_window_event_callback(const Callable &p_callable, WindowID p_window = MAIN_WINDOW_ID) override;
-	virtual void window_set_input_event_callback(const Callable &p_callable, WindowID p_window = MAIN_WINDOW_ID) override;
-	virtual void window_set_input_text_callback(const Callable &p_callable, WindowID p_window = MAIN_WINDOW_ID) override;
-	virtual void window_set_rect_changed_callback(const Callable &p_callable, WindowID p_window = MAIN_WINDOW_ID) override;
-	virtual void window_set_drop_files_callback(const Callable &p_callable, WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual void window_set_window_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual void window_set_input_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual void window_set_input_text_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual void window_set_rect_changed_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual void window_set_drop_files_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
 
 	void send_window_event(WindowEvent p_event, bool p_deferred = false) const;
 	void send_input_event(const Ref<InputEvent> &p_event) const;
 	void send_input_text(const String &p_text) const;
 
-	virtual Vector<WindowID> get_window_list() const override;
-	virtual WindowID get_window_at_screen_position(const Point2i &p_position) const override;
+	virtual Vector<DisplayServerEnums::WindowID> get_window_list() const override;
+	virtual DisplayServerEnums::WindowID get_window_at_screen_position(const Point2i &p_position) const override;
 
-	virtual int64_t window_get_native_handle(HandleType p_handle_type, WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual int64_t window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
 
-	virtual void window_attach_instance_id(ObjectID p_instance, WindowID p_window = MAIN_WINDOW_ID) override;
-	virtual ObjectID window_get_attached_instance_id(WindowID p_window = MAIN_WINDOW_ID) const override;
-	virtual void window_set_title(const String &p_title, WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual void window_attach_instance_id(ObjectID p_instance, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual ObjectID window_get_attached_instance_id(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual void window_set_title(const String &p_title, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
 
-	virtual int window_get_current_screen(WindowID p_window = MAIN_WINDOW_ID) const override;
-	virtual void window_set_current_screen(int p_screen, WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual int window_get_current_screen(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual void window_set_current_screen(int p_screen, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
 
-	virtual Point2i window_get_position(WindowID p_window = MAIN_WINDOW_ID) const override;
-	virtual Point2i window_get_position_with_decorations(WindowID p_window = MAIN_WINDOW_ID) const override;
-	virtual void window_set_position(const Point2i &p_position, WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual Point2i window_get_position(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual Point2i window_get_position_with_decorations(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual void window_set_position(const Point2i &p_position, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
 
-	virtual void window_set_transient(WindowID p_window, WindowID p_parent) override;
+	virtual void window_set_transient(DisplayServerEnums::WindowID p_window, DisplayServerEnums::WindowID p_parent) override;
 
-	virtual void window_set_max_size(const Size2i p_size, WindowID p_window = MAIN_WINDOW_ID) override;
-	virtual Size2i window_get_max_size(WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual void window_set_max_size(const Size2i p_size, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual Size2i window_get_max_size(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
 
-	virtual void window_set_min_size(const Size2i p_size, WindowID p_window = MAIN_WINDOW_ID) override;
-	virtual Size2i window_get_min_size(WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual void window_set_min_size(const Size2i p_size, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual Size2i window_get_min_size(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
 
-	virtual void window_set_size(const Size2i p_size, WindowID p_window = MAIN_WINDOW_ID) override;
-	virtual Size2i window_get_size(WindowID p_window = MAIN_WINDOW_ID) const override;
-	virtual Size2i window_get_size_with_decorations(WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual void window_set_size(const Size2i p_size, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual Size2i window_get_size(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual Size2i window_get_size_with_decorations(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
 
-	virtual void window_set_mode(WindowMode p_mode, WindowID p_window = MAIN_WINDOW_ID) override;
-	virtual WindowMode window_get_mode(WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual void window_set_mode(WindowMode p_mode, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual WindowMode window_get_mode(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
 
-	virtual bool window_is_maximize_allowed(WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual bool window_is_maximize_allowed(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
 
-	virtual void window_set_flag(WindowFlags p_flag, bool p_enabled, WindowID p_window = MAIN_WINDOW_ID) override;
-	virtual bool window_get_flag(WindowFlags p_flag, WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual void window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual bool window_get_flag(WindowFlags p_flag, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
 
-	virtual void window_request_attention(WindowID p_window = MAIN_WINDOW_ID) override;
-	virtual void window_move_to_foreground(WindowID p_window = MAIN_WINDOW_ID) override;
-	virtual bool window_is_focused(WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual void window_request_attention(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual void window_move_to_foreground(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual bool window_is_focused(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
 
-	virtual bool window_can_draw(WindowID p_window = MAIN_WINDOW_ID) const override;
+	virtual bool window_can_draw(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const override;
 
 	virtual bool can_any_window_draw() const override;
 
-	virtual void window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_mode, WindowID p_window = MAIN_WINDOW_ID) override;
-	virtual DisplayServer::VSyncMode window_get_vsync_mode(WindowID p_vsync_mode) const override;
+	virtual void window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) override;
+	virtual DisplayServer::VSyncMode window_get_vsync_mode(DisplayServerEnums::WindowID p_vsync_mode) const override;
 
 	virtual void window_set_color(const Color &p_color) override;
 

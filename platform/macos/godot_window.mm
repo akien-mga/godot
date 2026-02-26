@@ -53,7 +53,7 @@
 	}
 }
 
-- (void)setWindowID:(DisplayServerMacOS::WindowID)wid {
+- (void)setWindowID:(DisplayServerEnums::WindowID)wid {
 	window_id = wid;
 }
 

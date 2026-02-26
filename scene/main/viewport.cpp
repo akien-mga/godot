@@ -1733,7 +1733,7 @@ void Viewport::_gui_show_tooltip_at(const Point2i &p_pos) {
 		}
 	}
 
-	DisplayServer::WindowID active_popup = DisplayServer::get_singleton()->window_get_active_popup();
+	DisplayServerEnums::WindowID active_popup = DisplayServer::get_singleton()->window_get_active_popup();
 	if (active_popup == DisplayServer::INVALID_WINDOW_ID || active_popup == window->get_window_id()) {
 		gui.tooltip_popup->popup(r);
 	}
@@ -4113,7 +4113,7 @@ Ref<Texture2D> Viewport::get_vrs_texture() const {
 	return vrs_texture;
 }
 
-DisplayServer::WindowID Viewport::get_window_id() const {
+DisplayServerEnums::WindowID Viewport::get_window_id() const {
 	ERR_READ_THREAD_GUARD_V(DisplayServer::INVALID_WINDOW_ID);
 	return DisplayServer::MAIN_WINDOW_ID;
 }
@@ -4163,8 +4163,8 @@ void Viewport::set_embedding_subwindows(bool p_embed) {
 		}
 
 		if (allow_change) {
-			Vector<DisplayServer::WindowID> wl = DisplayServer::get_singleton()->get_window_list();
-			for (const DisplayServer::WindowID &window_id : wl) {
+			Vector<DisplayServerEnums::WindowID> wl = DisplayServer::get_singleton()->get_window_list();
+			for (const DisplayServerEnums::WindowID &window_id : wl) {
 				const Window *w = Window::get_from_id(window_id);
 				if (w && is_ancestor_of(w)) {
 					// Prevent change when this viewport has child windows that are displayed as native windows.
@@ -5543,7 +5543,7 @@ SubViewport::ClearMode SubViewport::get_clear_mode() const {
 	return clear_mode;
 }
 
-DisplayServer::WindowID SubViewport::get_window_id() const {
+DisplayServerEnums::WindowID SubViewport::get_window_id() const {
 	ERR_READ_THREAD_GUARD_V(DisplayServer::INVALID_WINDOW_ID);
 	return DisplayServer::INVALID_WINDOW_ID;
 }

@@ -38,7 +38,7 @@
 #include "servers/display/accessibility_server.h"
 
 @implementation GodotWindowDelegate {
-	DisplayServer::WindowID window_id;
+	DisplayServerEnums::WindowID window_id;
 	DisplayServerMacOS *ds;
 }
 
@@ -50,7 +50,7 @@
 	return self;
 }
 
-- (void)setWindowID:(DisplayServer::WindowID)wid {
+- (void)setWindowID:(DisplayServerEnums::WindowID)wid {
 	window_id = wid;
 }
 

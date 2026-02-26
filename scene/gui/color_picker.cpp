@@ -1812,9 +1812,9 @@ void ColorPicker::_pick_button_pressed_legacy() {
 		DisplayServer *ds = DisplayServer::get_singleton();
 
 		// Add the Texture of each Window to the Image.
-		Vector<DisplayServer::WindowID> wl = ds->get_window_list();
+		Vector<DisplayServerEnums::WindowID> wl = ds->get_window_list();
 		// FIXME: sort windows by visibility.
-		for (const DisplayServer::WindowID &window_id : wl) {
+		for (const DisplayServerEnums::WindowID &window_id : wl) {
 			Window *w = Window::get_from_id(window_id);
 			if (!w) {
 				continue;

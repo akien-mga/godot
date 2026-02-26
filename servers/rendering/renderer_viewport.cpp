@@ -362,7 +362,7 @@ void RendererViewport::_draw_viewport(Viewport *p_viewport) {
 		}
 
 		p_viewport->window_output_max_value = 1.0;
-		DisplayServer::WindowID parent_window = _get_containing_window(p_viewport);
+		DisplayServerEnums::WindowID parent_window = _get_containing_window(p_viewport);
 		if (RD::get_singleton() && parent_window != DisplayServer::INVALID_WINDOW_ID) {
 			RenderingContextDriver *context_driver = RD::get_singleton()->get_context_driver();
 			if (context_driver->window_get_hdr_output_enabled(parent_window)) {
@@ -745,7 +745,7 @@ void RendererViewport::_draw_viewport(Viewport *p_viewport) {
 	}
 }
 
-DisplayServer::WindowID RendererViewport::_get_containing_window(Viewport *p_viewport) {
+DisplayServerEnums::WindowID RendererViewport::_get_containing_window(Viewport *p_viewport) {
 	if (p_viewport->viewport_to_screen != DisplayServer::INVALID_WINDOW_ID) {
 		return p_viewport->viewport_to_screen;
 	}
@@ -784,7 +784,7 @@ void RendererViewport::draw_viewports(bool p_swap_buffers) {
 		sorted_active_viewports_dirty = false;
 	}
 
-	HashMap<DisplayServer::WindowID, Vector<RenderingServerTypes::BlitToScreen>> blit_to_screen_list;
+	HashMap<DisplayServerEnums::WindowID, Vector<RenderingServerTypes::BlitToScreen>> blit_to_screen_list;
 	//draw viewports
 	RENDER_TIMESTAMP("> Render Viewports");
 
@@ -1132,7 +1132,7 @@ void RendererViewport::viewport_set_clear_mode(RID p_viewport, RSE::ViewportClea
 	viewport->clear_mode = p_clear_mode;
 }
 
-void RendererViewport::viewport_attach_to_screen(RID p_viewport, const Rect2 &p_rect, DisplayServer::WindowID p_screen) {
+void RendererViewport::viewport_attach_to_screen(RID p_viewport, const Rect2 &p_rect, DisplayServerEnums::WindowID p_screen) {
 	Viewport *viewport = viewport_owner.get_or_null(p_viewport);
 	ERR_FAIL_NULL(viewport);
 
@@ -1604,7 +1604,7 @@ void RendererViewport::viewport_set_sdf_oversize_and_scale(RID p_viewport, RSE::
 	RSG::texture_storage->render_target_set_sdf_size_and_scale(viewport->render_target, p_size, p_scale);
 }
 
-RID RendererViewport::viewport_find_from_screen_attachment(DisplayServer::WindowID p_id) const {
+RID RendererViewport::viewport_find_from_screen_attachment(DisplayServerEnums::WindowID p_id) const {
 	RID *rids = nullptr;
 	uint32_t rid_count = viewport_owner.get_rid_count();
 	rids = (RID *)alloca(sizeof(RID) * rid_count);
@@ -1704,7 +1704,7 @@ void RendererViewport::viewport_set_canvas_cull_mask(RID p_viewport, uint32_t p_
 }
 
 // Workaround for setting this on thread.
-void RendererViewport::call_set_vsync_mode(DisplayServer::VSyncMode p_mode, DisplayServer::WindowID p_window) {
+void RendererViewport::call_set_vsync_mode(DisplayServer::VSyncMode p_mode, DisplayServerEnums::WindowID p_window) {
 	DisplayServer::get_singleton()->window_set_vsync_mode(p_mode, p_window);
 }
 

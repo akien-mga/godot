@@ -86,10 +86,10 @@
 #import <IOKit/hid/IOHIDKeys.h>
 #import <IOKit/hid/IOHIDLib.h>
 
-DisplayServerMacOS::WindowID DisplayServerMacOS::_create_window(WindowMode p_mode, VSyncMode p_vsync_mode, const Rect2i &p_rect) {
+DisplayServerEnums::WindowID DisplayServerMacOS::_create_window(WindowMode p_mode, VSyncMode p_vsync_mode, const Rect2i &p_rect) {
 	const float scale = screen_get_max_scale();
 
-	WindowID id = window_id_counter;
+	DisplayServerEnums::WindowID id = window_id_counter;
 	{
 		WindowData &wd = windows[id];
 
@@ -256,7 +256,7 @@ DisplayServerMacOS::WindowID DisplayServerMacOS::_create_window(WindowMode p_mod
 	return id;
 }
 
-void DisplayServerMacOS::_update_window_style(WindowData p_wd, WindowID p_window) {
+void DisplayServerMacOS::_update_window_style(WindowData p_wd, DisplayServerEnums::WindowID p_window) {
 	bool borderless_full = false;
 
 	if (p_wd.borderless) {
@@ -285,7 +285,7 @@ void DisplayServerMacOS::_update_window_style(WindowData p_wd, WindowID p_window
 	}
 }
 
-bool DisplayServerMacOS::is_always_on_top_recursive(WindowID p_window) const {
+bool DisplayServerMacOS::is_always_on_top_recursive(DisplayServerEnums::WindowID p_window) const {
 	ERR_FAIL_COND_V(!windows.has(p_window), false);
 
 	const WindowData &wd = windows[p_window];
@@ -300,7 +300,7 @@ bool DisplayServerMacOS::is_always_on_top_recursive(WindowID p_window) const {
 	return false;
 }
 
-void DisplayServerMacOS::set_window_per_pixel_transparency_enabled(bool p_enabled, WindowID p_window) {
+void DisplayServerMacOS::set_window_per_pixel_transparency_enabled(bool p_enabled, DisplayServerEnums::WindowID p_window) {
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
 
@@ -401,8 +401,8 @@ void DisplayServerMacOS::_displays_arrangement_changed(CGDirectDisplayID display
 	}
 }
 
-DisplayServer::WindowID DisplayServerMacOS::_get_focused_window_or_popup() const {
-	const List<WindowID>::Element *E = popup_list.back();
+DisplayServerEnums::WindowID DisplayServerMacOS::_get_focused_window_or_popup() const {
+	const List<DisplayServerEnums::WindowID>::Element *E = popup_list.back();
 	if (E) {
 		return E->get();
 	}
@@ -410,7 +410,7 @@ DisplayServer::WindowID DisplayServerMacOS::_get_focused_window_or_popup() const
 	return last_focused_window;
 }
 
-void DisplayServerMacOS::mouse_enter_window(WindowID p_window) {
+void DisplayServerMacOS::mouse_enter_window(DisplayServerEnums::WindowID p_window) {
 	if (window_mouseover_id != p_window) {
 		if (window_mouseover_id != INVALID_WINDOW_ID) {
 			send_window_event(windows[window_mouseover_id], WINDOW_EVENT_MOUSE_EXIT);
@@ -422,7 +422,7 @@ void DisplayServerMacOS::mouse_enter_window(WindowID p_window) {
 	}
 }
 
-void DisplayServerMacOS::mouse_exit_window(WindowID p_window) {
+void DisplayServerMacOS::mouse_exit_window(DisplayServerEnums::WindowID p_window) {
 	if (window_mouseover_id == p_window && p_window != INVALID_WINDOW_ID) {
 		send_window_event(windows[p_window], WINDOW_EVENT_MOUSE_EXIT);
 	}
@@ -438,7 +438,7 @@ void DisplayServerMacOS::_dispatch_input_event(const Ref<InputEvent> &p_event) {
 		in_dispatch_input_event = true;
 
 		{
-			List<WindowID>::Element *E = popup_list.back();
+			List<DisplayServerEnums::WindowID>::Element *E = popup_list.back();
 			if (E && Object::cast_to<InputEventKey>(*p_event)) {
 				// Redirect keyboard input to active popup.
 				if (windows.has(E->get())) {
@@ -464,7 +464,7 @@ void DisplayServerMacOS::_dispatch_input_event(const Ref<InputEvent> &p_event) {
 		} else {
 			// Send to all windows. Copy all pending callbacks, since callback can erase window.
 			Vector<Callable> cbs;
-			for (KeyValue<WindowID, WindowData> &E : windows) {
+			for (KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 				Callable callable = E.value.input_event_callback;
 				if (callable.is_valid()) {
 					cbs.push_back(callable);
@@ -607,11 +607,11 @@ void DisplayServerMacOS::menu_callback(id p_sender) {
 	}
 }
 
-bool DisplayServerMacOS::has_window(WindowID p_window) const {
+bool DisplayServerMacOS::has_window(DisplayServerEnums::WindowID p_window) const {
 	return windows.has(p_window);
 }
 
-DisplayServerMacOS::WindowData &DisplayServerMacOS::get_window(WindowID p_window) {
+DisplayServerMacOS::WindowData &DisplayServerMacOS::get_window(DisplayServerEnums::WindowID p_window) {
 	return windows[p_window];
 }
 
@@ -733,7 +733,7 @@ void DisplayServerMacOS::push_to_key_event_buffer(const DisplayServerMacOS::KeyE
 	key_event_buffer.write[key_event_pos++] = p_event;
 }
 
-void DisplayServerMacOS::set_last_focused_window(WindowID p_window) {
+void DisplayServerMacOS::set_last_focused_window(DisplayServerEnums::WindowID p_window) {
 	last_focused_window = p_window;
 }
 
@@ -745,7 +745,7 @@ bool DisplayServerMacOS::get_is_resizing() const {
 	return is_resizing;
 }
 
-void DisplayServerMacOS::window_destroy(WindowID p_window) {
+void DisplayServerMacOS::window_destroy(DisplayServerEnums::WindowID p_window) {
 	ERR_FAIL_COND(!windows.has(p_window));
 
 #if defined(GLES3_ENABLED)
@@ -772,7 +772,7 @@ void DisplayServerMacOS::window_destroy(WindowID p_window) {
 	update_presentation_mode();
 }
 
-void DisplayServerMacOS::window_resize(WindowID p_window, int p_width, int p_height) {
+void DisplayServerMacOS::window_resize(DisplayServerEnums::WindowID p_window, int p_width, int p_height) {
 #if defined(RD_ENABLED)
 	if (rendering_context) {
 		rendering_context->window_set_size(p_window, p_width, p_height);
@@ -892,15 +892,15 @@ Error DisplayServerMacOS::dialog_show(String p_title, String p_description, Vect
 	return OK;
 }
 
-Error DisplayServerMacOS::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, WindowID p_window_id) {
+Error DisplayServerMacOS::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	return _file_dialog_with_options_show(p_title, p_current_directory, String(), p_filename, p_show_hidden, p_mode, p_filters, TypedArray<Dictionary>(), p_callback, false, p_window_id);
 }
 
-Error DisplayServerMacOS::file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, WindowID p_window_id) {
+Error DisplayServerMacOS::file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	return _file_dialog_with_options_show(p_title, p_current_directory, p_root, p_filename, p_show_hidden, p_mode, p_filters, p_options, p_callback, true, p_window_id);
 }
 
-Error DisplayServerMacOS::_file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, bool p_options_in_cb, WindowID p_window_id) {
+Error DisplayServerMacOS::_file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, bool p_options_in_cb, DisplayServerEnums::WindowID p_window_id) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_INDEX_V(int(p_mode), FILE_DIALOG_MODE_SAVE_MAX, FAILED);
@@ -1193,7 +1193,7 @@ Error DisplayServerMacOS::dialog_input_text(String p_title, String p_description
 void DisplayServerMacOS::_mouse_apply_mode(MouseMode p_prev_mode, MouseMode p_new_mode) {
 	_THREAD_SAFE_METHOD_
 
-	WindowID window_id = _get_focused_window_or_popup();
+	DisplayServerEnums::WindowID window_id = _get_focused_window_or_popup();
 	if (!windows.has(window_id)) {
 		window_id = MAIN_WINDOW_ID;
 	}
@@ -1322,7 +1322,7 @@ void DisplayServerMacOS::warp_mouse(const Point2i &p_position) {
 	_THREAD_SAFE_METHOD_
 
 	if (mouse_mode != MOUSE_MODE_CAPTURED) {
-		WindowID window_id = _get_focused_window_or_popup();
+		DisplayServerEnums::WindowID window_id = _get_focused_window_or_popup();
 		if (!windows.has(window_id)) {
 			window_id = MAIN_WINDOW_ID;
 		}
@@ -1506,7 +1506,7 @@ Rect2i DisplayServerMacOS::screen_get_usable_rect(int p_screen) const {
 
 Color DisplayServerMacOS::screen_get_pixel(const Point2i &p_position) const {
 	HashSet<CGWindowID> exclude_windows;
-	for (HashMap<WindowID, WindowData>::ConstIterator E = windows.begin(); E; ++E) {
+	for (HashMap<DisplayServerEnums::WindowID, WindowData>::ConstIterator E = windows.begin(); E; ++E) {
 		if (E->value.hide_from_capture) {
 			exclude_windows.insert([E->value.window_object windowNumber]);
 		}
@@ -1550,7 +1550,7 @@ Ref<Image> DisplayServerMacOS::screen_get_image(int p_screen) const {
 	ERR_FAIL_INDEX_V(p_screen, screen_count, Ref<Image>());
 
 	HashSet<CGWindowID> exclude_windows;
-	for (HashMap<WindowID, WindowData>::ConstIterator E = windows.begin(); E; ++E) {
+	for (HashMap<DisplayServerEnums::WindowID, WindowData>::ConstIterator E = windows.begin(); E; ++E) {
 		if (E->value.hide_from_capture) {
 			exclude_windows.insert([E->value.window_object windowNumber]);
 		}
@@ -1598,7 +1598,7 @@ Ref<Image> DisplayServerMacOS::screen_get_image(int p_screen) const {
 
 Ref<Image> DisplayServerMacOS::screen_get_image_rect(const Rect2i &p_rect) const {
 	HashSet<CGWindowID> exclude_windows;
-	for (HashMap<WindowID, WindowData>::ConstIterator E = windows.begin(); E; ++E) {
+	for (HashMap<DisplayServerEnums::WindowID, WindowData>::ConstIterator E = windows.begin(); E; ++E) {
 		if (E->value.hide_from_capture) {
 			exclude_windows.insert([E->value.window_object windowNumber]);
 		}
@@ -1644,20 +1644,20 @@ Ref<Image> DisplayServerMacOS::screen_get_image_rect(const Rect2i &p_rect) const
 	return img;
 }
 
-Vector<DisplayServer::WindowID> DisplayServerMacOS::get_window_list() const {
+Vector<DisplayServerEnums::WindowID> DisplayServerMacOS::get_window_list() const {
 	_THREAD_SAFE_METHOD_
 
 	Vector<int> ret;
-	for (const KeyValue<WindowID, WindowData> &E : windows) {
+	for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 		ret.push_back(E.key);
 	}
 	return ret;
 }
 
-DisplayServer::WindowID DisplayServerMacOS::create_sub_window(WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, WindowID p_transient_parent) {
+DisplayServerEnums::WindowID DisplayServerMacOS::create_sub_window(WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
 	_THREAD_SAFE_METHOD_
 
-	WindowID id = _create_window(p_mode, p_vsync_mode, p_rect);
+	DisplayServerEnums::WindowID id = _create_window(p_mode, p_vsync_mode, p_rect);
 
 	uint32_t set_flags = p_flags & ~(WINDOW_FLAG_MAX - 1); // Clear the flags that are not supported by the window.
 	while (set_flags != 0) {
@@ -1682,7 +1682,7 @@ DisplayServer::WindowID DisplayServerMacOS::create_sub_window(WindowMode p_mode,
 	return id;
 }
 
-void DisplayServerMacOS::show_window(WindowID p_id) {
+void DisplayServerMacOS::show_window(DisplayServerEnums::WindowID p_id) {
 	WindowData &wd = windows[p_id];
 
 	if (p_id == MAIN_WINDOW_ID) {
@@ -1706,7 +1706,7 @@ void DisplayServerMacOS::show_window(WindowID p_id) {
 	}
 }
 
-void DisplayServerMacOS::delete_sub_window(WindowID p_id) {
+void DisplayServerMacOS::delete_sub_window(DisplayServerEnums::WindowID p_id) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_id));
@@ -1721,7 +1721,7 @@ void DisplayServerMacOS::delete_sub_window(WindowID p_id) {
 	mouse_enter_window(get_window_at_screen_position(mouse_get_position()));
 }
 
-void DisplayServerMacOS::window_set_rect_changed_callback(const Callable &p_callable, WindowID p_window) {
+void DisplayServerMacOS::window_set_rect_changed_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -1729,7 +1729,7 @@ void DisplayServerMacOS::window_set_rect_changed_callback(const Callable &p_call
 	wd.rect_changed_callback = p_callable;
 }
 
-void DisplayServerMacOS::window_set_window_event_callback(const Callable &p_callable, WindowID p_window) {
+void DisplayServerMacOS::window_set_window_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -1737,7 +1737,7 @@ void DisplayServerMacOS::window_set_window_event_callback(const Callable &p_call
 	wd.event_callback = p_callable;
 }
 
-void DisplayServerMacOS::window_set_input_event_callback(const Callable &p_callable, WindowID p_window) {
+void DisplayServerMacOS::window_set_input_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -1745,21 +1745,21 @@ void DisplayServerMacOS::window_set_input_event_callback(const Callable &p_calla
 	wd.input_event_callback = p_callable;
 }
 
-void DisplayServerMacOS::window_set_input_text_callback(const Callable &p_callable, WindowID p_window) {
+void DisplayServerMacOS::window_set_input_text_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
 	wd.input_text_callback = p_callable;
 }
 
-void DisplayServerMacOS::window_set_drop_files_callback(const Callable &p_callable, WindowID p_window) {
+void DisplayServerMacOS::window_set_drop_files_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
 	wd.drop_files_callback = p_callable;
 }
 
-void DisplayServerMacOS::window_set_title(const String &p_title, WindowID p_window) {
+void DisplayServerMacOS::window_set_title(const String &p_title, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -1768,7 +1768,7 @@ void DisplayServerMacOS::window_set_title(const String &p_title, WindowID p_wind
 	[wd.window_object setTitle:[NSString stringWithUTF8String:p_title.utf8().get_data()]];
 }
 
-Size2i DisplayServerMacOS::window_get_title_size(const String &p_title, WindowID p_window) const {
+Size2i DisplayServerMacOS::window_get_title_size(const String &p_title, DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	Size2i size;
@@ -1809,7 +1809,7 @@ Size2i DisplayServerMacOS::window_get_title_size(const String &p_title, WindowID
 	return size * scale;
 }
 
-void DisplayServerMacOS::window_set_mouse_passthrough(const Vector<Vector2> &p_region, WindowID p_window) {
+void DisplayServerMacOS::window_set_mouse_passthrough(const Vector<Vector2> &p_region, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -1818,7 +1818,7 @@ void DisplayServerMacOS::window_set_mouse_passthrough(const Vector<Vector2> &p_r
 	wd.mpath = p_region;
 }
 
-int DisplayServerMacOS::window_get_current_screen(WindowID p_window) const {
+int DisplayServerMacOS::window_get_current_screen(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 	ERR_FAIL_COND_V(!windows.has(p_window), INVALID_SCREEN);
 	const WindowData &wd = windows[p_window];
@@ -1827,7 +1827,7 @@ int DisplayServerMacOS::window_get_current_screen(WindowID p_window) const {
 	return (index == NSNotFound) ? 0 : index;
 }
 
-void DisplayServerMacOS::window_set_current_screen(int p_screen, WindowID p_window) {
+void DisplayServerMacOS::window_set_current_screen(int p_screen, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -1872,7 +1872,7 @@ void DisplayServerMacOS::window_set_current_screen(int p_screen, WindowID p_wind
 	}
 }
 
-void DisplayServerMacOS::reparent_check(WindowID p_window) {
+void DisplayServerMacOS::reparent_check(DisplayServerEnums::WindowID p_window) {
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
 	NSScreen *screen = [wd.window_object screen];
@@ -1906,7 +1906,7 @@ void DisplayServerMacOS::reparent_check(WindowID p_window) {
 		}
 	}
 
-	for (const WindowID &child : wd.transient_children) {
+	for (const DisplayServerEnums::WindowID &child : wd.transient_children) {
 		WindowData &wd_child = windows[child];
 		NSScreen *child_screen = [wd_child.window_object screen];
 
@@ -1927,7 +1927,7 @@ void DisplayServerMacOS::reparent_check(WindowID p_window) {
 	}
 }
 
-void DisplayServerMacOS::window_set_exclusive(WindowID p_window, bool p_exclusive) {
+void DisplayServerMacOS::window_set_exclusive(DisplayServerEnums::WindowID p_window, bool p_exclusive) {
 	_THREAD_SAFE_METHOD_
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
@@ -1937,7 +1937,7 @@ void DisplayServerMacOS::window_set_exclusive(WindowID p_window, bool p_exclusiv
 	}
 }
 
-Point2i DisplayServerMacOS::window_get_position(WindowID p_window) const {
+Point2i DisplayServerMacOS::window_get_position(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), Point2i());
@@ -1960,7 +1960,7 @@ Point2i DisplayServerMacOS::window_get_position(WindowID p_window) const {
 	return pos;
 }
 
-Point2i DisplayServerMacOS::window_get_position_with_decorations(WindowID p_window) const {
+Point2i DisplayServerMacOS::window_get_position_with_decorations(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), Point2i());
@@ -1981,7 +1981,7 @@ Point2i DisplayServerMacOS::window_get_position_with_decorations(WindowID p_wind
 	return pos;
 }
 
-void DisplayServerMacOS::window_set_position(const Point2i &p_position, WindowID p_window) {
+void DisplayServerMacOS::window_set_position(const Point2i &p_position, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2013,7 +2013,7 @@ void DisplayServerMacOS::window_set_position(const Point2i &p_position, WindowID
 	update_mouse_pos(wd, [wd.window_object mouseLocationOutsideOfEventStream]);
 }
 
-void DisplayServerMacOS::window_set_transient(WindowID p_window, WindowID p_parent) {
+void DisplayServerMacOS::window_set_transient(DisplayServerEnums::WindowID p_window, DisplayServerEnums::WindowID p_parent) {
 	_THREAD_SAFE_METHOD_
 	ERR_FAIL_COND(p_window == p_parent);
 
@@ -2047,7 +2047,7 @@ void DisplayServerMacOS::window_set_transient(WindowID p_window, WindowID p_pare
 	}
 }
 
-void DisplayServerMacOS::window_set_max_size(const Size2i p_size, WindowID p_window) {
+void DisplayServerMacOS::window_set_max_size(const Size2i p_size, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2067,7 +2067,7 @@ void DisplayServerMacOS::window_set_max_size(const Size2i p_size, WindowID p_win
 	}
 }
 
-Size2i DisplayServerMacOS::window_get_max_size(WindowID p_window) const {
+Size2i DisplayServerMacOS::window_get_max_size(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), Size2i());
@@ -2077,7 +2077,7 @@ Size2i DisplayServerMacOS::window_get_max_size(WindowID p_window) const {
 
 void DisplayServerMacOS::update_presentation_mode() {
 	bool has_fs_windows = false;
-	for (const KeyValue<WindowID, WindowData> &wd : windows) {
+	for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &wd : windows) {
 		if (wd.value.fullscreen) {
 			if (wd.value.exclusive_fullscreen) {
 				return;
@@ -2093,7 +2093,7 @@ void DisplayServerMacOS::update_presentation_mode() {
 	}
 }
 
-void DisplayServerMacOS::window_set_min_size(const Size2i p_size, WindowID p_window) {
+void DisplayServerMacOS::window_set_min_size(const Size2i p_size, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2113,7 +2113,7 @@ void DisplayServerMacOS::window_set_min_size(const Size2i p_size, WindowID p_win
 	}
 }
 
-Size2i DisplayServerMacOS::window_get_min_size(WindowID p_window) const {
+Size2i DisplayServerMacOS::window_get_min_size(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), Size2i());
@@ -2122,7 +2122,7 @@ Size2i DisplayServerMacOS::window_get_min_size(WindowID p_window) const {
 	return wd.min_size;
 }
 
-void DisplayServerMacOS::window_set_size(const Size2i p_size, WindowID p_window) {
+void DisplayServerMacOS::window_set_size(const Size2i p_size, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2150,7 +2150,7 @@ void DisplayServerMacOS::window_set_size(const Size2i p_size, WindowID p_window)
 	_update_window_style(wd, p_window);
 }
 
-Size2i DisplayServerMacOS::window_get_size(WindowID p_window) const {
+Size2i DisplayServerMacOS::window_get_size(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), Size2i());
@@ -2158,7 +2158,7 @@ Size2i DisplayServerMacOS::window_get_size(WindowID p_window) const {
 	return wd.size;
 }
 
-Size2i DisplayServerMacOS::window_get_size_with_decorations(WindowID p_window) const {
+Size2i DisplayServerMacOS::window_get_size_with_decorations(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), Size2i());
@@ -2167,7 +2167,7 @@ Size2i DisplayServerMacOS::window_get_size_with_decorations(WindowID p_window) c
 	return Size2i(frame.size.width, frame.size.height) * screen_get_max_scale();
 }
 
-void DisplayServerMacOS::window_set_mode(WindowMode p_mode, WindowID p_window) {
+void DisplayServerMacOS::window_set_mode(WindowMode p_mode, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2276,7 +2276,7 @@ void DisplayServerMacOS::window_set_mode(WindowMode p_mode, WindowID p_window) {
 	}
 }
 
-DisplayServer::WindowMode DisplayServerMacOS::window_get_mode(WindowID p_window) const {
+DisplayServer::WindowMode DisplayServerMacOS::window_get_mode(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), WINDOW_MODE_WINDOWED);
@@ -2302,7 +2302,7 @@ DisplayServer::WindowMode DisplayServerMacOS::window_get_mode(WindowID p_window)
 	return WINDOW_MODE_WINDOWED;
 }
 
-bool DisplayServerMacOS::window_is_maximize_allowed(WindowID p_window) const {
+bool DisplayServerMacOS::window_is_maximize_allowed(DisplayServerEnums::WindowID p_window) const {
 	ERR_FAIL_COND_V(!windows.has(p_window), false);
 	const WindowData &wd = windows[p_window];
 
@@ -2319,7 +2319,7 @@ bool DisplayServerMacOS::window_minimize_on_title_dbl_click() const {
 	return [value isEqualToString:@"Minimize"];
 }
 
-void DisplayServerMacOS::window_start_drag(WindowID p_window) {
+void DisplayServerMacOS::window_start_drag(DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2329,7 +2329,7 @@ void DisplayServerMacOS::window_start_drag(WindowID p_window) {
 	[wd.window_object performWindowDragWithEvent:event];
 }
 
-void DisplayServerMacOS::window_start_resize(WindowResizeEdge p_edge, WindowID p_window) {
+void DisplayServerMacOS::window_start_resize(WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_INDEX(int(p_edge), WINDOW_EDGE_MAX);
@@ -2339,7 +2339,7 @@ void DisplayServerMacOS::window_start_resize(WindowResizeEdge p_edge, WindowID p
 	wd.edge = p_edge;
 }
 
-void DisplayServerMacOS::window_set_window_buttons_offset(const Vector2i &p_offset, WindowID p_window) {
+void DisplayServerMacOS::window_set_window_buttons_offset(const Vector2i &p_offset, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2352,7 +2352,7 @@ void DisplayServerMacOS::window_set_window_buttons_offset(const Vector2i &p_offs
 	}
 }
 
-Vector3i DisplayServerMacOS::window_get_safe_title_margins(WindowID p_window) const {
+Vector3i DisplayServerMacOS::window_get_safe_title_margins(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), Vector3i());
@@ -2406,7 +2406,7 @@ void DisplayServerMacOS::window_set_custom_window_buttons(WindowData &p_wd, bool
 	}
 }
 
-void DisplayServerMacOS::window_set_flag(WindowFlags p_flag, bool p_enabled, WindowID p_window) {
+void DisplayServerMacOS::window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2568,7 +2568,7 @@ void DisplayServerMacOS::window_set_flag(WindowFlags p_flag, bool p_enabled, Win
 	}
 }
 
-bool DisplayServerMacOS::window_get_flag(WindowFlags p_flag, WindowID p_window) const {
+bool DisplayServerMacOS::window_get_flag(WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), false);
@@ -2615,12 +2615,12 @@ bool DisplayServerMacOS::window_get_flag(WindowFlags p_flag, WindowID p_window) 
 	return false;
 }
 
-void DisplayServerMacOS::window_request_attention(WindowID p_window) {
+void DisplayServerMacOS::window_request_attention(DisplayServerEnums::WindowID p_window) {
 	// It's app global, ignore window id.
 	[NSApp requestUserAttention:NSCriticalRequest];
 }
 
-void DisplayServerMacOS::window_set_taskbar_progress_value(float p_value, WindowID p_window) {
+void DisplayServerMacOS::window_set_taskbar_progress_value(float p_value, DisplayServerEnums::WindowID p_window) {
 	ERR_FAIL_COND(p_window != MAIN_WINDOW_ID);
 
 	if (!dock_progress) {
@@ -2631,7 +2631,7 @@ void DisplayServerMacOS::window_set_taskbar_progress_value(float p_value, Window
 	[dock_progress setValue:p_value];
 }
 
-void DisplayServerMacOS::window_set_taskbar_progress_state(ProgressState p_state, WindowID p_window) {
+void DisplayServerMacOS::window_set_taskbar_progress_state(ProgressState p_state, DisplayServerEnums::WindowID p_window) {
 	ERR_FAIL_COND(p_window != MAIN_WINDOW_ID);
 
 	if (!dock_progress) {
@@ -2642,7 +2642,7 @@ void DisplayServerMacOS::window_set_taskbar_progress_state(ProgressState p_state
 	[dock_progress setState:p_state];
 }
 
-void DisplayServerMacOS::window_move_to_foreground(WindowID p_window) {
+void DisplayServerMacOS::window_move_to_foreground(DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2663,7 +2663,7 @@ void DisplayServerMacOS::window_move_to_foreground(WindowID p_window) {
 	}
 }
 
-bool DisplayServerMacOS::window_is_focused(WindowID p_window) const {
+bool DisplayServerMacOS::window_is_focused(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), false);
@@ -2672,18 +2672,18 @@ bool DisplayServerMacOS::window_is_focused(WindowID p_window) const {
 	return wd.focused;
 }
 
-DisplayServerMacOS::WindowID DisplayServerMacOS::get_focused_window() const {
+DisplayServerEnums::WindowID DisplayServerMacOS::get_focused_window() const {
 	return last_focused_window;
 }
 
-bool DisplayServerMacOS::window_can_draw(WindowID p_window) const {
+bool DisplayServerMacOS::window_can_draw(DisplayServerEnums::WindowID p_window) const {
 	return windows[p_window].is_visible;
 }
 
 bool DisplayServerMacOS::can_any_window_draw() const {
 	_THREAD_SAFE_METHOD_
 
-	for (const KeyValue<WindowID, WindowData> &E : windows) {
+	for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 		if (E.value.is_visible) {
 			return true;
 		}
@@ -2691,7 +2691,7 @@ bool DisplayServerMacOS::can_any_window_draw() const {
 	return false;
 }
 
-void DisplayServerMacOS::window_set_ime_active(const bool p_active, WindowID p_window) {
+void DisplayServerMacOS::window_set_ime_active(const bool p_active, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2704,7 +2704,7 @@ void DisplayServerMacOS::window_set_ime_active(const bool p_active, WindowID p_w
 	}
 }
 
-void DisplayServerMacOS::window_set_ime_position(const Point2i &p_pos, WindowID p_window) {
+void DisplayServerMacOS::window_set_ime_position(const Point2i &p_pos, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -2713,14 +2713,14 @@ void DisplayServerMacOS::window_set_ime_position(const Point2i &p_pos, WindowID 
 	wd.im_position = p_pos;
 }
 
-DisplayServer::WindowID DisplayServerMacOS::get_window_at_screen_position(const Point2i &p_position) const {
+DisplayServerEnums::WindowID DisplayServerMacOS::get_window_at_screen_position(const Point2i &p_position) const {
 	Point2i position = p_position;
 	position.y *= -1;
 	position += _get_screens_origin();
 	position /= screen_get_max_scale();
 
 	NSInteger wnum = [NSWindow windowNumberAtPoint:NSMakePoint(position.x, position.y) belowWindowWithWindowNumber:0 /*topmost*/];
-	for (const KeyValue<WindowID, WindowData> &E : windows) {
+	for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 		if ([E.value.window_object windowNumber] == wnum) {
 			return E.key;
 		}
@@ -2728,7 +2728,7 @@ DisplayServer::WindowID DisplayServerMacOS::get_window_at_screen_position(const 
 	return INVALID_WINDOW_ID;
 }
 
-int64_t DisplayServerMacOS::window_get_native_handle(HandleType p_handle_type, WindowID p_window) const {
+int64_t DisplayServerMacOS::window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
 	ERR_FAIL_COND_V(!windows.has(p_window), 0);
 	switch (p_handle_type) {
 		case DISPLAY_HANDLE: {
@@ -2769,21 +2769,21 @@ int64_t DisplayServerMacOS::window_get_native_handle(HandleType p_handle_type, W
 	}
 }
 
-void DisplayServerMacOS::window_attach_instance_id(ObjectID p_instance, WindowID p_window) {
+void DisplayServerMacOS::window_attach_instance_id(ObjectID p_instance, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
 	windows[p_window].instance_id = p_instance;
 }
 
-ObjectID DisplayServerMacOS::window_get_attached_instance_id(WindowID p_window) const {
+ObjectID DisplayServerMacOS::window_get_attached_instance_id(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), ObjectID());
 	return windows[p_window].instance_id;
 }
 
-void DisplayServerMacOS::gl_window_make_current(DisplayServer::WindowID p_window_id) {
+void DisplayServerMacOS::gl_window_make_current(DisplayServerEnums::WindowID p_window_id) {
 #if defined(GLES3_ENABLED)
 	if (gl_manager_legacy) {
 		gl_manager_legacy->window_make_current(p_window_id);
@@ -2794,7 +2794,7 @@ void DisplayServerMacOS::gl_window_make_current(DisplayServer::WindowID p_window
 #endif
 }
 
-void DisplayServerMacOS::window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_mode, WindowID p_window) {
+void DisplayServerMacOS::window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 #if defined(GLES3_ENABLED)
 	if (gl_manager_angle) {
@@ -2811,7 +2811,7 @@ void DisplayServerMacOS::window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_
 #endif
 }
 
-DisplayServer::VSyncMode DisplayServerMacOS::window_get_vsync_mode(WindowID p_window) const {
+DisplayServer::VSyncMode DisplayServerMacOS::window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 #if defined(GLES3_ENABLED)
 	if (gl_manager_angle) {
@@ -2829,15 +2829,15 @@ DisplayServer::VSyncMode DisplayServerMacOS::window_get_vsync_mode(WindowID p_wi
 	return DisplayServer::VSYNC_ENABLED;
 }
 
-DisplayServerMacOSBase::HDROutput &DisplayServerMacOS::_get_hdr_output(WindowID p_window) {
+DisplayServerMacOSBase::HDROutput &DisplayServerMacOS::_get_hdr_output(DisplayServerEnums::WindowID p_window) {
 	return windows.getptr(p_window)->hdr_output;
 }
 
-const DisplayServerMacOSBase::HDROutput &DisplayServerMacOS::_get_hdr_output(WindowID p_window) const {
+const DisplayServerMacOSBase::HDROutput &DisplayServerMacOS::_get_hdr_output(DisplayServerEnums::WindowID p_window) const {
 	return windows.getptr(p_window)->hdr_output;
 }
 
-void DisplayServerMacOS::window_get_edr_values(WindowID p_window, CGFloat *r_max_potential_edr_value, CGFloat *r_max_edr_value) const {
+void DisplayServerMacOS::window_get_edr_values(DisplayServerEnums::WindowID p_window, CGFloat *r_max_potential_edr_value, CGFloat *r_max_edr_value) const {
 	_THREAD_SAFE_METHOD_
 
 	const WindowData *wd = windows.getptr(p_window);
@@ -2861,7 +2861,7 @@ void DisplayServerMacOS::window_get_edr_values(WindowID p_window, CGFloat *r_max
 }
 
 void DisplayServerMacOS::update_screen_parameters() {
-	for (const KeyValue<WindowID, WindowData> &E : windows) {
+	for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 		if (E.value.hdr_output.requested) {
 			_update_hdr_output(E.key, E.value.hdr_output);
 		}
@@ -3048,7 +3048,7 @@ void DisplayServerMacOS::enable_for_stealing_focus(OS::ProcessID pid) {
 		ERR_FAIL_V(m_retval); \
 	}
 
-uint32_t DisplayServerMacOS::window_get_display_id(WindowID p_window) const {
+uint32_t DisplayServerMacOS::window_get_display_id(DisplayServerEnums::WindowID p_window) const {
 	const WindowData *wd;
 	GET_OR_FAIL_V(wd, windows, p_window, -1);
 	return wd->display_id;
@@ -3075,7 +3075,7 @@ void DisplayServerMacOS::_window_update_display_id(WindowData *p_wd) {
 
 #ifdef TOOLS_ENABLED
 
-Error DisplayServerMacOS::embed_process_update(WindowID p_window, EmbeddedProcessMacOS *p_process) {
+Error DisplayServerMacOS::embed_process_update(DisplayServerEnums::WindowID p_window, EmbeddedProcessMacOS *p_process) {
 	_THREAD_SAFE_METHOD_
 
 	WindowData *wd;
@@ -3180,7 +3180,7 @@ void DisplayServerMacOS::_process_events(bool p_pump) {
 
 	_THREAD_SAFE_LOCK_
 
-	for (KeyValue<WindowID, WindowData> &E : windows) {
+	for (KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 		WindowData &wd = E.value;
 		if (wd.mpass) {
 			if (![wd.window_object ignoresMouseEvents]) {
@@ -3476,8 +3476,8 @@ void DisplayServerMacOS::register_macos_driver() {
 	register_create_function("macos", create_func, get_rendering_drivers_func);
 }
 
-DisplayServer::WindowID DisplayServerMacOS::window_get_active_popup() const {
-	const List<WindowID>::Element *E = popup_list.back();
+DisplayServerEnums::WindowID DisplayServerMacOS::window_get_active_popup() const {
+	const List<DisplayServerEnums::WindowID>::Element *E = popup_list.back();
 	if (E) {
 		return E->get();
 	} else {
@@ -3485,7 +3485,7 @@ DisplayServer::WindowID DisplayServerMacOS::window_get_active_popup() const {
 	}
 }
 
-void DisplayServerMacOS::window_set_popup_safe_rect(WindowID p_window, const Rect2i &p_rect) {
+void DisplayServerMacOS::window_set_popup_safe_rect(DisplayServerEnums::WindowID p_window, const Rect2i &p_rect) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
@@ -3493,7 +3493,7 @@ void DisplayServerMacOS::window_set_popup_safe_rect(WindowID p_window, const Rec
 	wd.parent_safe_rect = p_rect;
 }
 
-Rect2i DisplayServerMacOS::window_get_popup_safe_rect(WindowID p_window) const {
+Rect2i DisplayServerMacOS::window_get_popup_safe_rect(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), Rect2i());
@@ -3501,13 +3501,13 @@ Rect2i DisplayServerMacOS::window_get_popup_safe_rect(WindowID p_window) const {
 	return wd.parent_safe_rect;
 }
 
-void DisplayServerMacOS::popup_open(WindowID p_window) {
+void DisplayServerMacOS::popup_open(DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	bool has_popup_ancestor = false;
-	WindowID transient_root = p_window;
+	DisplayServerEnums::WindowID transient_root = p_window;
 	while (true) {
-		WindowID parent = windows[transient_root].transient_parent;
+		DisplayServerEnums::WindowID parent = windows[transient_root].transient_parent;
 		if (parent == INVALID_WINDOW_ID) {
 			break;
 		} else {
@@ -3526,8 +3526,8 @@ void DisplayServerMacOS::popup_open(WindowID p_window) {
 	if (wd.is_popup || (has_popup_ancestor && !ignores_input)) {
 		bool was_empty = popup_list.is_empty();
 		// Find current popup parent, or root popup if new window is not transient.
-		List<WindowID>::Element *C = nullptr;
-		List<WindowID>::Element *E = popup_list.back();
+		List<DisplayServerEnums::WindowID>::Element *C = nullptr;
+		List<DisplayServerEnums::WindowID>::Element *E = popup_list.back();
 		while (E) {
 			if (wd.transient_parent != E->get() || wd.transient_parent == INVALID_WINDOW_ID) {
 				C = E;
@@ -3549,14 +3549,14 @@ void DisplayServerMacOS::popup_open(WindowID p_window) {
 	}
 }
 
-void DisplayServerMacOS::popup_close(WindowID p_window) {
+void DisplayServerMacOS::popup_close(DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	bool was_empty = popup_list.is_empty();
-	List<WindowID>::Element *E = popup_list.find(p_window);
+	List<DisplayServerEnums::WindowID>::Element *E = popup_list.find(p_window);
 	while (E) {
-		List<WindowID>::Element *F = E->next();
-		WindowID win_id = E->get();
+		List<DisplayServerEnums::WindowID>::Element *F = E->next();
+		DisplayServerEnums::WindowID win_id = E->get();
 		popup_list.erase(E);
 
 		if (win_id != p_window) {
@@ -3578,7 +3578,7 @@ bool DisplayServerMacOS::mouse_process_popups(bool p_close) {
 	bool closed = false;
 	if (p_close) {
 		// Close all popups.
-		List<WindowID>::Element *E = popup_list.front();
+		List<DisplayServerEnums::WindowID>::Element *E = popup_list.front();
 		if (E) {
 			send_window_event(windows[E->get()], DisplayServerMacOS::WINDOW_EVENT_CLOSE_REQUEST);
 			closed = true;
@@ -3594,8 +3594,8 @@ bool DisplayServerMacOS::mouse_process_popups(bool p_close) {
 		}
 
 		Point2i pos = mouse_get_position();
-		List<WindowID>::Element *C = nullptr;
-		List<WindowID>::Element *E = popup_list.back();
+		List<DisplayServerEnums::WindowID>::Element *C = nullptr;
+		List<DisplayServerEnums::WindowID>::Element *E = popup_list.back();
 		// Find top popup to close.
 		while (E) {
 			// Popup window area.
@@ -3827,7 +3827,7 @@ DisplayServerMacOS::DisplayServerMacOS(const String &p_rendering_driver, WindowM
 		window_position = scr_rect.position + (scr_rect.size - p_resolution) / 2;
 	}
 
-	WindowID main_window = _create_window(p_mode, p_vsync_mode, Rect2i(window_position, p_resolution));
+	DisplayServerEnums::WindowID main_window = _create_window(p_mode, p_vsync_mode, Rect2i(window_position, p_resolution));
 	ERR_FAIL_COND(main_window == INVALID_WINDOW_ID);
 	for (int i = 0; i < WINDOW_FLAG_MAX; i++) {
 		if (p_flags & (1 << i)) {
@@ -3881,8 +3881,8 @@ DisplayServerMacOS::~DisplayServerMacOS() {
 	}
 
 	// Destroy all windows.
-	for (HashMap<WindowID, WindowData>::Iterator E = windows.begin(); E;) {
-		HashMap<WindowID, WindowData>::Iterator F = E;
+	for (HashMap<DisplayServerEnums::WindowID, WindowData>::Iterator E = windows.begin(); E;) {
+		HashMap<DisplayServerEnums::WindowID, WindowData>::Iterator F = E;
 		++E;
 		[F->value.window_object setContentView:nil];
 		[F->value.window_object close];
