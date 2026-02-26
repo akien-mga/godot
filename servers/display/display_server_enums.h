@@ -95,6 +95,18 @@ enum WindowEvent {
 	WINDOW_EVENT_FORCE_CLOSE,
 };
 
+enum WindowResizeEdge {
+	WINDOW_EDGE_TOP_LEFT,
+	WINDOW_EDGE_TOP,
+	WINDOW_EDGE_TOP_RIGHT,
+	WINDOW_EDGE_LEFT,
+	WINDOW_EDGE_RIGHT,
+	WINDOW_EDGE_BOTTOM_LEFT,
+	WINDOW_EDGE_BOTTOM,
+	WINDOW_EDGE_BOTTOM_RIGHT,
+	WINDOW_EDGE_MAX,
+};
+
 // Keep the VSyncMode enum values in sync with the `display/window/vsync/vsync_mode`
 // project setting hint.
 enum VSyncMode {

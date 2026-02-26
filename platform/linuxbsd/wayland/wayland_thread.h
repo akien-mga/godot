@@ -1122,7 +1122,7 @@ public:
 	const WindowState *window_get_state(DisplayServerEnums::WindowID p_window_id) const;
 	Size2i window_set_size(DisplayServerEnums::WindowID p_window_id, const Size2i &p_size);
 
-	void window_start_resize(DisplayServer::WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window);
+	void window_start_resize(DisplayServerEnums::WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window);
 
 	void window_set_max_size(DisplayServerEnums::WindowID p_window_id, const Size2i &p_size);
 	void window_set_min_size(DisplayServerEnums::WindowID p_window_id, const Size2i &p_size);

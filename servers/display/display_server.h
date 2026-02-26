@@ -498,19 +498,7 @@ public:
 
 	virtual void window_set_color(const Color &p_color) {}
 
-	enum WindowResizeEdge {
-		WINDOW_EDGE_TOP_LEFT,
-		WINDOW_EDGE_TOP,
-		WINDOW_EDGE_TOP_RIGHT,
-		WINDOW_EDGE_LEFT,
-		WINDOW_EDGE_RIGHT,
-		WINDOW_EDGE_BOTTOM_LEFT,
-		WINDOW_EDGE_BOTTOM,
-		WINDOW_EDGE_BOTTOM_RIGHT,
-		WINDOW_EDGE_MAX,
-	};
-
-	virtual void window_start_resize(WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) {}
+	virtual void window_start_resize(DisplayServerEnums::WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) {}
 
 	// Accessibility.
 
@@ -881,7 +869,7 @@ VARIANT_ENUM_CAST(DisplayServer::MouseMode)
 VARIANT_ENUM_CAST(DisplayServer::ScreenOrientation)
 VARIANT_ENUM_CAST_EXT(DisplayServerEnums::WindowMode, DisplayServer::WindowMode)
 VARIANT_ENUM_CAST_EXT(DisplayServerEnums::WindowFlags, DisplayServer::WindowFlags)
-VARIANT_ENUM_CAST(DisplayServer::WindowResizeEdge)
+VARIANT_ENUM_CAST_EXT(DisplayServerEnums::WindowResizeEdge, DisplayServer::WindowResizeEdge)
 VARIANT_ENUM_CAST(DisplayServer::HandleType)
 VARIANT_ENUM_CAST(DisplayServer::VirtualKeyboardType);
 VARIANT_ENUM_CAST(DisplayServer::CursorShape)

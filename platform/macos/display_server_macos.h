@@ -108,7 +108,7 @@ public:
 		CGDirectDisplayID display_id = -1;
 
 		Point2i mouse_pos;
-		WindowResizeEdge edge = WINDOW_EDGE_MAX;
+		DisplayServerEnums::WindowResizeEdge edge = DisplayServerEnums::WINDOW_EDGE_MAX;
 
 		Size2i min_size;
 		Size2i max_size;
@@ -401,7 +401,7 @@ public:
 	virtual bool window_minimize_on_title_dbl_click() const override;
 
 	virtual void window_start_drag(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) override;
-	virtual void window_start_resize(WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) override;
+	virtual void window_start_resize(DisplayServerEnums::WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) override;
 
 	virtual void window_set_window_buttons_offset(const Vector2i &p_offset, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) override;
 	virtual Vector3i window_get_safe_title_margins(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const override;

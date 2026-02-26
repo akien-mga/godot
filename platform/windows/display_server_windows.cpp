@@ -4791,10 +4791,10 @@ void DisplayServerWindows::window_start_drag(DisplayServerEnums::WindowID p_wind
 	}
 }
 
-void DisplayServerWindows::window_start_resize(WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window) {
+void DisplayServerWindows::window_start_resize(DisplayServerEnums::WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
-	ERR_FAIL_INDEX(int(p_edge), WINDOW_EDGE_MAX);
+	ERR_FAIL_INDEX(int(p_edge), DisplayServerEnums::WINDOW_EDGE_MAX);
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
 
@@ -4810,28 +4810,28 @@ void DisplayServerWindows::window_start_resize(WindowResizeEdge p_edge, DisplayS
 
 	DWORD op = 0;
 	switch (p_edge) {
-		case DisplayServer::WINDOW_EDGE_TOP_LEFT: {
+		case DisplayServerEnums::WINDOW_EDGE_TOP_LEFT: {
 			op = WMSZ_TOPLEFT;
 		} break;
-		case DisplayServer::WINDOW_EDGE_TOP: {
+		case DisplayServerEnums::WINDOW_EDGE_TOP: {
 			op = WMSZ_TOP;
 		} break;
-		case DisplayServer::WINDOW_EDGE_TOP_RIGHT: {
+		case DisplayServerEnums::WINDOW_EDGE_TOP_RIGHT: {
 			op = WMSZ_TOPRIGHT;
 		} break;
-		case DisplayServer::WINDOW_EDGE_LEFT: {
+		case DisplayServerEnums::WINDOW_EDGE_LEFT: {
 			op = WMSZ_LEFT;
 		} break;
-		case DisplayServer::WINDOW_EDGE_RIGHT: {
+		case DisplayServerEnums::WINDOW_EDGE_RIGHT: {
 			op = WMSZ_RIGHT;
 		} break;
-		case DisplayServer::WINDOW_EDGE_BOTTOM_LEFT: {
+		case DisplayServerEnums::WINDOW_EDGE_BOTTOM_LEFT: {
 			op = WMSZ_BOTTOMLEFT;
 		} break;
-		case DisplayServer::WINDOW_EDGE_BOTTOM: {
+		case DisplayServerEnums::WINDOW_EDGE_BOTTOM: {
 			op = WMSZ_BOTTOM;
 		} break;
-		case DisplayServer::WINDOW_EDGE_BOTTOM_RIGHT: {
+		case DisplayServerEnums::WINDOW_EDGE_BOTTOM_RIGHT: {
 			op = WMSZ_BOTTOMRIGHT;
 		} break;
 		default:

@@ -441,7 +441,7 @@ public:
 	bool has_focus_or_active_popup() const;
 
 	void start_drag();
-	void start_resize(DisplayServer::WindowResizeEdge p_edge);
+	void start_resize(DisplayServerEnums::WindowResizeEdge p_edge);
 
 	Rect2i get_usable_parent_rect() const;
 

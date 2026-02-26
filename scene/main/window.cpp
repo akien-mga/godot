@@ -2355,7 +2355,7 @@ void Window::start_drag() {
 	}
 }
 
-void Window::start_resize(DisplayServer::WindowResizeEdge p_edge) {
+void Window::start_resize(DisplayServerEnums::WindowResizeEdge p_edge) {
 	ERR_MAIN_THREAD_GUARD;
 	if (get_flag(FLAG_RESIZE_DISABLED)) {
 		return;
@@ -2364,28 +2364,28 @@ void Window::start_resize(DisplayServer::WindowResizeEdge p_edge) {
 		DisplayServer::get_singleton()->window_start_resize(p_edge, window_id);
 	} else if (embedder) {
 		switch (p_edge) {
-			case DisplayServer::WINDOW_EDGE_TOP_LEFT: {
+			case DisplayServerEnums::WINDOW_EDGE_TOP_LEFT: {
 				embedder->_window_start_resize(Viewport::SUB_WINDOW_RESIZE_TOP_LEFT, this);
 			} break;
-			case DisplayServer::WINDOW_EDGE_TOP: {
+			case DisplayServerEnums::WINDOW_EDGE_TOP: {
 				embedder->_window_start_resize(Viewport::SUB_WINDOW_RESIZE_TOP, this);
 			} break;
-			case DisplayServer::WINDOW_EDGE_TOP_RIGHT: {
+			case DisplayServerEnums::WINDOW_EDGE_TOP_RIGHT: {
 				embedder->_window_start_resize(Viewport::SUB_WINDOW_RESIZE_TOP_RIGHT, this);
 			} break;
-			case DisplayServer::WINDOW_EDGE_LEFT: {
+			case DisplayServerEnums::WINDOW_EDGE_LEFT: {
 				embedder->_window_start_resize(Viewport::SUB_WINDOW_RESIZE_LEFT, this);
 			} break;
-			case DisplayServer::WINDOW_EDGE_RIGHT: {
+			case DisplayServerEnums::WINDOW_EDGE_RIGHT: {
 				embedder->_window_start_resize(Viewport::SUB_WINDOW_RESIZE_RIGHT, this);
 			} break;
-			case DisplayServer::WINDOW_EDGE_BOTTOM_LEFT: {
+			case DisplayServerEnums::WINDOW_EDGE_BOTTOM_LEFT: {
 				embedder->_window_start_resize(Viewport::SUB_WINDOW_RESIZE_BOTTOM_LEFT, this);
 			} break;
-			case DisplayServer::WINDOW_EDGE_BOTTOM: {
+			case DisplayServerEnums::WINDOW_EDGE_BOTTOM: {
 				embedder->_window_start_resize(Viewport::SUB_WINDOW_RESIZE_BOTTOM, this);
 			} break;
-			case DisplayServer::WINDOW_EDGE_BOTTOM_RIGHT: {
+			case DisplayServerEnums::WINDOW_EDGE_BOTTOM_RIGHT: {
 				embedder->_window_start_resize(Viewport::SUB_WINDOW_RESIZE_BOTTOM_RIGHT, this);
 			} break;
 			default:

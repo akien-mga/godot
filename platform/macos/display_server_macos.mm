@@ -2329,10 +2329,10 @@ void DisplayServerMacOS::window_start_drag(DisplayServerEnums::WindowID p_window
 	[wd.window_object performWindowDragWithEvent:event];
 }
 
-void DisplayServerMacOS::window_start_resize(WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window) {
+void DisplayServerMacOS::window_start_resize(DisplayServerEnums::WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
-	ERR_FAIL_INDEX(int(p_edge), WINDOW_EDGE_MAX);
+	ERR_FAIL_INDEX(int(p_edge), DisplayServerEnums::WINDOW_EDGE_MAX);
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
 

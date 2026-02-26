@@ -5894,10 +5894,10 @@ void DisplayServerX11::window_start_drag(DisplayServerEnums::WindowID p_window) 
 	XSync(x11_display, 0);
 }
 
-void DisplayServerX11::window_start_resize(WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window) {
+void DisplayServerX11::window_start_resize(DisplayServerEnums::WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
-	ERR_FAIL_INDEX(int(p_edge), WINDOW_EDGE_MAX);
+	ERR_FAIL_INDEX(int(p_edge), DisplayServerEnums::WINDOW_EDGE_MAX);
 
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
@@ -5928,28 +5928,28 @@ void DisplayServerX11::window_start_resize(WindowResizeEdge p_edge, DisplayServe
 	}
 
 	switch (p_edge) {
-		case DisplayServer::WINDOW_EDGE_TOP_LEFT: {
+		case DisplayServerEnums::WINDOW_EDGE_TOP_LEFT: {
 			m.data.l[2] = _NET_WM_MOVERESIZE_SIZE_TOPLEFT;
 		} break;
-		case DisplayServer::WINDOW_EDGE_TOP: {
+		case DisplayServerEnums::WINDOW_EDGE_TOP: {
 			m.data.l[2] = _NET_WM_MOVERESIZE_SIZE_TOP;
 		} break;
-		case DisplayServer::WINDOW_EDGE_TOP_RIGHT: {
+		case DisplayServerEnums::WINDOW_EDGE_TOP_RIGHT: {
 			m.data.l[2] = _NET_WM_MOVERESIZE_SIZE_TOPRIGHT;
 		} break;
-		case DisplayServer::WINDOW_EDGE_LEFT: {
+		case DisplayServerEnums::WINDOW_EDGE_LEFT: {
 			m.data.l[2] = _NET_WM_MOVERESIZE_SIZE_LEFT;
 		} break;
-		case DisplayServer::WINDOW_EDGE_RIGHT: {
+		case DisplayServerEnums::WINDOW_EDGE_RIGHT: {
 			m.data.l[2] = _NET_WM_MOVERESIZE_SIZE_RIGHT;
 		} break;
-		case DisplayServer::WINDOW_EDGE_BOTTOM_LEFT: {
+		case DisplayServerEnums::WINDOW_EDGE_BOTTOM_LEFT: {
 			m.data.l[2] = _NET_WM_MOVERESIZE_SIZE_BOTTOMLEFT;
 		} break;
-		case DisplayServer::WINDOW_EDGE_BOTTOM: {
+		case DisplayServerEnums::WINDOW_EDGE_BOTTOM: {
 			m.data.l[2] = _NET_WM_MOVERESIZE_SIZE_BOTTOM;
 		} break;
-		case DisplayServer::WINDOW_EDGE_BOTTOM_RIGHT: {
+		case DisplayServerEnums::WINDOW_EDGE_BOTTOM_RIGHT: {
 			m.data.l[2] = _NET_WM_MOVERESIZE_SIZE_BOTTOMRIGHT;
 		} break;
 		default:

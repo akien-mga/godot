@@ -4165,7 +4165,7 @@ void WaylandThread::window_start_drag(DisplayServerEnums::WindowID p_window_id) 
 #endif
 }
 
-void WaylandThread::window_start_resize(DisplayServer::WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window) {
+void WaylandThread::window_start_resize(DisplayServerEnums::WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window) {
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowState &ws = windows[p_window];
 	SeatState *ss = wl_seat_get_seat_state(wl_seat_current);
@@ -4173,28 +4173,28 @@ void WaylandThread::window_start_resize(DisplayServer::WindowResizeEdge p_edge, 
 	if (ss && ws.xdg_toplevel) {
 		xdg_toplevel_resize_edge edge = XDG_TOPLEVEL_RESIZE_EDGE_NONE;
 		switch (p_edge) {
-			case DisplayServer::WINDOW_EDGE_TOP_LEFT: {
+			case DisplayServerEnums::WINDOW_EDGE_TOP_LEFT: {
 				edge = XDG_TOPLEVEL_RESIZE_EDGE_TOP_LEFT;
 			} break;
-			case DisplayServer::WINDOW_EDGE_TOP: {
+			case DisplayServerEnums::WINDOW_EDGE_TOP: {
 				edge = XDG_TOPLEVEL_RESIZE_EDGE_TOP;
 			} break;
-			case DisplayServer::WINDOW_EDGE_TOP_RIGHT: {
+			case DisplayServerEnums::WINDOW_EDGE_TOP_RIGHT: {
 				edge = XDG_TOPLEVEL_RESIZE_EDGE_TOP_RIGHT;
 			} break;
-			case DisplayServer::WINDOW_EDGE_LEFT: {
+			case DisplayServerEnums::WINDOW_EDGE_LEFT: {
 				edge = XDG_TOPLEVEL_RESIZE_EDGE_LEFT;
 			} break;
-			case DisplayServer::WINDOW_EDGE_RIGHT: {
+			case DisplayServerEnums::WINDOW_EDGE_RIGHT: {
 				edge = XDG_TOPLEVEL_RESIZE_EDGE_RIGHT;
 			} break;
-			case DisplayServer::WINDOW_EDGE_BOTTOM_LEFT: {
+			case DisplayServerEnums::WINDOW_EDGE_BOTTOM_LEFT: {
 				edge = XDG_TOPLEVEL_RESIZE_EDGE_BOTTOM_LEFT;
 			} break;
-			case DisplayServer::WINDOW_EDGE_BOTTOM: {
+			case DisplayServerEnums::WINDOW_EDGE_BOTTOM: {
 				edge = XDG_TOPLEVEL_RESIZE_EDGE_BOTTOM;
 			} break;
-			case DisplayServer::WINDOW_EDGE_BOTTOM_RIGHT: {
+			case DisplayServerEnums::WINDOW_EDGE_BOTTOM_RIGHT: {
 				edge = XDG_TOPLEVEL_RESIZE_EDGE_BOTTOM_RIGHT;
 			} break;
 			default:
@@ -4207,28 +4207,28 @@ void WaylandThread::window_start_resize(DisplayServer::WindowResizeEdge p_edge, 
 	if (ws.libdecor_frame) {
 		libdecor_resize_edge edge = LIBDECOR_RESIZE_EDGE_NONE;
 		switch (p_edge) {
-			case DisplayServer::WINDOW_EDGE_TOP_LEFT: {
+			case DisplayServerEnums::WINDOW_EDGE_TOP_LEFT: {
 				edge = LIBDECOR_RESIZE_EDGE_TOP_LEFT;
 			} break;
-			case DisplayServer::WINDOW_EDGE_TOP: {
+			case DisplayServerEnums::WINDOW_EDGE_TOP: {
 				edge = LIBDECOR_RESIZE_EDGE_TOP;
 			} break;
-			case DisplayServer::WINDOW_EDGE_TOP_RIGHT: {
+			case DisplayServerEnums::WINDOW_EDGE_TOP_RIGHT: {
 				edge = LIBDECOR_RESIZE_EDGE_TOP_RIGHT;
 			} break;
-			case DisplayServer::WINDOW_EDGE_LEFT: {
+			case DisplayServerEnums::WINDOW_EDGE_LEFT: {
 				edge = LIBDECOR_RESIZE_EDGE_LEFT;
 			} break;
-			case DisplayServer::WINDOW_EDGE_RIGHT: {
+			case DisplayServerEnums::WINDOW_EDGE_RIGHT: {
 				edge = LIBDECOR_RESIZE_EDGE_RIGHT;
 			} break;
-			case DisplayServer::WINDOW_EDGE_BOTTOM_LEFT: {
+			case DisplayServerEnums::WINDOW_EDGE_BOTTOM_LEFT: {
 				edge = LIBDECOR_RESIZE_EDGE_BOTTOM_LEFT;
 			} break;
-			case DisplayServer::WINDOW_EDGE_BOTTOM: {
+			case DisplayServerEnums::WINDOW_EDGE_BOTTOM: {
 				edge = LIBDECOR_RESIZE_EDGE_BOTTOM;
 			} break;
-			case DisplayServer::WINDOW_EDGE_BOTTOM_RIGHT: {
+			case DisplayServerEnums::WINDOW_EDGE_BOTTOM_RIGHT: {
 				edge = LIBDECOR_RESIZE_EDGE_BOTTOM_RIGHT;
 			} break;
 			default:

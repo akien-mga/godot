@@ -529,7 +529,7 @@ public:
 	virtual DisplayServerEnums::VSyncMode window_get_vsync_mode(DisplayServerEnums::WindowID p_vsync_mode) const override;
 
 	virtual void window_start_drag(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) override;
-	virtual void window_start_resize(WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window) override;
+	virtual void window_start_resize(DisplayServerEnums::WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window) override;
 
 	virtual Error embed_process(DisplayServerEnums::WindowID p_window, OS::ProcessID p_pid, const Rect2i &p_rect, bool p_visible, bool p_grab_focus) override;
 	virtual Error request_close_embedded_process(OS::ProcessID p_pid) override;

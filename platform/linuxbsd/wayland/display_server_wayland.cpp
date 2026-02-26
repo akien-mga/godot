@@ -1453,10 +1453,10 @@ void DisplayServerWayland::window_start_drag(DisplayServerEnums::WindowID p_wind
 	wayland_thread.window_start_drag(p_window);
 }
 
-void DisplayServerWayland::window_start_resize(WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window) {
+void DisplayServerWayland::window_start_resize(DisplayServerEnums::WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window) {
 	MutexLock mutex_lock(wayland_thread.mutex);
 
-	ERR_FAIL_INDEX(int(p_edge), WINDOW_EDGE_MAX);
+	ERR_FAIL_INDEX(int(p_edge), DisplayServerEnums::WINDOW_EDGE_MAX);
 	wayland_thread.window_start_resize(p_edge, p_window);
 }
 
