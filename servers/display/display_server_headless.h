@@ -181,11 +181,11 @@ public:
 	void release_rendering_thread() override {}
 	void swap_buffers() override {}
 
-	IndicatorID create_status_indicator(const Ref<Texture2D> &p_icon, const String &p_tooltip, const Callable &p_callback) override { return INVALID_INDICATOR_ID; }
-	void status_indicator_set_icon(IndicatorID p_id, const Ref<Texture2D> &p_icon) override {}
-	void status_indicator_set_tooltip(IndicatorID p_id, const String &p_tooltip) override {}
-	void status_indicator_set_callback(IndicatorID p_id, const Callable &p_callback) override {}
-	void delete_status_indicator(IndicatorID p_id) override {}
+	DisplayServerEnums::IndicatorID create_status_indicator(const Ref<Texture2D> &p_icon, const String &p_tooltip, const Callable &p_callback) override { return INVALID_INDICATOR_ID; }
+	void status_indicator_set_icon(DisplayServerEnums::IndicatorID p_id, const Ref<Texture2D> &p_icon) override {}
+	void status_indicator_set_tooltip(DisplayServerEnums::IndicatorID p_id, const String &p_tooltip) override {}
+	void status_indicator_set_callback(DisplayServerEnums::IndicatorID p_id, const Callable &p_callback) override {}
+	void delete_status_indicator(DisplayServerEnums::IndicatorID p_id) override {}
 
 	DisplayServerHeadless();
 	~DisplayServerHeadless();

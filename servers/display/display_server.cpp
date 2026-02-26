@@ -1255,33 +1255,33 @@ void DisplayServer::set_icon(const Ref<Image> &p_icon) {
 	WARN_PRINT("Icon not supported by this display server.");
 }
 
-DisplayServer::IndicatorID DisplayServer::create_status_indicator(const Ref<Texture2D> &p_icon, const String &p_tooltip, const Callable &p_callback) {
+DisplayServerEnums::IndicatorID DisplayServer::create_status_indicator(const Ref<Texture2D> &p_icon, const String &p_tooltip, const Callable &p_callback) {
 	WARN_PRINT("Status indicator not supported by this display server.");
 	return INVALID_INDICATOR_ID;
 }
 
-void DisplayServer::status_indicator_set_icon(IndicatorID p_id, const Ref<Texture2D> &p_icon) {
+void DisplayServer::status_indicator_set_icon(DisplayServerEnums::IndicatorID p_id, const Ref<Texture2D> &p_icon) {
 	WARN_PRINT("Status indicator not supported by this display server.");
 }
 
-void DisplayServer::status_indicator_set_tooltip(IndicatorID p_id, const String &p_tooltip) {
+void DisplayServer::status_indicator_set_tooltip(DisplayServerEnums::IndicatorID p_id, const String &p_tooltip) {
 	WARN_PRINT("Status indicator not supported by this display server.");
 }
 
-void DisplayServer::status_indicator_set_menu(IndicatorID p_id, const RID &p_menu_rid) {
+void DisplayServer::status_indicator_set_menu(DisplayServerEnums::IndicatorID p_id, const RID &p_menu_rid) {
 	WARN_PRINT("Status indicator not supported by this display server.");
 }
 
-void DisplayServer::status_indicator_set_callback(IndicatorID p_id, const Callable &p_callback) {
+void DisplayServer::status_indicator_set_callback(DisplayServerEnums::IndicatorID p_id, const Callable &p_callback) {
 	WARN_PRINT("Status indicator not supported by this display server.");
 }
 
-Rect2 DisplayServer::status_indicator_get_rect(IndicatorID p_id) const {
+Rect2 DisplayServer::status_indicator_get_rect(DisplayServerEnums::IndicatorID p_id) const {
 	WARN_PRINT("Status indicator not supported by this display server.");
 	return Rect2();
 }
 
-void DisplayServer::delete_status_indicator(IndicatorID p_id) {
+void DisplayServer::delete_status_indicator(DisplayServerEnums::IndicatorID p_id) {
 	WARN_PRINT("Status indicator not supported by this display server.");
 }
 

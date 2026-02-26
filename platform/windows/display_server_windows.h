@@ -429,8 +429,8 @@ class DisplayServerWindows : public DisplayServer {
 		HICON icon = nullptr;
 	};
 
-	IndicatorID indicator_id_counter = 0;
-	HashMap<IndicatorID, IndicatorData> indicators;
+	DisplayServerEnums::IndicatorID indicator_id_counter = 0;
+	HashMap<DisplayServerEnums::IndicatorID, IndicatorData> indicators;
 
 	struct FileDialogData {
 		HWND hwnd_owner = 0;
@@ -765,13 +765,13 @@ public:
 	virtual void set_native_icon(const String &p_filename) override;
 	virtual void set_icon(const Ref<Image> &p_icon) override;
 
-	virtual IndicatorID create_status_indicator(const Ref<Texture2D> &p_icon, const String &p_tooltip, const Callable &p_callback) override;
-	virtual void status_indicator_set_icon(IndicatorID p_id, const Ref<Texture2D> &p_icon) override;
-	virtual void status_indicator_set_tooltip(IndicatorID p_id, const String &p_tooltip) override;
-	virtual void status_indicator_set_menu(IndicatorID p_id, const RID &p_rid) override;
-	virtual void status_indicator_set_callback(IndicatorID p_id, const Callable &p_callback) override;
-	virtual Rect2 status_indicator_get_rect(IndicatorID p_id) const override;
-	virtual void delete_status_indicator(IndicatorID p_id) override;
+	virtual DisplayServerEnums::IndicatorID create_status_indicator(const Ref<Texture2D> &p_icon, const String &p_tooltip, const Callable &p_callback) override;
+	virtual void status_indicator_set_icon(DisplayServerEnums::IndicatorID p_id, const Ref<Texture2D> &p_icon) override;
+	virtual void status_indicator_set_tooltip(DisplayServerEnums::IndicatorID p_id, const String &p_tooltip) override;
+	virtual void status_indicator_set_menu(DisplayServerEnums::IndicatorID p_id, const RID &p_rid) override;
+	virtual void status_indicator_set_callback(DisplayServerEnums::IndicatorID p_id, const Callable &p_callback) override;
+	virtual Rect2 status_indicator_get_rect(DisplayServerEnums::IndicatorID p_id) const override;
+	virtual void delete_status_indicator(DisplayServerEnums::IndicatorID p_id) override;
 
 	virtual void set_context(Context p_context) override;
 

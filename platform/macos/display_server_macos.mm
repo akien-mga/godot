@@ -3313,7 +3313,7 @@ void DisplayServerMacOS::set_icon(const Ref<Image> &p_icon) {
 	}
 }
 
-DisplayServer::IndicatorID DisplayServerMacOS::create_status_indicator(const Ref<Texture2D> &p_icon, const String &p_tooltip, const Callable &p_callback) {
+DisplayServerEnums::IndicatorID DisplayServerMacOS::create_status_indicator(const Ref<Texture2D> &p_icon, const String &p_tooltip, const Callable &p_callback) {
 	NSImage *nsimg = nullptr;
 	if (p_icon.is_valid() && p_icon->get_width() > 0 && p_icon->get_height() > 0 && p_icon->get_image().is_valid()) {
 		Ref<Image> img = p_icon->get_image();
@@ -3339,13 +3339,13 @@ DisplayServer::IndicatorID DisplayServerMacOS::create_status_indicator(const Ref
 	[item.button sendActionOn:(NSEventMaskLeftMouseDown | NSEventMaskRightMouseDown | NSEventMaskOtherMouseDown)];
 	item.button.toolTip = [NSString stringWithUTF8String:p_tooltip.utf8().get_data()];
 
-	IndicatorID iid = indicator_id_counter++;
+	DisplayServerEnums::IndicatorID iid = indicator_id_counter++;
 	indicators[iid] = idat;
 
 	return iid;
 }
 
-void DisplayServerMacOS::status_indicator_set_icon(IndicatorID p_id, const Ref<Texture2D> &p_icon) {
+void DisplayServerMacOS::status_indicator_set_icon(DisplayServerEnums::IndicatorID p_id, const Ref<Texture2D> &p_icon) {
 	ERR_FAIL_COND(!indicators.has(p_id));
 
 	NSImage *nsimg = nullptr;
@@ -3362,14 +3362,14 @@ void DisplayServerMacOS::status_indicator_set_icon(IndicatorID p_id, const Ref<T
 	item.button.image = nsimg;
 }
 
-void DisplayServerMacOS::status_indicator_set_tooltip(IndicatorID p_id, const String &p_tooltip) {
+void DisplayServerMacOS::status_indicator_set_tooltip(DisplayServerEnums::IndicatorID p_id, const String &p_tooltip) {
 	ERR_FAIL_COND(!indicators.has(p_id));
 
 	NSStatusItem *item = indicators[p_id].item;
 	item.button.toolTip = [NSString stringWithUTF8String:p_tooltip.utf8().get_data()];
 }
 
-void DisplayServerMacOS::status_indicator_set_menu(IndicatorID p_id, const RID &p_menu_rid) {
+void DisplayServerMacOS::status_indicator_set_menu(DisplayServerEnums::IndicatorID p_id, const RID &p_menu_rid) {
 	ERR_FAIL_COND(!indicators.has(p_id));
 
 	NSStatusItem *item = indicators[p_id].item;
@@ -3381,13 +3381,13 @@ void DisplayServerMacOS::status_indicator_set_menu(IndicatorID p_id, const RID &
 	}
 }
 
-void DisplayServerMacOS::status_indicator_set_callback(IndicatorID p_id, const Callable &p_callback) {
+void DisplayServerMacOS::status_indicator_set_callback(DisplayServerEnums::IndicatorID p_id, const Callable &p_callback) {
 	ERR_FAIL_COND(!indicators.has(p_id));
 
 	[indicators[p_id].delegate setCallback:p_callback];
 }
 
-Rect2 DisplayServerMacOS::status_indicator_get_rect(IndicatorID p_id) const {
+Rect2 DisplayServerMacOS::status_indicator_get_rect(DisplayServerEnums::IndicatorID p_id) const {
 	ERR_FAIL_COND_V(!indicators.has(p_id), Rect2());
 
 	NSStatusItem *item = indicators[p_id].item;
@@ -3411,7 +3411,7 @@ Rect2 DisplayServerMacOS::status_indicator_get_rect(IndicatorID p_id) const {
 	return rect;
 }
 
-void DisplayServerMacOS::delete_status_indicator(IndicatorID p_id) {
+void DisplayServerMacOS::delete_status_indicator(DisplayServerEnums::IndicatorID p_id) {
 	ERR_FAIL_COND(!indicators.has(p_id));
 
 	[[NSStatusBar systemStatusBar] removeStatusItem:indicators[p_id].item];
@@ -3870,7 +3870,7 @@ DisplayServerMacOS::DisplayServerMacOS(const String &p_rendering_driver, WindowM
 
 DisplayServerMacOS::~DisplayServerMacOS() {
 	// Destroy all status indicators.
-	for (HashMap<IndicatorID, IndicatorData>::Iterator E = indicators.begin(); E; ++E) {
+	for (HashMap<DisplayServerEnums::IndicatorID, IndicatorData>::Iterator E = indicators.begin(); E; ++E) {
 		[[NSStatusBar systemStatusBar] removeStatusItem:E->value.item];
 	}
 

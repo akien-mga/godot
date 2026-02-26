@@ -4362,7 +4362,7 @@ void DisplayServerWindows::set_icon(const Ref<Image> &p_icon) {
 	}
 }
 
-DisplayServer::IndicatorID DisplayServerWindows::create_status_indicator(const Ref<Texture2D> &p_icon, const String &p_tooltip, const Callable &p_callback) {
+DisplayServerEnums::IndicatorID DisplayServerWindows::create_status_indicator(const Ref<Texture2D> &p_icon, const String &p_tooltip, const Callable &p_callback) {
 	IndicatorData idat;
 	if (p_icon.is_valid() && p_icon->get_width() > 0 && p_icon->get_height() > 0 && p_icon->get_image().is_valid()) {
 		Ref<Image> img = p_icon->get_image();
@@ -4425,13 +4425,13 @@ DisplayServer::IndicatorID DisplayServerWindows::create_status_indicator(const R
 	Shell_NotifyIconW(NIM_ADD, &ndat);
 	Shell_NotifyIconW(NIM_SETVERSION, &ndat);
 
-	IndicatorID iid = indicator_id_counter++;
+	DisplayServerEnums::IndicatorID iid = indicator_id_counter++;
 	indicators[iid] = idat;
 
 	return iid;
 }
 
-void DisplayServerWindows::status_indicator_set_icon(IndicatorID p_id, const Ref<Texture2D> &p_icon) {
+void DisplayServerWindows::status_indicator_set_icon(DisplayServerEnums::IndicatorID p_id, const Ref<Texture2D> &p_icon) {
 	ERR_FAIL_COND(!indicators.has(p_id));
 
 	IndicatorData &idat = indicators[p_id];
@@ -4499,7 +4499,7 @@ void DisplayServerWindows::status_indicator_set_icon(IndicatorID p_id, const Ref
 	Shell_NotifyIconW(NIM_MODIFY, &ndat);
 }
 
-void DisplayServerWindows::status_indicator_set_tooltip(IndicatorID p_id, const String &p_tooltip) {
+void DisplayServerWindows::status_indicator_set_tooltip(DisplayServerEnums::IndicatorID p_id, const String &p_tooltip) {
 	ERR_FAIL_COND(!indicators.has(p_id));
 
 	NOTIFYICONDATAW ndat;
@@ -4514,19 +4514,19 @@ void DisplayServerWindows::status_indicator_set_tooltip(IndicatorID p_id, const 
 	Shell_NotifyIconW(NIM_MODIFY, &ndat);
 }
 
-void DisplayServerWindows::status_indicator_set_menu(IndicatorID p_id, const RID &p_menu_rid) {
+void DisplayServerWindows::status_indicator_set_menu(DisplayServerEnums::IndicatorID p_id, const RID &p_menu_rid) {
 	ERR_FAIL_COND(!indicators.has(p_id));
 
 	indicators[p_id].menu_rid = p_menu_rid;
 }
 
-void DisplayServerWindows::status_indicator_set_callback(IndicatorID p_id, const Callable &p_callback) {
+void DisplayServerWindows::status_indicator_set_callback(DisplayServerEnums::IndicatorID p_id, const Callable &p_callback) {
 	ERR_FAIL_COND(!indicators.has(p_id));
 
 	indicators[p_id].callback = p_callback;
 }
 
-Rect2 DisplayServerWindows::status_indicator_get_rect(IndicatorID p_id) const {
+Rect2 DisplayServerWindows::status_indicator_get_rect(DisplayServerEnums::IndicatorID p_id) const {
 	ERR_FAIL_COND_V(!indicators.has(p_id), Rect2());
 
 	NOTIFYICONIDENTIFIER nid;
@@ -4550,7 +4550,7 @@ Rect2 DisplayServerWindows::status_indicator_get_rect(IndicatorID p_id) const {
 	return Rect2();
 }
 
-void DisplayServerWindows::delete_status_indicator(IndicatorID p_id) {
+void DisplayServerWindows::delete_status_indicator(DisplayServerEnums::IndicatorID p_id) {
 	ERR_FAIL_COND(!indicators.has(p_id));
 
 	IndicatorData &idat = indicators[p_id];
@@ -5363,7 +5363,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 		} break;
 		case WM_INDICATOR_CALLBACK_MESSAGE: {
 			if (lParam == WM_LBUTTONDOWN || lParam == WM_RBUTTONDOWN || lParam == WM_MBUTTONDOWN || lParam == WM_XBUTTONDOWN) {
-				IndicatorID iid = (IndicatorID)wParam;
+				DisplayServerEnums::IndicatorID iid = (DisplayServerEnums::IndicatorID)wParam;
 				MouseButton mb = MouseButton::LEFT;
 				if (lParam == WM_RBUTTONDOWN) {
 					mb = MouseButton::RIGHT;
@@ -8080,7 +8080,7 @@ DisplayServerWindows::~DisplayServerWindows() {
 	cursors_cache.clear();
 
 	// Destroy all status indicators.
-	for (HashMap<IndicatorID, IndicatorData>::Iterator E = indicators.begin(); E; ++E) {
+	for (HashMap<DisplayServerEnums::IndicatorID, IndicatorData>::Iterator E = indicators.begin(); E; ++E) {
 		NOTIFYICONDATAW ndat;
 		ZeroMemory(&ndat, sizeof(NOTIFYICONDATAW));
 		ndat.cbSize = sizeof(NOTIFYICONDATAW);

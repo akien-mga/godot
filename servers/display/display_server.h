@@ -413,8 +413,6 @@ public:
 	};
 
 public:
-	typedef int IndicatorID;
-
 	virtual Vector<DisplayServerEnums::WindowID> get_window_list() const = 0;
 
 	enum WindowFlags {
@@ -894,13 +892,13 @@ public:
 	virtual void set_native_icon(const String &p_filename);
 	virtual void set_icon(const Ref<Image> &p_icon);
 
-	virtual IndicatorID create_status_indicator(const Ref<Texture2D> &p_icon, const String &p_tooltip, const Callable &p_callback);
-	virtual void status_indicator_set_icon(IndicatorID p_id, const Ref<Texture2D> &p_icon);
-	virtual void status_indicator_set_tooltip(IndicatorID p_id, const String &p_tooltip);
-	virtual void status_indicator_set_menu(IndicatorID p_id, const RID &p_menu_rid);
-	virtual void status_indicator_set_callback(IndicatorID p_id, const Callable &p_callback);
-	virtual Rect2 status_indicator_get_rect(IndicatorID p_id) const;
-	virtual void delete_status_indicator(IndicatorID p_id);
+	virtual DisplayServerEnums::IndicatorID create_status_indicator(const Ref<Texture2D> &p_icon, const String &p_tooltip, const Callable &p_callback);
+	virtual void status_indicator_set_icon(DisplayServerEnums::IndicatorID p_id, const Ref<Texture2D> &p_icon);
+	virtual void status_indicator_set_tooltip(DisplayServerEnums::IndicatorID p_id, const String &p_tooltip);
+	virtual void status_indicator_set_menu(DisplayServerEnums::IndicatorID p_id, const RID &p_menu_rid);
+	virtual void status_indicator_set_callback(DisplayServerEnums::IndicatorID p_id, const Callable &p_callback);
+	virtual Rect2 status_indicator_get_rect(DisplayServerEnums::IndicatorID p_id) const;
+	virtual void delete_status_indicator(DisplayServerEnums::IndicatorID p_id);
 
 	virtual void set_context(Context p_context);
 
