@@ -60,7 +60,7 @@
 #import "core/os/main_loop.h"
 #import "servers/display/native_menu.h"
 
-DisplayServerMacOSEmbedded::DisplayServerMacOSEmbedded(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, Error &r_error) {
+DisplayServerMacOSEmbedded::DisplayServerMacOSEmbedded(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, Error &r_error) {
 	EmbeddedDebugger::initialize(this);
 
 	r_error = OK; // default to OK
@@ -243,7 +243,7 @@ DisplayServerMacOSEmbedded::~DisplayServerMacOSEmbedded() {
 #endif
 }
 
-DisplayServer *DisplayServerMacOSEmbedded::create_func(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t /* p_parent_window */, Error &r_error) {
+DisplayServer *DisplayServerMacOSEmbedded::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t /* p_parent_window */, Error &r_error) {
 	return memnew(DisplayServerMacOSEmbedded(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, r_error));
 }
 
@@ -605,12 +605,12 @@ Size2i DisplayServerMacOSEmbedded::window_get_size_with_decorations(DisplayServe
 	return window_get_size(p_window);
 }
 
-void DisplayServerMacOSEmbedded::window_set_mode(WindowMode p_mode, DisplayServerEnums::WindowID p_window) {
+void DisplayServerMacOSEmbedded::window_set_mode(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::WindowID p_window) {
 	// Not supported
 }
 
-DisplayServer::WindowMode DisplayServerMacOSEmbedded::window_get_mode(DisplayServerEnums::WindowID p_window) const {
-	return WindowMode::WINDOW_MODE_WINDOWED;
+DisplayServerEnums::WindowMode DisplayServerMacOSEmbedded::window_get_mode(DisplayServerEnums::WindowID p_window) const {
+	return DisplayServerEnums::WindowMode::WINDOW_MODE_WINDOWED;
 }
 
 bool DisplayServerMacOSEmbedded::window_is_maximize_allowed(DisplayServerEnums::WindowID p_window) const {

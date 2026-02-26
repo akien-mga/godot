@@ -1764,7 +1764,7 @@ DisplayServerEnums::WindowID DisplayServerWindows::get_window_at_screen_position
 	return DisplayServerEnums::INVALID_WINDOW_ID;
 }
 
-DisplayServerEnums::WindowID DisplayServerWindows::create_sub_window(WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
+DisplayServerEnums::WindowID DisplayServerWindows::create_sub_window(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
 	_THREAD_SAFE_METHOD_
 
 	bool no_redirection_bitmap = false;
@@ -1802,7 +1802,7 @@ DisplayServerEnums::WindowID DisplayServerWindows::create_sub_window(WindowMode 
 	if (p_flags & WINDOW_FLAG_BORDERLESS_BIT) {
 		wd.borderless = true;
 	}
-	if (p_flags & WINDOW_FLAG_ALWAYS_ON_TOP_BIT && p_mode != WINDOW_MODE_FULLSCREEN && p_mode != WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+	if (p_flags & WINDOW_FLAG_ALWAYS_ON_TOP_BIT && p_mode != DisplayServerEnums::WINDOW_MODE_FULLSCREEN && p_mode != DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 		wd.always_on_top = true;
 	}
 	if (p_flags & WINDOW_FLAG_SHARP_CORNERS_BIT) {
@@ -2585,13 +2585,13 @@ void DisplayServerWindows::_update_window_style(DisplayServerEnums::WindowID p_w
 	}
 }
 
-void DisplayServerWindows::window_set_mode(WindowMode p_mode, DisplayServerEnums::WindowID p_window) {
+void DisplayServerWindows::window_set_mode(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
 
-	if (p_mode != WINDOW_MODE_WINDOWED && wd.parent_hwnd) {
+	if (p_mode != DisplayServerEnums::WINDOW_MODE_WINDOWED && wd.parent_hwnd) {
 		print_line("Embedded window only supports Windowed mode.");
 		return;
 	}
@@ -2599,16 +2599,16 @@ void DisplayServerWindows::window_set_mode(WindowMode p_mode, DisplayServerEnums
 	bool was_fullscreen = wd.fullscreen;
 	wd.was_fullscreen_pre_min = false;
 
-	if (p_mode == WINDOW_MODE_MAXIMIZED && wd.borderless) {
+	if (p_mode == DisplayServerEnums::WINDOW_MODE_MAXIMIZED && wd.borderless) {
 		int cs = window_get_current_screen(p_window);
 		Rect2i full = Rect2i(screen_get_position(cs), screen_get_size(cs));
 		Rect2i usable = screen_get_usable_rect(cs);
 		if (full == usable) {
-			p_mode = WINDOW_MODE_FULLSCREEN;
+			p_mode = DisplayServerEnums::WINDOW_MODE_FULLSCREEN;
 		}
 	}
 
-	if (wd.fullscreen && p_mode != WINDOW_MODE_FULLSCREEN && p_mode != WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+	if (wd.fullscreen && p_mode != DisplayServerEnums::WINDOW_MODE_FULLSCREEN && p_mode != DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 		RECT rect;
 
 		wd.fullscreen = false;
@@ -2638,7 +2638,7 @@ void DisplayServerWindows::window_set_mode(WindowMode p_mode, DisplayServerEnums
 		}
 	}
 
-	if ((wd.maximized || wd.was_maximized_pre_fs) && wd.borderless && p_mode != WINDOW_MODE_MINIMIZED && p_mode != WINDOW_MODE_FULLSCREEN && p_mode != WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+	if ((wd.maximized || wd.was_maximized_pre_fs) && wd.borderless && p_mode != DisplayServerEnums::WINDOW_MODE_MINIMIZED && p_mode != DisplayServerEnums::WINDOW_MODE_FULLSCREEN && p_mode != DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 		RECT rect;
 		if (wd.pre_fs_valid) {
 			rect = wd.pre_fs_rect;
@@ -2653,19 +2653,19 @@ void DisplayServerWindows::window_set_mode(WindowMode p_mode, DisplayServerEnums
 		MoveWindow(wd.hWnd, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, TRUE);
 	}
 
-	if (p_mode == WINDOW_MODE_WINDOWED) {
+	if (p_mode == DisplayServerEnums::WINDOW_MODE_WINDOWED) {
 		ShowWindow(wd.hWnd, SW_NORMAL);
 		wd.maximized = false;
 		wd.minimized = false;
 	}
 
-	if (p_mode == WINDOW_MODE_MAXIMIZED && !wd.borderless) {
+	if (p_mode == DisplayServerEnums::WINDOW_MODE_MAXIMIZED && !wd.borderless) {
 		ShowWindow(wd.hWnd, SW_MAXIMIZE);
 		wd.maximized = true;
 		wd.minimized = false;
 	}
 
-	if (p_mode == WINDOW_MODE_MAXIMIZED && wd.borderless) {
+	if (p_mode == DisplayServerEnums::WINDOW_MODE_MAXIMIZED && wd.borderless) {
 		if (!was_fullscreen && !(wd.maximized && wd.borderless)) {
 			// Save non-fullscreen rect before entering fullscreen.
 			GetWindowRect(wd.hWnd, &wd.pre_fs_rect);
@@ -2682,21 +2682,21 @@ void DisplayServerWindows::window_set_mode(WindowMode p_mode, DisplayServerEnums
 		MoveWindow(wd.hWnd, pos.x, pos.y, size.width, size.height, TRUE);
 	}
 
-	if (p_mode == WINDOW_MODE_MINIMIZED) {
+	if (p_mode == DisplayServerEnums::WINDOW_MODE_MINIMIZED) {
 		ShowWindow(wd.hWnd, SW_MINIMIZE);
 		wd.maximized = false;
 		wd.minimized = true;
 		wd.was_fullscreen_pre_min = was_fullscreen;
 	}
 
-	if (p_mode == WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+	if (p_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 		wd.multiwindow_fs = false;
-	} else if (p_mode == WINDOW_MODE_FULLSCREEN) {
+	} else if (p_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN) {
 		wd.multiwindow_fs = true;
 	}
 	_update_window_style(p_window, false);
 
-	if ((p_mode == WINDOW_MODE_FULLSCREEN || p_mode == WINDOW_MODE_EXCLUSIVE_FULLSCREEN) && !wd.fullscreen) {
+	if ((p_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || p_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) && !wd.fullscreen) {
 		if (wd.minimized || wd.maximized) {
 			ShowWindow(wd.hWnd, SW_RESTORE);
 		}
@@ -2733,24 +2733,24 @@ void DisplayServerWindows::window_set_mode(WindowMode p_mode, DisplayServerEnums
 	_update_window_mouse_passthrough(p_window);
 }
 
-DisplayServer::WindowMode DisplayServerWindows::window_get_mode(DisplayServerEnums::WindowID p_window) const {
+DisplayServerEnums::WindowMode DisplayServerWindows::window_get_mode(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
-	ERR_FAIL_COND_V(!windows.has(p_window), WINDOW_MODE_WINDOWED);
+	ERR_FAIL_COND_V(!windows.has(p_window), DisplayServerEnums::WINDOW_MODE_WINDOWED);
 	const WindowData &wd = windows[p_window];
 
 	if (wd.fullscreen) {
 		if (wd.multiwindow_fs) {
-			return WINDOW_MODE_FULLSCREEN;
+			return DisplayServerEnums::WINDOW_MODE_FULLSCREEN;
 		} else {
-			return WINDOW_MODE_EXCLUSIVE_FULLSCREEN;
+			return DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN;
 		}
 	} else if (wd.minimized) {
-		return WINDOW_MODE_MINIMIZED;
+		return DisplayServerEnums::WINDOW_MODE_MINIMIZED;
 	} else if (wd.maximized) {
-		return WINDOW_MODE_MAXIMIZED;
+		return DisplayServerEnums::WINDOW_MODE_MAXIMIZED;
 	} else {
-		return WINDOW_MODE_WINDOWED;
+		return DisplayServerEnums::WINDOW_MODE_WINDOWED;
 	}
 }
 
@@ -6813,11 +6813,11 @@ void DisplayServerWindows::_update_tablet_ctx(const String &p_old_driver, const 
 	}
 }
 
-Error DisplayServerWindows::_create_window(DisplayServerEnums::WindowID p_window_id, WindowMode p_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent, HWND p_parent_hwnd, bool p_no_redirection_bitmap) {
+Error DisplayServerWindows::_create_window(DisplayServerEnums::WindowID p_window_id, DisplayServerEnums::WindowMode p_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent, HWND p_parent_hwnd, bool p_no_redirection_bitmap) {
 	DWORD dwExStyle;
 	DWORD dwStyle;
 
-	_get_window_style(p_window_id == DisplayServerEnums::MAIN_WINDOW_ID, false, (p_mode == WINDOW_MODE_FULLSCREEN || p_mode == WINDOW_MODE_EXCLUSIVE_FULLSCREEN), p_mode != WINDOW_MODE_EXCLUSIVE_FULLSCREEN, p_flags & WINDOW_FLAG_BORDERLESS_BIT, !(p_flags & WINDOW_FLAG_RESIZE_DISABLED_BIT), p_flags & WINDOW_FLAG_MINIMIZE_DISABLED_BIT, p_flags & WINDOW_FLAG_MAXIMIZE_DISABLED_BIT, p_mode == WINDOW_MODE_MINIMIZED, p_mode == WINDOW_MODE_MAXIMIZED, false, (p_flags & WINDOW_FLAG_NO_FOCUS_BIT) | (p_flags & WINDOW_FLAG_POPUP_BIT), p_parent_hwnd, p_no_redirection_bitmap, dwStyle, dwExStyle);
+	_get_window_style(p_window_id == DisplayServerEnums::MAIN_WINDOW_ID, false, (p_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || p_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN), p_mode != DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN, p_flags & WINDOW_FLAG_BORDERLESS_BIT, !(p_flags & WINDOW_FLAG_RESIZE_DISABLED_BIT), p_flags & WINDOW_FLAG_MINIMIZE_DISABLED_BIT, p_flags & WINDOW_FLAG_MAXIMIZE_DISABLED_BIT, p_mode == DisplayServerEnums::WINDOW_MODE_MINIMIZED, p_mode == DisplayServerEnums::WINDOW_MODE_MAXIMIZED, false, (p_flags & WINDOW_FLAG_NO_FOCUS_BIT) | (p_flags & WINDOW_FLAG_POPUP_BIT), p_parent_hwnd, p_no_redirection_bitmap, dwStyle, dwExStyle);
 
 	int rq_screen = get_screen_from_rect(p_rect);
 	if (rq_screen < 0) {
@@ -6829,7 +6829,7 @@ Error DisplayServerWindows::_create_window(DisplayServerEnums::WindowID p_window
 
 	RECT WindowRect;
 
-	Vector2i off = (p_mode == WINDOW_MODE_FULLSCREEN || ((p_flags & WINDOW_FLAG_BORDERLESS_BIT) && p_mode == WINDOW_MODE_MAXIMIZED)) ? _get_screen_expand_offset(rq_screen) : Vector2i();
+	Vector2i off = (p_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || ((p_flags & WINDOW_FLAG_BORDERLESS_BIT) && p_mode == DisplayServerEnums::WINDOW_MODE_MAXIMIZED)) ? _get_screen_expand_offset(rq_screen) : Vector2i();
 
 	WindowRect.left = p_rect.position.x;
 	WindowRect.right = p_rect.position.x + p_rect.size.x + off.x;
@@ -6837,7 +6837,7 @@ Error DisplayServerWindows::_create_window(DisplayServerEnums::WindowID p_window
 	WindowRect.bottom = p_rect.position.y + p_rect.size.y + off.y;
 
 	if (!p_parent_hwnd) {
-		if (p_mode == WINDOW_MODE_FULLSCREEN || p_mode == WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+		if (p_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || p_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 			Rect2i screen_rect = Rect2i(screen_get_position(rq_screen), screen_get_size(rq_screen));
 
 			WindowRect.left = screen_rect.position.x;
@@ -6863,7 +6863,7 @@ Error DisplayServerWindows::_create_window(DisplayServerEnums::WindowID p_window
 	WindowRect.top += offset.y;
 	WindowRect.bottom += offset.y;
 
-	if (p_mode != WINDOW_MODE_FULLSCREEN && p_mode != WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+	if (p_mode != DisplayServerEnums::WINDOW_MODE_FULLSCREEN && p_mode != DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 		AdjustWindowRectEx(&WindowRect, dwStyle, FALSE, dwExStyle);
 	}
 
@@ -6920,14 +6920,14 @@ Error DisplayServerWindows::_create_window(DisplayServerEnums::WindowID p_window
 			AttachThreadInput(embeddedThreadId, mainThreadId, FALSE);
 		}
 
-		if (p_mode == WINDOW_MODE_FULLSCREEN || p_mode == WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+		if (p_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || p_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 			wd.fullscreen = true;
-			if (p_mode == WINDOW_MODE_FULLSCREEN) {
+			if (p_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN) {
 				wd.multiwindow_fs = true;
 			}
 		}
 
-		if (p_mode == WINDOW_MODE_FULLSCREEN || p_mode == WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+		if (p_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || p_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 			// Save initial non-fullscreen rect.
 			Rect2i srect = screen_get_usable_rect(rq_screen);
 			Point2i wpos = p_rect.position;
@@ -6991,12 +6991,12 @@ Error DisplayServerWindows::_create_window(DisplayServerEnums::WindowID p_window
 			wd.wtctx = nullptr;
 		}
 
-		if (p_mode == WINDOW_MODE_MAXIMIZED) {
+		if (p_mode == DisplayServerEnums::WINDOW_MODE_MAXIMIZED) {
 			wd.maximized = true;
 			wd.minimized = false;
 		}
 
-		if (p_mode == WINDOW_MODE_MINIMIZED) {
+		if (p_mode == DisplayServerEnums::WINDOW_MODE_MINIMIZED) {
 			wd.maximized = false;
 			wd.minimized = true;
 		}
@@ -7038,7 +7038,7 @@ Error DisplayServerWindows::_create_window(DisplayServerEnums::WindowID p_window
 
 		wd.im_position = Vector2();
 
-		if (p_mode == WINDOW_MODE_FULLSCREEN || p_mode == WINDOW_MODE_EXCLUSIVE_FULLSCREEN || p_mode == WINDOW_MODE_MAXIMIZED) {
+		if (p_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || p_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN || p_mode == DisplayServerEnums::WINDOW_MODE_MAXIMIZED) {
 			RECT r;
 			GetClientRect(wd.hWnd, &r);
 			ClientToScreen(wd.hWnd, (POINT *)&r.left);
@@ -7056,7 +7056,7 @@ Error DisplayServerWindows::_create_window(DisplayServerEnums::WindowID p_window
 
 		wd.create_completed = true;
 		// Set size of maximized borderless window (by default it covers the entire screen).
-		if (!p_parent_hwnd && p_mode == WINDOW_MODE_MAXIMIZED && (p_flags & WINDOW_FLAG_BORDERLESS_BIT)) {
+		if (!p_parent_hwnd && p_mode == DisplayServerEnums::WINDOW_MODE_MAXIMIZED && (p_flags & WINDOW_FLAG_BORDERLESS_BIT)) {
 			SetWindowPos(wd.hWnd, HWND_TOP, usable_rect.position.x - off.x, usable_rect.position.y - off.y, usable_rect.size.width + off.x, usable_rect.size.height + off.y, SWP_NOZORDER | SWP_NOACTIVATE);
 		}
 		_update_window_mouse_passthrough(id);
@@ -7400,7 +7400,7 @@ void DisplayServerWindows::tablet_set_current_driver(const String &p_driver) {
 	}
 }
 
-DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	KeyMappingWindows::initialize();
 
 	tested_drivers.clear();
@@ -8008,7 +8008,7 @@ Vector<String> DisplayServerWindows::get_rendering_drivers_func() {
 	return drivers;
 }
 
-DisplayServer *DisplayServerWindows::create_func(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServerWindows::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	DisplayServer *ds = memnew(DisplayServerWindows(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, p_parent_window, r_error));
 	if (r_error != OK) {
 		if (tested_drivers == 0) {

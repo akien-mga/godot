@@ -733,7 +733,7 @@ Vector<DisplayServerEnums::WindowID> DisplayServerWayland::get_window_list() con
 	return ret;
 }
 
-DisplayServerEnums::WindowID DisplayServerWayland::create_sub_window(WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
+DisplayServerEnums::WindowID DisplayServerWayland::create_sub_window(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
 	DisplayServerEnums::WindowID id = ++window_id_counter;
 	WindowData &wd = windows[id];
 
@@ -769,7 +769,7 @@ void DisplayServerWayland::show_window(DisplayServerEnums::WindowID p_window_id)
 		// Showing this window will reset its mode with whatever the compositor
 		// reports. We'll save the mode beforehand so that we can reapply it later.
 		// TODO: Fix/Port/Move/Whatever to `WaylandThread` APIs.
-		WindowMode setup_mode = wd.mode;
+		DisplayServerEnums::WindowMode setup_mode = wd.mode;
 
 		// Let's determine the closest toplevel. For toplevels it will be themselves,
 		// for popups the first toplevel ancestor it finds.
@@ -1237,7 +1237,7 @@ float DisplayServerWayland::window_get_scale(DisplayServerEnums::WindowID p_wind
 	return wayland_thread.window_state_get_scale_factor(ws);
 }
 
-void DisplayServerWayland::window_set_mode(WindowMode p_mode, DisplayServerEnums::WindowID p_window_id) {
+void DisplayServerWayland::window_set_mode(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::WindowID p_window_id) {
 	MutexLock mutex_lock(wayland_thread.mutex);
 
 	ERR_FAIL_COND(!windows.has(p_window_id));
@@ -1250,14 +1250,14 @@ void DisplayServerWayland::window_set_mode(WindowMode p_mode, DisplayServerEnums
 	wayland_thread.window_try_set_mode(p_window_id, p_mode);
 }
 
-DisplayServer::WindowMode DisplayServerWayland::window_get_mode(DisplayServerEnums::WindowID p_window_id) const {
+DisplayServerEnums::WindowMode DisplayServerWayland::window_get_mode(DisplayServerEnums::WindowID p_window_id) const {
 	MutexLock mutex_lock(wayland_thread.mutex);
 
-	ERR_FAIL_COND_V(!windows.has(p_window_id), WINDOW_MODE_WINDOWED);
+	ERR_FAIL_COND_V(!windows.has(p_window_id), DisplayServerEnums::WINDOW_MODE_WINDOWED);
 	const WindowData &wd = windows[p_window_id];
 
 	if (!wd.visible) {
-		return WINDOW_MODE_WINDOWED;
+		return DisplayServerEnums::WINDOW_MODE_WINDOWED;
 	}
 
 	return wayland_thread.window_get_mode(p_window_id);
@@ -1266,7 +1266,7 @@ DisplayServer::WindowMode DisplayServerWayland::window_get_mode(DisplayServerEnu
 bool DisplayServerWayland::window_is_maximize_allowed(DisplayServerEnums::WindowID p_window_id) const {
 	MutexLock mutex_lock(wayland_thread.mutex);
 
-	return wayland_thread.window_can_set_mode(p_window_id, WINDOW_MODE_MAXIMIZED);
+	return wayland_thread.window_can_set_mode(p_window_id, DisplayServerEnums::WINDOW_MODE_MAXIMIZED);
 }
 
 void DisplayServerWayland::window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window_id) {
@@ -1986,7 +1986,7 @@ Vector<String> DisplayServerWayland::get_rendering_drivers_func() {
 	return drivers;
 }
 
-DisplayServer *DisplayServerWayland::create_func(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServerWayland::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	DisplayServer *ds = memnew(DisplayServerWayland(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_resolution, p_context, p_parent_window, r_error));
 	if (r_error != OK) {
 		ERR_PRINT("Can't create the Wayland display server.");
@@ -1997,7 +1997,7 @@ DisplayServer *DisplayServerWayland::create_func(const String &p_rendering_drive
 	return ds;
 }
 
-DisplayServerWayland::DisplayServerWayland(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i &p_resolution, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerWayland::DisplayServerWayland(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i &p_resolution, Context p_context, int64_t p_parent_window, Error &r_error) {
 #if defined(GLES3_ENABLED) || defined(DBUS_ENABLED)
 #ifdef SOWRAP_ENABLED
 #ifdef DEBUG_ENABLED

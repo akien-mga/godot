@@ -173,7 +173,7 @@ class DisplayServerX11 : public DisplayServer {
 		bool no_focus = false;
 
 		//better to guess on the fly, given WM can change it
-		//WindowMode mode;
+		//DisplayServerEnums::WindowMode mode;
 		bool fullscreen = false; //OS can't exit from this mode
 		bool exclusive_fullscreen = false;
 		bool on_top = false;
@@ -217,7 +217,7 @@ class DisplayServerX11 : public DisplayServer {
 
 	DisplayServerEnums::WindowID window_id_counter = DisplayServerEnums::MAIN_WINDOW_ID;
 	void _create_xic(WindowData &wd);
-	DisplayServerEnums::WindowID _create_window(WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, Window p_parent_window);
+	DisplayServerEnums::WindowID _create_window(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, Window p_parent_window);
 
 	String internal_clipboard;
 	String internal_clipboard_primary;
@@ -377,7 +377,7 @@ class DisplayServerX11 : public DisplayServer {
 
 	Point2i _get_window_position(Window p_window) const;
 	Rect2i _get_window_rect(Window p_window) const;
-	void _set_external_window_settings(Window p_window, Window p_parent_transient, WindowMode p_mode, uint32_t p_flags, const Rect2i &p_rect);
+	void _set_external_window_settings(Window p_window, Window p_parent_transient, DisplayServerEnums::WindowMode p_mode, uint32_t p_flags, const Rect2i &p_rect);
 	void _set_window_taskbar_pager_enabled(Window p_window, bool p_enabled);
 	Rect2i _screens_get_full_rect() const;
 
@@ -453,7 +453,7 @@ public:
 
 	virtual Vector<DisplayServerEnums::WindowID> get_window_list() const override;
 
-	virtual DisplayServerEnums::WindowID create_sub_window(WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect = Rect2i(), bool p_exclusive = false, DisplayServerEnums::WindowID p_transient_parent = DisplayServerEnums::INVALID_WINDOW_ID) override;
+	virtual DisplayServerEnums::WindowID create_sub_window(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect = Rect2i(), bool p_exclusive = false, DisplayServerEnums::WindowID p_transient_parent = DisplayServerEnums::INVALID_WINDOW_ID) override;
 	virtual void show_window(DisplayServerEnums::WindowID p_id) override;
 	virtual void delete_sub_window(DisplayServerEnums::WindowID p_id) override;
 
@@ -497,8 +497,8 @@ public:
 	virtual Size2i window_get_size(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const override;
 	virtual Size2i window_get_size_with_decorations(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const override;
 
-	virtual void window_set_mode(WindowMode p_mode, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) override;
-	virtual WindowMode window_get_mode(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const override;
+	virtual void window_set_mode(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) override;
+	virtual DisplayServerEnums::WindowMode window_get_mode(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const override;
 
 	virtual bool window_is_maximize_allowed(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const override;
 
@@ -564,12 +564,12 @@ public:
 	virtual void set_native_icon(const String &p_filename) override;
 	virtual void set_icon(const Ref<Image> &p_icon) override;
 
-	static DisplayServer *create_func(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error);
+	static DisplayServer *create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error);
 	static Vector<String> get_rendering_drivers_func();
 
 	static void register_x11_driver();
 
-	DisplayServerX11(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error);
+	DisplayServerX11(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error);
 	~DisplayServerX11();
 };
 

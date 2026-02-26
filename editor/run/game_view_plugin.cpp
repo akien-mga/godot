@@ -750,14 +750,14 @@ GameView::EmbedAvailability GameView::_get_embed_available() {
 		return EMBED_NOT_AVAILABLE_MAXIMIZED;
 	}
 
-	DisplayServer::WindowMode window_mode = (DisplayServer::WindowMode)(GLOBAL_GET("display/window/size/mode").operator int());
-	if (window_mode == DisplayServer::WindowMode::WINDOW_MODE_MINIMIZED) {
+	DisplayServerEnums::WindowMode window_mode = (DisplayServerEnums::WindowMode)(GLOBAL_GET("display/window/size/mode").operator int());
+	if (window_mode == DisplayServerEnums::WindowMode::WINDOW_MODE_MINIMIZED) {
 		return EMBED_NOT_AVAILABLE_MINIMIZED;
 	}
-	if (window_mode == DisplayServer::WindowMode::WINDOW_MODE_MAXIMIZED) {
+	if (window_mode == DisplayServerEnums::WindowMode::WINDOW_MODE_MAXIMIZED) {
 		return EMBED_NOT_AVAILABLE_MAXIMIZED;
 	}
-	if (window_mode == DisplayServer::WindowMode::WINDOW_MODE_FULLSCREEN || window_mode == DisplayServer::WindowMode::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+	if (window_mode == DisplayServerEnums::WindowMode::WINDOW_MODE_FULLSCREEN || window_mode == DisplayServerEnums::WindowMode::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 		return EMBED_NOT_AVAILABLE_FULLSCREEN;
 	}
 

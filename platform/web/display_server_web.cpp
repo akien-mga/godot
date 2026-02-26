@@ -89,9 +89,9 @@ void DisplayServerWeb::fullscreen_change_callback(int p_fullscreen) {
 void DisplayServerWeb::_fullscreen_change_callback(int p_fullscreen) {
 	DisplayServerWeb *display = get_singleton();
 	if (p_fullscreen) {
-		display->window_mode = WINDOW_MODE_FULLSCREEN;
+		display->window_mode = DisplayServerEnums::WINDOW_MODE_FULLSCREEN;
 	} else {
-		display->window_mode = WINDOW_MODE_WINDOWED;
+		display->window_mode = DisplayServerEnums::WINDOW_MODE_WINDOWED;
 	}
 }
 
@@ -1110,11 +1110,11 @@ void DisplayServerWeb::_dispatch_input_event(const Ref<InputEvent> &p_event) {
 	}
 }
 
-DisplayServer *DisplayServerWeb::create_func(const String &p_rendering_driver, WindowMode p_window_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServerWeb::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_window_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	return memnew(DisplayServerWeb(p_rendering_driver, p_window_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, p_parent_window, r_error));
 }
 
-DisplayServerWeb::DisplayServerWeb(const String &p_rendering_driver, WindowMode p_window_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerWeb::DisplayServerWeb(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_window_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	r_error = OK; // Always succeeds for now.
 
 	native_menu = memnew(NativeMenu); // Dummy native menu.
@@ -1123,7 +1123,7 @@ DisplayServerWeb::DisplayServerWeb(const String &p_rendering_driver, WindowMode 
 	godot_js_config_canvas_id_get(canvas_id, 256);
 
 	// Handle contextmenu, webglcontextlost
-	godot_js_display_setup_canvas(p_resolution.x, p_resolution.y, (p_window_mode == WINDOW_MODE_FULLSCREEN || p_window_mode == WINDOW_MODE_EXCLUSIVE_FULLSCREEN), OS::get_singleton()->is_hidpi_allowed() ? 1 : 0);
+	godot_js_display_setup_canvas(p_resolution.x, p_resolution.y, (p_window_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || p_window_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN), OS::get_singleton()->is_hidpi_allowed() ? 1 : 0);
 
 	// Check if it's windows.
 	swap_cancel_ok = godot_js_display_is_swap_ok_cancel() == 1;
@@ -1400,33 +1400,33 @@ Size2i DisplayServerWeb::window_get_size_with_decorations(DisplayServerEnums::Wi
 	return window_get_size(p_window);
 }
 
-void DisplayServerWeb::window_set_mode(WindowMode p_mode, DisplayServerEnums::WindowID p_window) {
+void DisplayServerWeb::window_set_mode(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::WindowID p_window) {
 	if (window_mode == p_mode) {
 		return;
 	}
 
 	switch (p_mode) {
-		case WINDOW_MODE_WINDOWED: {
-			if (window_mode == WINDOW_MODE_FULLSCREEN) {
+		case DisplayServerEnums::WINDOW_MODE_WINDOWED: {
+			if (window_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN) {
 				godot_js_display_fullscreen_exit();
 			}
-			window_mode = WINDOW_MODE_WINDOWED;
+			window_mode = DisplayServerEnums::WINDOW_MODE_WINDOWED;
 		} break;
-		case WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
-		case WINDOW_MODE_FULLSCREEN: {
+		case DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
+		case DisplayServerEnums::WINDOW_MODE_FULLSCREEN: {
 			int result = godot_js_display_fullscreen_request();
 			ERR_FAIL_COND_MSG(result, "The request was denied. Remember that enabling fullscreen is only possible from an input callback for the Web platform.");
 		} break;
-		case WINDOW_MODE_MAXIMIZED:
-		case WINDOW_MODE_MINIMIZED:
-			// WindowMode MAXIMIZED and MINIMIZED are not supported in Web platform.
+		case DisplayServerEnums::WINDOW_MODE_MAXIMIZED:
+		case DisplayServerEnums::WINDOW_MODE_MINIMIZED:
+			// DisplayServerEnums::WindowMode MAXIMIZED and MINIMIZED are not supported in Web platform.
 			break;
 		default:
 			break;
 	}
 }
 
-DisplayServerWeb::WindowMode DisplayServerWeb::window_get_mode(DisplayServerEnums::WindowID p_window) const {
+DisplayServerEnums::WindowMode DisplayServerWeb::window_get_mode(DisplayServerEnums::WindowID p_window) const {
 	return window_mode;
 }
 

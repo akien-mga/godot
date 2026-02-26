@@ -610,7 +610,7 @@ int DisplayServer::get_screen_from_rect(const Rect2 &p_rect) const {
 	return pos_screen;
 }
 
-DisplayServerEnums::WindowID DisplayServer::create_sub_window(WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
+DisplayServerEnums::WindowID DisplayServer::create_sub_window(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
 	ERR_FAIL_V_MSG(DisplayServerEnums::INVALID_WINDOW_ID, "Sub-windows not supported by this display server.");
 }
 
@@ -1925,11 +1925,11 @@ void DisplayServer::_bind_methods() {
 	BIND_ENUM_CONSTANT(FILE_DIALOG_MODE_OPEN_ANY);
 	BIND_ENUM_CONSTANT(FILE_DIALOG_MODE_SAVE_FILE);
 
-	BIND_ENUM_CONSTANT(WINDOW_MODE_WINDOWED);
-	BIND_ENUM_CONSTANT(WINDOW_MODE_MINIMIZED);
-	BIND_ENUM_CONSTANT(WINDOW_MODE_MAXIMIZED);
-	BIND_ENUM_CONSTANT(WINDOW_MODE_FULLSCREEN);
-	BIND_ENUM_CONSTANT(WINDOW_MODE_EXCLUSIVE_FULLSCREEN);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::WINDOW_MODE_WINDOWED);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::WINDOW_MODE_MINIMIZED);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::WINDOW_MODE_MAXIMIZED);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::WINDOW_MODE_FULLSCREEN);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN);
 
 	BIND_ENUM_CONSTANT(PROGRESS_STATE_NOPROGRESS);
 	BIND_ENUM_CONSTANT(PROGRESS_STATE_INDETERMINATE);
@@ -2040,7 +2040,7 @@ Vector<String> DisplayServer::get_create_function_rendering_drivers(int p_index)
 	return server_create_functions[p_index].get_rendering_drivers_function();
 }
 
-DisplayServer *DisplayServer::create(int p_index, const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServer::create(int p_index, const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	ERR_FAIL_INDEX_V(p_index, server_create_count, nullptr);
 	return server_create_functions[p_index].create_function(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, p_parent_window, r_error);
 }

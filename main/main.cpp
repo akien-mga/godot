@@ -235,7 +235,7 @@ static bool single_threaded_scene = false;
 
 // Display
 
-static DisplayServer::WindowMode window_mode = DisplayServer::WINDOW_MODE_WINDOWED;
+static DisplayServerEnums::WindowMode window_mode = DisplayServerEnums::WINDOW_MODE_WINDOWED;
 static DisplayServer::ScreenOrientation window_orientation = DisplayServer::SCREEN_LANDSCAPE;
 static DisplayServerEnums::VSyncMode window_vsync_mode = DisplayServerEnums::VSYNC_ENABLED;
 static uint32_t window_flags = 0;
@@ -1302,10 +1302,10 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 			}
 		} else if (arg == "-f" || arg == "--fullscreen") { // force fullscreen
 			init_fullscreen = true;
-			window_mode = DisplayServer::WINDOW_MODE_FULLSCREEN;
+			window_mode = DisplayServerEnums::WINDOW_MODE_FULLSCREEN;
 		} else if (arg == "-m" || arg == "--maximized") { // force maximized window
 			init_maximized = true;
-			window_mode = DisplayServer::WINDOW_MODE_MAXIMIZED;
+			window_mode = DisplayServerEnums::WINDOW_MODE_MAXIMIZED;
 		} else if (arg == "-w" || arg == "--windowed") { // force windowed window
 
 			init_windowed = true;
@@ -2174,7 +2174,7 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 		main_args.push_back("--editor");
 		if (!init_windowed && !init_fullscreen) {
 			init_maximized = true;
-			window_mode = DisplayServer::WINDOW_MODE_MAXIMIZED;
+			window_mode = DisplayServerEnums::WINDOW_MODE_MAXIMIZED;
 		}
 	}
 
@@ -2671,7 +2671,7 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 		if (bool(GLOBAL_GET("display/window/size/sharp_corners"))) {
 			window_flags |= DisplayServer::WINDOW_FLAG_SHARP_CORNERS_BIT;
 		}
-		window_mode = (DisplayServer::WindowMode)(GLOBAL_GET("display/window/size/mode").operator int());
+		window_mode = (DisplayServerEnums::WindowMode)(GLOBAL_GET("display/window/size/mode").operator int());
 		int initial_position_type = GLOBAL_GET("display/window/size/initial_position_type").operator int();
 		if (initial_position_type == Window::WINDOW_INITIAL_POSITION_ABSOLUTE) { // Absolute.
 			if (!init_use_custom_pos) {
@@ -3115,13 +3115,13 @@ Error Main::setup2(bool p_show_boot_logo) {
 				String mode = config->get_value("EditorWindow", "mode", "maximized");
 				window_size = config->get_value("EditorWindow", "size", window_size);
 				if (mode == "windowed") {
-					window_mode = DisplayServer::WINDOW_MODE_WINDOWED;
+					window_mode = DisplayServerEnums::WINDOW_MODE_WINDOWED;
 					init_windowed = true;
 				} else if (mode == "fullscreen") {
-					window_mode = DisplayServer::WINDOW_MODE_FULLSCREEN;
+					window_mode = DisplayServerEnums::WINDOW_MODE_FULLSCREEN;
 					init_fullscreen = true;
 				} else {
-					window_mode = DisplayServer::WINDOW_MODE_MAXIMIZED;
+					window_mode = DisplayServerEnums::WINDOW_MODE_MAXIMIZED;
 					init_maximized = true;
 				}
 
@@ -3234,7 +3234,7 @@ Error Main::setup2(bool p_show_boot_logo) {
 		if (init_embed_parent_window_id) {
 			// Reset flags and other settings to be sure it's borderless and windowed. The position and size should have been initialized correctly
 			// from --position and --resolution parameters.
-			window_mode = DisplayServer::WINDOW_MODE_WINDOWED;
+			window_mode = DisplayServerEnums::WINDOW_MODE_WINDOWED;
 			window_flags = DisplayServer::WINDOW_FLAG_BORDERLESS_BIT;
 			if (bool(GLOBAL_GET("display/window/size/transparent"))) {
 				window_flags |= DisplayServer::WINDOW_FLAG_TRANSPARENT_BIT;
@@ -3422,7 +3422,7 @@ Error Main::setup2(bool p_show_boot_logo) {
 	if (editor && init_windowed) {
 		// We still need to check we are actually in windowed mode, because
 		// certain platform might only support one fullscreen window.
-		if (DisplayServer::get_singleton()->window_get_mode() == DisplayServer::WINDOW_MODE_WINDOWED) {
+		if (DisplayServer::get_singleton()->window_get_mode() == DisplayServerEnums::WINDOW_MODE_WINDOWED) {
 			Vector2i current_size = DisplayServer::get_singleton()->window_get_size();
 			Vector2i current_pos = DisplayServer::get_singleton()->window_get_position();
 			int screen = DisplayServer::get_singleton()->window_get_current_screen();
@@ -3572,9 +3572,9 @@ Error Main::setup2(bool p_show_boot_logo) {
 			if (init_windowed) {
 				//do none..
 			} else if (init_maximized) {
-				DisplayServer::get_singleton()->window_set_mode(DisplayServer::WINDOW_MODE_MAXIMIZED);
+				DisplayServer::get_singleton()->window_set_mode(DisplayServerEnums::WINDOW_MODE_MAXIMIZED);
 			} else if (init_fullscreen) {
-				DisplayServer::get_singleton()->window_set_mode(DisplayServer::WINDOW_MODE_FULLSCREEN);
+				DisplayServer::get_singleton()->window_set_mode(DisplayServerEnums::WINDOW_MODE_FULLSCREEN);
 			}
 			if (init_always_on_top) {
 				DisplayServer::get_singleton()->window_set_flag(DisplayServer::WINDOW_FLAG_ALWAYS_ON_TOP, true);

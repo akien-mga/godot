@@ -41,6 +41,14 @@ enum {
 	INVALID_INDICATOR_ID = -1
 };
 
+enum WindowMode {
+	WINDOW_MODE_WINDOWED,
+	WINDOW_MODE_MINIMIZED,
+	WINDOW_MODE_MAXIMIZED,
+	WINDOW_MODE_FULLSCREEN,
+	WINDOW_MODE_EXCLUSIVE_FULLSCREEN,
+};
+
 // Keep the VSyncMode enum values in sync with the `display/window/vsync/vsync_mode`
 // project setting hint.
 enum VSyncMode {

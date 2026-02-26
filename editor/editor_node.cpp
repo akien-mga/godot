@@ -939,7 +939,7 @@ void EditorNode::_notification(int p_what) {
 			get_tree()->set_quit_on_go_back(false);
 			bool is_fullscreen = EDITOR_DEF("_is_editor_fullscreen", false);
 			if (is_fullscreen) {
-				DisplayServer::get_singleton()->window_set_mode(DisplayServer::WINDOW_MODE_FULLSCREEN);
+				DisplayServer::get_singleton()->window_set_mode(DisplayServerEnums::WINDOW_MODE_FULLSCREEN);
 			}
 #endif
 			get_tree()->get_root()->connect("files_dropped", callable_mp(this, &EditorNode::_dropped_files));
@@ -3816,8 +3816,8 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 			feature_profile_manager->popup_centered_clamped(Size2(900, 800) * EDSCALE, 0.8);
 		} break;
 		case EDITOR_TOGGLE_FULLSCREEN: {
-			DisplayServer::WindowMode mode = DisplayServer::get_singleton()->window_get_mode();
-			if (mode == DisplayServer::WINDOW_MODE_FULLSCREEN || mode == DisplayServer::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+			DisplayServerEnums::WindowMode mode = DisplayServer::get_singleton()->window_get_mode();
+			if (mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 				DisplayServer::get_singleton()->window_set_mode(prev_mode);
 #ifdef ANDROID_ENABLED
 				EditorSettings::get_singleton()->set("_is_editor_fullscreen", false);
@@ -3825,7 +3825,7 @@ void EditorNode::_menu_option_confirm(int p_option, bool p_confirmed) {
 #endif
 			} else {
 				prev_mode = mode;
-				DisplayServer::get_singleton()->window_set_mode(DisplayServer::WINDOW_MODE_FULLSCREEN);
+				DisplayServer::get_singleton()->window_set_mode(DisplayServerEnums::WINDOW_MODE_FULLSCREEN);
 #ifdef ANDROID_ENABLED
 				EditorSettings::get_singleton()->set("_is_editor_fullscreen", true);
 				EditorSettings::get_singleton()->save();

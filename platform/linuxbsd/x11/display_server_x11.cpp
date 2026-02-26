@@ -1941,7 +1941,7 @@ Vector<DisplayServerEnums::WindowID> DisplayServerX11::get_window_list() const {
 	return ret;
 }
 
-DisplayServerEnums::WindowID DisplayServerX11::create_sub_window(WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
+DisplayServerEnums::WindowID DisplayServerX11::create_sub_window(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
 	_THREAD_SAFE_METHOD_
 
 	DisplayServerEnums::WindowID id = _create_window(p_mode, p_vsync_mode, p_flags, p_rect, 0);
@@ -2383,9 +2383,9 @@ void DisplayServerX11::window_set_current_screen(int p_screen, DisplayServerEnum
 		return;
 	}
 
-	if (window_get_mode(p_window) == WINDOW_MODE_FULLSCREEN || window_get_mode(p_window) == WINDOW_MODE_MAXIMIZED) {
-		WindowMode current_mode = window_get_mode(p_window);
-		window_set_mode(WINDOW_MODE_WINDOWED, p_window);
+	if (window_get_mode(p_window) == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || window_get_mode(p_window) == DisplayServerEnums::WINDOW_MODE_MAXIMIZED) {
+		DisplayServerEnums::WindowMode current_mode = window_get_mode(p_window);
+		window_set_mode(DisplayServerEnums::WINDOW_MODE_WINDOWED, p_window);
 		Point2i position = screen_get_position(p_screen);
 		Size2i size = screen_get_size(p_screen);
 		XMoveResizeWindow(x11_display, wd.x11_window, position.x, position.y, size.x, size.y);
@@ -2456,7 +2456,7 @@ void DisplayServerX11::window_set_transient(DisplayServerEnums::WindowID p_windo
 // Helper method. Assumes that the window id has already been checked and exists.
 void DisplayServerX11::_update_size_hints(DisplayServerEnums::WindowID p_window) {
 	WindowData &wd = windows[p_window];
-	WindowMode window_mode = window_get_mode(p_window);
+	DisplayServerEnums::WindowMode window_mode = window_get_mode(p_window);
 	XSizeHints *xsh = XAllocSizeHints();
 
 	// Always set the position and size hints - they should be synchronized with the actual values after the window is mapped anyway
@@ -2467,7 +2467,7 @@ void DisplayServerX11::_update_size_hints(DisplayServerEnums::WindowID p_window)
 	xsh->height = wd.size.height;
 	xsh->win_gravity = StaticGravity;
 
-	if (window_mode == WINDOW_MODE_FULLSCREEN || window_mode == WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+	if (window_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || window_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 		// Do not set any other hints to prevent the window manager from ignoring the fullscreen flags
 	} else if (window_get_flag(WINDOW_FLAG_RESIZE_DISABLED, p_window)) {
 		// If resizing is disabled, use the forced size
@@ -3013,7 +3013,7 @@ void DisplayServerX11::_set_wm_maximized(DisplayServerEnums::WindowID p_window, 
 		// Wait for effective resizing (so the GLX context is too).
 		// Give up after 0.5s, it's not going to happen on this WM.
 		// https://github.com/godotengine/godot/issues/19978
-		for (int attempt = 0; window_get_mode(p_window) != WINDOW_MODE_MAXIMIZED && attempt < 50; attempt++) {
+		for (int attempt = 0; window_get_mode(p_window) != DisplayServerEnums::WINDOW_MODE_MAXIMIZED && attempt < 50; attempt++) {
 			OS::get_singleton()->delay_usec(10'000);
 		}
 	}
@@ -3097,61 +3097,61 @@ void DisplayServerX11::_set_wm_fullscreen(DisplayServerEnums::WindowID p_window,
 	}
 }
 
-void DisplayServerX11::window_set_mode(WindowMode p_mode, DisplayServerEnums::WindowID p_window) {
+void DisplayServerX11::window_set_mode(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
 
-	WindowMode old_mode = window_get_mode(p_window);
+	DisplayServerEnums::WindowMode old_mode = window_get_mode(p_window);
 	if (old_mode == p_mode) {
 		return; // do nothing
 	}
 
-	if (p_mode != WINDOW_MODE_WINDOWED && wd.embed_parent) {
+	if (p_mode != DisplayServerEnums::WINDOW_MODE_WINDOWED && wd.embed_parent) {
 		print_line("Embedded window only supports Windowed mode.");
 		return;
 	}
 
 	// Remove all "extra" modes.
 	switch (old_mode) {
-		case WINDOW_MODE_WINDOWED: {
+		case DisplayServerEnums::WINDOW_MODE_WINDOWED: {
 			//do nothing
 		} break;
-		case WINDOW_MODE_MINIMIZED: {
+		case DisplayServerEnums::WINDOW_MODE_MINIMIZED: {
 			_set_wm_minimized(p_window, false);
 		} break;
-		case WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
-		case WINDOW_MODE_FULLSCREEN: {
+		case DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
+		case DisplayServerEnums::WINDOW_MODE_FULLSCREEN: {
 			// Only remove fullscreen when necessary.
-			if (p_mode == WINDOW_MODE_WINDOWED || p_mode == WINDOW_MODE_MAXIMIZED) {
+			if (p_mode == DisplayServerEnums::WINDOW_MODE_WINDOWED || p_mode == DisplayServerEnums::WINDOW_MODE_MAXIMIZED) {
 				wd.fullscreen = false;
 				wd.exclusive_fullscreen = false;
 				_set_wm_fullscreen(p_window, false, false);
 			}
 		} break;
-		case WINDOW_MODE_MAXIMIZED: {
+		case DisplayServerEnums::WINDOW_MODE_MAXIMIZED: {
 			// Varies between target modes, so do nothing here.
 		} break;
 	}
 
 	switch (p_mode) {
-		case WINDOW_MODE_WINDOWED: {
+		case DisplayServerEnums::WINDOW_MODE_WINDOWED: {
 			if (wd.maximized) {
 				_set_wm_maximized(p_window, false);
 			}
 		} break;
-		case WINDOW_MODE_MINIMIZED: {
+		case DisplayServerEnums::WINDOW_MODE_MINIMIZED: {
 			_set_wm_minimized(p_window, true);
 		} break;
-		case WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
-		case WINDOW_MODE_FULLSCREEN: {
+		case DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
+		case DisplayServerEnums::WINDOW_MODE_FULLSCREEN: {
 			if (window_get_flag(WINDOW_FLAG_ALWAYS_ON_TOP, p_window)) {
 				_set_wm_maximized(p_window, true);
 			}
 
 			wd.fullscreen = true;
-			if (p_mode == WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+			if (p_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 				wd.exclusive_fullscreen = true;
 				_set_wm_fullscreen(p_window, true, true);
 			} else {
@@ -3159,34 +3159,34 @@ void DisplayServerX11::window_set_mode(WindowMode p_mode, DisplayServerEnums::Wi
 				_set_wm_fullscreen(p_window, true, false);
 			}
 		} break;
-		case WINDOW_MODE_MAXIMIZED: {
+		case DisplayServerEnums::WINDOW_MODE_MAXIMIZED: {
 			_set_wm_maximized(p_window, true);
 		} break;
 	}
 }
 
-DisplayServer::WindowMode DisplayServerX11::window_get_mode(DisplayServerEnums::WindowID p_window) const {
+DisplayServerEnums::WindowMode DisplayServerX11::window_get_mode(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
-	ERR_FAIL_COND_V(!windows.has(p_window), WINDOW_MODE_WINDOWED);
+	ERR_FAIL_COND_V(!windows.has(p_window), DisplayServerEnums::WINDOW_MODE_WINDOWED);
 	const WindowData &wd = windows[p_window];
 
 	if (_window_minimize_check(p_window)) {
-		return WINDOW_MODE_MINIMIZED;
+		return DisplayServerEnums::WINDOW_MODE_MINIMIZED;
 	}
 
 	if (wd.fullscreen) {
 		if (wd.exclusive_fullscreen) {
-			return WINDOW_MODE_EXCLUSIVE_FULLSCREEN;
+			return DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN;
 		}
-		return WINDOW_MODE_FULLSCREEN;
+		return DisplayServerEnums::WINDOW_MODE_FULLSCREEN;
 	}
 
 	if (_window_maximize_check(p_window, "_NET_WM_STATE")) {
-		return WINDOW_MODE_MAXIMIZED;
+		return DisplayServerEnums::WINDOW_MODE_MAXIMIZED;
 	}
 
-	return WINDOW_MODE_WINDOWED;
+	return DisplayServerEnums::WINDOW_MODE_WINDOWED;
 }
 
 void DisplayServerX11::window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
@@ -3387,14 +3387,14 @@ bool DisplayServerX11::window_is_focused(DisplayServerEnums::WindowID p_window) 
 
 bool DisplayServerX11::window_can_draw(DisplayServerEnums::WindowID p_window) const {
 	//this seems to be all that is provided by X11
-	return window_get_mode(p_window) != WINDOW_MODE_MINIMIZED;
+	return window_get_mode(p_window) != DisplayServerEnums::WINDOW_MODE_MINIMIZED;
 }
 
 bool DisplayServerX11::can_any_window_draw() const {
 	_THREAD_SAFE_METHOD_
 
 	for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
-		if (window_get_mode(E.key) != WINDOW_MODE_MINIMIZED) {
+		if (window_get_mode(E.key) != DisplayServerEnums::WINDOW_MODE_MINIMIZED) {
 			return true;
 		}
 	}
@@ -6286,7 +6286,7 @@ Vector<String> DisplayServerX11::get_rendering_drivers_func() {
 	return drivers;
 }
 
-DisplayServer *DisplayServerX11::create_func(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServerX11::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	DisplayServer *ds = memnew(DisplayServerX11(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, p_parent_window, r_error));
 	return ds;
 }
@@ -6358,7 +6358,7 @@ void DisplayServerX11::_create_xic(WindowData &wd) {
 	}
 }
 
-DisplayServerEnums::WindowID DisplayServerX11::_create_window(WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, Window p_parent_window) {
+DisplayServerEnums::WindowID DisplayServerX11::_create_window(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, Window p_parent_window) {
 	//Create window
 
 	XVisualInfo visualInfo;
@@ -6459,7 +6459,7 @@ DisplayServerEnums::WindowID DisplayServerX11::_create_window(WindowMode p_mode,
 	Rect2i win_rect = p_rect;
 	if (!p_parent_window) {
 		// No parent.
-		if (p_mode == WINDOW_MODE_FULLSCREEN || p_mode == WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+		if (p_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || p_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 			Rect2i screen_rect = Rect2i(screen_get_position(rq_screen), screen_get_size(rq_screen));
 
 			win_rect = screen_rect;
@@ -6759,7 +6759,7 @@ void DisplayServerX11::_xim_instantiate_callback(::Display *display, ::XPointer 
 	}
 }
 
-DisplayServerX11::DisplayServerX11(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerX11::DisplayServerX11(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	KeyMappingX11::initialize();
 
 	String current_desk = OS::get_singleton()->get_environment("XDG_CURRENT_DESKTOP").to_lower();

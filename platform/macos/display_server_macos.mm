@@ -86,7 +86,7 @@
 #import <IOKit/hid/IOHIDKeys.h>
 #import <IOKit/hid/IOHIDLib.h>
 
-DisplayServerEnums::WindowID DisplayServerMacOS::_create_window(WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, const Rect2i &p_rect) {
+DisplayServerEnums::WindowID DisplayServerMacOS::_create_window(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, const Rect2i &p_rect) {
 	const float scale = screen_get_max_scale();
 
 	DisplayServerEnums::WindowID id = window_id_counter;
@@ -1654,7 +1654,7 @@ Vector<DisplayServerEnums::WindowID> DisplayServerMacOS::get_window_list() const
 	return ret;
 }
 
-DisplayServerEnums::WindowID DisplayServerMacOS::create_sub_window(WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
+DisplayServerEnums::WindowID DisplayServerMacOS::create_sub_window(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
 	_THREAD_SAFE_METHOD_
 
 	DisplayServerEnums::WindowID id = _create_window(p_mode, p_vsync_mode, p_rect);
@@ -2167,28 +2167,28 @@ Size2i DisplayServerMacOS::window_get_size_with_decorations(DisplayServerEnums::
 	return Size2i(frame.size.width, frame.size.height) * screen_get_max_scale();
 }
 
-void DisplayServerMacOS::window_set_mode(WindowMode p_mode, DisplayServerEnums::WindowID p_window) {
+void DisplayServerMacOS::window_set_mode(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
 
-	WindowMode old_mode = window_get_mode(p_window);
+	DisplayServerEnums::WindowMode old_mode = window_get_mode(p_window);
 	if (old_mode == p_mode) {
 		return; // Do nothing.
 	}
 
 	switch (old_mode) {
-		case WINDOW_MODE_WINDOWED: {
+		case DisplayServerEnums::WINDOW_MODE_WINDOWED: {
 			// Do nothing.
 		} break;
-		case WINDOW_MODE_MINIMIZED: {
+		case DisplayServerEnums::WINDOW_MODE_MINIMIZED: {
 			[wd.window_object deminiaturize:nil];
 		} break;
-		case WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
-		case WINDOW_MODE_FULLSCREEN: {
-			if (p_mode == WINDOW_MODE_EXCLUSIVE_FULLSCREEN || p_mode == WINDOW_MODE_FULLSCREEN) {
-				if (p_mode == WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+		case DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
+		case DisplayServerEnums::WINDOW_MODE_FULLSCREEN: {
+			if (p_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN || p_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN) {
+				if (p_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 					const NSUInteger presentationOptions = NSApplicationPresentationHideDock | NSApplicationPresentationHideMenuBar;
 					[NSApp setPresentationOptions:presentationOptions];
 					wd.exclusive_fullscreen = true;
@@ -2217,14 +2217,14 @@ void DisplayServerMacOS::window_set_mode(WindowMode p_mode, DisplayServerEnums::
 			}
 			[wd.window_object toggleFullScreen:nil];
 
-			if (old_mode == WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+			if (old_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 				update_presentation_mode();
 			}
 
 			wd.fullscreen = false;
 			wd.exclusive_fullscreen = false;
 		} break;
-		case WINDOW_MODE_MAXIMIZED: {
+		case DisplayServerEnums::WINDOW_MODE_MAXIMIZED: {
 			if (NSEqualRects([wd.window_object frame], [[wd.window_object screen] visibleFrame])) {
 				if (wd.borderless) {
 					if (wd.pre_zoom_rect.size.width > 0 && wd.pre_zoom_rect.size.height > 0) {
@@ -2238,14 +2238,14 @@ void DisplayServerMacOS::window_set_mode(WindowMode p_mode, DisplayServerEnums::
 	}
 
 	switch (p_mode) {
-		case WINDOW_MODE_WINDOWED: {
+		case DisplayServerEnums::WINDOW_MODE_WINDOWED: {
 			// Do nothing.
 		} break;
-		case WINDOW_MODE_MINIMIZED: {
+		case DisplayServerEnums::WINDOW_MODE_MINIMIZED: {
 			[wd.window_object performMiniaturize:nil];
 		} break;
-		case WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
-		case WINDOW_MODE_FULLSCREEN: {
+		case DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
+		case DisplayServerEnums::WINDOW_MODE_FULLSCREEN: {
 			if (wd.resize_disabled) { // Fullscreen window should be resizable to work.
 				[wd.window_object setStyleMask:[wd.window_object styleMask] | NSWindowStyleMaskResizable];
 			}
@@ -2254,7 +2254,7 @@ void DisplayServerMacOS::window_set_mode(WindowMode p_mode, DisplayServerEnums::
 			[wd.window_object toggleFullScreen:nil];
 
 			wd.fullscreen = true;
-			if (p_mode == WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+			if (p_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 				const NSUInteger presentationOptions = NSApplicationPresentationHideDock | NSApplicationPresentationHideMenuBar;
 				[NSApp setPresentationOptions:presentationOptions];
 				wd.exclusive_fullscreen = true;
@@ -2263,7 +2263,7 @@ void DisplayServerMacOS::window_set_mode(WindowMode p_mode, DisplayServerEnums::
 				update_presentation_mode();
 			}
 		} break;
-		case WINDOW_MODE_MAXIMIZED: {
+		case DisplayServerEnums::WINDOW_MODE_MAXIMIZED: {
 			if (!NSEqualRects([wd.window_object frame], [[wd.window_object screen] visibleFrame])) {
 				wd.pre_zoom_rect = [wd.window_object frame];
 				if (wd.borderless) {
@@ -2276,30 +2276,30 @@ void DisplayServerMacOS::window_set_mode(WindowMode p_mode, DisplayServerEnums::
 	}
 }
 
-DisplayServer::WindowMode DisplayServerMacOS::window_get_mode(DisplayServerEnums::WindowID p_window) const {
+DisplayServerEnums::WindowMode DisplayServerMacOS::window_get_mode(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
-	ERR_FAIL_COND_V(!windows.has(p_window), WINDOW_MODE_WINDOWED);
+	ERR_FAIL_COND_V(!windows.has(p_window), DisplayServerEnums::WINDOW_MODE_WINDOWED);
 	const WindowData &wd = windows[p_window];
 
 	if (wd.fullscreen) { // If fullscreen, it's not in another mode.
 		if (wd.exclusive_fullscreen) {
-			return WINDOW_MODE_EXCLUSIVE_FULLSCREEN;
+			return DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN;
 		} else {
-			return WINDOW_MODE_FULLSCREEN;
+			return DisplayServerEnums::WINDOW_MODE_FULLSCREEN;
 		}
 	}
 	if (NSEqualRects([wd.window_object frame], [[wd.window_object screen] visibleFrame])) {
-		return WINDOW_MODE_MAXIMIZED;
+		return DisplayServerEnums::WINDOW_MODE_MAXIMIZED;
 	}
 	if ([wd.window_object respondsToSelector:@selector(isMiniaturized)]) {
 		if ([wd.window_object isMiniaturized]) {
-			return WINDOW_MODE_MINIMIZED;
+			return DisplayServerEnums::WINDOW_MODE_MINIMIZED;
 		}
 	}
 
 	// All other discarded, return windowed.
-	return WINDOW_MODE_WINDOWED;
+	return DisplayServerEnums::WINDOW_MODE_WINDOWED;
 }
 
 bool DisplayServerMacOS::window_is_maximize_allowed(DisplayServerEnums::WindowID p_window) const {
@@ -3427,7 +3427,7 @@ bool DisplayServerMacOS::is_window_transparency_available() const {
 	return OS::get_singleton()->is_layered_allowed();
 }
 
-DisplayServer *DisplayServerMacOS::create_func(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServerMacOS::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	DisplayServer *ds = memnew(DisplayServerMacOS(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, p_parent_window, r_error));
 	if (r_error != OK) {
 		if (p_rendering_driver == "vulkan") {
@@ -3623,7 +3623,7 @@ bool DisplayServerMacOS::mouse_process_popups(bool p_close) {
 	return closed;
 }
 
-DisplayServerMacOS::DisplayServerMacOS(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerMacOS::DisplayServerMacOS(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	Input::get_singleton()->set_event_dispatch_function(_dispatch_input_events);
 
 	r_error = OK;

@@ -1368,7 +1368,7 @@ void WaylandThread::_xdg_toplevel_on_configure(void *data, struct xdg_toplevel *
 
 	// Expect the window to be in a plain state. It will get properly set if the
 	// compositor reports otherwise below.
-	ws->mode = DisplayServer::WINDOW_MODE_WINDOWED;
+	ws->mode = DisplayServerEnums::WINDOW_MODE_WINDOWED;
 	ws->maximized = false;
 	ws->fullscreen = false;
 	ws->resizing = false;
@@ -1382,12 +1382,12 @@ void WaylandThread::_xdg_toplevel_on_configure(void *data, struct xdg_toplevel *
 	wl_array_for_each(state, states) {
 		switch (*state) {
 			case XDG_TOPLEVEL_STATE_MAXIMIZED: {
-				ws->mode = DisplayServer::WINDOW_MODE_MAXIMIZED;
+				ws->mode = DisplayServerEnums::WINDOW_MODE_MAXIMIZED;
 				ws->maximized = true;
 			} break;
 
 			case XDG_TOPLEVEL_STATE_FULLSCREEN: {
-				ws->mode = DisplayServer::WINDOW_MODE_FULLSCREEN;
+				ws->mode = DisplayServerEnums::WINDOW_MODE_FULLSCREEN;
 				ws->fullscreen = true;
 			} break;
 
@@ -1586,7 +1586,7 @@ void WaylandThread::libdecor_frame_on_configure(struct libdecor_frame *frame, st
 
 	// Expect the window to be in a plain state. It will get properly set if the
 	// compositor reports otherwise below.
-	ws->mode = DisplayServer::WINDOW_MODE_WINDOWED;
+	ws->mode = DisplayServerEnums::WINDOW_MODE_WINDOWED;
 	ws->maximized = false;
 	ws->fullscreen = false;
 	ws->resizing = false;
@@ -1598,12 +1598,12 @@ void WaylandThread::libdecor_frame_on_configure(struct libdecor_frame *frame, st
 
 	if (libdecor_configuration_get_window_state(configuration, &window_state)) {
 		if (window_state & LIBDECOR_WINDOW_STATE_MAXIMIZED) {
-			ws->mode = DisplayServer::WINDOW_MODE_MAXIMIZED;
+			ws->mode = DisplayServerEnums::WINDOW_MODE_MAXIMIZED;
 			ws->maximized = true;
 		}
 
 		if (window_state & LIBDECOR_WINDOW_STATE_FULLSCREEN) {
-			ws->mode = DisplayServer::WINDOW_MODE_FULLSCREEN;
+			ws->mode = DisplayServerEnums::WINDOW_MODE_FULLSCREEN;
 			ws->fullscreen = true;
 		}
 
@@ -4302,17 +4302,17 @@ void WaylandThread::window_set_min_size(DisplayServerEnums::WindowID p_window_id
 #endif
 }
 
-bool WaylandThread::window_can_set_mode(DisplayServerEnums::WindowID p_window_id, DisplayServer::WindowMode p_window_mode) const {
+bool WaylandThread::window_can_set_mode(DisplayServerEnums::WindowID p_window_id, DisplayServerEnums::WindowMode p_window_mode) const {
 	ERR_FAIL_COND_V(!windows.has(p_window_id), false);
 	const WindowState &ws = windows[p_window_id];
 
 	switch (p_window_mode) {
-		case DisplayServer::WINDOW_MODE_WINDOWED: {
+		case DisplayServerEnums::WINDOW_MODE_WINDOWED: {
 			// Looks like it's guaranteed.
 			return true;
 		};
 
-		case DisplayServer::WINDOW_MODE_MINIMIZED: {
+		case DisplayServerEnums::WINDOW_MODE_MINIMIZED: {
 #ifdef LIBDECOR_ENABLED
 			if (ws.libdecor_frame) {
 				return libdecor_frame_has_capability(ws.libdecor_frame, LIBDECOR_ACTION_MINIMIZE);
@@ -4322,7 +4322,7 @@ bool WaylandThread::window_can_set_mode(DisplayServerEnums::WindowID p_window_id
 			return ws.can_minimize;
 		};
 
-		case DisplayServer::WINDOW_MODE_MAXIMIZED: {
+		case DisplayServerEnums::WINDOW_MODE_MAXIMIZED: {
 			if (ws.libdecor_frame) {
 				// NOTE: libdecor doesn't seem to have a maximize capability query?
 				// The fact that there's a fullscreen one makes me suspicious. Anyways,
@@ -4332,8 +4332,8 @@ bool WaylandThread::window_can_set_mode(DisplayServerEnums::WindowID p_window_id
 			return ws.can_maximize;
 		};
 
-		case DisplayServer::WINDOW_MODE_FULLSCREEN:
-		case DisplayServer::WINDOW_MODE_EXCLUSIVE_FULLSCREEN: {
+		case DisplayServerEnums::WINDOW_MODE_FULLSCREEN:
+		case DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN: {
 #ifdef LIBDECOR_ENABLED
 			if (ws.libdecor_frame) {
 				return libdecor_frame_has_capability(ws.libdecor_frame, LIBDECOR_ACTION_FULLSCREEN);
@@ -4347,7 +4347,7 @@ bool WaylandThread::window_can_set_mode(DisplayServerEnums::WindowID p_window_id
 	return false;
 }
 
-void WaylandThread::window_try_set_mode(DisplayServerEnums::WindowID p_window_id, DisplayServer::WindowMode p_window_mode) {
+void WaylandThread::window_try_set_mode(DisplayServerEnums::WindowID p_window_id, DisplayServerEnums::WindowMode p_window_mode) {
 	ERR_FAIL_COND(!windows.has(p_window_id));
 	WindowState &ws = windows[p_window_id];
 
@@ -4367,18 +4367,18 @@ void WaylandThread::window_try_set_mode(DisplayServerEnums::WindowID p_window_id
 
 	// Return back to a windowed state so that we can apply what the user asked.
 	switch (ws.mode) {
-		case DisplayServer::WINDOW_MODE_WINDOWED: {
+		case DisplayServerEnums::WINDOW_MODE_WINDOWED: {
 			// Do nothing.
 		} break;
 
-		case DisplayServer::WINDOW_MODE_MINIMIZED: {
+		case DisplayServerEnums::WINDOW_MODE_MINIMIZED: {
 			// We can't do much according to the xdg_shell protocol. I have no idea
 			// whether this implies that we should return or who knows what. For now
 			// we'll do nothing.
 			// TODO: Test this properly.
 		} break;
 
-		case DisplayServer::WINDOW_MODE_MAXIMIZED: {
+		case DisplayServerEnums::WINDOW_MODE_MAXIMIZED: {
 			// Try to unmaximize. This isn't garaunteed to work actually, so we'll have
 			// to check whether something changed.
 			if (ws.xdg_toplevel) {
@@ -4392,8 +4392,8 @@ void WaylandThread::window_try_set_mode(DisplayServerEnums::WindowID p_window_id
 #endif // LIBDECOR_ENABLED
 		} break;
 
-		case DisplayServer::WINDOW_MODE_FULLSCREEN:
-		case DisplayServer::WINDOW_MODE_EXCLUSIVE_FULLSCREEN: {
+		case DisplayServerEnums::WINDOW_MODE_FULLSCREEN:
+		case DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN: {
 			// Same thing as above, unset fullscreen and check later if it worked.
 			if (ws.xdg_toplevel) {
 				xdg_toplevel_unset_fullscreen(ws.xdg_toplevel);
@@ -4410,7 +4410,7 @@ void WaylandThread::window_try_set_mode(DisplayServerEnums::WindowID p_window_id
 	// Wait for a configure event and hope that something changed.
 	wl_display_roundtrip(wl_display);
 
-	if (ws.mode != DisplayServer::WINDOW_MODE_WINDOWED) {
+	if (ws.mode != DisplayServerEnums::WINDOW_MODE_WINDOWED) {
 		// The compositor refused our "normalization" request. It'd be useless or
 		// unpredictable to attempt setting a new state. We're done.
 		return;
@@ -4418,11 +4418,11 @@ void WaylandThread::window_try_set_mode(DisplayServerEnums::WindowID p_window_id
 
 	// Ask the compositor to set the state indicated by the new mode.
 	switch (p_window_mode) {
-		case DisplayServer::WINDOW_MODE_WINDOWED: {
+		case DisplayServerEnums::WINDOW_MODE_WINDOWED: {
 			// Do nothing. We're already windowed.
 		} break;
 
-		case DisplayServer::WINDOW_MODE_MINIMIZED: {
+		case DisplayServerEnums::WINDOW_MODE_MINIMIZED: {
 			if (!window_can_set_mode(p_window_id, p_window_mode)) {
 				// Minimization is special (read below). Better not mess with it if the
 				// compositor explicitly announces that it doesn't support it.
@@ -4441,10 +4441,10 @@ void WaylandThread::window_try_set_mode(DisplayServerEnums::WindowID p_window_id
 	   // We have no way to actually detect this state, so we'll have to report it
 	   // manually to the engine (hoping that it worked). In the worst case it'll
 	   // get reset by the next configure event.
-			ws.mode = DisplayServer::WINDOW_MODE_MINIMIZED;
+			ws.mode = DisplayServerEnums::WINDOW_MODE_MINIMIZED;
 		} break;
 
-		case DisplayServer::WINDOW_MODE_MAXIMIZED: {
+		case DisplayServerEnums::WINDOW_MODE_MAXIMIZED: {
 			if (ws.xdg_toplevel) {
 				xdg_toplevel_set_maximized(ws.xdg_toplevel);
 			}
@@ -4456,8 +4456,8 @@ void WaylandThread::window_try_set_mode(DisplayServerEnums::WindowID p_window_id
 #endif // LIBDECOR_ENABLED
 		} break;
 
-		case DisplayServer::WINDOW_MODE_FULLSCREEN:
-		case DisplayServer::WINDOW_MODE_EXCLUSIVE_FULLSCREEN: {
+		case DisplayServerEnums::WINDOW_MODE_FULLSCREEN:
+		case DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN: {
 			if (ws.xdg_toplevel) {
 				xdg_toplevel_set_fullscreen(ws.xdg_toplevel, nullptr);
 			}
@@ -4611,8 +4611,8 @@ void WaylandThread::set_icon(const Ref<Image> &p_icon) {
 	}
 }
 
-DisplayServer::WindowMode WaylandThread::window_get_mode(DisplayServerEnums::WindowID p_window_id) const {
-	ERR_FAIL_COND_V(!windows.has(p_window_id), DisplayServer::WINDOW_MODE_WINDOWED);
+DisplayServerEnums::WindowMode WaylandThread::window_get_mode(DisplayServerEnums::WindowID p_window_id) const {
+	ERR_FAIL_COND_V(!windows.has(p_window_id), DisplayServerEnums::WINDOW_MODE_WINDOWED);
 	const WindowState &ws = windows[p_window_id];
 
 	return ws.mode;

@@ -52,7 +52,7 @@ DisplayServerAppleEmbedded *DisplayServerAppleEmbedded::get_singleton() {
 	return (DisplayServerAppleEmbedded *)DisplayServer::get_singleton();
 }
 
-DisplayServerAppleEmbedded::DisplayServerAppleEmbedded(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerAppleEmbedded::DisplayServerAppleEmbedded(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	KeyMappingAppleEmbedded::initialize();
 
 	rendering_driver = p_rendering_driver;
@@ -623,12 +623,12 @@ Size2i DisplayServerAppleEmbedded::window_get_size_with_decorations(DisplayServe
 	return window_get_size(p_window);
 }
 
-void DisplayServerAppleEmbedded::window_set_mode(WindowMode p_mode, DisplayServerEnums::WindowID p_window) {
+void DisplayServerAppleEmbedded::window_set_mode(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::WindowID p_window) {
 	// Probably not supported for iOS
 }
 
-DisplayServer::WindowMode DisplayServerAppleEmbedded::window_get_mode(DisplayServerEnums::WindowID p_window) const {
-	return WindowMode::WINDOW_MODE_FULLSCREEN;
+DisplayServerEnums::WindowMode DisplayServerAppleEmbedded::window_get_mode(DisplayServerEnums::WindowID p_window) const {
+	return DisplayServerEnums::WindowMode::WINDOW_MODE_FULLSCREEN;
 }
 
 bool DisplayServerAppleEmbedded::window_is_maximize_allowed(DisplayServerEnums::WindowID p_window) const {

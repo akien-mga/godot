@@ -45,11 +45,11 @@ class Window : public Viewport {
 public:
 	// Keep synced with enum hint for `mode` property.
 	enum Mode {
-		MODE_WINDOWED = DisplayServer::WINDOW_MODE_WINDOWED,
-		MODE_MINIMIZED = DisplayServer::WINDOW_MODE_MINIMIZED,
-		MODE_MAXIMIZED = DisplayServer::WINDOW_MODE_MAXIMIZED,
-		MODE_FULLSCREEN = DisplayServer::WINDOW_MODE_FULLSCREEN,
-		MODE_EXCLUSIVE_FULLSCREEN = DisplayServer::WINDOW_MODE_EXCLUSIVE_FULLSCREEN,
+		MODE_WINDOWED = DisplayServerEnums::WINDOW_MODE_WINDOWED,
+		MODE_MINIMIZED = DisplayServerEnums::WINDOW_MODE_MINIMIZED,
+		MODE_MAXIMIZED = DisplayServerEnums::WINDOW_MODE_MAXIMIZED,
+		MODE_FULLSCREEN = DisplayServerEnums::WINDOW_MODE_FULLSCREEN,
+		MODE_EXCLUSIVE_FULLSCREEN = DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN,
 	};
 
 	enum Flags {

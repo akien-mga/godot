@@ -251,7 +251,7 @@ public:
 		DisplayServerEnums::WindowID parent_id = DisplayServerEnums::INVALID_WINDOW_ID;
 
 		Rect2i rect;
-		DisplayServer::WindowMode mode = DisplayServer::WINDOW_MODE_WINDOWED;
+		DisplayServerEnums::WindowMode mode = DisplayServerEnums::WINDOW_MODE_WINDOWED;
 
 		// Toplevel states.
 		bool maximized = false; // MUST obey configure size.
@@ -1127,9 +1127,9 @@ public:
 	void window_set_max_size(DisplayServerEnums::WindowID p_window_id, const Size2i &p_size);
 	void window_set_min_size(DisplayServerEnums::WindowID p_window_id, const Size2i &p_size);
 
-	bool window_can_set_mode(DisplayServerEnums::WindowID p_window_id, DisplayServer::WindowMode p_window_mode) const;
-	void window_try_set_mode(DisplayServerEnums::WindowID p_window_id, DisplayServer::WindowMode p_window_mode);
-	DisplayServer::WindowMode window_get_mode(DisplayServerEnums::WindowID p_window_id) const;
+	bool window_can_set_mode(DisplayServerEnums::WindowID p_window_id, DisplayServerEnums::WindowMode p_window_mode) const;
+	void window_try_set_mode(DisplayServerEnums::WindowID p_window_id, DisplayServerEnums::WindowMode p_window_mode);
+	DisplayServerEnums::WindowMode window_get_mode(DisplayServerEnums::WindowID p_window_id) const;
 
 	void window_set_borderless(DisplayServerEnums::WindowID p_window_id, bool p_borderless);
 	void window_set_title(DisplayServerEnums::WindowID p_window_id, const String &p_title);
