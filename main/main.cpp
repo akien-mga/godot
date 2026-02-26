@@ -2645,31 +2645,31 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 		}
 
 		if (!bool(GLOBAL_GET("display/window/size/resizable"))) {
-			window_flags |= DisplayServer::WINDOW_FLAG_RESIZE_DISABLED_BIT;
+			window_flags |= DisplayServerEnums::WINDOW_FLAG_RESIZE_DISABLED_BIT;
 		}
 		if (bool(GLOBAL_GET("display/window/size/minimize_disabled"))) {
-			window_flags |= DisplayServer::WINDOW_FLAG_MINIMIZE_DISABLED_BIT;
+			window_flags |= DisplayServerEnums::WINDOW_FLAG_MINIMIZE_DISABLED_BIT;
 		}
 		if (bool(GLOBAL_GET("display/window/size/maximize_disabled"))) {
-			window_flags |= DisplayServer::WINDOW_FLAG_MAXIMIZE_DISABLED_BIT;
+			window_flags |= DisplayServerEnums::WINDOW_FLAG_MAXIMIZE_DISABLED_BIT;
 		}
 		if (bool(GLOBAL_GET("display/window/size/borderless"))) {
-			window_flags |= DisplayServer::WINDOW_FLAG_BORDERLESS_BIT;
+			window_flags |= DisplayServerEnums::WINDOW_FLAG_BORDERLESS_BIT;
 		}
 		if (bool(GLOBAL_GET("display/window/size/always_on_top"))) {
-			window_flags |= DisplayServer::WINDOW_FLAG_ALWAYS_ON_TOP_BIT;
+			window_flags |= DisplayServerEnums::WINDOW_FLAG_ALWAYS_ON_TOP_BIT;
 		}
 		if (bool(GLOBAL_GET("display/window/size/transparent"))) {
-			window_flags |= DisplayServer::WINDOW_FLAG_TRANSPARENT_BIT;
+			window_flags |= DisplayServerEnums::WINDOW_FLAG_TRANSPARENT_BIT;
 		}
 		if (bool(GLOBAL_GET("display/window/size/extend_to_title"))) {
-			window_flags |= DisplayServer::WINDOW_FLAG_EXTEND_TO_TITLE_BIT;
+			window_flags |= DisplayServerEnums::WINDOW_FLAG_EXTEND_TO_TITLE_BIT;
 		}
 		if (bool(GLOBAL_GET("display/window/size/no_focus"))) {
-			window_flags |= DisplayServer::WINDOW_FLAG_NO_FOCUS_BIT;
+			window_flags |= DisplayServerEnums::WINDOW_FLAG_NO_FOCUS_BIT;
 		}
 		if (bool(GLOBAL_GET("display/window/size/sharp_corners"))) {
-			window_flags |= DisplayServer::WINDOW_FLAG_SHARP_CORNERS_BIT;
+			window_flags |= DisplayServerEnums::WINDOW_FLAG_SHARP_CORNERS_BIT;
 		}
 		window_mode = (DisplayServerEnums::WindowMode)(GLOBAL_GET("display/window/size/mode").operator int());
 		int initial_position_type = GLOBAL_GET("display/window/size/initial_position_type").operator int();
@@ -3235,15 +3235,15 @@ Error Main::setup2(bool p_show_boot_logo) {
 			// Reset flags and other settings to be sure it's borderless and windowed. The position and size should have been initialized correctly
 			// from --position and --resolution parameters.
 			window_mode = DisplayServerEnums::WINDOW_MODE_WINDOWED;
-			window_flags = DisplayServer::WINDOW_FLAG_BORDERLESS_BIT;
+			window_flags = DisplayServerEnums::WINDOW_FLAG_BORDERLESS_BIT;
 			if (bool(GLOBAL_GET("display/window/size/transparent"))) {
-				window_flags |= DisplayServer::WINDOW_FLAG_TRANSPARENT_BIT;
+				window_flags |= DisplayServerEnums::WINDOW_FLAG_TRANSPARENT_BIT;
 			}
 		}
 
 #ifdef TOOLS_ENABLED
 		if ((project_manager || editor) && init_expand_to_title) {
-			window_flags |= DisplayServer::WINDOW_FLAG_EXTEND_TO_TITLE_BIT;
+			window_flags |= DisplayServerEnums::WINDOW_FLAG_EXTEND_TO_TITLE_BIT;
 		}
 #endif
 
@@ -3577,7 +3577,7 @@ Error Main::setup2(bool p_show_boot_logo) {
 				DisplayServer::get_singleton()->window_set_mode(DisplayServerEnums::WINDOW_MODE_FULLSCREEN);
 			}
 			if (init_always_on_top) {
-				DisplayServer::get_singleton()->window_set_flag(DisplayServer::WINDOW_FLAG_ALWAYS_ON_TOP, true);
+				DisplayServer::get_singleton()->window_set_flag(DisplayServerEnums::WINDOW_FLAG_ALWAYS_ON_TOP, true);
 			}
 		}
 

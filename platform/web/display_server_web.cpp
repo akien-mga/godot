@@ -1434,11 +1434,11 @@ bool DisplayServerWeb::window_is_maximize_allowed(DisplayServerEnums::WindowID p
 	return false;
 }
 
-void DisplayServerWeb::window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
+void DisplayServerWeb::window_set_flag(DisplayServerEnums::WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
 	// Not supported.
 }
 
-bool DisplayServerWeb::window_get_flag(WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
+bool DisplayServerWeb::window_get_flag(DisplayServerEnums::WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
 	return false;
 }
 

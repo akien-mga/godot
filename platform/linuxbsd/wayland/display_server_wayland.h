@@ -131,7 +131,7 @@ class DisplayServerWayland : public DisplayServer {
 	Context context;
 	bool swap_cancel_ok = false;
 
-	// NOTE: These are the based on WINDOW_FLAG_POPUP, which does NOT imply what it
+	// NOTE: These are the based on DisplayServerEnums::WINDOW_FLAG_POPUP, which does NOT imply what it
 	// seems. It's particularly confusing for our usecase, but just know that these
 	// are the "take all input thx" windows while the `popup_stack` variable keeps
 	// track of all the generic floating window concept.
@@ -289,8 +289,8 @@ public:
 
 	virtual bool window_is_maximize_allowed(DisplayServerEnums::WindowID p_window_id = DisplayServerEnums::MAIN_WINDOW_ID) const override;
 
-	virtual void window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window_id = DisplayServerEnums::MAIN_WINDOW_ID) override;
-	virtual bool window_get_flag(WindowFlags p_flag, DisplayServerEnums::WindowID p_window_id = DisplayServerEnums::MAIN_WINDOW_ID) const override;
+	virtual void window_set_flag(DisplayServerEnums::WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window_id = DisplayServerEnums::MAIN_WINDOW_ID) override;
+	virtual bool window_get_flag(DisplayServerEnums::WindowFlags p_flag, DisplayServerEnums::WindowID p_window_id = DisplayServerEnums::MAIN_WINDOW_ID) const override;
 
 	virtual void window_request_attention(DisplayServerEnums::WindowID p_window_id = DisplayServerEnums::MAIN_WINDOW_ID) override;
 

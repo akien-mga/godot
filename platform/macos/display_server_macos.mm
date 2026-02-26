@@ -1659,13 +1659,13 @@ DisplayServerEnums::WindowID DisplayServerMacOS::create_sub_window(DisplayServer
 
 	DisplayServerEnums::WindowID id = _create_window(p_mode, p_vsync_mode, p_rect);
 
-	uint32_t set_flags = p_flags & ~(WINDOW_FLAG_MAX - 1); // Clear the flags that are not supported by the window.
+	uint32_t set_flags = p_flags & ~(DisplayServerEnums::WINDOW_FLAG_MAX - 1); // Clear the flags that are not supported by the window.
 	while (set_flags != 0) {
 		// Find the index of the next set bit.
 		uint32_t index = (uint32_t)__builtin_ctzll(set_flags);
 		// Clear the set bit.
 		set_flags &= (set_flags - 1);
-		window_set_flag(WindowFlags(index), true, id);
+		window_set_flag(DisplayServerEnums::WindowFlags(index), true, id);
 	}
 
 #ifdef RD_ENABLED
@@ -2406,26 +2406,26 @@ void DisplayServerMacOS::window_set_custom_window_buttons(WindowData &p_wd, bool
 	}
 }
 
-void DisplayServerMacOS::window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
+void DisplayServerMacOS::window_set_flag(DisplayServerEnums::WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
 
 	switch (p_flag) {
-		case WINDOW_FLAG_MINIMIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_MINIMIZE_DISABLED: {
 			wd.no_min_btn = p_enabled;
 			[[wd.window_object standardWindowButton:NSWindowMiniaturizeButton] setEnabled:!p_enabled];
 			[[wd.window_object standardWindowButton:NSWindowMiniaturizeButton] setHidden:(wd.no_min_btn && wd.no_max_btn)];
 			[[wd.window_object standardWindowButton:NSWindowZoomButton] setHidden:(wd.no_min_btn && wd.no_max_btn)];
 		} break;
-		case WINDOW_FLAG_MAXIMIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_MAXIMIZE_DISABLED: {
 			wd.no_max_btn = p_enabled;
 			[[wd.window_object standardWindowButton:NSWindowZoomButton] setEnabled:!p_enabled];
 			[[wd.window_object standardWindowButton:NSWindowMiniaturizeButton] setHidden:(wd.no_min_btn && wd.no_max_btn)];
 			[[wd.window_object standardWindowButton:NSWindowZoomButton] setHidden:(wd.no_min_btn && wd.no_max_btn)];
 		} break;
-		case WINDOW_FLAG_RESIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_RESIZE_DISABLED: {
 			wd.resize_disabled = p_enabled;
 			if (wd.fullscreen) { // Fullscreen window should be resizable, style will be applied on exiting fullscreen.
 				return;
@@ -2440,7 +2440,7 @@ void DisplayServerMacOS::window_set_flag(WindowFlags p_flag, bool p_enabled, Dis
 			[[wd.window_object standardWindowButton:NSWindowMiniaturizeButton] setHidden:(wd.no_min_btn && wd.no_max_btn)];
 			[[wd.window_object standardWindowButton:NSWindowZoomButton] setHidden:(wd.no_min_btn && wd.no_max_btn)];
 		} break;
-		case WINDOW_FLAG_EXTEND_TO_TITLE: {
+		case DisplayServerEnums::WINDOW_FLAG_EXTEND_TO_TITLE: {
 			NSRect rect = [wd.window_object frame];
 			wd.extend_to_title = p_enabled;
 			if (p_enabled) {
@@ -2459,7 +2459,7 @@ void DisplayServerMacOS::window_set_flag(WindowFlags p_flag, bool p_enabled, Dis
 			[wd.window_object setFrame:rect display:YES];
 			send_window_event(wd, DisplayServerMacOS::WINDOW_EVENT_TITLEBAR_CHANGE);
 		} break;
-		case WINDOW_FLAG_BORDERLESS: {
+		case DisplayServerEnums::WINDOW_FLAG_BORDERLESS: {
 			if (wd.fullscreen) {
 				return;
 			}
@@ -2514,7 +2514,7 @@ void DisplayServerMacOS::window_set_flag(WindowFlags p_flag, bool p_enabled, Dis
 				[wd.window_object setFrame:[[wd.window_object screen] visibleFrame] display:NO];
 			}
 		} break;
-		case WINDOW_FLAG_ALWAYS_ON_TOP: {
+		case DisplayServerEnums::WINDOW_FLAG_ALWAYS_ON_TOP: {
 			wd.on_top = p_enabled;
 			if (wd.fullscreen) {
 				return;
@@ -2525,7 +2525,7 @@ void DisplayServerMacOS::window_set_flag(WindowFlags p_flag, bool p_enabled, Dis
 				[(NSWindow *)wd.window_object setLevel:NSNormalWindowLevel];
 			}
 		} break;
-		case WINDOW_FLAG_TRANSPARENT: {
+		case DisplayServerEnums::WINDOW_FLAG_TRANSPARENT: {
 			if (wd.fullscreen) {
 				return;
 			}
@@ -2538,13 +2538,13 @@ void DisplayServerMacOS::window_set_flag(WindowFlags p_flag, bool p_enabled, Dis
 				[wd.window_object setFrame:frameRect display:NO];
 			}
 		} break;
-		case WINDOW_FLAG_NO_FOCUS: {
+		case DisplayServerEnums::WINDOW_FLAG_NO_FOCUS: {
 			wd.no_focus = p_enabled;
 
 			NSWindow *w = wd.window_object;
 			w.excludedFromWindowsMenu = wd.is_popup || wd.no_focus;
 		} break;
-		case WINDOW_FLAG_EXCLUDE_FROM_CAPTURE: {
+		case DisplayServerEnums::WINDOW_FLAG_EXCLUDE_FROM_CAPTURE: {
 			if (p_enabled) {
 				[wd.window_object setSharingType:NSWindowSharingNone];
 			} else {
@@ -2552,10 +2552,10 @@ void DisplayServerMacOS::window_set_flag(WindowFlags p_flag, bool p_enabled, Dis
 			}
 			wd.hide_from_capture = p_enabled;
 		} break;
-		case WINDOW_FLAG_MOUSE_PASSTHROUGH: {
+		case DisplayServerEnums::WINDOW_FLAG_MOUSE_PASSTHROUGH: {
 			wd.mpass = p_enabled;
 		} break;
-		case WINDOW_FLAG_POPUP: {
+		case DisplayServerEnums::WINDOW_FLAG_POPUP: {
 			ERR_FAIL_COND_MSG(p_window == DisplayServerEnums::MAIN_WINDOW_ID, "Main window can't be popup.");
 			ERR_FAIL_COND_MSG([wd.window_object isVisible] && (wd.is_popup != p_enabled), "Popup flag can't changed while window is opened.");
 			wd.is_popup = p_enabled;
@@ -2568,44 +2568,44 @@ void DisplayServerMacOS::window_set_flag(WindowFlags p_flag, bool p_enabled, Dis
 	}
 }
 
-bool DisplayServerMacOS::window_get_flag(WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
+bool DisplayServerMacOS::window_get_flag(DisplayServerEnums::WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), false);
 	const WindowData &wd = windows[p_window];
 
 	switch (p_flag) {
-		case WINDOW_FLAG_MAXIMIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_MAXIMIZE_DISABLED: {
 			return wd.no_max_btn;
 		} break;
-		case WINDOW_FLAG_MINIMIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_MINIMIZE_DISABLED: {
 			return wd.no_min_btn;
 		} break;
-		case WINDOW_FLAG_RESIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_RESIZE_DISABLED: {
 			return wd.resize_disabled;
 		} break;
-		case WINDOW_FLAG_EXTEND_TO_TITLE: {
+		case DisplayServerEnums::WINDOW_FLAG_EXTEND_TO_TITLE: {
 			return [wd.window_object styleMask] & NSWindowStyleMaskFullSizeContentView;
 		} break;
-		case WINDOW_FLAG_BORDERLESS: {
+		case DisplayServerEnums::WINDOW_FLAG_BORDERLESS: {
 			return [wd.window_object styleMask] == NSWindowStyleMaskBorderless;
 		} break;
-		case WINDOW_FLAG_ALWAYS_ON_TOP: {
+		case DisplayServerEnums::WINDOW_FLAG_ALWAYS_ON_TOP: {
 			return wd.on_top;
 		} break;
-		case WINDOW_FLAG_TRANSPARENT: {
+		case DisplayServerEnums::WINDOW_FLAG_TRANSPARENT: {
 			return wd.layered_window;
 		} break;
-		case WINDOW_FLAG_NO_FOCUS: {
+		case DisplayServerEnums::WINDOW_FLAG_NO_FOCUS: {
 			return wd.no_focus;
 		} break;
-		case WINDOW_FLAG_EXCLUDE_FROM_CAPTURE: {
+		case DisplayServerEnums::WINDOW_FLAG_EXCLUDE_FROM_CAPTURE: {
 			return wd.hide_from_capture;
 		} break;
-		case WINDOW_FLAG_MOUSE_PASSTHROUGH: {
+		case DisplayServerEnums::WINDOW_FLAG_MOUSE_PASSTHROUGH: {
 			return wd.mpass;
 		} break;
-		case WINDOW_FLAG_POPUP: {
+		case DisplayServerEnums::WINDOW_FLAG_POPUP: {
 			return wd.is_popup;
 		} break;
 		default: {
@@ -3520,7 +3520,7 @@ void DisplayServerMacOS::popup_open(DisplayServerEnums::WindowID p_window) {
 	}
 
 	// Detect tooltips and other similar popups that shouldn't block input to their parent.
-	bool ignores_input = window_get_flag(WINDOW_FLAG_NO_FOCUS, p_window) && window_get_flag(WINDOW_FLAG_MOUSE_PASSTHROUGH, p_window);
+	bool ignores_input = window_get_flag(DisplayServerEnums::WINDOW_FLAG_NO_FOCUS, p_window) && window_get_flag(DisplayServerEnums::WINDOW_FLAG_MOUSE_PASSTHROUGH, p_window);
 
 	WindowData &wd = windows[p_window];
 	if (wd.is_popup || (has_popup_ancestor && !ignores_input)) {
@@ -3829,9 +3829,9 @@ DisplayServerMacOS::DisplayServerMacOS(const String &p_rendering_driver, Display
 
 	DisplayServerEnums::WindowID main_window = _create_window(p_mode, p_vsync_mode, Rect2i(window_position, p_resolution));
 	ERR_FAIL_COND(main_window == DisplayServerEnums::INVALID_WINDOW_ID);
-	for (int i = 0; i < WINDOW_FLAG_MAX; i++) {
+	for (int i = 0; i < DisplayServerEnums::WINDOW_FLAG_MAX; i++) {
 		if (p_flags & (1 << i)) {
-			window_set_flag(WindowFlags(i), true, main_window);
+			window_set_flag(DisplayServerEnums::WindowFlags(i), true, main_window);
 		}
 	}
 	force_process_and_drop_events();

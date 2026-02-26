@@ -596,14 +596,14 @@ bool DisplayServerAndroid::window_is_maximize_allowed(DisplayServerEnums::Window
 	return false;
 }
 
-void DisplayServerAndroid::window_set_flag(DisplayServer::WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
+void DisplayServerAndroid::window_set_flag(DisplayServerEnums::WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
 	// Not supported on Android.
 }
 
-bool DisplayServerAndroid::window_get_flag(DisplayServer::WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
+bool DisplayServerAndroid::window_get_flag(DisplayServerEnums::WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
 	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, false);
 	switch (p_flag) {
-		case WindowFlags::WINDOW_FLAG_TRANSPARENT:
+		case DisplayServerEnums::WindowFlags::WINDOW_FLAG_TRANSPARENT:
 			return is_window_transparency_available();
 
 		default:

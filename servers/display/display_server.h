@@ -393,40 +393,6 @@ public:
 public:
 	virtual Vector<DisplayServerEnums::WindowID> get_window_list() const = 0;
 
-	enum WindowFlags {
-		WINDOW_FLAG_RESIZE_DISABLED,
-		WINDOW_FLAG_BORDERLESS,
-		WINDOW_FLAG_ALWAYS_ON_TOP,
-		WINDOW_FLAG_TRANSPARENT,
-		WINDOW_FLAG_NO_FOCUS,
-		WINDOW_FLAG_POPUP,
-		WINDOW_FLAG_EXTEND_TO_TITLE,
-		WINDOW_FLAG_MOUSE_PASSTHROUGH,
-		WINDOW_FLAG_SHARP_CORNERS,
-		WINDOW_FLAG_EXCLUDE_FROM_CAPTURE,
-		WINDOW_FLAG_POPUP_WM_HINT,
-		WINDOW_FLAG_MINIMIZE_DISABLED,
-		WINDOW_FLAG_MAXIMIZE_DISABLED,
-		WINDOW_FLAG_MAX,
-	};
-
-	// Separate enum otherwise we get warnings in switches not handling all values.
-	enum WindowFlagsBit {
-		WINDOW_FLAG_RESIZE_DISABLED_BIT = (1 << WINDOW_FLAG_RESIZE_DISABLED),
-		WINDOW_FLAG_BORDERLESS_BIT = (1 << WINDOW_FLAG_BORDERLESS),
-		WINDOW_FLAG_ALWAYS_ON_TOP_BIT = (1 << WINDOW_FLAG_ALWAYS_ON_TOP),
-		WINDOW_FLAG_TRANSPARENT_BIT = (1 << WINDOW_FLAG_TRANSPARENT),
-		WINDOW_FLAG_NO_FOCUS_BIT = (1 << WINDOW_FLAG_NO_FOCUS),
-		WINDOW_FLAG_POPUP_BIT = (1 << WINDOW_FLAG_POPUP),
-		WINDOW_FLAG_EXTEND_TO_TITLE_BIT = (1 << WINDOW_FLAG_EXTEND_TO_TITLE),
-		WINDOW_FLAG_MOUSE_PASSTHROUGH_BIT = (1 << WINDOW_FLAG_MOUSE_PASSTHROUGH),
-		WINDOW_FLAG_SHARP_CORNERS_BIT = (1 << WINDOW_FLAG_SHARP_CORNERS),
-		WINDOW_FLAG_EXCLUDE_FROM_CAPTURE_BIT = (1 << WINDOW_FLAG_EXCLUDE_FROM_CAPTURE),
-		WINDOW_FLAG_POPUP_WM_HINT_BIT = (1 << WINDOW_FLAG_POPUP_WM_HINT),
-		WINDOW_FLAG_MINIMIZE_DISABLED_BIT = (1 << WINDOW_FLAG_MINIMIZE_DISABLED),
-		WINDOW_FLAG_MAXIMIZE_DISABLED_BIT = (1 << WINDOW_FLAG_MAXIMIZE_DISABLED),
-	};
-
 	virtual DisplayServerEnums::WindowID create_sub_window(DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect = Rect2i(), bool p_exclusive = false, DisplayServerEnums::WindowID p_transient_parent = DisplayServerEnums::INVALID_WINDOW_ID);
 	virtual void show_window(DisplayServerEnums::WindowID p_id);
 	virtual void delete_sub_window(DisplayServerEnums::WindowID p_id);
@@ -515,8 +481,8 @@ public:
 
 	virtual bool window_is_maximize_allowed(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
 
-	virtual void window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
-	virtual bool window_get_flag(WindowFlags p_flag, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
+	virtual void window_set_flag(DisplayServerEnums::WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
+	virtual bool window_get_flag(DisplayServerEnums::WindowFlags p_flag, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
 
 	virtual void window_request_attention(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
 	virtual void window_set_taskbar_progress_value(float p_value, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) {}
@@ -925,7 +891,7 @@ VARIANT_ENUM_CAST(DisplayServer::Feature)
 VARIANT_ENUM_CAST(DisplayServer::MouseMode)
 VARIANT_ENUM_CAST(DisplayServer::ScreenOrientation)
 VARIANT_ENUM_CAST_EXT(DisplayServerEnums::WindowMode, DisplayServer::WindowMode)
-VARIANT_ENUM_CAST(DisplayServer::WindowFlags)
+VARIANT_ENUM_CAST_EXT(DisplayServerEnums::WindowFlags, DisplayServer::WindowFlags)
 VARIANT_ENUM_CAST(DisplayServer::WindowResizeEdge)
 VARIANT_ENUM_CAST(DisplayServer::HandleType)
 VARIANT_ENUM_CAST(DisplayServer::VirtualKeyboardType);

@@ -1945,9 +1945,9 @@ DisplayServerEnums::WindowID DisplayServerX11::create_sub_window(DisplayServerEn
 	_THREAD_SAFE_METHOD_
 
 	DisplayServerEnums::WindowID id = _create_window(p_mode, p_vsync_mode, p_flags, p_rect, 0);
-	for (int i = 0; i < WINDOW_FLAG_MAX; i++) {
+	for (int i = 0; i < DisplayServerEnums::WINDOW_FLAG_MAX; i++) {
 		if (p_flags & (1 << i)) {
-			window_set_flag(WindowFlags(i), true, id);
+			window_set_flag(DisplayServerEnums::WindowFlags(i), true, id);
 		}
 	}
 #ifdef RD_ENABLED
@@ -2469,7 +2469,7 @@ void DisplayServerX11::_update_size_hints(DisplayServerEnums::WindowID p_window)
 
 	if (window_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || window_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 		// Do not set any other hints to prevent the window manager from ignoring the fullscreen flags
-	} else if (window_get_flag(WINDOW_FLAG_RESIZE_DISABLED, p_window)) {
+	} else if (window_get_flag(DisplayServerEnums::WINDOW_FLAG_RESIZE_DISABLED, p_window)) {
 		// If resizing is disabled, use the forced size
 		xsh->flags |= PMinSize | PMaxSize;
 		xsh->min_width = wd.size.x;
@@ -3146,7 +3146,7 @@ void DisplayServerX11::window_set_mode(DisplayServerEnums::WindowMode p_mode, Di
 		} break;
 		case DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
 		case DisplayServerEnums::WINDOW_MODE_FULLSCREEN: {
-			if (window_get_flag(WINDOW_FLAG_ALWAYS_ON_TOP, p_window)) {
+			if (window_get_flag(DisplayServerEnums::WINDOW_FLAG_ALWAYS_ON_TOP, p_window)) {
 				_set_wm_maximized(p_window, true);
 			}
 
@@ -3189,26 +3189,26 @@ DisplayServerEnums::WindowMode DisplayServerX11::window_get_mode(DisplayServerEn
 	return DisplayServerEnums::WINDOW_MODE_WINDOWED;
 }
 
-void DisplayServerX11::window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
+void DisplayServerX11::window_set_flag(DisplayServerEnums::WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
 
 	switch (p_flag) {
-		case WINDOW_FLAG_MAXIMIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_MAXIMIZE_DISABLED: {
 			wd.no_max_btn = p_enabled;
 			_update_motif_wm_hints(p_window);
 
 			XFlush(x11_display);
 		} break;
-		case WINDOW_FLAG_MINIMIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_MINIMIZE_DISABLED: {
 			wd.no_min_btn = p_enabled;
 			_update_motif_wm_hints(p_window);
 
 			XFlush(x11_display);
 		} break;
-		case WINDOW_FLAG_RESIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_RESIZE_DISABLED: {
 			if (p_enabled && wd.embed_parent) {
 				print_line("Embedded window resize can't be disabled.");
 				return;
@@ -3220,12 +3220,12 @@ void DisplayServerX11::window_set_flag(WindowFlags p_flag, bool p_enabled, Displ
 
 			XFlush(x11_display);
 		} break;
-		case WINDOW_FLAG_BORDERLESS: {
+		case DisplayServerEnums::WINDOW_FLAG_BORDERLESS: {
 			wd.borderless = p_enabled;
 			_update_motif_wm_hints(p_window);
 			_update_window_mouse_passthrough(p_window);
 		} break;
-		case WINDOW_FLAG_ALWAYS_ON_TOP: {
+		case DisplayServerEnums::WINDOW_FLAG_ALWAYS_ON_TOP: {
 			ERR_FAIL_COND_MSG(wd.transient_parent != DisplayServerEnums::INVALID_WINDOW_ID, "Can't make a window transient if the 'on top' flag is active.");
 			if (p_enabled && wd.embed_parent) {
 				print_line("Embedded window can't become on top.");
@@ -3255,17 +3255,17 @@ void DisplayServerX11::window_set_flag(WindowFlags p_flag, bool p_enabled, Displ
 			wd.on_top = p_enabled;
 
 		} break;
-		case WINDOW_FLAG_TRANSPARENT: {
+		case DisplayServerEnums::WINDOW_FLAG_TRANSPARENT: {
 			wd.layered_window = p_enabled;
 		} break;
-		case WINDOW_FLAG_NO_FOCUS: {
+		case DisplayServerEnums::WINDOW_FLAG_NO_FOCUS: {
 			wd.no_focus = p_enabled;
 		} break;
-		case WINDOW_FLAG_MOUSE_PASSTHROUGH: {
+		case DisplayServerEnums::WINDOW_FLAG_MOUSE_PASSTHROUGH: {
 			wd.mpass = p_enabled;
 			_update_window_mouse_passthrough(p_window);
 		} break;
-		case WINDOW_FLAG_POPUP: {
+		case DisplayServerEnums::WINDOW_FLAG_POPUP: {
 			XWindowAttributes xwa;
 			XSync(x11_display, False);
 			XGetWindowAttributes(x11_display, wd.x11_window, &xwa);
@@ -3283,38 +3283,38 @@ void DisplayServerX11::window_set_flag(WindowFlags p_flag, bool p_enabled, Displ
 	}
 }
 
-bool DisplayServerX11::window_get_flag(WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
+bool DisplayServerX11::window_get_flag(DisplayServerEnums::WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), false);
 	const WindowData &wd = windows[p_window];
 
 	switch (p_flag) {
-		case WINDOW_FLAG_MAXIMIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_MAXIMIZE_DISABLED: {
 			return wd.no_max_btn;
 		} break;
-		case WINDOW_FLAG_MINIMIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_MINIMIZE_DISABLED: {
 			return wd.no_min_btn;
 		} break;
-		case WINDOW_FLAG_RESIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_RESIZE_DISABLED: {
 			return wd.resize_disabled;
 		} break;
-		case WINDOW_FLAG_BORDERLESS: {
+		case DisplayServerEnums::WINDOW_FLAG_BORDERLESS: {
 			return wd.borderless;
 		} break;
-		case WINDOW_FLAG_ALWAYS_ON_TOP: {
+		case DisplayServerEnums::WINDOW_FLAG_ALWAYS_ON_TOP: {
 			return wd.on_top;
 		} break;
-		case WINDOW_FLAG_TRANSPARENT: {
+		case DisplayServerEnums::WINDOW_FLAG_TRANSPARENT: {
 			return wd.layered_window;
 		} break;
-		case WINDOW_FLAG_NO_FOCUS: {
+		case DisplayServerEnums::WINDOW_FLAG_NO_FOCUS: {
 			return wd.no_focus;
 		} break;
-		case WINDOW_FLAG_MOUSE_PASSTHROUGH: {
+		case DisplayServerEnums::WINDOW_FLAG_MOUSE_PASSTHROUGH: {
 			return wd.mpass;
 		} break;
-		case WINDOW_FLAG_POPUP: {
+		case DisplayServerEnums::WINDOW_FLAG_POPUP: {
 			return wd.is_popup;
 		} break;
 		default: {
@@ -4667,7 +4667,7 @@ void DisplayServerX11::popup_open(DisplayServerEnums::WindowID p_window) {
 	}
 
 	// Detect tooltips and other similar popups that shouldn't block input to their parent.
-	bool ignores_input = window_get_flag(WINDOW_FLAG_NO_FOCUS, p_window) && window_get_flag(WINDOW_FLAG_MOUSE_PASSTHROUGH, p_window);
+	bool ignores_input = window_get_flag(DisplayServerEnums::WINDOW_FLAG_NO_FOCUS, p_window) && window_get_flag(DisplayServerEnums::WINDOW_FLAG_MOUSE_PASSTHROUGH, p_window);
 
 	WindowData &wd = windows[p_window];
 	if (wd.is_popup || (has_popup_ancestor && !ignores_input)) {
@@ -6432,11 +6432,11 @@ DisplayServerEnums::WindowID DisplayServerX11::_create_window(DisplayServerEnums
 	DisplayServerEnums::WindowID id = window_id_counter++;
 	WindowData &wd = windows[id];
 
-	if (p_flags & WINDOW_FLAG_NO_FOCUS_BIT) {
+	if (p_flags & DisplayServerEnums::WINDOW_FLAG_NO_FOCUS_BIT) {
 		wd.no_focus = true;
 	}
 
-	if (p_flags & WINDOW_FLAG_POPUP_BIT) {
+	if (p_flags & DisplayServerEnums::WINDOW_FLAG_POPUP_BIT) {
 		wd.is_popup = true;
 	}
 
@@ -7198,9 +7198,9 @@ DisplayServerX11::DisplayServerX11(const String &p_rendering_driver, DisplayServ
 		r_error = ERR_CANT_CREATE;
 		return;
 	}
-	for (int i = 0; i < WINDOW_FLAG_MAX; i++) {
+	for (int i = 0; i < DisplayServerEnums::WINDOW_FLAG_MAX; i++) {
 		if (p_flags & (1 << i)) {
-			window_set_flag(WindowFlags(i), true, main_window);
+			window_set_flag(DisplayServerEnums::WindowFlags(i), true, main_window);
 		}
 	}
 

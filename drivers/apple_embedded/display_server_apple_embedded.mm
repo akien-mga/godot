@@ -635,11 +635,11 @@ bool DisplayServerAppleEmbedded::window_is_maximize_allowed(DisplayServerEnums::
 	return false;
 }
 
-void DisplayServerAppleEmbedded::window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
+void DisplayServerAppleEmbedded::window_set_flag(DisplayServerEnums::WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
 	// Probably not supported for iOS
 }
 
-bool DisplayServerAppleEmbedded::window_get_flag(WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
+bool DisplayServerAppleEmbedded::window_get_flag(DisplayServerEnums::WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
 	return false;
 }
 

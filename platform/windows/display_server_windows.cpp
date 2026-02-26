@@ -1790,31 +1790,31 @@ DisplayServerEnums::WindowID DisplayServerWindows::create_sub_window(DisplayServ
 
 	WindowData &wd = windows[window_id];
 
-	if (p_flags & WINDOW_FLAG_RESIZE_DISABLED_BIT) {
+	if (p_flags & DisplayServerEnums::WINDOW_FLAG_RESIZE_DISABLED_BIT) {
 		wd.resizable = false;
 	}
-	if (p_flags & WINDOW_FLAG_MINIMIZE_DISABLED_BIT) {
+	if (p_flags & DisplayServerEnums::WINDOW_FLAG_MINIMIZE_DISABLED_BIT) {
 		wd.no_min_btn = true;
 	}
-	if (p_flags & WINDOW_FLAG_MAXIMIZE_DISABLED_BIT) {
+	if (p_flags & DisplayServerEnums::WINDOW_FLAG_MAXIMIZE_DISABLED_BIT) {
 		wd.no_max_btn = true;
 	}
-	if (p_flags & WINDOW_FLAG_BORDERLESS_BIT) {
+	if (p_flags & DisplayServerEnums::WINDOW_FLAG_BORDERLESS_BIT) {
 		wd.borderless = true;
 	}
-	if (p_flags & WINDOW_FLAG_ALWAYS_ON_TOP_BIT && p_mode != DisplayServerEnums::WINDOW_MODE_FULLSCREEN && p_mode != DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
+	if (p_flags & DisplayServerEnums::WINDOW_FLAG_ALWAYS_ON_TOP_BIT && p_mode != DisplayServerEnums::WINDOW_MODE_FULLSCREEN && p_mode != DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN) {
 		wd.always_on_top = true;
 	}
-	if (p_flags & WINDOW_FLAG_SHARP_CORNERS_BIT) {
+	if (p_flags & DisplayServerEnums::WINDOW_FLAG_SHARP_CORNERS_BIT) {
 		wd.sharp_corners = true;
 	}
-	if (p_flags & WINDOW_FLAG_NO_FOCUS_BIT) {
+	if (p_flags & DisplayServerEnums::WINDOW_FLAG_NO_FOCUS_BIT) {
 		wd.no_focus = true;
 	}
-	if (p_flags & WINDOW_FLAG_MOUSE_PASSTHROUGH_BIT) {
+	if (p_flags & DisplayServerEnums::WINDOW_FLAG_MOUSE_PASSTHROUGH_BIT) {
 		wd.mpass = true;
 	}
-	if (p_flags & WINDOW_FLAG_EXCLUDE_FROM_CAPTURE_BIT) {
+	if (p_flags & DisplayServerEnums::WINDOW_FLAG_EXCLUDE_FROM_CAPTURE_BIT) {
 		wd.hide_from_capture = true;
 		if (os_ver.dwBuildNumber >= 19041) {
 			SetWindowDisplayAffinity(wd.hWnd, WDA_EXCLUDEFROMCAPTURE);
@@ -1822,10 +1822,10 @@ DisplayServerEnums::WindowID DisplayServerWindows::create_sub_window(DisplayServ
 			SetWindowDisplayAffinity(wd.hWnd, WDA_MONITOR);
 		}
 	}
-	if (p_flags & WINDOW_FLAG_POPUP_BIT) {
+	if (p_flags & DisplayServerEnums::WINDOW_FLAG_POPUP_BIT) {
 		wd.is_popup = true;
 	}
-	if (p_flags & WINDOW_FLAG_TRANSPARENT_BIT) {
+	if (p_flags & DisplayServerEnums::WINDOW_FLAG_TRANSPARENT_BIT) {
 		if (OS::get_singleton()->is_layered_allowed()) {
 			DWM_BLURBEHIND bb;
 			ZeroMemory(&bb, sizeof(bb));
@@ -2764,21 +2764,21 @@ bool DisplayServerWindows::window_is_maximize_allowed(DisplayServerEnums::Window
 	return (style & WS_MAXIMIZEBOX) == WS_MAXIMIZEBOX;
 }
 
-void DisplayServerWindows::window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
+void DisplayServerWindows::window_set_flag(DisplayServerEnums::WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
 	switch (p_flag) {
-		case WINDOW_FLAG_MINIMIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_MINIMIZE_DISABLED: {
 			wd.no_min_btn = p_enabled;
 			_update_window_style(p_window);
 		} break;
-		case WINDOW_FLAG_MAXIMIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_MAXIMIZE_DISABLED: {
 			wd.no_max_btn = p_enabled;
 			_update_window_style(p_window);
 		} break;
-		case WINDOW_FLAG_RESIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_RESIZE_DISABLED: {
 			if (p_enabled && wd.parent_hwnd) {
 				print_line("Embedded window resize can't be disabled.");
 				return;
@@ -2786,7 +2786,7 @@ void DisplayServerWindows::window_set_flag(WindowFlags p_flag, bool p_enabled, D
 			wd.resizable = !p_enabled;
 			_update_window_style(p_window);
 		} break;
-		case WINDOW_FLAG_BORDERLESS: {
+		case DisplayServerEnums::WINDOW_FLAG_BORDERLESS: {
 			wd.borderless = p_enabled;
 			if (wd.fullscreen) {
 				return;
@@ -2795,7 +2795,7 @@ void DisplayServerWindows::window_set_flag(WindowFlags p_flag, bool p_enabled, D
 			_update_window_style(p_window);
 			ShowWindow(wd.hWnd, (wd.no_focus || wd.is_popup) ? SW_SHOWNOACTIVATE : SW_SHOW); // Show the window.
 		} break;
-		case WINDOW_FLAG_ALWAYS_ON_TOP: {
+		case DisplayServerEnums::WINDOW_FLAG_ALWAYS_ON_TOP: {
 			ERR_FAIL_COND_MSG(wd.transient_parent != DisplayServerEnums::INVALID_WINDOW_ID && p_enabled, "Transient windows can't become on top.");
 			if (p_enabled && wd.parent_hwnd) {
 				print_line("Embedded window can't become on top.");
@@ -2804,13 +2804,13 @@ void DisplayServerWindows::window_set_flag(WindowFlags p_flag, bool p_enabled, D
 			wd.always_on_top = p_enabled;
 			_update_window_style(p_window);
 		} break;
-		case WINDOW_FLAG_SHARP_CORNERS: {
+		case DisplayServerEnums::WINDOW_FLAG_SHARP_CORNERS: {
 			wd.sharp_corners = p_enabled;
 			DWORD value = wd.sharp_corners ? DWMWCP_DONOTROUND : DWMWCP_DEFAULT;
 			::DwmSetWindowAttribute(wd.hWnd, DWMWA_WINDOW_CORNER_PREFERENCE, &value, sizeof(value));
 			_update_window_style(p_window);
 		} break;
-		case WINDOW_FLAG_TRANSPARENT: {
+		case DisplayServerEnums::WINDOW_FLAG_TRANSPARENT: {
 			if (p_enabled) {
 				// Enable per-pixel alpha.
 				if (OS::get_singleton()->is_layered_allowed()) {
@@ -2837,14 +2837,14 @@ void DisplayServerWindows::window_set_flag(WindowFlags p_flag, bool p_enabled, D
 				}
 			}
 		} break;
-		case WINDOW_FLAG_NO_FOCUS: {
+		case DisplayServerEnums::WINDOW_FLAG_NO_FOCUS: {
 			wd.no_focus = p_enabled;
 			_update_window_style(p_window);
 		} break;
-		case WINDOW_FLAG_MOUSE_PASSTHROUGH: {
+		case DisplayServerEnums::WINDOW_FLAG_MOUSE_PASSTHROUGH: {
 			wd.mpass = p_enabled;
 		} break;
-		case WINDOW_FLAG_EXCLUDE_FROM_CAPTURE: {
+		case DisplayServerEnums::WINDOW_FLAG_EXCLUDE_FROM_CAPTURE: {
 			wd.hide_from_capture = p_enabled;
 			if (p_enabled) {
 				if (os_ver.dwBuildNumber >= 19041) {
@@ -2856,7 +2856,7 @@ void DisplayServerWindows::window_set_flag(WindowFlags p_flag, bool p_enabled, D
 				SetWindowDisplayAffinity(wd.hWnd, WDA_NONE);
 			}
 		} break;
-		case WINDOW_FLAG_POPUP: {
+		case DisplayServerEnums::WINDOW_FLAG_POPUP: {
 			ERR_FAIL_COND_MSG(p_window == DisplayServerEnums::MAIN_WINDOW_ID, "Main window can't be popup.");
 			ERR_FAIL_COND_MSG(IsWindowVisible(wd.hWnd) && (wd.is_popup != p_enabled), "Popup flag can't changed while window is opened.");
 			if (p_enabled && wd.parent_hwnd) {
@@ -2870,43 +2870,43 @@ void DisplayServerWindows::window_set_flag(WindowFlags p_flag, bool p_enabled, D
 	}
 }
 
-bool DisplayServerWindows::window_get_flag(WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
+bool DisplayServerWindows::window_get_flag(DisplayServerEnums::WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND_V(!windows.has(p_window), false);
 	const WindowData &wd = windows[p_window];
 	switch (p_flag) {
-		case WINDOW_FLAG_MAXIMIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_MAXIMIZE_DISABLED: {
 			return wd.no_max_btn;
 		} break;
-		case WINDOW_FLAG_MINIMIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_MINIMIZE_DISABLED: {
 			return wd.no_min_btn;
 		} break;
-		case WINDOW_FLAG_RESIZE_DISABLED: {
+		case DisplayServerEnums::WINDOW_FLAG_RESIZE_DISABLED: {
 			return !wd.resizable;
 		} break;
-		case WINDOW_FLAG_BORDERLESS: {
+		case DisplayServerEnums::WINDOW_FLAG_BORDERLESS: {
 			return wd.borderless;
 		} break;
-		case WINDOW_FLAG_ALWAYS_ON_TOP: {
+		case DisplayServerEnums::WINDOW_FLAG_ALWAYS_ON_TOP: {
 			return wd.always_on_top;
 		} break;
-		case WINDOW_FLAG_SHARP_CORNERS: {
+		case DisplayServerEnums::WINDOW_FLAG_SHARP_CORNERS: {
 			return wd.sharp_corners;
 		} break;
-		case WINDOW_FLAG_TRANSPARENT: {
+		case DisplayServerEnums::WINDOW_FLAG_TRANSPARENT: {
 			return wd.layered_window;
 		} break;
-		case WINDOW_FLAG_NO_FOCUS: {
+		case DisplayServerEnums::WINDOW_FLAG_NO_FOCUS: {
 			return wd.no_focus;
 		} break;
-		case WINDOW_FLAG_MOUSE_PASSTHROUGH: {
+		case DisplayServerEnums::WINDOW_FLAG_MOUSE_PASSTHROUGH: {
 			return wd.mpass;
 		} break;
-		case WINDOW_FLAG_EXCLUDE_FROM_CAPTURE: {
+		case DisplayServerEnums::WINDOW_FLAG_EXCLUDE_FROM_CAPTURE: {
 			return wd.hide_from_capture;
 		} break;
-		case WINDOW_FLAG_POPUP: {
+		case DisplayServerEnums::WINDOW_FLAG_POPUP: {
 			return wd.is_popup;
 		} break;
 		default:
@@ -5029,7 +5029,7 @@ void DisplayServerWindows::popup_open(DisplayServerEnums::WindowID p_window) {
 	}
 
 	// Detect tooltips and other similar popups that shouldn't block input to their parent.
-	bool ignores_input = window_get_flag(WINDOW_FLAG_NO_FOCUS, p_window) && window_get_flag(WINDOW_FLAG_MOUSE_PASSTHROUGH, p_window);
+	bool ignores_input = window_get_flag(DisplayServerEnums::WINDOW_FLAG_NO_FOCUS, p_window) && window_get_flag(DisplayServerEnums::WINDOW_FLAG_MOUSE_PASSTHROUGH, p_window);
 
 	WindowData &wd = windows[p_window];
 	if (wd.is_popup || (has_popup_ancestor && !ignores_input)) {
@@ -6817,7 +6817,7 @@ Error DisplayServerWindows::_create_window(DisplayServerEnums::WindowID p_window
 	DWORD dwExStyle;
 	DWORD dwStyle;
 
-	_get_window_style(p_window_id == DisplayServerEnums::MAIN_WINDOW_ID, false, (p_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || p_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN), p_mode != DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN, p_flags & WINDOW_FLAG_BORDERLESS_BIT, !(p_flags & WINDOW_FLAG_RESIZE_DISABLED_BIT), p_flags & WINDOW_FLAG_MINIMIZE_DISABLED_BIT, p_flags & WINDOW_FLAG_MAXIMIZE_DISABLED_BIT, p_mode == DisplayServerEnums::WINDOW_MODE_MINIMIZED, p_mode == DisplayServerEnums::WINDOW_MODE_MAXIMIZED, false, (p_flags & WINDOW_FLAG_NO_FOCUS_BIT) | (p_flags & WINDOW_FLAG_POPUP_BIT), p_parent_hwnd, p_no_redirection_bitmap, dwStyle, dwExStyle);
+	_get_window_style(p_window_id == DisplayServerEnums::MAIN_WINDOW_ID, false, (p_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || p_mode == DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN), p_mode != DisplayServerEnums::WINDOW_MODE_EXCLUSIVE_FULLSCREEN, p_flags & DisplayServerEnums::WINDOW_FLAG_BORDERLESS_BIT, !(p_flags & DisplayServerEnums::WINDOW_FLAG_RESIZE_DISABLED_BIT), p_flags & DisplayServerEnums::WINDOW_FLAG_MINIMIZE_DISABLED_BIT, p_flags & DisplayServerEnums::WINDOW_FLAG_MAXIMIZE_DISABLED_BIT, p_mode == DisplayServerEnums::WINDOW_MODE_MINIMIZED, p_mode == DisplayServerEnums::WINDOW_MODE_MAXIMIZED, false, (p_flags & DisplayServerEnums::WINDOW_FLAG_NO_FOCUS_BIT) | (p_flags & DisplayServerEnums::WINDOW_FLAG_POPUP_BIT), p_parent_hwnd, p_no_redirection_bitmap, dwStyle, dwExStyle);
 
 	int rq_screen = get_screen_from_rect(p_rect);
 	if (rq_screen < 0) {
@@ -6829,7 +6829,7 @@ Error DisplayServerWindows::_create_window(DisplayServerEnums::WindowID p_window
 
 	RECT WindowRect;
 
-	Vector2i off = (p_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || ((p_flags & WINDOW_FLAG_BORDERLESS_BIT) && p_mode == DisplayServerEnums::WINDOW_MODE_MAXIMIZED)) ? _get_screen_expand_offset(rq_screen) : Vector2i();
+	Vector2i off = (p_mode == DisplayServerEnums::WINDOW_MODE_FULLSCREEN || ((p_flags & DisplayServerEnums::WINDOW_FLAG_BORDERLESS_BIT) && p_mode == DisplayServerEnums::WINDOW_MODE_MAXIMIZED)) ? _get_screen_expand_offset(rq_screen) : Vector2i();
 
 	WindowRect.left = p_rect.position.x;
 	WindowRect.right = p_rect.position.x + p_rect.size.x + off.x;
@@ -6948,7 +6948,7 @@ Error DisplayServerWindows::_create_window(DisplayServerEnums::WindowID p_window
 			wd_transient_parent->transient_children.insert(id);
 		}
 
-		wd.sharp_corners = p_flags & WINDOW_FLAG_SHARP_CORNERS_BIT;
+		wd.sharp_corners = p_flags & DisplayServerEnums::WINDOW_FLAG_SHARP_CORNERS_BIT;
 		{
 			DWORD value = wd.sharp_corners ? DWMWCP_DONOTROUND : DWMWCP_DEFAULT;
 			::DwmSetWindowAttribute(wd.hWnd, DWMWA_WINDOW_CORNER_PREFERENCE, &value, sizeof(value));
@@ -7056,7 +7056,7 @@ Error DisplayServerWindows::_create_window(DisplayServerEnums::WindowID p_window
 
 		wd.create_completed = true;
 		// Set size of maximized borderless window (by default it covers the entire screen).
-		if (!p_parent_hwnd && p_mode == DisplayServerEnums::WINDOW_MODE_MAXIMIZED && (p_flags & WINDOW_FLAG_BORDERLESS_BIT)) {
+		if (!p_parent_hwnd && p_mode == DisplayServerEnums::WINDOW_MODE_MAXIMIZED && (p_flags & DisplayServerEnums::WINDOW_FLAG_BORDERLESS_BIT)) {
 			SetWindowPos(wd.hWnd, HWND_TOP, usable_rect.position.x - off.x, usable_rect.position.y - off.y, usable_rect.size.width + off.x, usable_rect.size.height + off.y, SWP_NOZORDER | SWP_NOACTIVATE);
 		}
 		_update_window_mouse_passthrough(id);
@@ -7925,9 +7925,9 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Dis
 	}
 #endif
 
-	for (int i = 0; i < WINDOW_FLAG_MAX; i++) {
+	for (int i = 0; i < DisplayServerEnums::WINDOW_FLAG_MAX; i++) {
 		if (p_flags & (1 << i)) {
-			window_set_flag(WindowFlags(i), true, DisplayServerEnums::MAIN_WINDOW_ID);
+			window_set_flag(DisplayServerEnums::WindowFlags(i), true, DisplayServerEnums::MAIN_WINDOW_ID);
 		}
 	}
 

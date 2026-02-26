@@ -353,7 +353,7 @@ Error DisplayServerWayland::file_dialog_show(const String &p_title, const String
 	MutexLock mutex_lock(wayland_thread.mutex);
 
 	DisplayServerEnums::WindowID window_id = p_window_id;
-	if (!windows.has(window_id) || window_get_flag(WINDOW_FLAG_POPUP_WM_HINT, window_id)) {
+	if (!windows.has(window_id) || window_get_flag(DisplayServerEnums::WINDOW_FLAG_POPUP_WM_HINT, window_id)) {
 		window_id = DisplayServerEnums::MAIN_WINDOW_ID;
 	}
 
@@ -368,7 +368,7 @@ Error DisplayServerWayland::file_dialog_with_options_show(const String &p_title,
 	MutexLock mutex_lock(wayland_thread.mutex);
 
 	DisplayServerEnums::WindowID window_id = p_window_id;
-	if (!windows.has(window_id) || window_get_flag(WINDOW_FLAG_POPUP_WM_HINT, window_id)) {
+	if (!windows.has(window_id) || window_get_flag(DisplayServerEnums::WINDOW_FLAG_POPUP_WM_HINT, window_id)) {
 		window_id = DisplayServerEnums::MAIN_WINDOW_ID;
 	}
 
@@ -774,14 +774,14 @@ void DisplayServerWayland::show_window(DisplayServerEnums::WindowID p_window_id)
 		// Let's determine the closest toplevel. For toplevels it will be themselves,
 		// for popups the first toplevel ancestor it finds.
 		DisplayServerEnums::WindowID root_id = wd.id;
-		while (root_id != DisplayServerEnums::INVALID_WINDOW_ID && window_get_flag(WINDOW_FLAG_POPUP_WM_HINT, root_id)) {
+		while (root_id != DisplayServerEnums::INVALID_WINDOW_ID && window_get_flag(DisplayServerEnums::WINDOW_FLAG_POPUP_WM_HINT, root_id)) {
 			root_id = windows[root_id].parent_id;
 		}
 		ERR_FAIL_COND(root_id == DisplayServerEnums::INVALID_WINDOW_ID);
 
 		wd.root_id = root_id;
 
-		if (!window_get_flag(WINDOW_FLAG_POPUP_WM_HINT, p_window_id)) {
+		if (!window_get_flag(DisplayServerEnums::WINDOW_FLAG_POPUP_WM_HINT, p_window_id)) {
 			// NOTE: DO **NOT** KEEP THE POSITION SET FOR TOPLEVELS. Wayland does not
 			// track them and we're gonna get our events transformed in unexpected ways.
 			wd.rect.position = Point2i();
@@ -791,7 +791,7 @@ void DisplayServerWayland::show_window(DisplayServerEnums::WindowID p_window_id)
 			wayland_thread.window_set_min_size(p_window_id, wd.min_size);
 			wayland_thread.window_set_max_size(p_window_id, wd.max_size);
 			wayland_thread.window_set_app_id(p_window_id, _get_app_id_from_context(context));
-			wayland_thread.window_set_borderless(p_window_id, window_get_flag(WINDOW_FLAG_BORDERLESS, p_window_id));
+			wayland_thread.window_set_borderless(p_window_id, window_get_flag(DisplayServerEnums::WINDOW_FLAG_BORDERLESS, p_window_id));
 
 			// Since it can't have a position. Let's tell the window node the news by
 			// the actual rect to it.
@@ -803,7 +803,7 @@ void DisplayServerWayland::show_window(DisplayServerEnums::WindowID p_window_id)
 
 			windows[root_id].popup_stack.push_back(p_window_id);
 
-			if (window_get_flag(WINDOW_FLAG_POPUP, p_window_id)) {
+			if (window_get_flag(DisplayServerEnums::WINDOW_FLAG_POPUP, p_window_id)) {
 				// Reroutes all input to it.
 				popup_menu_list.push_back(p_window_id);
 			}
@@ -1269,7 +1269,7 @@ bool DisplayServerWayland::window_is_maximize_allowed(DisplayServerEnums::Window
 	return wayland_thread.window_can_set_mode(p_window_id, DisplayServerEnums::WINDOW_MODE_MAXIMIZED);
 }
 
-void DisplayServerWayland::window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window_id) {
+void DisplayServerWayland::window_set_flag(DisplayServerEnums::WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window_id) {
 	MutexLock mutex_lock(wayland_thread.mutex);
 
 	ERR_FAIL_COND(!windows.has(p_window_id));
@@ -1278,18 +1278,18 @@ void DisplayServerWayland::window_set_flag(WindowFlags p_flag, bool p_enabled, D
 	DEBUG_LOG_WAYLAND(vformat("Window set flag %d", p_flag));
 
 	switch (p_flag) {
-		case WINDOW_FLAG_BORDERLESS: {
+		case DisplayServerEnums::WINDOW_FLAG_BORDERLESS: {
 			wayland_thread.window_set_borderless(p_window_id, p_enabled);
 		} break;
 
-		case WINDOW_FLAG_POPUP: {
+		case DisplayServerEnums::WINDOW_FLAG_POPUP: {
 			ERR_FAIL_COND_MSG(p_window_id == DisplayServerEnums::MAIN_WINDOW_ID, "Main window can't be popup.");
-			ERR_FAIL_COND_MSG(wd.visible && (wd.flags & WINDOW_FLAG_POPUP_BIT) != p_enabled, "Popup flag can't changed while window is opened.");
+			ERR_FAIL_COND_MSG(wd.visible && (wd.flags & DisplayServerEnums::WINDOW_FLAG_POPUP_BIT) != p_enabled, "Popup flag can't changed while window is opened.");
 		} break;
 
-		case WINDOW_FLAG_POPUP_WM_HINT: {
+		case DisplayServerEnums::WINDOW_FLAG_POPUP_WM_HINT: {
 			ERR_FAIL_COND_MSG(p_window_id == DisplayServerEnums::MAIN_WINDOW_ID, "Main window can't have popup hint.");
-			ERR_FAIL_COND_MSG(wd.visible && (wd.flags & WINDOW_FLAG_POPUP_WM_HINT_BIT) != p_enabled, "Popup hint can't changed while window is opened.");
+			ERR_FAIL_COND_MSG(wd.visible && (wd.flags & DisplayServerEnums::WINDOW_FLAG_POPUP_WM_HINT_BIT) != p_enabled, "Popup hint can't changed while window is opened.");
 		} break;
 
 		default: {
@@ -1303,7 +1303,7 @@ void DisplayServerWayland::window_set_flag(WindowFlags p_flag, bool p_enabled, D
 	}
 }
 
-bool DisplayServerWayland::window_get_flag(WindowFlags p_flag, DisplayServerEnums::WindowID p_window_id) const {
+bool DisplayServerWayland::window_get_flag(DisplayServerEnums::WindowFlags p_flag, DisplayServerEnums::WindowID p_window_id) const {
 	MutexLock mutex_lock(wayland_thread.mutex);
 
 	ERR_FAIL_COND_V(!windows.has(p_window_id), false);
@@ -2284,7 +2284,7 @@ DisplayServerWayland::~DisplayServerWayland() {
 	for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &pair : windows) {
 		DisplayServerEnums::WindowID id = pair.key;
 
-		if (!window_get_flag(WINDOW_FLAG_POPUP_WM_HINT, id)) {
+		if (!window_get_flag(DisplayServerEnums::WINDOW_FLAG_POPUP_WM_HINT, id)) {
 			toplevels.push_back(id);
 		} else {
 			AccessibilityServer::get_singleton()->window_destroy(id);

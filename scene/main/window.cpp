@@ -560,7 +560,7 @@ void Window::set_flag(Flags p_flag, bool p_enabled) {
 		embedder->_sub_window_update(this);
 	} else if (window_id != DisplayServerEnums::INVALID_WINDOW_ID) {
 		if (!is_in_edited_scene_root()) {
-			DisplayServer::get_singleton()->window_set_flag(DisplayServer::WindowFlags(p_flag), p_enabled, window_id);
+			DisplayServer::get_singleton()->window_set_flag(DisplayServerEnums::WindowFlags(p_flag), p_enabled, window_id);
 		}
 	}
 }
@@ -570,7 +570,7 @@ bool Window::get_flag(Flags p_flag) const {
 	ERR_FAIL_INDEX_V(p_flag, FLAG_MAX, false);
 	if (window_id != DisplayServerEnums::INVALID_WINDOW_ID) {
 		if (!is_in_edited_scene_root()) {
-			flags[p_flag] = DisplayServer::get_singleton()->window_get_flag(DisplayServer::WindowFlags(p_flag), window_id);
+			flags[p_flag] = DisplayServer::get_singleton()->window_get_flag(DisplayServerEnums::WindowFlags(p_flag), window_id);
 		}
 	}
 	return flags[p_flag];
@@ -748,7 +748,7 @@ void Window::_update_from_window() {
 	ERR_FAIL_COND(window_id == DisplayServerEnums::INVALID_WINDOW_ID);
 	mode = (Mode)DisplayServer::get_singleton()->window_get_mode(window_id);
 	for (int i = 0; i < FLAG_MAX; i++) {
-		flags[i] = DisplayServer::get_singleton()->window_get_flag(DisplayServer::WindowFlags(i), window_id);
+		flags[i] = DisplayServer::get_singleton()->window_get_flag(DisplayServerEnums::WindowFlags(i), window_id);
 	}
 }
 
@@ -1653,7 +1653,7 @@ void Window::_notification(int p_what) {
 						_event_callback(DisplayServer::WINDOW_EVENT_MOUSE_ENTER);
 					}
 					RS::get_singleton()->viewport_set_update_mode(get_viewport_rid(), RSE::VIEWPORT_UPDATE_WHEN_VISIBLE);
-					if (DisplayServer::get_singleton()->window_get_flag(DisplayServer::WindowFlags(FLAG_TRANSPARENT), window_id)) {
+					if (DisplayServer::get_singleton()->window_get_flag(DisplayServerEnums::WindowFlags(FLAG_TRANSPARENT), window_id)) {
 						set_transparent_background(true);
 					}
 				} else {

@@ -197,7 +197,7 @@ DisplayServerMacOSEmbedded::DisplayServerMacOSEmbedded(const String &p_rendering
 	layer.contentsScale = scale;
 	layer.magnificationFilter = kCAFilterNearest;
 	layer.minificationFilter = kCAFilterNearest;
-	transparent = ((p_flags & WINDOW_FLAG_TRANSPARENT_BIT) == WINDOW_FLAG_TRANSPARENT_BIT);
+	transparent = ((p_flags & DisplayServerEnums::WINDOW_FLAG_TRANSPARENT_BIT) == DisplayServerEnums::WINDOW_FLAG_TRANSPARENT_BIT);
 	layer.opaque = !(OS::get_singleton()->is_layered_allowed() && transparent);
 	layer.actions = @{ @"contents" : [NSNull null] }; // Disable implicit animations for contents.
 	// AppKit frames, bounds and positions are always in points.
@@ -617,15 +617,15 @@ bool DisplayServerMacOSEmbedded::window_is_maximize_allowed(DisplayServerEnums::
 	return false;
 }
 
-void DisplayServerMacOSEmbedded::window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
-	if (p_flag == WINDOW_FLAG_TRANSPARENT && p_window == DisplayServerEnums::MAIN_WINDOW_ID) {
+void DisplayServerMacOSEmbedded::window_set_flag(DisplayServerEnums::WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
+	if (p_flag == DisplayServerEnums::WINDOW_FLAG_TRANSPARENT && p_window == DisplayServerEnums::MAIN_WINDOW_ID) {
 		transparent = p_enabled;
 		layer.opaque = !(OS::get_singleton()->is_layered_allowed() && transparent);
 	}
 }
 
-bool DisplayServerMacOSEmbedded::window_get_flag(WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
-	if (p_flag == WINDOW_FLAG_TRANSPARENT && p_window == DisplayServerEnums::MAIN_WINDOW_ID) {
+bool DisplayServerMacOSEmbedded::window_get_flag(DisplayServerEnums::WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
+	if (p_flag == DisplayServerEnums::WINDOW_FLAG_TRANSPARENT && p_window == DisplayServerEnums::MAIN_WINDOW_ID) {
 		return transparent;
 	}
 	return false;
