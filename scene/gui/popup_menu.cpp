@@ -3369,8 +3369,8 @@ void PopupMenu::_native_popup(const Rect2i &p_rect) {
 	if (is_embedded()) {
 		popup_pos = get_embedder()->get_screen_transform().xform(popup_pos); // Note: for embedded windows "screen transform" is transform relative to embedder not the actual screen.
 		DisplayServerEnums::WindowID wid = get_window_id();
-		if (wid == DisplayServer::INVALID_WINDOW_ID) {
-			wid = DisplayServer::MAIN_WINDOW_ID;
+		if (wid == DisplayServerEnums::INVALID_WINDOW_ID) {
+			wid = DisplayServerEnums::MAIN_WINDOW_ID;
 		}
 		popup_pos += DisplayServer::get_singleton()->window_get_position(wid);
 	}

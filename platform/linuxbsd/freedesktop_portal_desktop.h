@@ -87,7 +87,7 @@ private:
 	struct FileDialogData {
 		Vector<String> filter_names;
 		HashMap<String, String> option_ids;
-		DisplayServerEnums::WindowID prev_focus = DisplayServer::INVALID_WINDOW_ID;
+		DisplayServerEnums::WindowID prev_focus = DisplayServerEnums::INVALID_WINDOW_ID;
 		Callable callback;
 		String filter;
 		String path;

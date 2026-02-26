@@ -363,7 +363,7 @@ void RendererViewport::_draw_viewport(Viewport *p_viewport) {
 
 		p_viewport->window_output_max_value = 1.0;
 		DisplayServerEnums::WindowID parent_window = _get_containing_window(p_viewport);
-		if (RD::get_singleton() && parent_window != DisplayServer::INVALID_WINDOW_ID) {
+		if (RD::get_singleton() && parent_window != DisplayServerEnums::INVALID_WINDOW_ID) {
 			RenderingContextDriver *context_driver = RD::get_singleton()->get_context_driver();
 			if (context_driver->window_get_hdr_output_enabled(parent_window)) {
 				p_viewport->window_output_max_value = context_driver->window_get_output_max_linear_value(parent_window);
@@ -746,7 +746,7 @@ void RendererViewport::_draw_viewport(Viewport *p_viewport) {
 }
 
 DisplayServerEnums::WindowID RendererViewport::_get_containing_window(Viewport *p_viewport) {
-	if (p_viewport->viewport_to_screen != DisplayServer::INVALID_WINDOW_ID) {
+	if (p_viewport->viewport_to_screen != DisplayServerEnums::INVALID_WINDOW_ID) {
 		return p_viewport->viewport_to_screen;
 	}
 
@@ -757,7 +757,7 @@ DisplayServerEnums::WindowID RendererViewport::_get_containing_window(Viewport *
 		}
 	}
 
-	return DisplayServer::INVALID_WINDOW_ID;
+	return DisplayServerEnums::INVALID_WINDOW_ID;
 }
 
 void RendererViewport::draw_viewports(bool p_swap_buffers) {
@@ -884,7 +884,7 @@ void RendererViewport::draw_viewports(bool p_swap_buffers) {
 
 				// commit our eyes
 				Vector<RenderingServerTypes::BlitToScreen> blits = xr_interface->post_draw_viewport(vp->render_target, vp->viewport_to_screen_rect);
-				if (vp->viewport_to_screen != DisplayServer::INVALID_WINDOW_ID) {
+				if (vp->viewport_to_screen != DisplayServerEnums::INVALID_WINDOW_ID) {
 					if (RSG::rasterizer->is_opengl()) {
 						if (blits.size() > 0) {
 							RSG::rasterizer->blit_render_targets_to_screen(vp->viewport_to_screen, blits.ptr(), blits.size());
@@ -909,7 +909,7 @@ void RendererViewport::draw_viewports(bool p_swap_buffers) {
 			// render standard mono camera
 			_draw_viewport(vp);
 
-			if (vp->viewport_to_screen != DisplayServer::INVALID_WINDOW_ID && (!vp->viewport_render_direct_to_screen || !RSG::rasterizer->is_low_end())) {
+			if (vp->viewport_to_screen != DisplayServerEnums::INVALID_WINDOW_ID && (!vp->viewport_render_direct_to_screen || !RSG::rasterizer->is_low_end())) {
 				//copy to screen if set as such
 				RenderingServerTypes::BlitToScreen blit;
 				blit.render_target = vp->render_target;
@@ -1136,7 +1136,7 @@ void RendererViewport::viewport_attach_to_screen(RID p_viewport, const Rect2 &p_
 	Viewport *viewport = viewport_owner.get_or_null(p_viewport);
 	ERR_FAIL_NULL(viewport);
 
-	if (p_screen != DisplayServer::INVALID_WINDOW_ID) {
+	if (p_screen != DisplayServerEnums::INVALID_WINDOW_ID) {
 		// If using OpenGL we can optimize this operation by rendering directly to system_fbo
 		// instead of rendering to fbo and copying to system_fbo after
 		if (RSG::rasterizer->is_low_end() && viewport->viewport_render_direct_to_screen) {
@@ -1154,7 +1154,7 @@ void RendererViewport::viewport_attach_to_screen(RID p_viewport, const Rect2 &p_
 		}
 
 		viewport->viewport_to_screen_rect = Rect2();
-		viewport->viewport_to_screen = DisplayServer::INVALID_WINDOW_ID;
+		viewport->viewport_to_screen = DisplayServerEnums::INVALID_WINDOW_ID;
 	}
 }
 

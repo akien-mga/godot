@@ -948,7 +948,7 @@ void FreeDesktopPortalDesktop::_thread_monitor(void *p_ud) {
 										cb.opt_in_cb = fd.opt_in_cb;
 										portal->pending_file_cbs.push_back(cb);
 									}
-									if (fd.prev_focus != DisplayServer::INVALID_WINDOW_ID) {
+									if (fd.prev_focus != DisplayServerEnums::INVALID_WINDOW_ID) {
 										callable_mp(DisplayServer::get_singleton(), &DisplayServer::window_move_to_foreground).call_deferred(fd.prev_focus);
 									}
 								}

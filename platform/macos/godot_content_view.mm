@@ -44,7 +44,7 @@
 
 - (id)init {
 	self = [super init];
-	window_id = DisplayServer::INVALID_WINDOW_ID;
+	window_id = DisplayServerEnums::INVALID_WINDOW_ID;
 	need_redraw = false;
 	return self;
 }
@@ -140,7 +140,7 @@
 - (id)init {
 	self = [super init];
 	layer_delegate = [[GodotContentLayerDelegate alloc] init];
-	window_id = DisplayServer::INVALID_WINDOW_ID;
+	window_id = DisplayServerEnums::INVALID_WINDOW_ID;
 	tracking_area = nil;
 	ime_input_event_in_progress = false;
 	mouse_down_control = false;

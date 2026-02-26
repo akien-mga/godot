@@ -470,16 +470,16 @@ void DisplayServerAndroid::_dispatch_input_events(const Ref<InputEvent> &p_event
 
 Vector<DisplayServerEnums::WindowID> DisplayServerAndroid::get_window_list() const {
 	Vector<DisplayServerEnums::WindowID> ret;
-	ret.push_back(MAIN_WINDOW_ID);
+	ret.push_back(DisplayServerEnums::MAIN_WINDOW_ID);
 	return ret;
 }
 
 DisplayServerEnums::WindowID DisplayServerAndroid::get_window_at_screen_position(const Point2i &p_position) const {
-	return MAIN_WINDOW_ID;
+	return DisplayServerEnums::MAIN_WINDOW_ID;
 }
 
 int64_t DisplayServerAndroid::window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
-	ERR_FAIL_COND_V(p_window != MAIN_WINDOW_ID, 0);
+	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, 0);
 	switch (p_handle_type) {
 		case WINDOW_HANDLE: {
 			return reinterpret_cast<int64_t>(static_cast<OS_Android *>(OS::get_singleton())->get_godot_java()->get_activity());
@@ -528,7 +528,7 @@ void DisplayServerAndroid::window_set_title(const String &p_title, DisplayServer
 }
 
 int DisplayServerAndroid::window_get_current_screen(DisplayServerEnums::WindowID p_window) const {
-	ERR_FAIL_COND_V(p_window != MAIN_WINDOW_ID, INVALID_SCREEN);
+	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, INVALID_SCREEN);
 	return 0;
 }
 
@@ -601,7 +601,7 @@ void DisplayServerAndroid::window_set_flag(DisplayServer::WindowFlags p_flag, bo
 }
 
 bool DisplayServerAndroid::window_get_flag(DisplayServer::WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
-	ERR_FAIL_COND_V(p_window != MAIN_WINDOW_ID, false);
+	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, false);
 	switch (p_flag) {
 		case WindowFlags::WINDOW_FLAG_TRANSPARENT:
 			return is_window_transparency_available();
@@ -722,11 +722,11 @@ void DisplayServerAndroid::reset_window() {
 #if defined(RD_ENABLED)
 	if (rendering_context_global) {
 		if (rendering_device) {
-			rendering_device->screen_free(MAIN_WINDOW_ID);
+			rendering_device->screen_free(DisplayServerEnums::MAIN_WINDOW_ID);
 		}
 
-		VSyncMode last_vsync_mode = rendering_context_global->window_get_vsync_mode(MAIN_WINDOW_ID);
-		rendering_context_global->window_destroy(MAIN_WINDOW_ID);
+		VSyncMode last_vsync_mode = rendering_context_global->window_get_vsync_mode(DisplayServerEnums::MAIN_WINDOW_ID);
+		rendering_context_global->window_destroy(DisplayServerEnums::MAIN_WINDOW_ID);
 
 		union {
 #ifdef VULKAN_ENABLED
@@ -741,17 +741,17 @@ void DisplayServerAndroid::reset_window() {
 		}
 #endif
 
-		if (rendering_context_global->window_create(MAIN_WINDOW_ID, &wpd) != OK) {
+		if (rendering_context_global->window_create(DisplayServerEnums::MAIN_WINDOW_ID, &wpd) != OK) {
 			ERR_PRINT(vformat("Failed to reset %s window.", rendering_driver));
 			return;
 		}
 
 		Size2i display_size = OS_Android::get_singleton()->get_display_size();
-		rendering_context_global->window_set_size(MAIN_WINDOW_ID, display_size.width, display_size.height);
-		rendering_context_global->window_set_vsync_mode(MAIN_WINDOW_ID, last_vsync_mode);
+		rendering_context_global->window_set_size(DisplayServerEnums::MAIN_WINDOW_ID, display_size.width, display_size.height);
+		rendering_context_global->window_set_vsync_mode(DisplayServerEnums::MAIN_WINDOW_ID, last_vsync_mode);
 
 		if (rendering_device) {
-			rendering_device->screen_create(MAIN_WINDOW_ID);
+			rendering_device->screen_create(DisplayServerEnums::MAIN_WINDOW_ID);
 		}
 	}
 #endif
@@ -793,24 +793,24 @@ DisplayServerAndroid::DisplayServerAndroid(const String &p_rendering_driver, Dis
 		RenderingContextDriverVulkanAndroid::WindowPlatformData wpd;
 		wpd.window = native_window;
 
-		if (rendering_context_global->window_create(MAIN_WINDOW_ID, &wpd) != OK) {
+		if (rendering_context_global->window_create(DisplayServerEnums::MAIN_WINDOW_ID, &wpd) != OK) {
 			ERR_PRINT(vformat("Failed to create %s window.", rendering_driver));
 			r_error = ERR_UNAVAILABLE;
 			return;
 		}
 
 		Size2i display_size = OS_Android::get_singleton()->get_display_size();
-		rendering_context_global->window_set_size(MAIN_WINDOW_ID, display_size.width, display_size.height);
-		rendering_context_global->window_set_vsync_mode(MAIN_WINDOW_ID, p_vsync_mode);
+		rendering_context_global->window_set_size(DisplayServerEnums::MAIN_WINDOW_ID, display_size.width, display_size.height);
+		rendering_context_global->window_set_vsync_mode(DisplayServerEnums::MAIN_WINDOW_ID, p_vsync_mode);
 
 		rendering_device = memnew(RenderingDevice);
-		if (rendering_device->initialize(rendering_context_global, MAIN_WINDOW_ID) != OK) {
+		if (rendering_device->initialize(rendering_context_global, DisplayServerEnums::MAIN_WINDOW_ID) != OK) {
 			rendering_device = nullptr;
 			r_error = ERR_UNAVAILABLE;
 			return;
 		}
 
-		rendering_device->screen_create(MAIN_WINDOW_ID);
+		rendering_device->screen_create(DisplayServerEnums::MAIN_WINDOW_ID);
 
 		RendererCompositorRD::make_current();
 	}

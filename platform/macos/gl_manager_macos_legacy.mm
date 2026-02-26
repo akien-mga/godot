@@ -105,19 +105,19 @@ void GLManagerLegacy_MacOS::window_destroy(DisplayServerEnums::WindowID p_window
 	}
 
 	if (current_window == p_window_id) {
-		current_window = DisplayServer::INVALID_WINDOW_ID;
+		current_window = DisplayServerEnums::INVALID_WINDOW_ID;
 	}
 
 	windows.erase(p_window_id);
 }
 
 void GLManagerLegacy_MacOS::release_current() {
-	if (current_window == DisplayServer::INVALID_WINDOW_ID) {
+	if (current_window == DisplayServerEnums::INVALID_WINDOW_ID) {
 		return;
 	}
 
 	[NSOpenGLContext clearCurrentContext];
-	current_window = DisplayServer::INVALID_WINDOW_ID;
+	current_window = DisplayServerEnums::INVALID_WINDOW_ID;
 }
 
 void GLManagerLegacy_MacOS::window_make_current(DisplayServerEnums::WindowID p_window_id) {

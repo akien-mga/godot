@@ -1828,14 +1828,14 @@ void WaylandThread::_wl_pointer_on_leave(void *data, struct wl_pointer *wl_point
 
 	PointerData &pd = ss->pointer_data_buffer;
 
-	if (pd.pointed_id == DisplayServer::INVALID_WINDOW_ID) {
+	if (pd.pointed_id == DisplayServerEnums::INVALID_WINDOW_ID) {
 		// We're probably on a decoration or some other third-party thing.
 		return;
 	}
 
 	DisplayServerEnums::WindowID id = pd.pointed_id;
 
-	pd.pointed_id = DisplayServer::INVALID_WINDOW_ID;
+	pd.pointed_id = DisplayServerEnums::INVALID_WINDOW_ID;
 	pd.pressed_button_mask.clear();
 
 	DEBUG_LOG_WAYLAND_THREAD(vformat("Pointer left window %d.", id));
@@ -1946,7 +1946,7 @@ void WaylandThread::_wl_pointer_on_frame(void *data, struct wl_pointer *wl_point
 	PointerData &pd = ss->pointer_data_buffer;
 
 	if (pd.pointed_id != old_pd.pointed_id) {
-		if (old_pd.pointed_id != DisplayServer::INVALID_WINDOW_ID) {
+		if (old_pd.pointed_id != DisplayServerEnums::INVALID_WINDOW_ID) {
 			Ref<WindowEventMessage> msg;
 			msg.instantiate();
 			msg->id = old_pd.pointed_id;
@@ -1955,7 +1955,7 @@ void WaylandThread::_wl_pointer_on_frame(void *data, struct wl_pointer *wl_point
 			wayland_thread->push_message(msg);
 		}
 
-		if (pd.pointed_id != DisplayServer::INVALID_WINDOW_ID) {
+		if (pd.pointed_id != DisplayServerEnums::INVALID_WINDOW_ID) {
 			Ref<WindowEventMessage> msg;
 			msg.instantiate();
 			msg->id = pd.pointed_id;
@@ -1972,10 +1972,10 @@ void WaylandThread::_wl_pointer_on_frame(void *data, struct wl_pointer *wl_point
 	// wl_pointer::button) within the same wl_pointer::frame. Because of this, we
 	// need to account for when the currently pointed window might be invalid
 	// (third-party or even none) and fall back to the old one.
-	if (pd.pointed_id != DisplayServer::INVALID_WINDOW_ID) {
+	if (pd.pointed_id != DisplayServerEnums::INVALID_WINDOW_ID) {
 		ws = ss->wayland_thread->window_get_state(pd.pointed_id);
 		ERR_FAIL_NULL(ws);
-	} else if (old_pd.pointed_id != DisplayServer::INVALID_WINDOW_ID) {
+	} else if (old_pd.pointed_id != DisplayServerEnums::INVALID_WINDOW_ID) {
 		ws = ss->wayland_thread->window_get_state(old_pd.pointed_id);
 		ERR_FAIL_NULL(ws);
 	}
@@ -2316,7 +2316,7 @@ void WaylandThread::_wl_keyboard_on_leave(void *data, struct wl_keyboard *wl_key
 
 	ss->repeating_keycode = XKB_KEYCODE_INVALID;
 
-	if (ss->focused_id == DisplayServer::INVALID_WINDOW_ID) {
+	if (ss->focused_id == DisplayServerEnums::INVALID_WINDOW_ID) {
 		// We're probably on a decoration or some other third-party thing.
 		return;
 	}
@@ -2324,7 +2324,7 @@ void WaylandThread::_wl_keyboard_on_leave(void *data, struct wl_keyboard *wl_key
 	WindowState *ws = wayland_thread->window_get_state(ss->focused_id);
 	ERR_FAIL_NULL(ws);
 
-	ss->focused_id = DisplayServer::INVALID_WINDOW_ID;
+	ss->focused_id = DisplayServerEnums::INVALID_WINDOW_ID;
 
 	Ref<WindowEventMessage> msg;
 	msg.instantiate();
@@ -2348,7 +2348,7 @@ void WaylandThread::_wl_keyboard_on_key(void *data, struct wl_keyboard *wl_keybo
 	SeatState *ss = (SeatState *)data;
 	ERR_FAIL_NULL(ss);
 
-	if (ss->focused_id == DisplayServer::INVALID_WINDOW_ID) {
+	if (ss->focused_id == DisplayServerEnums::INVALID_WINDOW_ID) {
 		return;
 	}
 
@@ -2433,7 +2433,7 @@ void WaylandThread::_wl_data_device_on_leave(void *data, struct wl_data_device *
 		memdelete(wl_data_offer_get_offer_state(ss->wl_data_offer_dnd));
 		wl_data_offer_destroy(ss->wl_data_offer_dnd);
 		ss->wl_data_offer_dnd = nullptr;
-		ss->dnd_id = DisplayServer::INVALID_WINDOW_ID;
+		ss->dnd_id = DisplayServerEnums::INVALID_WINDOW_ID;
 	}
 }
 
@@ -2470,7 +2470,7 @@ void WaylandThread::_wl_data_device_on_drop(void *data, struct wl_data_device *w
 	memdelete(wl_data_offer_get_offer_state(ss->wl_data_offer_dnd));
 	wl_data_offer_destroy(ss->wl_data_offer_dnd);
 	ss->wl_data_offer_dnd = nullptr;
-	ss->dnd_id = DisplayServer::INVALID_WINDOW_ID;
+	ss->dnd_id = DisplayServerEnums::INVALID_WINDOW_ID;
 }
 
 void WaylandThread::_wl_data_device_on_selection(void *data, struct wl_data_device *wl_data_device, struct wl_data_offer *id) {
@@ -2831,14 +2831,14 @@ void WaylandThread::_wp_tablet_tool_on_proximity_out(void *data, struct zwp_tabl
 	TabletToolState *ts = wp_tablet_tool_get_state(wp_tablet_tool_v2);
 	ERR_FAIL_NULL(ts);
 
-	if (ts->data_pending.proximal_id == DisplayServer::INVALID_WINDOW_ID) {
+	if (ts->data_pending.proximal_id == DisplayServerEnums::INVALID_WINDOW_ID) {
 		// We're probably on a decoration or some other third-party thing.
 		return;
 	}
 
 	DisplayServerEnums::WindowID id = ts->data_pending.proximal_id;
 
-	ts->data_pending.proximal_id = DisplayServer::INVALID_WINDOW_ID;
+	ts->data_pending.proximal_id = DisplayServerEnums::INVALID_WINDOW_ID;
 	ts->data_pending.pressed_button_mask.clear();
 
 	DEBUG_LOG_WAYLAND_THREAD(vformat("Tablet tool left window %d.", id));
@@ -2974,7 +2974,7 @@ void WaylandThread::_wp_tablet_tool_on_frame(void *data, struct zwp_tablet_tool_
 	TabletToolData &td = ts->data_pending;
 
 	if (td.proximal_id != old_td.proximal_id) {
-		if (old_td.proximal_id != DisplayServer::INVALID_WINDOW_ID) {
+		if (old_td.proximal_id != DisplayServerEnums::INVALID_WINDOW_ID) {
 			Ref<WindowEventMessage> msg;
 			msg.instantiate();
 			msg->id = old_td.proximal_id;
@@ -2983,7 +2983,7 @@ void WaylandThread::_wp_tablet_tool_on_frame(void *data, struct zwp_tablet_tool_
 			wayland_thread->push_message(msg);
 		}
 
-		if (td.proximal_id != DisplayServer::INVALID_WINDOW_ID) {
+		if (td.proximal_id != DisplayServerEnums::INVALID_WINDOW_ID) {
 			Ref<WindowEventMessage> msg;
 			msg.instantiate();
 			msg->id = td.proximal_id;
@@ -2993,7 +2993,7 @@ void WaylandThread::_wp_tablet_tool_on_frame(void *data, struct zwp_tablet_tool_
 		}
 	}
 
-	if (td.proximal_id == DisplayServer::INVALID_WINDOW_ID) {
+	if (td.proximal_id == DisplayServerEnums::INVALID_WINDOW_ID) {
 		// We're probably on a decoration or some other third-party thing. Let's
 		// "commit" the data and call it a day.
 		old_td = td;
@@ -3128,7 +3128,7 @@ void WaylandThread::_wp_text_input_on_leave(void *data, struct zwp_text_input_v3
 		return;
 	}
 
-	if (ss->ime_window_id == DisplayServer::INVALID_WINDOW_ID) {
+	if (ss->ime_window_id == DisplayServerEnums::INVALID_WINDOW_ID) {
 		return;
 	}
 
@@ -3139,7 +3139,7 @@ void WaylandThread::_wp_text_input_on_leave(void *data, struct zwp_text_input_v3
 	msg->selection = Vector2i();
 	ss->wayland_thread->push_message(msg);
 
-	ss->ime_window_id = DisplayServer::INVALID_WINDOW_ID;
+	ss->ime_window_id = DisplayServerEnums::INVALID_WINDOW_ID;
 	ss->ime_enabled = false;
 	ss->ime_active = false;
 	ss->ime_text = String();
@@ -3153,7 +3153,7 @@ void WaylandThread::_wp_text_input_on_preedit_string(void *data, struct zwp_text
 		return;
 	}
 
-	if (ss->ime_window_id == DisplayServer::INVALID_WINDOW_ID) {
+	if (ss->ime_window_id == DisplayServerEnums::INVALID_WINDOW_ID) {
 		return;
 	}
 
@@ -3205,7 +3205,7 @@ void WaylandThread::_wp_text_input_on_commit_string(void *data, struct zwp_text_
 		return;
 	}
 
-	if (ss->ime_window_id == DisplayServer::INVALID_WINDOW_ID) {
+	if (ss->ime_window_id == DisplayServerEnums::INVALID_WINDOW_ID) {
 		return;
 	}
 
@@ -3222,7 +3222,7 @@ void WaylandThread::_wp_text_input_on_done(void *data, struct zwp_text_input_v3 
 		return;
 	}
 
-	if (ss->ime_window_id == DisplayServer::INVALID_WINDOW_ID) {
+	if (ss->ime_window_id == DisplayServerEnums::INVALID_WINDOW_ID) {
 		return;
 	}
 
@@ -3666,7 +3666,7 @@ void WaylandThread::seat_state_lock_pointer(SeatState *p_ss) {
 	if (p_ss->wp_locked_pointer == nullptr) {
 		struct wl_surface *locked_surface = window_get_wl_surface(p_ss->pointer_data.last_pointed_id);
 		if (locked_surface == nullptr) {
-			locked_surface = window_get_wl_surface(DisplayServer::MAIN_WINDOW_ID);
+			locked_surface = window_get_wl_surface(DisplayServerEnums::MAIN_WINDOW_ID);
 		}
 		ERR_FAIL_NULL(locked_surface);
 
@@ -3687,7 +3687,7 @@ void WaylandThread::seat_state_warp_pointer(SeatState *p_ss, int p_x, int p_y) {
 		return;
 	}
 
-	if (p_ss->pointer_data.pointed_id == DisplayServer::INVALID_WINDOW_ID) {
+	if (p_ss->pointer_data.pointed_id == DisplayServerEnums::INVALID_WINDOW_ID) {
 		return;
 	}
 
@@ -3911,7 +3911,7 @@ void WaylandThread::window_create(DisplayServerEnums::WindowID p_window_id, cons
 		}
 	}
 
-	if (p_parent_id != DisplayServer::INVALID_WINDOW_ID) {
+	if (p_parent_id != DisplayServerEnums::INVALID_WINDOW_ID) {
 		// NOTE: It's important to set the parent ASAP to avoid misunderstandings with
 		// the compositor. For example, niri immediately resizes the window to full
 		// size as soon as it's configured if it's not parented to another toplevel.
@@ -4698,7 +4698,7 @@ DisplayServerEnums::WindowID WaylandThread::pointer_get_pointed_window_id() cons
 		return ss->pointer_data.pointed_id;
 	}
 
-	return DisplayServer::INVALID_WINDOW_ID;
+	return DisplayServerEnums::INVALID_WINDOW_ID;
 }
 DisplayServerEnums::WindowID WaylandThread::pointer_get_last_pointed_window_id() const {
 	SeatState *ss = wl_seat_get_seat_state(wl_seat_current);
@@ -4734,7 +4734,7 @@ DisplayServerEnums::WindowID WaylandThread::pointer_get_last_pointed_window_id()
 		return ss->pointer_data.last_pointed_id;
 	}
 
-	return DisplayServer::INVALID_WINDOW_ID;
+	return DisplayServerEnums::INVALID_WINDOW_ID;
 }
 
 void WaylandThread::pointer_set_constraint(PointerConstraint p_constraint) {

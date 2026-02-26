@@ -80,7 +80,7 @@ public:
 		bool use_occlusion_culling = false;
 		bool occlusion_buffer_dirty = false;
 
-		DisplayServerEnums::WindowID viewport_to_screen = DisplayServer::INVALID_WINDOW_ID;
+		DisplayServerEnums::WindowID viewport_to_screen = DisplayServerEnums::INVALID_WINDOW_ID;
 		Rect2 viewport_to_screen_rect;
 		bool viewport_render_direct_to_screen = false;
 
@@ -162,7 +162,7 @@ public:
 			use_hdr_2d = false;
 			window_output_max_value = 1.0;
 
-			viewport_to_screen = DisplayServer::INVALID_WINDOW_ID;
+			viewport_to_screen = DisplayServerEnums::INVALID_WINDOW_ID;
 			shadow_atlas_size = 0;
 			measure_render_time = false;
 
@@ -226,7 +226,7 @@ public:
 
 	void viewport_set_size(RID p_viewport, int p_width, int p_height, int p_view_count = 1);
 
-	void viewport_attach_to_screen(RID p_viewport, const Rect2 &p_rect = Rect2(), DisplayServerEnums::WindowID p_screen = DisplayServer::MAIN_WINDOW_ID);
+	void viewport_attach_to_screen(RID p_viewport, const Rect2 &p_rect = Rect2(), DisplayServerEnums::WindowID p_screen = DisplayServerEnums::MAIN_WINDOW_ID);
 	void viewport_set_render_direct_to_screen(RID p_viewport, bool p_enable);
 
 	void viewport_set_active(RID p_viewport, bool p_active);
@@ -301,7 +301,7 @@ public:
 
 	void viewport_set_sdf_oversize_and_scale(RID p_viewport, RSE::ViewportSDFOversize p_over_size, RSE::ViewportSDFScale p_scale);
 
-	virtual RID viewport_find_from_screen_attachment(DisplayServerEnums::WindowID p_id = DisplayServer::MAIN_WINDOW_ID) const;
+	virtual RID viewport_find_from_screen_attachment(DisplayServerEnums::WindowID p_id = DisplayServerEnums::MAIN_WINDOW_ID) const;
 
 	void viewport_set_vrs_mode(RID p_viewport, RSE::ViewportVRSMode p_mode);
 	void viewport_set_vrs_update_mode(RID p_viewport, RSE::ViewportVRSUpdateMode p_mode);

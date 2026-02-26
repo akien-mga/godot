@@ -35,4 +35,10 @@ namespace DisplayServerEnums {
 typedef int WindowID;
 typedef int IndicatorID;
 
+enum {
+	MAIN_WINDOW_ID = 0,
+	INVALID_WINDOW_ID = -1,
+	INVALID_INDICATOR_ID = -1
+};
+
 } // namespace DisplayServerEnums

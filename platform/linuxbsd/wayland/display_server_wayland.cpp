@@ -354,7 +354,7 @@ Error DisplayServerWayland::file_dialog_show(const String &p_title, const String
 
 	DisplayServerEnums::WindowID window_id = p_window_id;
 	if (!windows.has(window_id) || window_get_flag(WINDOW_FLAG_POPUP_WM_HINT, window_id)) {
-		window_id = MAIN_WINDOW_ID;
+		window_id = DisplayServerEnums::MAIN_WINDOW_ID;
 	}
 
 	WaylandThread::WindowState *ws = wayland_thread.window_get_state(window_id);
@@ -369,7 +369,7 @@ Error DisplayServerWayland::file_dialog_with_options_show(const String &p_title,
 
 	DisplayServerEnums::WindowID window_id = p_window_id;
 	if (!windows.has(window_id) || window_get_flag(WINDOW_FLAG_POPUP_WM_HINT, window_id)) {
-		window_id = MAIN_WINDOW_ID;
+		window_id = DisplayServerEnums::MAIN_WINDOW_ID;
 	}
 
 	WaylandThread::WindowState *ws = wayland_thread.window_get_state(window_id);
@@ -474,7 +474,7 @@ Point2i DisplayServerWayland::mouse_get_position() const {
 
 	DisplayServerEnums::WindowID pointed_id = wayland_thread.pointer_get_pointed_window_id();
 
-	if (pointed_id != INVALID_WINDOW_ID && windows.has(pointed_id)) {
+	if (pointed_id != DisplayServerEnums::INVALID_WINDOW_ID && windows.has(pointed_id)) {
 		return Input::get_singleton()->get_mouse_position() + windows[pointed_id].rect.position;
 	}
 
@@ -656,7 +656,7 @@ float DisplayServerWayland::screen_get_scale(int p_screen) const {
 		// of code relies on it, we'll return the window's scale, which is what we
 		// really care about. After all, we have very little use of the actual screen
 		// enumeration APIs and we're (for now) in single-window mode anyways.
-		struct wl_surface *wl_surface = wayland_thread.window_get_wl_surface(MAIN_WINDOW_ID);
+		struct wl_surface *wl_surface = wayland_thread.window_get_wl_surface(DisplayServerEnums::MAIN_WINDOW_ID);
 		WaylandThread::WindowState *ws = wayland_thread.wl_surface_get_window_state(wl_surface);
 
 		return wayland_thread.window_state_get_scale_factor(ws);
@@ -688,14 +688,14 @@ void DisplayServerWayland::screen_set_keep_on(bool p_enable) {
 		return;
 	}
 
-	wayland_thread.window_set_idle_inhibition(MAIN_WINDOW_ID, p_enable);
+	wayland_thread.window_set_idle_inhibition(DisplayServerEnums::MAIN_WINDOW_ID, p_enable);
 
 #ifdef DBUS_ENABLED
 	if (portal_desktop && portal_desktop->is_inhibit_supported()) {
 		if (p_enable) {
 			// Attach the inhibit request to the main window, not the last focused window,
 			// on the basis that inhibiting the screensaver is global state for the application.
-			DisplayServerEnums::WindowID window_id = MAIN_WINDOW_ID;
+			DisplayServerEnums::WindowID window_id = DisplayServerEnums::MAIN_WINDOW_ID;
 			WaylandThread::WindowState *ws = wayland_thread.wl_surface_get_window_state(wayland_thread.window_get_wl_surface(window_id));
 			screensaver_inhibited = portal_desktop->inhibit(ws ? ws->exported_handle : String());
 		} else {
@@ -717,9 +717,9 @@ void DisplayServerWayland::screen_set_keep_on(bool p_enable) {
 bool DisplayServerWayland::screen_is_kept_on() const {
 	// FIXME: Multiwindow support.
 #ifdef DBUS_ENABLED
-	return wayland_thread.window_get_idle_inhibition(MAIN_WINDOW_ID) || screensaver_inhibited;
+	return wayland_thread.window_get_idle_inhibition(DisplayServerEnums::MAIN_WINDOW_ID) || screensaver_inhibited;
 #else
-	return wayland_thread.window_get_idle_inhibition(MAIN_WINDOW_ID);
+	return wayland_thread.window_get_idle_inhibition(DisplayServerEnums::MAIN_WINDOW_ID);
 #endif
 }
 
@@ -774,10 +774,10 @@ void DisplayServerWayland::show_window(DisplayServerEnums::WindowID p_window_id)
 		// Let's determine the closest toplevel. For toplevels it will be themselves,
 		// for popups the first toplevel ancestor it finds.
 		DisplayServerEnums::WindowID root_id = wd.id;
-		while (root_id != INVALID_WINDOW_ID && window_get_flag(WINDOW_FLAG_POPUP_WM_HINT, root_id)) {
+		while (root_id != DisplayServerEnums::INVALID_WINDOW_ID && window_get_flag(WINDOW_FLAG_POPUP_WM_HINT, root_id)) {
 			root_id = windows[root_id].parent_id;
 		}
-		ERR_FAIL_COND(root_id == INVALID_WINDOW_ID);
+		ERR_FAIL_COND(root_id == DisplayServerEnums::INVALID_WINDOW_ID);
 
 		wd.root_id = root_id;
 
@@ -932,7 +932,7 @@ DisplayServerEnums::WindowID DisplayServerWayland::window_get_active_popup() con
 		return popup_menu_list.back()->get();
 	}
 
-	return INVALID_WINDOW_ID;
+	return DisplayServerEnums::INVALID_WINDOW_ID;
 }
 
 void DisplayServerWayland::window_set_popup_safe_rect(DisplayServerEnums::WindowID p_window, const Rect2i &p_rect) {
@@ -996,7 +996,7 @@ int64_t DisplayServerWayland::window_get_native_handle(HandleType p_handle_type,
 
 DisplayServerEnums::WindowID DisplayServerWayland::get_window_at_screen_position(const Point2i &p_position) const {
 	// Standard Wayland APIs don't support this.
-	return MAIN_WINDOW_ID;
+	return DisplayServerEnums::MAIN_WINDOW_ID;
 }
 
 void DisplayServerWayland::window_attach_instance_id(ObjectID p_instance, DisplayServerEnums::WindowID p_window_id) {
@@ -1148,9 +1148,9 @@ void DisplayServerWayland::window_set_transient(DisplayServerEnums::WindowID p_w
 
 	ERR_FAIL_COND(wd.parent_id == p_parent);
 
-	if (p_parent != INVALID_WINDOW_ID) {
+	if (p_parent != DisplayServerEnums::INVALID_WINDOW_ID) {
 		ERR_FAIL_COND(!windows.has(p_parent));
-		ERR_FAIL_COND_MSG(wd.parent_id != INVALID_WINDOW_ID, "Window already has a transient parent");
+		ERR_FAIL_COND_MSG(wd.parent_id != DisplayServerEnums::INVALID_WINDOW_ID, "Window already has a transient parent");
 		wd.parent_id = p_parent;
 
 		// NOTE: Looks like live unparenting is not really practical unfortunately.
@@ -1283,12 +1283,12 @@ void DisplayServerWayland::window_set_flag(WindowFlags p_flag, bool p_enabled, D
 		} break;
 
 		case WINDOW_FLAG_POPUP: {
-			ERR_FAIL_COND_MSG(p_window_id == MAIN_WINDOW_ID, "Main window can't be popup.");
+			ERR_FAIL_COND_MSG(p_window_id == DisplayServerEnums::MAIN_WINDOW_ID, "Main window can't be popup.");
 			ERR_FAIL_COND_MSG(wd.visible && (wd.flags & WINDOW_FLAG_POPUP_BIT) != p_enabled, "Popup flag can't changed while window is opened.");
 		} break;
 
 		case WINDOW_FLAG_POPUP_WM_HINT: {
-			ERR_FAIL_COND_MSG(p_window_id == MAIN_WINDOW_ID, "Main window can't have popup hint.");
+			ERR_FAIL_COND_MSG(p_window_id == DisplayServerEnums::MAIN_WINDOW_ID, "Main window can't have popup hint.");
 			ERR_FAIL_COND_MSG(wd.visible && (wd.flags & WINDOW_FLAG_POPUP_WM_HINT_BIT) != p_enabled, "Popup hint can't changed while window is opened.");
 		} break;
 
@@ -1688,7 +1688,7 @@ bool DisplayServerWayland::color_picker(const Callable &p_callback) {
 		return false;
 	}
 	MutexLock mutex_lock(wayland_thread.mutex);
-	DisplayServerEnums::WindowID window_id = MAIN_WINDOW_ID;
+	DisplayServerEnums::WindowID window_id = DisplayServerEnums::MAIN_WINDOW_ID;
 	// TODO: Use window IDs for multiwindow support.
 	WaylandThread::WindowState *ws = wayland_thread.wl_surface_get_window_state(wayland_thread.window_get_wl_surface(window_id));
 	return portal_desktop->color_picker((ws ? ws->exported_handle : String()), p_callback);
@@ -1720,7 +1720,7 @@ void DisplayServerWayland::process_events() {
 		// Generic check. Not actual message handling.
 		Ref<WaylandThread::WindowMessage> win_msg = msg;
 		if (win_msg.is_valid()) {
-			ERR_CONTINUE_MSG(win_msg->id == INVALID_WINDOW_ID, "Invalid window ID received from Wayland thread.");
+			ERR_CONTINUE_MSG(win_msg->id == DisplayServerEnums::INVALID_WINDOW_ID, "Invalid window ID received from Wayland thread.");
 
 			if (!windows.has(win_msg->id)) {
 				// Window got probably deleted.
@@ -1958,7 +1958,7 @@ void DisplayServerWayland::set_context(Context p_context) {
 	context = p_context;
 
 	String app_id = _get_app_id_from_context(p_context);
-	wayland_thread.window_set_app_id(MAIN_WINDOW_ID, app_id);
+	wayland_thread.window_set_app_id(DisplayServerEnums::MAIN_WINDOW_ID, app_id);
 }
 
 bool DisplayServerWayland::is_window_transparency_available() const {
@@ -2203,9 +2203,9 @@ DisplayServerWayland::DisplayServerWayland(const String &p_rendering_driver, Win
 
 	cursor_set_shape(CURSOR_BUSY);
 
-	WindowData &wd = windows[MAIN_WINDOW_ID];
+	WindowData &wd = windows[DisplayServerEnums::MAIN_WINDOW_ID];
 
-	wd.id = MAIN_WINDOW_ID;
+	wd.id = DisplayServerEnums::MAIN_WINDOW_ID;
 	wd.mode = p_mode;
 	wd.flags = p_flags;
 	wd.vsync_mode = p_vsync_mode;
@@ -2218,12 +2218,12 @@ DisplayServerWayland::DisplayServerWayland(const String &p_rendering_driver, Win
 		}
 	}
 
-	show_window(MAIN_WINDOW_ID);
+	show_window(DisplayServerEnums::MAIN_WINDOW_ID);
 
 #ifdef RD_ENABLED
 	if (rendering_context) {
 		rendering_device = memnew(RenderingDevice);
-		if (rendering_device->initialize(rendering_context, MAIN_WINDOW_ID) != OK) {
+		if (rendering_device->initialize(rendering_context, DisplayServerEnums::MAIN_WINDOW_ID) != OK) {
 			memdelete(rendering_device);
 			rendering_device = nullptr;
 			memdelete(rendering_context);
@@ -2231,7 +2231,7 @@ DisplayServerWayland::DisplayServerWayland(const String &p_rendering_driver, Win
 			r_error = ERR_UNAVAILABLE;
 			return;
 		}
-		rendering_device->screen_create(MAIN_WINDOW_ID);
+		rendering_device->screen_create(DisplayServerEnums::MAIN_WINDOW_ID);
 
 		RendererCompositorRD::make_current();
 	}

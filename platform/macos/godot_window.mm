@@ -36,7 +36,7 @@
 
 - (id)init {
 	self = [super init];
-	window_id = DisplayServer::INVALID_WINDOW_ID;
+	window_id = DisplayServerEnums::INVALID_WINDOW_ID;
 	anim_duration = -1.0f;
 	return self;
 }

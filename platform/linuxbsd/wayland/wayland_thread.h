@@ -108,7 +108,7 @@ public:
 		GDSOFTCLASS(WindowMessage, Message);
 
 	public:
-		DisplayServerEnums::WindowID id = DisplayServer::INVALID_WINDOW_ID;
+		DisplayServerEnums::WindowID id = DisplayServerEnums::INVALID_WINDOW_ID;
 	};
 
 	// Message data for window rect changes.
@@ -247,8 +247,8 @@ public:
 	// TODO: Make private?
 
 	struct WindowState {
-		DisplayServerEnums::WindowID id = DisplayServer::INVALID_WINDOW_ID;
-		DisplayServerEnums::WindowID parent_id = DisplayServer::INVALID_WINDOW_ID;
+		DisplayServerEnums::WindowID id = DisplayServerEnums::INVALID_WINDOW_ID;
+		DisplayServerEnums::WindowID parent_id = DisplayServerEnums::INVALID_WINDOW_ID;
 
 		Rect2i rect;
 		DisplayServer::WindowMode mode = DisplayServer::WINDOW_MODE_WINDOWED;
@@ -384,8 +384,8 @@ public:
 		MouseButton last_button_pressed = MouseButton::NONE;
 		Point2 last_pressed_position;
 
-		DisplayServerEnums::WindowID pointed_id = DisplayServer::INVALID_WINDOW_ID;
-		DisplayServerEnums::WindowID last_pointed_id = DisplayServer::INVALID_WINDOW_ID;
+		DisplayServerEnums::WindowID pointed_id = DisplayServerEnums::INVALID_WINDOW_ID;
+		DisplayServerEnums::WindowID last_pointed_id = DisplayServerEnums::INVALID_WINDOW_ID;
 
 		// This is needed to check for a new double click every time.
 		bool double_click_begun = false;
@@ -419,8 +419,8 @@ public:
 		uint64_t button_time = 0;
 		uint64_t motion_time = 0;
 
-		DisplayServerEnums::WindowID proximal_id = DisplayServer::INVALID_WINDOW_ID;
-		DisplayServerEnums::WindowID last_proximal_id = DisplayServer::INVALID_WINDOW_ID;
+		DisplayServerEnums::WindowID proximal_id = DisplayServerEnums::INVALID_WINDOW_ID;
+		DisplayServerEnums::WindowID last_proximal_id = DisplayServerEnums::INVALID_WINDOW_ID;
 		uint32_t proximity_serial = 0;
 	};
 
@@ -483,7 +483,7 @@ public:
 		struct wl_keyboard *wl_keyboard = nullptr;
 
 		// For key events.
-		DisplayServerEnums::WindowID focused_id = DisplayServer::INVALID_WINDOW_ID;
+		DisplayServerEnums::WindowID focused_id = DisplayServerEnums::INVALID_WINDOW_ID;
 
 		struct xkb_context *xkb_context = nullptr;
 		struct xkb_keymap *xkb_keymap = nullptr;
@@ -522,7 +522,7 @@ public:
 		struct wl_data_device *wl_data_device = nullptr;
 
 		// Drag and drop.
-		DisplayServerEnums::WindowID dnd_id = DisplayServer::INVALID_WINDOW_ID;
+		DisplayServerEnums::WindowID dnd_id = DisplayServerEnums::INVALID_WINDOW_ID;
 		struct wl_data_offer *wl_data_offer_dnd = nullptr;
 		uint32_t dnd_enter_serial = 0;
 
@@ -547,7 +547,7 @@ public:
 
 		// IME.
 		struct zwp_text_input_v3 *wp_text_input = nullptr;
-		DisplayServerEnums::WindowID ime_window_id = DisplayServer::INVALID_WINDOW_ID;
+		DisplayServerEnums::WindowID ime_window_id = DisplayServerEnums::INVALID_WINDOW_ID;
 		bool ime_enabled = false;
 		bool ime_active = false;
 		String ime_text;
@@ -1111,7 +1111,7 @@ public:
 
 	void set_icon(const Ref<Image> &p_icon);
 
-	void window_create(DisplayServerEnums::WindowID p_window_id, const Size2i &p_size, DisplayServerEnums::WindowID p_parent_id = DisplayServer::INVALID_WINDOW_ID);
+	void window_create(DisplayServerEnums::WindowID p_window_id, const Size2i &p_size, DisplayServerEnums::WindowID p_parent_id = DisplayServerEnums::INVALID_WINDOW_ID);
 	void window_create_popup(DisplayServerEnums::WindowID p_window_id, DisplayServerEnums::WindowID p_parent_id, Rect2i p_rect);
 	void window_destroy(DisplayServerEnums::WindowID p_window_Id);
 

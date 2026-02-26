@@ -358,7 +358,7 @@ public:
 				return get_primary_screen();
 			} break;
 			case SCREEN_OF_MAIN_WINDOW: {
-				return window_get_current_screen(MAIN_WINDOW_ID);
+				return window_get_current_screen(DisplayServerEnums::MAIN_WINDOW_ID);
 			} break;
 			default: {
 				return p_screen;
@@ -406,11 +406,6 @@ public:
 
 	virtual void screen_set_keep_on(bool p_enable); //disable screensaver
 	virtual bool screen_is_kept_on() const;
-	enum {
-		MAIN_WINDOW_ID = 0,
-		INVALID_WINDOW_ID = -1,
-		INVALID_INDICATOR_ID = -1
-	};
 
 public:
 	virtual Vector<DisplayServerEnums::WindowID> get_window_list() const = 0;
@@ -449,22 +444,22 @@ public:
 		WINDOW_FLAG_MAXIMIZE_DISABLED_BIT = (1 << WINDOW_FLAG_MAXIMIZE_DISABLED),
 	};
 
-	virtual DisplayServerEnums::WindowID create_sub_window(WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect = Rect2i(), bool p_exclusive = false, DisplayServerEnums::WindowID p_transient_parent = INVALID_WINDOW_ID);
+	virtual DisplayServerEnums::WindowID create_sub_window(WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect = Rect2i(), bool p_exclusive = false, DisplayServerEnums::WindowID p_transient_parent = DisplayServerEnums::INVALID_WINDOW_ID);
 	virtual void show_window(DisplayServerEnums::WindowID p_id);
 	virtual void delete_sub_window(DisplayServerEnums::WindowID p_id);
 
-	virtual DisplayServerEnums::WindowID window_get_active_popup() const { return INVALID_WINDOW_ID; }
+	virtual DisplayServerEnums::WindowID window_get_active_popup() const { return DisplayServerEnums::INVALID_WINDOW_ID; }
 	virtual void window_set_popup_safe_rect(DisplayServerEnums::WindowID p_window, const Rect2i &p_rect) {}
 	virtual Rect2i window_get_popup_safe_rect(DisplayServerEnums::WindowID p_window) const { return Rect2i(); }
 
-	virtual int64_t window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const;
+	virtual int64_t window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const;
 
 	virtual DisplayServerEnums::WindowID get_window_at_screen_position(const Point2i &p_position) const = 0;
 
-	virtual void window_attach_instance_id(ObjectID p_instance, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) = 0; // Note: internal method used by Window, do not expose.
-	virtual ObjectID window_get_attached_instance_id(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const = 0;
+	virtual void window_attach_instance_id(ObjectID p_instance, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0; // Note: internal method used by Window, do not expose.
+	virtual ObjectID window_get_attached_instance_id(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
 
-	virtual void window_set_rect_changed_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) = 0;
+	virtual void window_set_rect_changed_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
 
 	enum WindowEvent {
 		WINDOW_EVENT_MOUSE_ENTER,
@@ -477,91 +472,91 @@ public:
 		WINDOW_EVENT_TITLEBAR_CHANGE,
 		WINDOW_EVENT_FORCE_CLOSE,
 	};
-	virtual void window_set_window_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) = 0;
-	virtual void window_set_input_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) = 0;
-	virtual void window_set_input_text_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) = 0;
+	virtual void window_set_window_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
+	virtual void window_set_input_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
+	virtual void window_set_input_text_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
 
-	virtual void window_set_drop_files_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) = 0;
+	virtual void window_set_drop_files_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
 
-	virtual void window_set_title(const String &p_title, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) = 0;
-	virtual Size2i window_get_title_size(const String &p_title, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const { return Size2i(); }
+	virtual void window_set_title(const String &p_title, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
+	virtual Size2i window_get_title_size(const String &p_title, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const { return Size2i(); }
 
-	virtual void window_set_mouse_passthrough(const Vector<Vector2> &p_region, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID);
+	virtual void window_set_mouse_passthrough(const Vector<Vector2> &p_region, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID);
 
-	virtual int window_get_current_screen(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const = 0;
-	virtual void window_set_current_screen(int p_screen, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) = 0;
+	virtual int window_get_current_screen(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
+	virtual void window_set_current_screen(int p_screen, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
 
-	virtual Point2i window_get_position(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const = 0;
-	virtual Point2i window_get_position_with_decorations(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const = 0;
-	virtual void window_set_position(const Point2i &p_position, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) = 0;
+	virtual Point2i window_get_position(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
+	virtual Point2i window_get_position_with_decorations(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
+	virtual void window_set_position(const Point2i &p_position, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
 
 	virtual void window_set_transient(DisplayServerEnums::WindowID p_window, DisplayServerEnums::WindowID p_parent) = 0;
 	virtual void window_set_exclusive(DisplayServerEnums::WindowID p_window, bool p_exclusive);
 
-	virtual void window_set_max_size(const Size2i p_size, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) = 0;
-	virtual Size2i window_get_max_size(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const = 0;
+	virtual void window_set_max_size(const Size2i p_size, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
+	virtual Size2i window_get_max_size(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
 
-	virtual void window_set_min_size(const Size2i p_size, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) = 0;
-	virtual Size2i window_get_min_size(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const = 0;
+	virtual void window_set_min_size(const Size2i p_size, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
+	virtual Size2i window_get_min_size(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
 
-	virtual void window_set_size(const Size2i p_size, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) = 0;
-	virtual Size2i window_get_size(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const = 0;
-	virtual Size2i window_get_size_with_decorations(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const = 0;
+	virtual void window_set_size(const Size2i p_size, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
+	virtual Size2i window_get_size(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
+	virtual Size2i window_get_size_with_decorations(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
 
-	virtual float window_get_scale(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const {
+	virtual float window_get_scale(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const {
 		int screen = window_get_current_screen(p_window);
 		return screen_get_scale(screen);
 	}
 
-	virtual void window_set_mode(WindowMode p_mode, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) = 0;
-	virtual WindowMode window_get_mode(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const = 0;
+	virtual void window_set_mode(WindowMode p_mode, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
+	virtual WindowMode window_get_mode(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
 
-	virtual void window_set_vsync_mode(VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID);
+	virtual void window_set_vsync_mode(VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID);
 	virtual VSyncMode window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const;
 
-	virtual bool window_is_hdr_output_supported(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const;
+	virtual bool window_is_hdr_output_supported(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const;
 
-	virtual void window_request_hdr_output(const bool p_enable, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID);
-	virtual bool window_is_hdr_output_requested(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const;
-	virtual bool window_is_hdr_output_enabled(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const;
+	virtual void window_request_hdr_output(const bool p_enable, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID);
+	virtual bool window_is_hdr_output_requested(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const;
+	virtual bool window_is_hdr_output_enabled(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const;
 
-	virtual void window_set_hdr_output_reference_luminance(const float p_reference_luminance, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID);
-	virtual float window_get_hdr_output_reference_luminance(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const;
-	virtual float window_get_hdr_output_current_reference_luminance(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const;
+	virtual void window_set_hdr_output_reference_luminance(const float p_reference_luminance, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID);
+	virtual float window_get_hdr_output_reference_luminance(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const;
+	virtual float window_get_hdr_output_current_reference_luminance(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const;
 
-	virtual void window_set_hdr_output_max_luminance(const float p_max_luminance, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID);
-	virtual float window_get_hdr_output_max_luminance(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const;
-	virtual float window_get_hdr_output_current_max_luminance(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const;
+	virtual void window_set_hdr_output_max_luminance(const float p_max_luminance, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID);
+	virtual float window_get_hdr_output_max_luminance(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const;
+	virtual float window_get_hdr_output_current_max_luminance(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const;
 
-	virtual float window_get_output_max_linear_value(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const;
+	virtual float window_get_output_max_linear_value(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const;
 
-	virtual bool window_is_maximize_allowed(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const = 0;
+	virtual bool window_is_maximize_allowed(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
 
-	virtual void window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) = 0;
-	virtual bool window_get_flag(WindowFlags p_flag, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const = 0;
+	virtual void window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
+	virtual bool window_get_flag(WindowFlags p_flag, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
 
-	virtual void window_request_attention(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) = 0;
-	virtual void window_set_taskbar_progress_value(float p_value, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) {}
-	virtual void window_set_taskbar_progress_state(ProgressState p_state, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) {}
-	virtual void window_move_to_foreground(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) = 0;
-	virtual bool window_is_focused(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const = 0;
+	virtual void window_request_attention(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
+	virtual void window_set_taskbar_progress_value(float p_value, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) {}
+	virtual void window_set_taskbar_progress_state(ProgressState p_state, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) {}
+	virtual void window_move_to_foreground(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
+	virtual bool window_is_focused(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
 
 	virtual DisplayServerEnums::WindowID get_focused_window() const;
 
-	virtual void window_set_window_buttons_offset(const Vector2i &p_offset, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) {}
-	virtual Vector3i window_get_safe_title_margins(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const { return Vector3i(); }
+	virtual void window_set_window_buttons_offset(const Vector2i &p_offset, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) {}
+	virtual Vector3i window_get_safe_title_margins(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const { return Vector3i(); }
 
-	virtual bool window_can_draw(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) const = 0;
+	virtual bool window_can_draw(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
 
 	virtual bool can_any_window_draw() const = 0;
 
-	virtual void window_set_ime_active(const bool p_active, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID);
-	virtual void window_set_ime_position(const Point2i &p_pos, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID);
+	virtual void window_set_ime_active(const bool p_active, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID);
+	virtual void window_set_ime_position(const Point2i &p_pos, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID);
 
 	virtual bool window_maximize_on_title_dbl_click() const { return false; }
 	virtual bool window_minimize_on_title_dbl_click() const { return false; }
 
-	virtual void window_start_drag(DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) {}
+	virtual void window_start_drag(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) {}
 
 	virtual void window_set_color(const Color &p_color) {}
 
@@ -577,7 +572,7 @@ public:
 		WINDOW_EDGE_MAX,
 	};
 
-	virtual void window_start_resize(WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window = MAIN_WINDOW_ID) {}
+	virtual void window_start_resize(WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) {}
 
 	// Accessibility.
 
@@ -857,8 +852,8 @@ public:
 		FILE_DIALOG_MODE_SAVE_FILE,
 		FILE_DIALOG_MODE_SAVE_MAX
 	};
-	virtual Error file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id = MAIN_WINDOW_ID);
-	virtual Error file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id = MAIN_WINDOW_ID);
+	virtual Error file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id = DisplayServerEnums::MAIN_WINDOW_ID);
+	virtual Error file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id = DisplayServerEnums::MAIN_WINDOW_ID);
 
 #ifndef DISABLE_DEPRECATED
 	Error _file_dialog_show_bind_compat_98194(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback);

@@ -65,7 +65,7 @@ private:
 		bool in_use = false;
 
 		// the external ID .. should match the GL window number .. unused I think
-		DisplayServerEnums::WindowID window_id = DisplayServer::INVALID_WINDOW_ID;
+		DisplayServerEnums::WindowID window_id = DisplayServerEnums::INVALID_WINDOW_ID;
 		int width = 0;
 		int height = 0;
 		::Window x11_window;

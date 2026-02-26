@@ -129,7 +129,7 @@ DisplayServerAppleEmbedded::DisplayServerAppleEmbedded(const String &p_rendering
 	}
 
 	if (rendering_context) {
-		if (rendering_context->window_create(MAIN_WINDOW_ID, &wpd) != OK) {
+		if (rendering_context->window_create(DisplayServerEnums::MAIN_WINDOW_ID, &wpd) != OK) {
 			ERR_PRINT(vformat("Failed to create %s window.", rendering_driver));
 			memdelete(rendering_context);
 			rendering_context = nullptr;
@@ -138,18 +138,18 @@ DisplayServerAppleEmbedded::DisplayServerAppleEmbedded(const String &p_rendering
 		}
 
 		Size2i size = Size2i(layer.bounds.size.width, layer.bounds.size.height) * screen_get_max_scale();
-		rendering_context->window_set_size(MAIN_WINDOW_ID, size.width, size.height);
-		rendering_context->window_set_vsync_mode(MAIN_WINDOW_ID, p_vsync_mode);
+		rendering_context->window_set_size(DisplayServerEnums::MAIN_WINDOW_ID, size.width, size.height);
+		rendering_context->window_set_vsync_mode(DisplayServerEnums::MAIN_WINDOW_ID, p_vsync_mode);
 
 		rendering_device = memnew(RenderingDevice);
-		if (rendering_device->initialize(rendering_context, MAIN_WINDOW_ID) != OK) {
+		if (rendering_device->initialize(rendering_context, DisplayServerEnums::MAIN_WINDOW_ID) != OK) {
 			rendering_device = nullptr;
 			memdelete(rendering_context);
 			rendering_context = nullptr;
 			r_error = ERR_UNAVAILABLE;
 			return;
 		}
-		rendering_device->screen_create(MAIN_WINDOW_ID);
+		rendering_device->screen_create(DisplayServerEnums::MAIN_WINDOW_ID);
 
 		RendererCompositorRD::make_current();
 		has_made_render_compositor_current = true;
@@ -187,13 +187,13 @@ DisplayServerAppleEmbedded::~DisplayServerAppleEmbedded() {
 
 #if defined(RD_ENABLED)
 	if (rendering_device) {
-		rendering_device->screen_free(MAIN_WINDOW_ID);
+		rendering_device->screen_free(DisplayServerEnums::MAIN_WINDOW_ID);
 		memdelete(rendering_device);
 		rendering_device = nullptr;
 	}
 
 	if (rendering_context) {
-		rendering_context->window_destroy(MAIN_WINDOW_ID);
+		rendering_context->window_destroy(DisplayServerEnums::MAIN_WINDOW_ID);
 		memdelete(rendering_context);
 		rendering_context = nullptr;
 	}
@@ -531,16 +531,16 @@ Rect2i DisplayServerAppleEmbedded::screen_get_usable_rect(int p_screen) const {
 
 Vector<DisplayServerEnums::WindowID> DisplayServerAppleEmbedded::get_window_list() const {
 	Vector<DisplayServerEnums::WindowID> list;
-	list.push_back(MAIN_WINDOW_ID);
+	list.push_back(DisplayServerEnums::MAIN_WINDOW_ID);
 	return list;
 }
 
 DisplayServerEnums::WindowID DisplayServerAppleEmbedded::get_window_at_screen_position(const Point2i &p_position) const {
-	return MAIN_WINDOW_ID;
+	return DisplayServerEnums::MAIN_WINDOW_ID;
 }
 
 int64_t DisplayServerAppleEmbedded::window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
-	ERR_FAIL_COND_V(p_window != MAIN_WINDOW_ID, 0);
+	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, 0);
 	switch (p_handle_type) {
 		case DISPLAY_HANDLE: {
 			return 0; // Not supported.
@@ -570,7 +570,7 @@ void DisplayServerAppleEmbedded::window_set_title(const String &p_title, Display
 }
 
 int DisplayServerAppleEmbedded::window_get_current_screen(DisplayServerEnums::WindowID p_window) const {
-	ERR_FAIL_COND_V(p_window != MAIN_WINDOW_ID, INVALID_SCREEN);
+	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, INVALID_SCREEN);
 	return 0;
 }
 
@@ -794,7 +794,7 @@ void DisplayServerAppleEmbedded::resize_window(CGSize viewSize) {
 
 #if defined(RD_ENABLED)
 	if (rendering_context) {
-		rendering_context->window_set_size(MAIN_WINDOW_ID, size.x, size.y);
+		rendering_context->window_set_size(DisplayServerEnums::MAIN_WINDOW_ID, size.x, size.y);
 	}
 #endif
 
@@ -830,15 +830,15 @@ void DisplayServerAppleEmbedded::_update_hdr_output() {
 	}
 
 	bool desired = edr_requested && _screen_hdr_is_supported();
-	if (rendering_context->window_get_hdr_output_enabled(MAIN_WINDOW_ID) != desired) {
-		rendering_context->window_set_hdr_output_enabled(MAIN_WINDOW_ID, desired);
+	if (rendering_context->window_get_hdr_output_enabled(DisplayServerEnums::MAIN_WINDOW_ID) != desired) {
+		rendering_context->window_set_hdr_output_enabled(DisplayServerEnums::MAIN_WINDOW_ID, desired);
 	}
 
 	float reference_luminance = _calculate_current_reference_luminance();
-	rendering_context->window_set_hdr_output_reference_luminance(MAIN_WINDOW_ID, reference_luminance);
+	rendering_context->window_set_hdr_output_reference_luminance(DisplayServerEnums::MAIN_WINDOW_ID, reference_luminance);
 
 	float max_luminance = _screen_potential_edr_headroom() * hardware_reference_luminance_nits;
-	rendering_context->window_set_hdr_output_max_luminance(MAIN_WINDOW_ID, max_luminance);
+	rendering_context->window_set_hdr_output_max_luminance(DisplayServerEnums::MAIN_WINDOW_ID, max_luminance);
 #endif
 }
 

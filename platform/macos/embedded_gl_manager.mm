@@ -192,19 +192,19 @@ void GLManagerEmbedded::window_destroy(DisplayServerEnums::WindowID p_window_id)
 	}
 
 	if (current_window == p_window_id) {
-		current_window = DisplayServer::INVALID_WINDOW_ID;
+		current_window = DisplayServerEnums::INVALID_WINDOW_ID;
 	}
 
 	windows.erase(el);
 }
 
 void GLManagerEmbedded::release_current() {
-	if (current_window == DisplayServer::INVALID_WINDOW_ID) {
+	if (current_window == DisplayServerEnums::INVALID_WINDOW_ID) {
 		return;
 	}
 
 	[NSOpenGLContext clearCurrentContext];
-	current_window = DisplayServer::INVALID_WINDOW_ID;
+	current_window = DisplayServerEnums::INVALID_WINDOW_ID;
 }
 
 void GLManagerEmbedded::window_make_current(DisplayServerEnums::WindowID p_window_id) {

@@ -3242,7 +3242,7 @@ void EditorFileSystem::reimport_files(const Vector<String> &p_files) {
 	// this could lead to a slow import process, especially when the editor is unfocused.
 	// Temporarily disabling VSync and low_processor_usage_mode while reimporting fixes this.
 	const bool old_low_processor_usage_mode = OS::get_singleton()->is_in_low_processor_usage_mode();
-	const DisplayServer::VSyncMode old_vsync_mode = DisplayServer::get_singleton()->window_get_vsync_mode(DisplayServer::MAIN_WINDOW_ID);
+	const DisplayServer::VSyncMode old_vsync_mode = DisplayServer::get_singleton()->window_get_vsync_mode(DisplayServerEnums::MAIN_WINDOW_ID);
 	OS::get_singleton()->set_low_processor_usage_mode(false);
 	DisplayServer::get_singleton()->window_set_vsync_mode(DisplayServer::VSyncMode::VSYNC_DISABLED);
 

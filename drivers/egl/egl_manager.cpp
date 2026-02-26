@@ -366,7 +366,7 @@ void EGLManager::swap_buffers() {
 }
 
 void EGLManager::window_make_current(DisplayServerEnums::WindowID p_window_id) {
-	if (p_window_id == DisplayServer::INVALID_WINDOW_ID) {
+	if (p_window_id == DisplayServerEnums::INVALID_WINDOW_ID) {
 		return;
 	}
 

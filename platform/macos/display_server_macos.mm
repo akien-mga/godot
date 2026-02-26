@@ -94,7 +94,7 @@ DisplayServerEnums::WindowID DisplayServerMacOS::_create_window(WindowMode p_mod
 		WindowData &wd = windows[id];
 
 		wd.window_delegate = [[GodotWindowDelegate alloc] initWithDisplayServer:this];
-		ERR_FAIL_NULL_V_MSG(wd.window_delegate, INVALID_WINDOW_ID, "Can't create a window delegate");
+		ERR_FAIL_NULL_V_MSG(wd.window_delegate, DisplayServerEnums::INVALID_WINDOW_ID, "Can't create a window delegate");
 		[wd.window_delegate setWindowID:id];
 
 		int rq_screen = get_screen_from_rect(p_rect);
@@ -119,14 +119,14 @@ DisplayServerEnums::WindowID DisplayServerMacOS::_create_window(WindowMode p_mod
 						  styleMask:NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable
 							backing:NSBackingStoreBuffered
 							  defer:NO];
-		ERR_FAIL_NULL_V_MSG(wd.window_object, INVALID_WINDOW_ID, "Can't create a window");
+		ERR_FAIL_NULL_V_MSG(wd.window_object, DisplayServerEnums::INVALID_WINDOW_ID, "Can't create a window");
 		[wd.window_object setWindowID:id];
 		[wd.window_object setReleasedWhenClosed:NO];
 
 		wd.window_view = [[GodotContentView alloc] init];
 		if (wd.window_view == nil) {
 			windows.erase(id);
-			ERR_FAIL_V_MSG(INVALID_WINDOW_ID, "Can't create a window view");
+			ERR_FAIL_V_MSG(DisplayServerEnums::INVALID_WINDOW_ID, "Can't create a window view");
 		}
 		[wd.window_view setWindowID:id];
 		[wd.window_view setWantsLayer:TRUE];
@@ -190,7 +190,7 @@ DisplayServerEnums::WindowID DisplayServerMacOS::_create_window(WindowMode p_mod
 				AccessibilityServer::get_singleton()->window_destroy(id);
 			}
 
-			ERR_FAIL_COND_V_MSG(err != OK, INVALID_WINDOW_ID, vformat("Can't create a %s context", rendering_driver));
+			ERR_FAIL_COND_V_MSG(err != OK, DisplayServerEnums::INVALID_WINDOW_ID, vformat("Can't create a %s context", rendering_driver));
 
 			rendering_context->window_set_size(window_id_counter, p_rect.size.width, p_rect.size.height);
 			rendering_context->window_set_vsync_mode(window_id_counter, p_vsync_mode);
@@ -215,7 +215,7 @@ DisplayServerEnums::WindowID DisplayServerMacOS::_create_window(WindowMode p_mod
 			AccessibilityServer::get_singleton()->window_destroy(id);
 
 			windows.erase(id);
-			ERR_FAIL_V_MSG(INVALID_WINDOW_ID, "Can't create an OpenGL context.");
+			ERR_FAIL_V_MSG(DisplayServerEnums::INVALID_WINDOW_ID, "Can't create an OpenGL context.");
 		}
 		window_set_vsync_mode(p_vsync_mode, id);
 #endif
@@ -293,7 +293,7 @@ bool DisplayServerMacOS::is_always_on_top_recursive(DisplayServerEnums::WindowID
 		return true;
 	}
 
-	if (wd.transient_parent != INVALID_WINDOW_ID) {
+	if (wd.transient_parent != DisplayServerEnums::INVALID_WINDOW_ID) {
 		return is_always_on_top_recursive(wd.transient_parent);
 	}
 
@@ -412,21 +412,21 @@ DisplayServerEnums::WindowID DisplayServerMacOS::_get_focused_window_or_popup() 
 
 void DisplayServerMacOS::mouse_enter_window(DisplayServerEnums::WindowID p_window) {
 	if (window_mouseover_id != p_window) {
-		if (window_mouseover_id != INVALID_WINDOW_ID) {
+		if (window_mouseover_id != DisplayServerEnums::INVALID_WINDOW_ID) {
 			send_window_event(windows[window_mouseover_id], WINDOW_EVENT_MOUSE_EXIT);
 		}
 		window_mouseover_id = p_window;
-		if (p_window != INVALID_WINDOW_ID) {
+		if (p_window != DisplayServerEnums::INVALID_WINDOW_ID) {
 			send_window_event(windows[p_window], WINDOW_EVENT_MOUSE_ENTER);
 		}
 	}
 }
 
 void DisplayServerMacOS::mouse_exit_window(DisplayServerEnums::WindowID p_window) {
-	if (window_mouseover_id == p_window && p_window != INVALID_WINDOW_ID) {
+	if (window_mouseover_id == p_window && p_window != DisplayServerEnums::INVALID_WINDOW_ID) {
 		send_window_event(windows[p_window], WINDOW_EVENT_MOUSE_EXIT);
 	}
-	window_mouseover_id = INVALID_WINDOW_ID;
+	window_mouseover_id = DisplayServerEnums::INVALID_WINDOW_ID;
 }
 
 void DisplayServerMacOS::_dispatch_input_events(const Ref<InputEvent> &p_event) {
@@ -453,7 +453,7 @@ void DisplayServerMacOS::_dispatch_input_event(const Ref<InputEvent> &p_event) {
 		}
 
 		Ref<InputEventFromWindow> event_from_window = p_event;
-		if (event_from_window.is_valid() && event_from_window->get_window_id() != INVALID_WINDOW_ID) {
+		if (event_from_window.is_valid() && event_from_window->get_window_id() != DisplayServerEnums::INVALID_WINDOW_ID) {
 			// Send to a window.
 			if (windows.has(event_from_window->get_window_id())) {
 				Callable callable = windows[event_from_window->get_window_id()].input_event_callback;
@@ -626,7 +626,7 @@ void DisplayServerMacOS::send_event(NSEvent *p_event) {
 			k.instantiate();
 
 			get_key_modifier_state([p_event modifierFlags], k);
-			k->set_window_id(DisplayServerMacOS::INVALID_WINDOW_ID);
+			k->set_window_id(DisplayServerEnums::INVALID_WINDOW_ID);
 			k->set_pressed(true);
 			k->set_keycode(Key::PERIOD);
 			k->set_physical_keycode(Key::PERIOD);
@@ -643,7 +643,7 @@ void DisplayServerMacOS::send_event(NSEvent *p_event) {
 			k.instantiate();
 
 			get_key_modifier_state([p_event modifierFlags], k);
-			k->set_window_id(DisplayServerMacOS::INVALID_WINDOW_ID);
+			k->set_window_id(DisplayServerEnums::INVALID_WINDOW_ID);
 			k->set_pressed(true);
 			k->set_keycode(Key::TAB);
 			k->set_physical_keycode(Key::TAB);
@@ -767,7 +767,7 @@ void DisplayServerMacOS::window_destroy(DisplayServerEnums::WindowID p_window) {
 	windows.erase(p_window);
 
 	if (last_focused_window == p_window) {
-		last_focused_window = INVALID_WINDOW_ID;
+		last_focused_window = DisplayServerEnums::INVALID_WINDOW_ID;
 	}
 	update_presentation_mode();
 }
@@ -1019,7 +1019,7 @@ Error DisplayServerMacOS::_file_dialog_with_options_show(const String &p_title, 
 					}
 				}
 			}
-			if (p_window_id != INVALID_WINDOW_ID) {
+			if (p_window_id != DisplayServerEnums::INVALID_WINDOW_ID) {
 				callable_mp(DisplayServer::get_singleton(), &DisplayServer::window_move_to_foreground).call_deferred(p_window_id);
 			}
 		};
@@ -1140,7 +1140,7 @@ Error DisplayServerMacOS::_file_dialog_with_options_show(const String &p_title, 
 					}
 				}
 			}
-			if (p_window_id != INVALID_WINDOW_ID) {
+			if (p_window_id != DisplayServerEnums::INVALID_WINDOW_ID) {
 				callable_mp(DisplayServer::get_singleton(), &DisplayServer::window_move_to_foreground).call_deferred(p_window_id);
 			}
 		};
@@ -1195,7 +1195,7 @@ void DisplayServerMacOS::_mouse_apply_mode(MouseMode p_prev_mode, MouseMode p_ne
 
 	DisplayServerEnums::WindowID window_id = _get_focused_window_or_popup();
 	if (!windows.has(window_id)) {
-		window_id = MAIN_WINDOW_ID;
+		window_id = DisplayServerEnums::MAIN_WINDOW_ID;
 	}
 	WindowData &wd = windows[window_id];
 
@@ -1324,7 +1324,7 @@ void DisplayServerMacOS::warp_mouse(const Point2i &p_position) {
 	if (mouse_mode != MOUSE_MODE_CAPTURED) {
 		DisplayServerEnums::WindowID window_id = _get_focused_window_or_popup();
 		if (!windows.has(window_id)) {
-			window_id = MAIN_WINDOW_ID;
+			window_id = DisplayServerEnums::MAIN_WINDOW_ID;
 		}
 		WindowData &wd = windows[window_id];
 
@@ -1675,7 +1675,7 @@ DisplayServerEnums::WindowID DisplayServerMacOS::create_sub_window(WindowMode p_
 #endif
 
 	window_set_exclusive(id, p_exclusive);
-	if (p_transient_parent != INVALID_WINDOW_ID) {
+	if (p_transient_parent != DisplayServerEnums::INVALID_WINDOW_ID) {
 		window_set_transient(id, p_transient_parent);
 	}
 
@@ -1685,7 +1685,7 @@ DisplayServerEnums::WindowID DisplayServerMacOS::create_sub_window(WindowMode p_
 void DisplayServerMacOS::show_window(DisplayServerEnums::WindowID p_id) {
 	WindowData &wd = windows[p_id];
 
-	if (p_id == MAIN_WINDOW_ID) {
+	if (p_id == DisplayServerEnums::MAIN_WINDOW_ID) {
 		[GodotApp activateApplication];
 	}
 
@@ -1693,11 +1693,11 @@ void DisplayServerMacOS::show_window(DisplayServerEnums::WindowID p_id) {
 	if ([wd.window_object isMiniaturized]) {
 		return;
 	} else if (wd.no_focus) {
-		if (wd.transient_parent != INVALID_WINDOW_ID) {
+		if (wd.transient_parent != DisplayServerEnums::INVALID_WINDOW_ID) {
 			WindowData &wd_parent = windows[wd.transient_parent];
 			[wd.window_object orderWindow:NSWindowAbove relativeTo:[wd_parent.window_object windowNumber]];
-		} else if (p_id != MAIN_WINDOW_ID) {
-			[wd.window_object orderWindow:NSWindowAbove relativeTo:[windows[MAIN_WINDOW_ID].window_object windowNumber]];
+		} else if (p_id != DisplayServerEnums::MAIN_WINDOW_ID) {
+			[wd.window_object orderWindow:NSWindowAbove relativeTo:[windows[DisplayServerEnums::MAIN_WINDOW_ID].window_object windowNumber]];
 		} else {
 			[wd.window_object orderFront:nil];
 		}
@@ -1710,7 +1710,7 @@ void DisplayServerMacOS::delete_sub_window(DisplayServerEnums::WindowID p_id) {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_COND(!windows.has(p_id));
-	ERR_FAIL_COND_MSG(p_id == MAIN_WINDOW_ID, "Main window can't be deleted");
+	ERR_FAIL_COND_MSG(p_id == DisplayServerEnums::MAIN_WINDOW_ID, "Main window can't be deleted");
 
 	WindowData &wd = windows[p_id];
 
@@ -1881,7 +1881,7 @@ void DisplayServerMacOS::reparent_check(DisplayServerEnums::WindowID p_window) {
 
 	_window_update_display_id(&wd);
 
-	if (wd.transient_parent != INVALID_WINDOW_ID) {
+	if (wd.transient_parent != DisplayServerEnums::INVALID_WINDOW_ID) {
 		WindowData &wd_parent = windows[wd.transient_parent];
 		NSScreen *parent_screen = [wd_parent.window_object screen];
 
@@ -1894,11 +1894,11 @@ void DisplayServerMacOS::reparent_check(DisplayServerEnums::WindowID p_window) {
 			if ([[wd_parent.window_object childWindows] containsObject:wd.window_object]) {
 				[wd_parent.window_object removeChildWindow:wd.window_object];
 				[wd.window_object setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
-				if (wd.transient_parent != INVALID_WINDOW_ID) {
+				if (wd.transient_parent != DisplayServerEnums::INVALID_WINDOW_ID) {
 					WindowData &wd_parent = windows[wd.transient_parent];
 					[wd.window_object orderWindow:NSWindowAbove relativeTo:[wd_parent.window_object windowNumber]];
-				} else if (p_window != MAIN_WINDOW_ID) {
-					[wd.window_object orderWindow:NSWindowAbove relativeTo:[windows[MAIN_WINDOW_ID].window_object windowNumber]];
+				} else if (p_window != DisplayServerEnums::MAIN_WINDOW_ID) {
+					[wd.window_object orderWindow:NSWindowAbove relativeTo:[windows[DisplayServerEnums::MAIN_WINDOW_ID].window_object windowNumber]];
 				} else {
 					[wd.window_object orderFront:nil];
 				}
@@ -2023,14 +2023,14 @@ void DisplayServerMacOS::window_set_transient(DisplayServerEnums::WindowID p_win
 	ERR_FAIL_COND(wd_window.transient_parent == p_parent);
 
 	ERR_FAIL_COND_MSG(wd_window.on_top, "Windows with the 'on top' can't become transient.");
-	if (p_parent == INVALID_WINDOW_ID) {
+	if (p_parent == DisplayServerEnums::INVALID_WINDOW_ID) {
 		// Remove transient.
-		ERR_FAIL_COND(wd_window.transient_parent == INVALID_WINDOW_ID);
+		ERR_FAIL_COND(wd_window.transient_parent == DisplayServerEnums::INVALID_WINDOW_ID);
 		ERR_FAIL_COND(!windows.has(wd_window.transient_parent));
 
 		WindowData &wd_parent = windows[wd_window.transient_parent];
 
-		wd_window.transient_parent = INVALID_WINDOW_ID;
+		wd_window.transient_parent = DisplayServerEnums::INVALID_WINDOW_ID;
 		wd_parent.transient_children.erase(p_window);
 		if ([[wd_parent.window_object childWindows] containsObject:wd_window.window_object]) {
 			[wd_parent.window_object removeChildWindow:wd_window.window_object];
@@ -2038,7 +2038,7 @@ void DisplayServerMacOS::window_set_transient(DisplayServerEnums::WindowID p_win
 		[wd_window.window_object setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
 	} else {
 		ERR_FAIL_COND(!windows.has(p_parent));
-		ERR_FAIL_COND_MSG(wd_window.transient_parent != INVALID_WINDOW_ID, "Window already has a transient parent");
+		ERR_FAIL_COND_MSG(wd_window.transient_parent != DisplayServerEnums::INVALID_WINDOW_ID, "Window already has a transient parent");
 		WindowData &wd_parent = windows[p_parent];
 
 		wd_window.transient_parent = p_parent;
@@ -2498,11 +2498,11 @@ void DisplayServerMacOS::window_set_flag(WindowFlags p_flag, bool p_enabled, Dis
 				if ([wd.window_object isMiniaturized]) {
 					return;
 				} else if (wd.no_focus) {
-					if (wd.transient_parent != INVALID_WINDOW_ID) {
+					if (wd.transient_parent != DisplayServerEnums::INVALID_WINDOW_ID) {
 						WindowData &wd_parent = windows[wd.transient_parent];
 						[wd.window_object orderWindow:NSWindowAbove relativeTo:[wd_parent.window_object windowNumber]];
-					} else if (p_window != MAIN_WINDOW_ID) {
-						[wd.window_object orderWindow:NSWindowAbove relativeTo:[windows[MAIN_WINDOW_ID].window_object windowNumber]];
+					} else if (p_window != DisplayServerEnums::MAIN_WINDOW_ID) {
+						[wd.window_object orderWindow:NSWindowAbove relativeTo:[windows[DisplayServerEnums::MAIN_WINDOW_ID].window_object windowNumber]];
 					} else {
 						[wd.window_object orderFront:nil];
 					}
@@ -2556,7 +2556,7 @@ void DisplayServerMacOS::window_set_flag(WindowFlags p_flag, bool p_enabled, Dis
 			wd.mpass = p_enabled;
 		} break;
 		case WINDOW_FLAG_POPUP: {
-			ERR_FAIL_COND_MSG(p_window == MAIN_WINDOW_ID, "Main window can't be popup.");
+			ERR_FAIL_COND_MSG(p_window == DisplayServerEnums::MAIN_WINDOW_ID, "Main window can't be popup.");
 			ERR_FAIL_COND_MSG([wd.window_object isVisible] && (wd.is_popup != p_enabled), "Popup flag can't changed while window is opened.");
 			wd.is_popup = p_enabled;
 
@@ -2621,7 +2621,7 @@ void DisplayServerMacOS::window_request_attention(DisplayServerEnums::WindowID p
 }
 
 void DisplayServerMacOS::window_set_taskbar_progress_value(float p_value, DisplayServerEnums::WindowID p_window) {
-	ERR_FAIL_COND(p_window != MAIN_WINDOW_ID);
+	ERR_FAIL_COND(p_window != DisplayServerEnums::MAIN_WINDOW_ID);
 
 	if (!dock_progress) {
 		dock_progress = [[GodotProgressView alloc] init];
@@ -2632,7 +2632,7 @@ void DisplayServerMacOS::window_set_taskbar_progress_value(float p_value, Displa
 }
 
 void DisplayServerMacOS::window_set_taskbar_progress_state(ProgressState p_state, DisplayServerEnums::WindowID p_window) {
-	ERR_FAIL_COND(p_window != MAIN_WINDOW_ID);
+	ERR_FAIL_COND(p_window != DisplayServerEnums::MAIN_WINDOW_ID);
 
 	if (!dock_progress) {
 		dock_progress = [[GodotProgressView alloc] init];
@@ -2650,11 +2650,11 @@ void DisplayServerMacOS::window_move_to_foreground(DisplayServerEnums::WindowID 
 
 	[[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 	if (wd.no_focus || wd.is_popup) {
-		if (wd.transient_parent != INVALID_WINDOW_ID) {
+		if (wd.transient_parent != DisplayServerEnums::INVALID_WINDOW_ID) {
 			WindowData &wd_parent = windows[wd.transient_parent];
 			[wd.window_object orderWindow:NSWindowAbove relativeTo:[wd_parent.window_object windowNumber]];
-		} else if (p_window != MAIN_WINDOW_ID) {
-			[wd.window_object orderWindow:NSWindowAbove relativeTo:[windows[MAIN_WINDOW_ID].window_object windowNumber]];
+		} else if (p_window != DisplayServerEnums::MAIN_WINDOW_ID) {
+			[wd.window_object orderWindow:NSWindowAbove relativeTo:[windows[DisplayServerEnums::MAIN_WINDOW_ID].window_object windowNumber]];
 		} else {
 			[wd.window_object orderFront:nil];
 		}
@@ -2725,7 +2725,7 @@ DisplayServerEnums::WindowID DisplayServerMacOS::get_window_at_screen_position(c
 			return E.key;
 		}
 	}
-	return INVALID_WINDOW_ID;
+	return DisplayServerEnums::INVALID_WINDOW_ID;
 }
 
 int64_t DisplayServerMacOS::window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
@@ -3481,7 +3481,7 @@ DisplayServerEnums::WindowID DisplayServerMacOS::window_get_active_popup() const
 	if (E) {
 		return E->get();
 	} else {
-		return INVALID_WINDOW_ID;
+		return DisplayServerEnums::INVALID_WINDOW_ID;
 	}
 }
 
@@ -3508,7 +3508,7 @@ void DisplayServerMacOS::popup_open(DisplayServerEnums::WindowID p_window) {
 	DisplayServerEnums::WindowID transient_root = p_window;
 	while (true) {
 		DisplayServerEnums::WindowID parent = windows[transient_root].transient_parent;
-		if (parent == INVALID_WINDOW_ID) {
+		if (parent == DisplayServerEnums::INVALID_WINDOW_ID) {
 			break;
 		} else {
 			transient_root = parent;
@@ -3529,7 +3529,7 @@ void DisplayServerMacOS::popup_open(DisplayServerEnums::WindowID p_window) {
 		List<DisplayServerEnums::WindowID>::Element *C = nullptr;
 		List<DisplayServerEnums::WindowID>::Element *E = popup_list.back();
 		while (E) {
-			if (wd.transient_parent != E->get() || wd.transient_parent == INVALID_WINDOW_ID) {
+			if (wd.transient_parent != E->get() || wd.transient_parent == DisplayServerEnums::INVALID_WINDOW_ID) {
 				C = E;
 				E = E->prev();
 			} else {
@@ -3828,7 +3828,7 @@ DisplayServerMacOS::DisplayServerMacOS(const String &p_rendering_driver, WindowM
 	}
 
 	DisplayServerEnums::WindowID main_window = _create_window(p_mode, p_vsync_mode, Rect2i(window_position, p_resolution));
-	ERR_FAIL_COND(main_window == INVALID_WINDOW_ID);
+	ERR_FAIL_COND(main_window == DisplayServerEnums::INVALID_WINDOW_ID);
 	for (int i = 0; i < WINDOW_FLAG_MAX; i++) {
 		if (p_flags & (1 << i)) {
 			window_set_flag(WindowFlags(i), true, main_window);
@@ -3860,8 +3860,8 @@ DisplayServerMacOS::DisplayServerMacOS(const String &p_rendering_driver, WindowM
 #if defined(RD_ENABLED)
 	if (rendering_context) {
 		rendering_device = memnew(RenderingDevice);
-		rendering_device->initialize(rendering_context, MAIN_WINDOW_ID);
-		rendering_device->screen_create(MAIN_WINDOW_ID);
+		rendering_device->initialize(rendering_context, DisplayServerEnums::MAIN_WINDOW_ID);
+		rendering_device->screen_create(DisplayServerEnums::MAIN_WINDOW_ID);
 
 		RendererCompositorRD::make_current();
 	}

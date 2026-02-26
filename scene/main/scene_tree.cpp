@@ -275,7 +275,7 @@ void SceneTree::_process_accessibility_changes(DisplayServerEnums::WindowID p_wi
 
 		// Popups have no native window focus, but have focused element.
 		DisplayServerEnums::WindowID popup_id = DisplayServer::get_singleton()->window_get_active_popup();
-		if (popup_id != DisplayServer::INVALID_WINDOW_ID) {
+		if (popup_id != DisplayServerEnums::INVALID_WINDOW_ID) {
 			Window *popup_w = Window::get_from_id(popup_id);
 			if (popup_w && w_this->is_ancestor_of(popup_w)) {
 				w_this = popup_w;

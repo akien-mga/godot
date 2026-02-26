@@ -1274,14 +1274,14 @@ private:
 	uint32_t _get_swap_chain_desired_count() const;
 
 public:
-	Error screen_create(DisplayServerEnums::WindowID p_screen = DisplayServer::MAIN_WINDOW_ID);
-	Error screen_prepare_for_drawing(DisplayServerEnums::WindowID p_screen = DisplayServer::MAIN_WINDOW_ID);
-	int screen_get_width(DisplayServerEnums::WindowID p_screen = DisplayServer::MAIN_WINDOW_ID) const;
-	int screen_get_height(DisplayServerEnums::WindowID p_screen = DisplayServer::MAIN_WINDOW_ID) const;
-	int screen_get_pre_rotation_degrees(DisplayServerEnums::WindowID p_screen = DisplayServer::MAIN_WINDOW_ID) const;
-	FramebufferFormatID screen_get_framebuffer_format(DisplayServerEnums::WindowID p_screen = DisplayServer::MAIN_WINDOW_ID) const;
-	ColorSpace screen_get_color_space(DisplayServerEnums::WindowID p_screen = DisplayServer::MAIN_WINDOW_ID) const;
-	Error screen_free(DisplayServerEnums::WindowID p_screen = DisplayServer::MAIN_WINDOW_ID);
+	Error screen_create(DisplayServerEnums::WindowID p_screen = DisplayServerEnums::MAIN_WINDOW_ID);
+	Error screen_prepare_for_drawing(DisplayServerEnums::WindowID p_screen = DisplayServerEnums::MAIN_WINDOW_ID);
+	int screen_get_width(DisplayServerEnums::WindowID p_screen = DisplayServerEnums::MAIN_WINDOW_ID) const;
+	int screen_get_height(DisplayServerEnums::WindowID p_screen = DisplayServerEnums::MAIN_WINDOW_ID) const;
+	int screen_get_pre_rotation_degrees(DisplayServerEnums::WindowID p_screen = DisplayServerEnums::MAIN_WINDOW_ID) const;
+	FramebufferFormatID screen_get_framebuffer_format(DisplayServerEnums::WindowID p_screen = DisplayServerEnums::MAIN_WINDOW_ID) const;
+	ColorSpace screen_get_color_space(DisplayServerEnums::WindowID p_screen = DisplayServerEnums::MAIN_WINDOW_ID) const;
+	Error screen_free(DisplayServerEnums::WindowID p_screen = DisplayServerEnums::MAIN_WINDOW_ID);
 
 private:
 	/********************************/
@@ -1784,7 +1784,7 @@ public:
 #endif
 
 public:
-	Error initialize(RenderingContextDriver *p_context, DisplayServerEnums::WindowID p_main_window = DisplayServer::INVALID_WINDOW_ID);
+	Error initialize(RenderingContextDriver *p_context, DisplayServerEnums::WindowID p_main_window = DisplayServerEnums::INVALID_WINDOW_ID);
 	void finalize();
 
 	void _set_max_fps(int p_max_fps);

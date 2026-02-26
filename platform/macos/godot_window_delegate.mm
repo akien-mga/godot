@@ -45,7 +45,7 @@
 - (instancetype)initWithDisplayServer:(DisplayServerMacOS *)p_ds {
 	if (self = [super init]) {
 		ds = p_ds;
-		window_id = DisplayServerMacOS::INVALID_WINDOW_ID;
+		window_id = DisplayServerEnums::INVALID_WINDOW_ID;
 	}
 	return self;
 }
@@ -72,11 +72,11 @@
 
 	DisplayServerMacOS::WindowData &wd = ds->get_window(window_id);
 	while (wd.transient_children.size()) {
-		ds->window_set_transient(*wd.transient_children.begin(), DisplayServerMacOS::INVALID_WINDOW_ID);
+		ds->window_set_transient(*wd.transient_children.begin(), DisplayServerEnums::INVALID_WINDOW_ID);
 	}
 
-	if (wd.transient_parent != DisplayServerMacOS::INVALID_WINDOW_ID) {
-		ds->window_set_transient(window_id, DisplayServerMacOS::INVALID_WINDOW_ID);
+	if (wd.transient_parent != DisplayServerEnums::INVALID_WINDOW_ID) {
+		ds->window_set_transient(window_id, DisplayServerEnums::INVALID_WINDOW_ID);
 	}
 
 	ds->mouse_exit_window(window_id);

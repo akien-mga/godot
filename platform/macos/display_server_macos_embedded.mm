@@ -186,8 +186,8 @@ DisplayServerMacOSEmbedded::DisplayServerMacOSEmbedded(const String &p_rendering
 #if defined(RD_ENABLED)
 	if (rendering_context) {
 		rendering_device = memnew(RenderingDevice);
-		rendering_device->initialize(rendering_context, MAIN_WINDOW_ID);
-		rendering_device->screen_create(MAIN_WINDOW_ID);
+		rendering_device->initialize(rendering_context, DisplayServerEnums::MAIN_WINDOW_ID);
+		rendering_device->screen_create(DisplayServerEnums::MAIN_WINDOW_ID);
 
 		RendererCompositorRD::make_current();
 	}
@@ -349,7 +349,7 @@ void DisplayServerMacOSEmbedded::process_events() {
 
 void DisplayServerMacOSEmbedded::_dispatch_input_events(const Ref<InputEvent> &p_event) {
 	Ref<InputEventFromWindow> event_from_window = p_event;
-	DisplayServerEnums::WindowID window_id = INVALID_WINDOW_ID;
+	DisplayServerEnums::WindowID window_id = DisplayServerEnums::INVALID_WINDOW_ID;
 	if (event_from_window.is_valid()) {
 		window_id = event_from_window->get_window_id();
 	}
@@ -358,7 +358,7 @@ void DisplayServerMacOSEmbedded::_dispatch_input_events(const Ref<InputEvent> &p
 }
 
 void DisplayServerMacOSEmbedded::send_input_event(const Ref<InputEvent> &p_event, DisplayServerEnums::WindowID p_id) const {
-	if (p_id != INVALID_WINDOW_ID) {
+	if (p_id != DisplayServerEnums::INVALID_WINDOW_ID) {
 		const Callable *cb = input_event_callbacks.getptr(p_id);
 		if (cb) {
 			_window_callback(*cb, p_event);
@@ -447,7 +447,7 @@ Size2i DisplayServerMacOSEmbedded::screen_get_size(int p_screen) const {
 	int screen_count = get_screen_count();
 	ERR_FAIL_INDEX_V(p_screen, screen_count, Size2i());
 
-	return window_get_size(MAIN_WINDOW_ID);
+	return window_get_size(DisplayServerEnums::MAIN_WINDOW_ID);
 }
 
 Rect2i DisplayServerMacOSEmbedded::screen_get_usable_rect(int p_screen) const {
@@ -487,12 +487,12 @@ float DisplayServerMacOSEmbedded::screen_get_scale(int p_screen) const {
 
 Vector<DisplayServerEnums::WindowID> DisplayServerMacOSEmbedded::get_window_list() const {
 	Vector<DisplayServerEnums::WindowID> list;
-	list.push_back(MAIN_WINDOW_ID);
+	list.push_back(DisplayServerEnums::MAIN_WINDOW_ID);
 	return list;
 }
 
 DisplayServerEnums::WindowID DisplayServerMacOSEmbedded::get_window_at_screen_position(const Point2i &p_position) const {
-	return MAIN_WINDOW_ID;
+	return DisplayServerEnums::MAIN_WINDOW_ID;
 }
 
 void DisplayServerMacOSEmbedded::window_attach_instance_id(ObjectID p_instance, DisplayServerEnums::WindowID p_window) {
@@ -509,7 +509,7 @@ void DisplayServerMacOSEmbedded::window_set_title(const String &p_title, Display
 
 int DisplayServerMacOSEmbedded::window_get_current_screen(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
-	ERR_FAIL_COND_V(p_window != MAIN_WINDOW_ID, INVALID_SCREEN);
+	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, INVALID_SCREEN);
 
 	return 0;
 }
@@ -618,14 +618,14 @@ bool DisplayServerMacOSEmbedded::window_is_maximize_allowed(DisplayServerEnums::
 }
 
 void DisplayServerMacOSEmbedded::window_set_flag(WindowFlags p_flag, bool p_enabled, DisplayServerEnums::WindowID p_window) {
-	if (p_flag == WINDOW_FLAG_TRANSPARENT && p_window == MAIN_WINDOW_ID) {
+	if (p_flag == WINDOW_FLAG_TRANSPARENT && p_window == DisplayServerEnums::MAIN_WINDOW_ID) {
 		transparent = p_enabled;
 		layer.opaque = !(OS::get_singleton()->is_layered_allowed() && transparent);
 	}
 }
 
 bool DisplayServerMacOSEmbedded::window_get_flag(WindowFlags p_flag, DisplayServerEnums::WindowID p_window) const {
-	if (p_flag == WINDOW_FLAG_TRANSPARENT && p_window == MAIN_WINDOW_ID) {
+	if (p_flag == WINDOW_FLAG_TRANSPARENT && p_window == DisplayServerEnums::MAIN_WINDOW_ID) {
 		return transparent;
 	}
 	return false;
@@ -704,7 +704,7 @@ void DisplayServerMacOSEmbedded::window_get_edr_values(DisplayServerEnums::Windo
 
 void DisplayServerMacOSEmbedded::update_screen_parameters() {
 	if (hdr_output.requested) {
-		_update_hdr_output(MAIN_WINDOW_ID, hdr_output);
+		_update_hdr_output(DisplayServerEnums::MAIN_WINDOW_ID, hdr_output);
 	}
 }
 
@@ -725,7 +725,7 @@ void DisplayServerMacOSEmbedded::set_state(const DisplayServerMacOSEmbeddedState
 #endif
 	}
 	if (hdr_output.requested) {
-		_update_hdr_output(MAIN_WINDOW_ID, hdr_output);
+		_update_hdr_output(DisplayServerEnums::MAIN_WINDOW_ID, hdr_output);
 	}
 }
 

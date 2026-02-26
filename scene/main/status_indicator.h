@@ -39,7 +39,7 @@ class StatusIndicator : public Node {
 	Ref<Texture2D> icon;
 	String tooltip;
 	bool visible = true;
-	DisplayServerEnums::IndicatorID iid = DisplayServer::INVALID_INDICATOR_ID;
+	DisplayServerEnums::IndicatorID iid = DisplayServerEnums::INVALID_INDICATOR_ID;
 	NodePath menu;
 
 protected:

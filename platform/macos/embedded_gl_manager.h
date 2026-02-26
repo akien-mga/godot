@@ -79,7 +79,7 @@ class GLManagerEmbedded {
 	typedef RBMap<DisplayServerEnums::WindowID, GLWindow>::Element GLWindowElement;
 
 	NSOpenGLContext *shared_context = nullptr;
-	DisplayServerEnums::WindowID current_window = DisplayServer::INVALID_WINDOW_ID;
+	DisplayServerEnums::WindowID current_window = DisplayServerEnums::INVALID_WINDOW_ID;
 
 	Error create_context(GLWindow &p_win);
 

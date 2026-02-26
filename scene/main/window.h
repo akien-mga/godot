@@ -115,7 +115,7 @@ public:
 	};
 
 private:
-	DisplayServerEnums::WindowID window_id = DisplayServer::INVALID_WINDOW_ID;
+	DisplayServerEnums::WindowID window_id = DisplayServerEnums::INVALID_WINDOW_ID;
 	bool initialized = false;
 
 	String title;

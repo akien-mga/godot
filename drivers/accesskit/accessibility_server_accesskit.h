@@ -57,7 +57,7 @@ class AccessibilityServerAccessKit : public AccessibilityServer {
 	struct AccessibilityElement {
 		HashMap<accesskit_action, Callable> actions;
 
-		DisplayServerEnums::WindowID window_id = DisplayServer::INVALID_WINDOW_ID;
+		DisplayServerEnums::WindowID window_id = DisplayServerEnums::INVALID_WINDOW_ID;
 		RID parent;
 		LocalVector<RID> children;
 		Vector3i run;

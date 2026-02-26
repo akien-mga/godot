@@ -1305,12 +1305,12 @@ float DisplayServerWeb::screen_get_refresh_rate(int p_screen) const {
 
 Vector<DisplayServerEnums::WindowID> DisplayServerWeb::get_window_list() const {
 	Vector<DisplayServerEnums::WindowID> ret;
-	ret.push_back(MAIN_WINDOW_ID);
+	ret.push_back(DisplayServerEnums::MAIN_WINDOW_ID);
 	return ret;
 }
 
 DisplayServerEnums::WindowID DisplayServerWeb::get_window_at_screen_position(const Point2i &p_position) const {
-	return MAIN_WINDOW_ID;
+	return DisplayServerEnums::MAIN_WINDOW_ID;
 }
 
 void DisplayServerWeb::window_attach_instance_id(ObjectID p_instance, DisplayServerEnums::WindowID p_window) {
@@ -1346,7 +1346,7 @@ void DisplayServerWeb::window_set_title(const String &p_title, DisplayServerEnum
 }
 
 int DisplayServerWeb::window_get_current_screen(DisplayServerEnums::WindowID p_window) const {
-	ERR_FAIL_COND_V(p_window != MAIN_WINDOW_ID, INVALID_SCREEN);
+	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, INVALID_SCREEN);
 	return 0;
 }
 
