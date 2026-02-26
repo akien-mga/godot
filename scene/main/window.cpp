@@ -702,7 +702,7 @@ void Window::_make_window() {
 		}
 	}
 
-	DisplayServer::VSyncMode vsync_mode = DisplayServer::get_singleton()->window_get_vsync_mode(DisplayServerEnums::MAIN_WINDOW_ID);
+	DisplayServerEnums::VSyncMode vsync_mode = DisplayServer::get_singleton()->window_get_vsync_mode(DisplayServerEnums::MAIN_WINDOW_ID);
 	Rect2i window_rect;
 	if (initial_position == WINDOW_INITIAL_POSITION_ABSOLUTE) {
 		window_rect = Rect2i(position, size);

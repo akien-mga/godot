@@ -59,19 +59,19 @@ void RenderingContextDriver::window_set_size(DisplayServerEnums::WindowID p_wind
 	}
 }
 
-void RenderingContextDriver::window_set_vsync_mode(DisplayServerEnums::WindowID p_window, DisplayServer::VSyncMode p_vsync_mode) {
+void RenderingContextDriver::window_set_vsync_mode(DisplayServerEnums::WindowID p_window, DisplayServerEnums::VSyncMode p_vsync_mode) {
 	SurfaceID surface = surface_get_from_window(p_window);
 	if (surface) {
 		surface_set_vsync_mode(surface, p_vsync_mode);
 	}
 }
 
-DisplayServer::VSyncMode RenderingContextDriver::window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const {
+DisplayServerEnums::VSyncMode RenderingContextDriver::window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const {
 	SurfaceID surface = surface_get_from_window(p_window);
 	if (surface) {
 		return surface_get_vsync_mode(surface);
 	} else {
-		return DisplayServer::VSYNC_DISABLED;
+		return DisplayServerEnums::VSYNC_DISABLED;
 	}
 }
 

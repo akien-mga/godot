@@ -1704,7 +1704,7 @@ void RendererViewport::viewport_set_canvas_cull_mask(RID p_viewport, uint32_t p_
 }
 
 // Workaround for setting this on thread.
-void RendererViewport::call_set_vsync_mode(DisplayServer::VSyncMode p_mode, DisplayServerEnums::WindowID p_window) {
+void RendererViewport::call_set_vsync_mode(DisplayServerEnums::VSyncMode p_mode, DisplayServerEnums::WindowID p_window) {
 	DisplayServer::get_singleton()->window_set_vsync_mode(p_mode, p_window);
 }
 

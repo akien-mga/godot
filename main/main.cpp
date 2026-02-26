@@ -237,7 +237,7 @@ static bool single_threaded_scene = false;
 
 static DisplayServer::WindowMode window_mode = DisplayServer::WINDOW_MODE_WINDOWED;
 static DisplayServer::ScreenOrientation window_orientation = DisplayServer::SCREEN_LANDSCAPE;
-static DisplayServer::VSyncMode window_vsync_mode = DisplayServer::VSYNC_ENABLED;
+static DisplayServerEnums::VSyncMode window_vsync_mode = DisplayServerEnums::VSYNC_ENABLED;
 static uint32_t window_flags = 0;
 static Size2i window_size = Size2i(1152, 648);
 
@@ -2781,9 +2781,9 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 		window_orientation = DisplayServer::ScreenOrientation(int(GLOBAL_DEF_BASIC("display/window/handheld/orientation", DisplayServer::ScreenOrientation::SCREEN_LANDSCAPE)));
 	}
 	{
-		window_vsync_mode = DisplayServer::VSyncMode(int(GLOBAL_DEF_BASIC("display/window/vsync/vsync_mode", DisplayServer::VSyncMode::VSYNC_ENABLED)));
+		window_vsync_mode = DisplayServerEnums::VSyncMode(int(GLOBAL_DEF_BASIC("display/window/vsync/vsync_mode", DisplayServerEnums::VSyncMode::VSYNC_ENABLED)));
 		if (disable_vsync) {
-			window_vsync_mode = DisplayServer::VSyncMode::VSYNC_DISABLED;
+			window_vsync_mode = DisplayServerEnums::VSyncMode::VSYNC_DISABLED;
 		}
 	}
 
@@ -3443,16 +3443,16 @@ Error Main::setup2(bool p_show_boot_logo) {
 	if (GLOBAL_GET("debug/settings/stdout/print_fps") || print_fps) {
 		// Print requested V-Sync mode at startup to diagnose the printed FPS not going above the monitor refresh rate.
 		switch (window_vsync_mode) {
-			case DisplayServer::VSyncMode::VSYNC_DISABLED:
+			case DisplayServerEnums::VSyncMode::VSYNC_DISABLED:
 				print_line("Requested V-Sync mode: Disabled");
 				break;
-			case DisplayServer::VSyncMode::VSYNC_ENABLED:
+			case DisplayServerEnums::VSyncMode::VSYNC_ENABLED:
 				print_line("Requested V-Sync mode: Enabled - FPS will likely be capped to the monitor refresh rate.");
 				break;
-			case DisplayServer::VSyncMode::VSYNC_ADAPTIVE:
+			case DisplayServerEnums::VSyncMode::VSYNC_ADAPTIVE:
 				print_line("Requested V-Sync mode: Adaptive");
 				break;
-			case DisplayServer::VSyncMode::VSYNC_MAILBOX:
+			case DisplayServerEnums::VSyncMode::VSYNC_MAILBOX:
 				print_line("Requested V-Sync mode: Mailbox");
 				break;
 		}

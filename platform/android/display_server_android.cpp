@@ -654,7 +654,7 @@ Vector<String> DisplayServerAndroid::get_rendering_drivers_func() {
 	return drivers;
 }
 
-DisplayServer *DisplayServerAndroid::create_func(const String &p_rendering_driver, DisplayServer::WindowMode p_mode, DisplayServer::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServerAndroid::create_func(const String &p_rendering_driver, DisplayServer::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	DisplayServer *ds = memnew(DisplayServerAndroid(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, p_parent_window, r_error));
 	if (r_error != OK) {
 		if (p_rendering_driver == "vulkan") {
@@ -725,7 +725,7 @@ void DisplayServerAndroid::reset_window() {
 			rendering_device->screen_free(DisplayServerEnums::MAIN_WINDOW_ID);
 		}
 
-		VSyncMode last_vsync_mode = rendering_context_global->window_get_vsync_mode(DisplayServerEnums::MAIN_WINDOW_ID);
+		DisplayServerEnums::VSyncMode last_vsync_mode = rendering_context_global->window_get_vsync_mode(DisplayServerEnums::MAIN_WINDOW_ID);
 		rendering_context_global->window_destroy(DisplayServerEnums::MAIN_WINDOW_ID);
 
 		union {
@@ -771,7 +771,7 @@ void DisplayServerAndroid::notify_application_paused() {
 #endif // defined(RD_ENABLED)
 }
 
-DisplayServerAndroid::DisplayServerAndroid(const String &p_rendering_driver, DisplayServer::WindowMode p_mode, DisplayServer::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerAndroid::DisplayServerAndroid(const String &p_rendering_driver, DisplayServer::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	rendering_driver = p_rendering_driver;
 
 	keep_screen_on = GLOBAL_GET("display/window/energy_saving/keep_screen_on");
@@ -962,7 +962,7 @@ void DisplayServerAndroid::cursor_set_custom_image(const Ref<Resource> &p_cursor
 	_cursor_set_shape_helper(p_shape, true);
 }
 
-void DisplayServerAndroid::window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window) {
+void DisplayServerAndroid::window_set_vsync_mode(DisplayServerEnums::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window) {
 #if defined(RD_ENABLED)
 	if (rendering_context_global) {
 		rendering_context_global->window_set_vsync_mode(p_window, p_vsync_mode);
@@ -970,13 +970,13 @@ void DisplayServerAndroid::window_set_vsync_mode(DisplayServer::VSyncMode p_vsyn
 #endif
 }
 
-DisplayServer::VSyncMode DisplayServerAndroid::window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const {
+DisplayServerEnums::VSyncMode DisplayServerAndroid::window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const {
 #if defined(RD_ENABLED)
 	if (rendering_context_global) {
 		return rendering_context_global->window_get_vsync_mode(p_window);
 	}
 #endif
-	return DisplayServer::VSYNC_ENABLED;
+	return DisplayServerEnums::VSYNC_ENABLED;
 }
 
 void DisplayServerAndroid::reset_swap_buffers_flag() {

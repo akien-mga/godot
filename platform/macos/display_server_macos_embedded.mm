@@ -60,7 +60,7 @@
 #import "core/os/main_loop.h"
 #import "servers/display/native_menu.h"
 
-DisplayServerMacOSEmbedded::DisplayServerMacOSEmbedded(const String &p_rendering_driver, WindowMode p_mode, DisplayServer::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, Error &r_error) {
+DisplayServerMacOSEmbedded::DisplayServerMacOSEmbedded(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, Error &r_error) {
 	EmbeddedDebugger::initialize(this);
 
 	r_error = OK; // default to OK
@@ -139,7 +139,7 @@ DisplayServerMacOSEmbedded::DisplayServerMacOSEmbedded(const String &p_rendering
 		if (err != OK) {
 			ERR_FAIL_MSG("Could not create OpenGL context.");
 		}
-		gl_manager->set_vsync_enabled(p_vsync_mode != DisplayServer::VSYNC_DISABLED);
+		gl_manager->set_vsync_enabled(p_vsync_mode != DisplayServerEnums::VSYNC_DISABLED);
 	}
 #endif
 
@@ -243,7 +243,7 @@ DisplayServerMacOSEmbedded::~DisplayServerMacOSEmbedded() {
 #endif
 }
 
-DisplayServer *DisplayServerMacOSEmbedded::create_func(const String &p_rendering_driver, WindowMode p_mode, DisplayServer::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t /* p_parent_window */, Error &r_error) {
+DisplayServer *DisplayServerMacOSEmbedded::create_func(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t /* p_parent_window */, Error &r_error) {
 	return memnew(DisplayServerMacOSEmbedded(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, r_error));
 }
 
@@ -729,10 +729,10 @@ void DisplayServerMacOSEmbedded::set_state(const DisplayServerMacOSEmbeddedState
 	}
 }
 
-void DisplayServerMacOSEmbedded::window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window) {
+void DisplayServerMacOSEmbedded::window_set_vsync_mode(DisplayServerEnums::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window) {
 #if defined(GLES3_ENABLED)
 	if (gl_manager) {
-		gl_manager->set_vsync_enabled(p_vsync_mode != DisplayServer::VSYNC_DISABLED);
+		gl_manager->set_vsync_enabled(p_vsync_mode != DisplayServerEnums::VSYNC_DISABLED);
 	}
 #endif
 
@@ -743,11 +743,11 @@ void DisplayServerMacOSEmbedded::window_set_vsync_mode(DisplayServer::VSyncMode 
 #endif
 }
 
-DisplayServer::VSyncMode DisplayServerMacOSEmbedded::window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const {
+DisplayServerEnums::VSyncMode DisplayServerMacOSEmbedded::window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 #if defined(GLES3_ENABLED)
 	if (gl_manager) {
-		return (gl_manager->is_vsync_enabled() ? DisplayServer::VSyncMode::VSYNC_ENABLED : DisplayServer::VSyncMode::VSYNC_DISABLED);
+		return (gl_manager->is_vsync_enabled() ? DisplayServerEnums::VSyncMode::VSYNC_ENABLED : DisplayServerEnums::VSyncMode::VSYNC_DISABLED);
 	}
 #endif
 #if defined(RD_ENABLED)
@@ -755,7 +755,7 @@ DisplayServer::VSyncMode DisplayServerMacOSEmbedded::window_get_vsync_mode(Displ
 		return rendering_context->window_get_vsync_mode(p_window);
 	}
 #endif
-	return DisplayServer::VSYNC_ENABLED;
+	return DisplayServerEnums::VSYNC_ENABLED;
 }
 
 void DisplayServerMacOSEmbedded::cursor_set_shape(CursorShape p_shape) {

@@ -87,7 +87,7 @@ class DisplayServerWayland : public DisplayServer {
 		// Flags whether we have allocated a buffer through the video drivers.
 		bool visible = false;
 
-		DisplayServer::VSyncMode vsync_mode = VSYNC_ENABLED;
+		DisplayServerEnums::VSyncMode vsync_mode = DisplayServerEnums::VSYNC_ENABLED;
 
 		uint32_t flags = 0;
 
@@ -238,7 +238,7 @@ public:
 
 	virtual Vector<DisplayServerEnums::WindowID> get_window_list() const override;
 
-	virtual DisplayServerEnums::WindowID create_sub_window(WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect = Rect2i(), bool p_exclusive = false, DisplayServerEnums::WindowID p_transient_parent = DisplayServerEnums::INVALID_WINDOW_ID) override;
+	virtual DisplayServerEnums::WindowID create_sub_window(WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect = Rect2i(), bool p_exclusive = false, DisplayServerEnums::WindowID p_transient_parent = DisplayServerEnums::INVALID_WINDOW_ID) override;
 	virtual void show_window(DisplayServerEnums::WindowID p_id) override;
 	virtual void delete_sub_window(DisplayServerEnums::WindowID p_id) override;
 
@@ -310,8 +310,8 @@ public:
 	virtual Point2i ime_get_selection() const override;
 	virtual String ime_get_text() const override;
 
-	virtual void window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window_id = DisplayServerEnums::MAIN_WINDOW_ID) override;
-	virtual DisplayServer::VSyncMode window_get_vsync_mode(DisplayServerEnums::WindowID p_window_id) const override;
+	virtual void window_set_vsync_mode(DisplayServerEnums::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window_id = DisplayServerEnums::MAIN_WINDOW_ID) override;
+	virtual DisplayServerEnums::VSyncMode window_get_vsync_mode(DisplayServerEnums::WindowID p_window_id) const override;
 
 	virtual void window_start_drag(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) override;
 	virtual void window_start_resize(WindowResizeEdge p_edge, DisplayServerEnums::WindowID p_window) override;
@@ -348,12 +348,12 @@ public:
 
 	virtual bool is_window_transparency_available() const override;
 
-	static DisplayServer *create_func(const String &p_rendering_driver, WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error);
+	static DisplayServer *create_func(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error);
 	static Vector<String> get_rendering_drivers_func();
 
 	static void register_wayland_driver();
 
-	DisplayServerWayland(const String &p_rendering_driver, WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i &p_resolution, Context p_context, int64_t p_parent_window, Error &r_error);
+	DisplayServerWayland(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i &p_resolution, Context p_context, int64_t p_parent_window, Error &r_error);
 	~DisplayServerWayland();
 };
 

@@ -1110,11 +1110,11 @@ void DisplayServerWeb::_dispatch_input_event(const Ref<InputEvent> &p_event) {
 	}
 }
 
-DisplayServer *DisplayServerWeb::create_func(const String &p_rendering_driver, WindowMode p_window_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServerWeb::create_func(const String &p_rendering_driver, WindowMode p_window_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	return memnew(DisplayServerWeb(p_rendering_driver, p_window_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, p_parent_window, r_error));
 }
 
-DisplayServerWeb::DisplayServerWeb(const String &p_rendering_driver, WindowMode p_window_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerWeb::DisplayServerWeb(const String &p_rendering_driver, WindowMode p_window_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	r_error = OK; // Always succeeds for now.
 
 	native_menu = memnew(NativeMenu); // Dummy native menu.
@@ -1462,8 +1462,8 @@ bool DisplayServerWeb::can_any_window_draw() const {
 	return true;
 }
 
-DisplayServer::VSyncMode DisplayServerWeb::window_get_vsync_mode(DisplayServerEnums::WindowID p_vsync_mode) const {
-	return DisplayServer::VSYNC_ENABLED;
+DisplayServerEnums::VSyncMode DisplayServerWeb::window_get_vsync_mode(DisplayServerEnums::WindowID p_vsync_mode) const {
+	return DisplayServerEnums::VSYNC_ENABLED;
 }
 
 void DisplayServerWeb::process_events() {

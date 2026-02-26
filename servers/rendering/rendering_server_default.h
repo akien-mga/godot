@@ -796,7 +796,7 @@ public:
 	FUNC1RC(double, viewport_get_measured_render_time_gpu, RID)
 	FUNC1RC(RID, viewport_find_from_screen_attachment, DisplayServerEnums::WindowID)
 
-	FUNC2(call_set_vsync_mode, DisplayServer::VSyncMode, DisplayServerEnums::WindowID)
+	FUNC2(call_set_vsync_mode, DisplayServerEnums::VSyncMode, DisplayServerEnums::WindowID)
 
 	FUNC2(viewport_set_vrs_mode, RID, RSE::ViewportVRSMode)
 	FUNC2(viewport_set_vrs_update_mode, RID, RSE::ViewportVRSUpdateMode)

@@ -733,7 +733,7 @@ Vector<DisplayServerEnums::WindowID> DisplayServerWayland::get_window_list() con
 	return ret;
 }
 
-DisplayServerEnums::WindowID DisplayServerWayland::create_sub_window(WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
+DisplayServerEnums::WindowID DisplayServerWayland::create_sub_window(WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
 	DisplayServerEnums::WindowID id = ++window_id_counter;
 	WindowData &wd = windows[id];
 
@@ -1392,7 +1392,7 @@ String DisplayServerWayland::ime_get_text() const {
 // 1.30 added a protocol for allowing async flips which is supposed to be
 // handled by drivers such as Vulkan. We can then just ask to disable v-sync and
 // hope for the best. See: https://gitlab.freedesktop.org/wayland/wayland-protocols/-/commit/6394f0b4f3be151076f10a845a2fb131eeb56706
-void DisplayServerWayland::window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window_id) {
+void DisplayServerWayland::window_set_vsync_mode(DisplayServerEnums::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window_id) {
 	MutexLock mutex_lock(wayland_thread.mutex);
 
 	WindowData &wd = windows[p_window_id];
@@ -1401,18 +1401,18 @@ void DisplayServerWayland::window_set_vsync_mode(DisplayServer::VSyncMode p_vsyn
 	if (rendering_context) {
 		rendering_context->window_set_vsync_mode(p_window_id, p_vsync_mode);
 
-		wd.emulate_vsync = (!wayland_thread.is_fifo_available() && rendering_context->window_get_vsync_mode(p_window_id) == DisplayServer::VSYNC_ENABLED);
+		wd.emulate_vsync = (!wayland_thread.is_fifo_available() && rendering_context->window_get_vsync_mode(p_window_id) == DisplayServerEnums::VSYNC_ENABLED);
 
 		if (wd.emulate_vsync) {
 			print_verbose("VSYNC: manually throttling frames using MAILBOX.");
-			rendering_context->window_set_vsync_mode(p_window_id, DisplayServer::VSYNC_MAILBOX);
+			rendering_context->window_set_vsync_mode(p_window_id, DisplayServerEnums::VSYNC_MAILBOX);
 		}
 	}
 #endif // VULKAN_ENABLED
 
 #ifdef GLES3_ENABLED
 	if (egl_manager) {
-		egl_manager->set_use_vsync(p_vsync_mode != DisplayServer::VSYNC_DISABLED);
+		egl_manager->set_use_vsync(p_vsync_mode != DisplayServerEnums::VSYNC_DISABLED);
 
 		// NOTE: Mesa's EGL implementation does not seem to make use of fifo_v1 so
 		// we'll have to always emulate V-Sync.
@@ -1426,10 +1426,10 @@ void DisplayServerWayland::window_set_vsync_mode(DisplayServer::VSyncMode p_vsyn
 #endif // GLES3_ENABLED
 }
 
-DisplayServer::VSyncMode DisplayServerWayland::window_get_vsync_mode(DisplayServerEnums::WindowID p_window_id) const {
+DisplayServerEnums::VSyncMode DisplayServerWayland::window_get_vsync_mode(DisplayServerEnums::WindowID p_window_id) const {
 	const WindowData &wd = windows[p_window_id];
 	if (wd.emulate_vsync) {
-		return DisplayServer::VSYNC_ENABLED;
+		return DisplayServerEnums::VSYNC_ENABLED;
 	}
 
 #ifdef VULKAN_ENABLED
@@ -1440,11 +1440,11 @@ DisplayServer::VSyncMode DisplayServerWayland::window_get_vsync_mode(DisplayServ
 
 #ifdef GLES3_ENABLED
 	if (egl_manager) {
-		return egl_manager->is_using_vsync() ? DisplayServer::VSYNC_ENABLED : DisplayServer::VSYNC_DISABLED;
+		return egl_manager->is_using_vsync() ? DisplayServerEnums::VSYNC_ENABLED : DisplayServerEnums::VSYNC_DISABLED;
 	}
 #endif // GLES3_ENABLED
 
-	return DisplayServer::VSYNC_ENABLED;
+	return DisplayServerEnums::VSYNC_ENABLED;
 }
 
 void DisplayServerWayland::window_start_drag(DisplayServerEnums::WindowID p_window) {
@@ -1986,7 +1986,7 @@ Vector<String> DisplayServerWayland::get_rendering_drivers_func() {
 	return drivers;
 }
 
-DisplayServer *DisplayServerWayland::create_func(const String &p_rendering_driver, WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServerWayland::create_func(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	DisplayServer *ds = memnew(DisplayServerWayland(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_resolution, p_context, p_parent_window, r_error));
 	if (r_error != OK) {
 		ERR_PRINT("Can't create the Wayland display server.");
@@ -1997,7 +1997,7 @@ DisplayServer *DisplayServerWayland::create_func(const String &p_rendering_drive
 	return ds;
 }
 
-DisplayServerWayland::DisplayServerWayland(const String &p_rendering_driver, WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i &p_resolution, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerWayland::DisplayServerWayland(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i &p_resolution, Context p_context, int64_t p_parent_window, Error &r_error) {
 #if defined(GLES3_ENABLED) || defined(DBUS_ENABLED)
 #ifdef SOWRAP_ENABLED
 #ifdef DEBUG_ENABLED

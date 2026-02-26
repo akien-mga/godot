@@ -1012,7 +1012,7 @@ public:
 
 	virtual void set_debug_generate_wireframes(bool p_generate) = 0;
 
-	virtual void call_set_vsync_mode(DisplayServer::VSyncMode p_mode, DisplayServerEnums::WindowID p_window) = 0;
+	virtual void call_set_vsync_mode(DisplayServerEnums::VSyncMode p_mode, DisplayServerEnums::WindowID p_window) = 0;
 
 	virtual bool is_low_end() const = 0;
 

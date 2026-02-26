@@ -41,4 +41,13 @@ enum {
 	INVALID_INDICATOR_ID = -1
 };
 
+// Keep the VSyncMode enum values in sync with the `display/window/vsync/vsync_mode`
+// project setting hint.
+enum VSyncMode {
+	VSYNC_DISABLED,
+	VSYNC_ENABLED,
+	VSYNC_ADAPTIVE,
+	VSYNC_MAILBOX
+};
+
 } // namespace DisplayServerEnums

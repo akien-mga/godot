@@ -52,7 +52,7 @@ DisplayServerAppleEmbedded *DisplayServerAppleEmbedded::get_singleton() {
 	return (DisplayServerAppleEmbedded *)DisplayServer::get_singleton();
 }
 
-DisplayServerAppleEmbedded::DisplayServerAppleEmbedded(const String &p_rendering_driver, WindowMode p_mode, DisplayServer::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerAppleEmbedded::DisplayServerAppleEmbedded(const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	KeyMappingAppleEmbedded::initialize();
 
 	rendering_driver = p_rendering_driver;
@@ -802,7 +802,7 @@ void DisplayServerAppleEmbedded::resize_window(CGSize viewSize) {
 	_window_callback(window_resize_callback, resize_rect);
 }
 
-void DisplayServerAppleEmbedded::window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window) {
+void DisplayServerAppleEmbedded::window_set_vsync_mode(DisplayServerEnums::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window) {
 	_THREAD_SAFE_METHOD_
 #if defined(RD_ENABLED)
 	if (rendering_context) {
@@ -811,14 +811,14 @@ void DisplayServerAppleEmbedded::window_set_vsync_mode(DisplayServer::VSyncMode 
 #endif
 }
 
-DisplayServer::VSyncMode DisplayServerAppleEmbedded::window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const {
+DisplayServerEnums::VSyncMode DisplayServerAppleEmbedded::window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 #if defined(RD_ENABLED)
 	if (rendering_context) {
 		return rendering_context->window_get_vsync_mode(p_window);
 	}
 #endif
-	return DisplayServer::VSYNC_ENABLED;
+	return DisplayServerEnums::VSYNC_ENABLED;
 }
 
 // MARK: - HDR / EDR

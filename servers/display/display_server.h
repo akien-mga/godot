@@ -83,15 +83,6 @@ public:
 		PROGRESS_STATE_PAUSED,
 	};
 
-	// Keep the VSyncMode enum values in sync with the `display/window/vsync/vsync_mode`
-	// project setting hint.
-	enum VSyncMode {
-		VSYNC_DISABLED,
-		VSYNC_ENABLED,
-		VSYNC_ADAPTIVE,
-		VSYNC_MAILBOX
-	};
-
 	enum HandleType {
 		DISPLAY_HANDLE,
 		WINDOW_HANDLE,
@@ -109,7 +100,7 @@ public:
 		CONTEXT_ENGINE,
 	};
 
-	typedef DisplayServer *(*CreateFunction)(const String &, WindowMode, VSyncMode, uint32_t, const Point2i *, const Size2i &, int p_screen, Context, int64_t p_parent_window, Error &r_error);
+	typedef DisplayServer *(*CreateFunction)(const String &, WindowMode, DisplayServerEnums::VSyncMode, uint32_t, const Point2i *, const Size2i &, int p_screen, Context, int64_t p_parent_window, Error &r_error);
 	typedef Vector<String> (*GetRenderingDriversFunction)();
 
 private:
@@ -444,7 +435,7 @@ public:
 		WINDOW_FLAG_MAXIMIZE_DISABLED_BIT = (1 << WINDOW_FLAG_MAXIMIZE_DISABLED),
 	};
 
-	virtual DisplayServerEnums::WindowID create_sub_window(WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect = Rect2i(), bool p_exclusive = false, DisplayServerEnums::WindowID p_transient_parent = DisplayServerEnums::INVALID_WINDOW_ID);
+	virtual DisplayServerEnums::WindowID create_sub_window(WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect = Rect2i(), bool p_exclusive = false, DisplayServerEnums::WindowID p_transient_parent = DisplayServerEnums::INVALID_WINDOW_ID);
 	virtual void show_window(DisplayServerEnums::WindowID p_id);
 	virtual void delete_sub_window(DisplayServerEnums::WindowID p_id);
 
@@ -511,8 +502,8 @@ public:
 	virtual void window_set_mode(WindowMode p_mode, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
 	virtual WindowMode window_get_mode(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const = 0;
 
-	virtual void window_set_vsync_mode(VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID);
-	virtual VSyncMode window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const;
+	virtual void window_set_vsync_mode(DisplayServerEnums::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID);
+	virtual DisplayServerEnums::VSyncMode window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const;
 
 	virtual bool window_is_hdr_output_supported(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const;
 
@@ -907,7 +898,7 @@ public:
 	static int get_create_function_count();
 	static const char *get_create_function_name(int p_index);
 	static Vector<String> get_create_function_rendering_drivers(int p_index);
-	static DisplayServer *create(int p_index, const String &p_rendering_driver, WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error);
+	static DisplayServer *create(int p_index, const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error);
 
 	enum RenderingDeviceCreationStatus {
 		UNKNOWN,
@@ -947,7 +938,7 @@ VARIANT_ENUM_CAST(DisplayServer::WindowResizeEdge)
 VARIANT_ENUM_CAST(DisplayServer::HandleType)
 VARIANT_ENUM_CAST(DisplayServer::VirtualKeyboardType);
 VARIANT_ENUM_CAST(DisplayServer::CursorShape)
-VARIANT_ENUM_CAST(DisplayServer::VSyncMode)
+VARIANT_ENUM_CAST_EXT(DisplayServerEnums::VSyncMode, DisplayServer::VSyncMode)
 VARIANT_ENUM_CAST(DisplayServer::TTSUtteranceEvent)
 VARIANT_ENUM_CAST(DisplayServer::FileDialogMode)
 VARIANT_ENUM_CAST(DisplayServer::ProgressState)

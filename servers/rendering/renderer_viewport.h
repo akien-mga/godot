@@ -319,7 +319,7 @@ public:
 	int get_num_viewports_with_motion_vectors() const;
 
 	// Workaround for setting this on thread.
-	void call_set_vsync_mode(DisplayServer::VSyncMode p_mode, DisplayServerEnums::WindowID p_window);
+	void call_set_vsync_mode(DisplayServerEnums::VSyncMode p_mode, DisplayServerEnums::WindowID p_window);
 
 	RendererViewport();
 	virtual ~RendererViewport() {}

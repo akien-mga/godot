@@ -457,7 +457,7 @@ void EditorNode::shortcut_input(const Ref<InputEvent> &p_event) {
 }
 
 void EditorNode::_update_vsync_mode() {
-	const DisplayServer::VSyncMode window_vsync_mode = DisplayServer::VSyncMode(int(EDITOR_GET("interface/editor/display/vsync_mode")));
+	const DisplayServerEnums::VSyncMode window_vsync_mode = DisplayServerEnums::VSyncMode(int(EDITOR_GET("interface/editor/display/vsync_mode")));
 	DisplayServer::get_singleton()->window_set_vsync_mode(window_vsync_mode);
 }
 

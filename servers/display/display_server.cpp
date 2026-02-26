@@ -610,7 +610,7 @@ int DisplayServer::get_screen_from_rect(const Rect2 &p_rect) const {
 	return pos_screen;
 }
 
-DisplayServerEnums::WindowID DisplayServer::create_sub_window(WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
+DisplayServerEnums::WindowID DisplayServer::create_sub_window(WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Rect2i &p_rect, bool p_exclusive, DisplayServerEnums::WindowID p_transient_parent) {
 	ERR_FAIL_V_MSG(DisplayServerEnums::INVALID_WINDOW_ID, "Sub-windows not supported by this display server.");
 }
 
@@ -1290,13 +1290,13 @@ int64_t DisplayServer::window_get_native_handle(HandleType p_handle_type, Displa
 	return 0;
 }
 
-void DisplayServer::window_set_vsync_mode(DisplayServer::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window) {
+void DisplayServer::window_set_vsync_mode(DisplayServerEnums::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window) {
 	WARN_PRINT("Changing the V-Sync mode is not supported by this display server.");
 }
 
-DisplayServer::VSyncMode DisplayServer::window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const {
+DisplayServerEnums::VSyncMode DisplayServer::window_get_vsync_mode(DisplayServerEnums::WindowID p_window) const {
 	WARN_PRINT("Changing the V-Sync mode is not supported by this display server.");
-	return VSyncMode::VSYNC_ENABLED;
+	return DisplayServerEnums::VSyncMode::VSYNC_ENABLED;
 }
 
 bool DisplayServer::window_is_hdr_output_supported(DisplayServerEnums::WindowID p_window) const {
@@ -1972,10 +1972,10 @@ void DisplayServer::_bind_methods() {
 	BIND_ENUM_CONSTANT(WINDOW_EDGE_BOTTOM_RIGHT);
 	BIND_ENUM_CONSTANT(WINDOW_EDGE_MAX);
 
-	BIND_ENUM_CONSTANT(VSYNC_DISABLED);
-	BIND_ENUM_CONSTANT(VSYNC_ENABLED);
-	BIND_ENUM_CONSTANT(VSYNC_ADAPTIVE);
-	BIND_ENUM_CONSTANT(VSYNC_MAILBOX);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::VSYNC_DISABLED);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::VSYNC_ENABLED);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::VSYNC_ADAPTIVE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::VSYNC_MAILBOX);
 
 	BIND_ENUM_CONSTANT(DISPLAY_HANDLE);
 	BIND_ENUM_CONSTANT(WINDOW_HANDLE);
@@ -2040,7 +2040,7 @@ Vector<String> DisplayServer::get_create_function_rendering_drivers(int p_index)
 	return server_create_functions[p_index].get_rendering_drivers_function();
 }
 
-DisplayServer *DisplayServer::create(int p_index, const String &p_rendering_driver, WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServer::create(int p_index, const String &p_rendering_driver, WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
 	ERR_FAIL_INDEX_V(p_index, server_create_count, nullptr);
 	return server_create_functions[p_index].create_function(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, p_parent_window, r_error);
 }
