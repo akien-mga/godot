@@ -350,7 +350,7 @@ class DisplayServerX11 : public DisplayServer {
 	DisplayServerEnums::WindowID _get_focused_window_or_popup() const;
 	bool _window_focus_check();
 
-	void _send_window_event(const WindowData &wd, WindowEvent p_event);
+	void _send_window_event(const WindowData &wd, DisplayServerEnums::WindowEvent p_event);
 	static void _dispatch_input_events(const Ref<InputEvent> &p_event);
 	void _dispatch_input_event(const Ref<InputEvent> &p_event);
 	void _set_input_focus(Window p_window, int p_revert_to);

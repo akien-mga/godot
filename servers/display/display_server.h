@@ -410,17 +410,6 @@ public:
 
 	virtual void window_set_rect_changed_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
 
-	enum WindowEvent {
-		WINDOW_EVENT_MOUSE_ENTER,
-		WINDOW_EVENT_MOUSE_EXIT,
-		WINDOW_EVENT_FOCUS_IN,
-		WINDOW_EVENT_FOCUS_OUT,
-		WINDOW_EVENT_CLOSE_REQUEST,
-		WINDOW_EVENT_GO_BACK_REQUEST,
-		WINDOW_EVENT_DPI_CHANGE,
-		WINDOW_EVENT_TITLEBAR_CHANGE,
-		WINDOW_EVENT_FORCE_CLOSE,
-	};
 	virtual void window_set_window_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
 	virtual void window_set_input_event_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
 	virtual void window_set_input_text_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) = 0;
@@ -886,7 +875,7 @@ VARIANT_ENUM_CAST(DisplayServer::AccessibilityScrollUnit)
 VARIANT_ENUM_CAST(DisplayServer::AccessibilityScrollHint)
 #endif // DISABLE_DEPRECATED
 
-VARIANT_ENUM_CAST(DisplayServer::WindowEvent)
+VARIANT_ENUM_CAST_EXT(DisplayServerEnums::WindowEvent, DisplayServer::WindowEvent)
 VARIANT_ENUM_CAST(DisplayServer::Feature)
 VARIANT_ENUM_CAST(DisplayServer::MouseMode)
 VARIANT_ENUM_CAST(DisplayServer::ScreenOrientation)

@@ -121,7 +121,7 @@ void EmbeddedProcessMacOS::reset() {
 
 void EmbeddedProcessMacOS::request_close() {
 	if (current_process_id != 0 && is_embedding_completed()) {
-		script_debugger->send_message("embed:win_event", { DisplayServer::WINDOW_EVENT_CLOSE_REQUEST });
+		script_debugger->send_message("embed:win_event", { DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST });
 	}
 	reset();
 }
@@ -230,7 +230,7 @@ void LayerHost::_notification(int p_what) {
 				ds->cursor_set_custom_image(E.value.image, E.key, E.value.hotspot);
 			}
 			if (script_debugger) {
-				script_debugger->send_message("embed:win_event", { DisplayServer::WINDOW_EVENT_MOUSE_ENTER });
+				script_debugger->send_message("embed:win_event", { DisplayServerEnums::WINDOW_EVENT_MOUSE_ENTER });
 			}
 			if (get_window()->has_focus()) {
 				grab_focus();
@@ -245,7 +245,7 @@ void LayerHost::_notification(int p_what) {
 					ds->mouse_set_mode(process->get_mouse_mode());
 				}
 				script_debugger->send_message("embed:notification", { NOTIFICATION_APPLICATION_FOCUS_IN });
-				script_debugger->send_message("embed:win_event", { DisplayServer::WINDOW_EVENT_FOCUS_IN });
+				script_debugger->send_message("embed:win_event", { DisplayServerEnums::WINDOW_EVENT_FOCUS_IN });
 				window_focused = true;
 			}
 			process->queue_redraw();
@@ -256,7 +256,7 @@ void LayerHost::_notification(int p_what) {
 				ds->cursor_set_custom_image(Ref<Resource>(), (DisplayServer::CursorShape)i, Vector2());
 			}
 			if (script_debugger) {
-				script_debugger->send_message("embed:win_event", { DisplayServer::WINDOW_EVENT_MOUSE_EXIT });
+				script_debugger->send_message("embed:win_event", { DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT });
 			}
 		} break;
 		case NOTIFICATION_FOCUS_EXIT: {
@@ -266,7 +266,7 @@ void LayerHost::_notification(int p_what) {
 				if (ds->mouse_get_mode() != DisplayServer::MOUSE_MODE_VISIBLE) {
 					ds->mouse_set_mode(DisplayServer::MOUSE_MODE_VISIBLE);
 				}
-				script_debugger->send_message("embed:win_event", { DisplayServer::WINDOW_EVENT_FOCUS_OUT });
+				script_debugger->send_message("embed:win_event", { DisplayServerEnums::WINDOW_EVENT_FOCUS_OUT });
 				script_debugger->send_message("embed:notification", { NOTIFICATION_APPLICATION_FOCUS_OUT });
 				window_focused = false;
 			}
@@ -303,7 +303,7 @@ void LayerHost::_notification(int p_what) {
 					}
 				}
 				script_debugger->send_message("embed:notification", { NOTIFICATION_APPLICATION_FOCUS_IN });
-				script_debugger->send_message("embed:win_event", { DisplayServer::WINDOW_EVENT_FOCUS_IN });
+				script_debugger->send_message("embed:win_event", { DisplayServerEnums::WINDOW_EVENT_FOCUS_IN });
 				window_focused = true;
 			}
 		} break;
@@ -314,7 +314,7 @@ void LayerHost::_notification(int p_what) {
 				if (ds->mouse_get_mode() != DisplayServer::MOUSE_MODE_VISIBLE) {
 					ds->mouse_set_mode(DisplayServer::MOUSE_MODE_VISIBLE);
 				}
-				script_debugger->send_message("embed:win_event", { DisplayServer::WINDOW_EVENT_FOCUS_OUT });
+				script_debugger->send_message("embed:win_event", { DisplayServerEnums::WINDOW_EVENT_FOCUS_OUT });
 				script_debugger->send_message("embed:notification", { NOTIFICATION_APPLICATION_FOCUS_OUT });
 				window_focused = false;
 			}

@@ -110,7 +110,7 @@ String DisplayServerWayland::_get_app_id_from_context(Context p_context) {
 	return app_id;
 }
 
-void DisplayServerWayland::_send_window_event(WindowEvent p_event, DisplayServerEnums::WindowID p_window_id) {
+void DisplayServerWayland::_send_window_event(DisplayServerEnums::WindowEvent p_event, DisplayServerEnums::WindowID p_window_id) {
 	ERR_FAIL_COND(!windows.has(p_window_id));
 
 	WindowData &wd = windows[p_window_id];
@@ -878,16 +878,16 @@ void DisplayServerWayland::delete_sub_window(DisplayServerEnums::WindowID p_wind
 	ERR_FAIL_COND(!windows.has(wd.root_id));
 	WindowData &root_wd = windows[wd.root_id];
 
-	// NOTE: By the time the Wayland thread will send a `WINDOW_EVENT_MOUSE_EXIT`
+	// NOTE: By the time the Wayland thread will send a `DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT`
 	// the window will be gone and the message will be discarded, confusing the
 	// engine. We thus have to send it ourselves.
 	if (wayland_thread.pointer_get_pointed_window_id() == p_window_id) {
-		_send_window_event(WINDOW_EVENT_MOUSE_EXIT, p_window_id);
+		_send_window_event(DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT, p_window_id);
 	}
 
 	// The XDG shell specification requires us to clear all popups in reverse order.
 	while (!root_wd.popup_stack.is_empty() && root_wd.popup_stack.back()->get() != p_window_id) {
-		_send_window_event(WINDOW_EVENT_FORCE_CLOSE, root_wd.popup_stack.back()->get());
+		_send_window_event(DisplayServerEnums::WINDOW_EVENT_FORCE_CLOSE, root_wd.popup_stack.back()->get());
 	}
 
 	if (root_wd.popup_stack.back() && root_wd.popup_stack.back()->get() == p_window_id) {
@@ -1738,12 +1738,12 @@ void DisplayServerWayland::process_events() {
 		if (winev_msg.is_valid() && windows.has(winev_msg->id)) {
 			_send_window_event(winev_msg->event, winev_msg->id);
 
-			if (winev_msg->event == WINDOW_EVENT_FOCUS_IN) {
+			if (winev_msg->event == DisplayServerEnums::WINDOW_EVENT_FOCUS_IN) {
 				AccessibilityServer::get_singleton()->set_window_focused(winev_msg->id, true);
 				if (OS::get_singleton()->get_main_loop()) {
 					OS::get_singleton()->get_main_loop()->notification(MainLoop::NOTIFICATION_APPLICATION_FOCUS_IN);
 				}
-			} else if (winev_msg->event == WINDOW_EVENT_FOCUS_OUT) {
+			} else if (winev_msg->event == DisplayServerEnums::WINDOW_EVENT_FOCUS_OUT) {
 				AccessibilityServer::get_singleton()->set_window_focused(winev_msg->id, false);
 				if (OS::get_singleton()->get_main_loop()) {
 					OS::get_singleton()->get_main_loop()->notification(MainLoop::NOTIFICATION_APPLICATION_FOCUS_OUT);
@@ -1781,7 +1781,7 @@ void DisplayServerWayland::process_events() {
 
 					if (C) {
 						handled = true;
-						_send_window_event(WINDOW_EVENT_CLOSE_REQUEST, C->get());
+						_send_window_event(DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST, C->get());
 					}
 				}
 

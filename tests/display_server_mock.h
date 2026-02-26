@@ -53,7 +53,7 @@ private:
 
 	void _set_mouse_position(const Point2i &p_position);
 	void _set_window_over(bool p_over);
-	void _send_window_event(WindowEvent p_event);
+	void _send_window_event(DisplayServerEnums::WindowEvent p_event);
 
 public:
 	bool has_feature(Feature p_feature) const override;

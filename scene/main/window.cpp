@@ -831,9 +831,9 @@ void Window::_propagate_window_notification(Node *p_node, int p_notification) {
 	}
 }
 
-void Window::_event_callback(DisplayServer::WindowEvent p_event) {
+void Window::_event_callback(DisplayServerEnums::WindowEvent p_event) {
 	switch (p_event) {
-		case DisplayServer::WINDOW_EVENT_MOUSE_ENTER: {
+		case DisplayServerEnums::WINDOW_EVENT_MOUSE_ENTER: {
 			if (!is_inside_tree()) {
 				return;
 			}
@@ -845,7 +845,7 @@ void Window::_event_callback(DisplayServer::WindowEvent p_event) {
 #ifdef DEV_ENABLED
 				WARN_PRINT_ONCE("Entering a window while a window is hovered should never happen in DisplayServer.");
 #endif // DEV_ENABLED
-				root->gui.windowmanager_window_over->_event_callback(DisplayServer::WINDOW_EVENT_MOUSE_EXIT);
+				root->gui.windowmanager_window_over->_event_callback(DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT);
 			}
 			_propagate_window_notification(this, NOTIFICATION_WM_MOUSE_ENTER);
 			root->gui.windowmanager_window_over = this;
@@ -854,7 +854,7 @@ void Window::_event_callback(DisplayServer::WindowEvent p_event) {
 				DisplayServer::get_singleton()->cursor_set_shape(DisplayServer::CURSOR_ARROW); //restore cursor shape
 			}
 		} break;
-		case DisplayServer::WINDOW_EVENT_MOUSE_EXIT: {
+		case DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT: {
 			if (!is_inside_tree()) {
 				return;
 			}
@@ -873,7 +873,7 @@ void Window::_event_callback(DisplayServer::WindowEvent p_event) {
 			root->gui.windowmanager_window_over = nullptr;
 			_propagate_window_notification(this, NOTIFICATION_WM_MOUSE_EXIT);
 		} break;
-		case DisplayServer::WINDOW_EVENT_FOCUS_IN: {
+		case DisplayServerEnums::WINDOW_EVENT_FOCUS_IN: {
 			focused = true;
 			focused_window = this;
 			_propagate_window_notification(this, NOTIFICATION_WM_WINDOW_FOCUS_IN);
@@ -890,7 +890,7 @@ void Window::_event_callback(DisplayServer::WindowEvent p_event) {
 				}
 			}
 		} break;
-		case DisplayServer::WINDOW_EVENT_FOCUS_OUT: {
+		case DisplayServerEnums::WINDOW_EVENT_FOCUS_OUT: {
 			focused = false;
 			if (focused_window == this) {
 				focused_window = nullptr;
@@ -898,26 +898,26 @@ void Window::_event_callback(DisplayServer::WindowEvent p_event) {
 			_propagate_window_notification(this, NOTIFICATION_WM_WINDOW_FOCUS_OUT);
 			emit_signal(SceneStringName(focus_exited));
 		} break;
-		case DisplayServer::WINDOW_EVENT_CLOSE_REQUEST: {
+		case DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST: {
 			if (exclusive_child != nullptr) {
 				break; //has an exclusive child, can't get events until child is closed
 			}
 			_propagate_window_notification(this, NOTIFICATION_WM_CLOSE_REQUEST);
 			emit_signal(SNAME("close_requested"));
 		} break;
-		case DisplayServer::WINDOW_EVENT_GO_BACK_REQUEST: {
+		case DisplayServerEnums::WINDOW_EVENT_GO_BACK_REQUEST: {
 			_propagate_window_notification(this, NOTIFICATION_WM_GO_BACK_REQUEST);
 			emit_signal(SNAME("go_back_requested"));
 		} break;
-		case DisplayServer::WINDOW_EVENT_DPI_CHANGE: {
+		case DisplayServerEnums::WINDOW_EVENT_DPI_CHANGE: {
 			_update_viewport_size();
 			_propagate_window_notification(this, NOTIFICATION_WM_DPI_CHANGE);
 			emit_signal(SNAME("dpi_changed"));
 		} break;
-		case DisplayServer::WINDOW_EVENT_TITLEBAR_CHANGE: {
+		case DisplayServerEnums::WINDOW_EVENT_TITLEBAR_CHANGE: {
 			emit_signal(SNAME("titlebar_changed"));
 		} break;
-		case DisplayServer::WINDOW_EVENT_FORCE_CLOSE: {
+		case DisplayServerEnums::WINDOW_EVENT_FORCE_CLOSE: {
 			hide();
 		} break;
 	}
@@ -1650,7 +1650,7 @@ void Window::_notification(int p_what) {
 					_update_window_callbacks();
 					// Simulate mouse-enter event when mouse is over the window, since OS event might arrive before setting callbacks.
 					if (!mouse_in_window && Rect2(position, size).has_point(DisplayServer::get_singleton()->mouse_get_position())) {
-						_event_callback(DisplayServer::WINDOW_EVENT_MOUSE_ENTER);
+						_event_callback(DisplayServerEnums::WINDOW_EVENT_MOUSE_ENTER);
 					}
 					RS::get_singleton()->viewport_set_update_mode(get_viewport_rid(), RSE::VIEWPORT_UPDATE_WHEN_VISIBLE);
 					if (DisplayServer::get_singleton()->window_get_flag(DisplayServerEnums::WindowFlags(FLAG_TRANSPARENT), window_id)) {

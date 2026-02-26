@@ -137,9 +137,9 @@ Error EmbeddedDebugger::_msg_event(const Array &p_args) {
 
 Error EmbeddedDebugger::_msg_win_event(const Array &p_args) {
 	ERR_FAIL_COND_V_MSG(p_args.size() != 1, ERR_INVALID_PARAMETER, "Invalid number of arguments for 'win_event' message.");
-	DisplayServer::WindowEvent win_event = p_args[0];
+	DisplayServerEnums::WindowEvent win_event = p_args[0];
 	ds->send_window_event(win_event, DisplayServerEnums::MAIN_WINDOW_ID);
-	if (win_event == DisplayServer::WindowEvent::WINDOW_EVENT_MOUSE_EXIT) {
+	if (win_event == DisplayServerEnums::WindowEvent::WINDOW_EVENT_MOUSE_EXIT) {
 		Input::get_singleton()->release_pressed_events();
 	}
 	return OK;

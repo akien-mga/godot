@@ -172,7 +172,7 @@ public:
 	virtual void window_set_rect_changed_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) override;
 	virtual void window_set_drop_files_callback(const Callable &p_callable, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) override;
 
-	void send_window_event(WindowEvent p_event, bool p_deferred = false) const;
+	void send_window_event(DisplayServerEnums::WindowEvent p_event, bool p_deferred = false) const;
 	void send_input_event(const Ref<InputEvent> &p_event) const;
 	void send_input_text(const String &p_text) const;
 

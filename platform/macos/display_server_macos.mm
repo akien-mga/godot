@@ -413,18 +413,18 @@ DisplayServerEnums::WindowID DisplayServerMacOS::_get_focused_window_or_popup() 
 void DisplayServerMacOS::mouse_enter_window(DisplayServerEnums::WindowID p_window) {
 	if (window_mouseover_id != p_window) {
 		if (window_mouseover_id != DisplayServerEnums::INVALID_WINDOW_ID) {
-			send_window_event(windows[window_mouseover_id], WINDOW_EVENT_MOUSE_EXIT);
+			send_window_event(windows[window_mouseover_id], DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT);
 		}
 		window_mouseover_id = p_window;
 		if (p_window != DisplayServerEnums::INVALID_WINDOW_ID) {
-			send_window_event(windows[p_window], WINDOW_EVENT_MOUSE_ENTER);
+			send_window_event(windows[p_window], DisplayServerEnums::WINDOW_EVENT_MOUSE_ENTER);
 		}
 	}
 }
 
 void DisplayServerMacOS::mouse_exit_window(DisplayServerEnums::WindowID p_window) {
 	if (window_mouseover_id == p_window && p_window != DisplayServerEnums::INVALID_WINDOW_ID) {
-		send_window_event(windows[p_window], WINDOW_EVENT_MOUSE_EXIT);
+		send_window_event(windows[p_window], DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT);
 	}
 	window_mouseover_id = DisplayServerEnums::INVALID_WINDOW_ID;
 }
@@ -656,7 +656,7 @@ void DisplayServerMacOS::send_event(NSEvent *p_event) {
 	}
 }
 
-void DisplayServerMacOS::send_window_event(const WindowData &wd, WindowEvent p_event) {
+void DisplayServerMacOS::send_window_event(const WindowData &wd, DisplayServerEnums::WindowEvent p_event) {
 	_THREAD_SAFE_METHOD_
 
 	if (wd.event_callback.is_valid()) {
@@ -2457,7 +2457,7 @@ void DisplayServerMacOS::window_set_flag(DisplayServerEnums::WindowFlags p_flag,
 				}
 			}
 			[wd.window_object setFrame:rect display:YES];
-			send_window_event(wd, DisplayServerMacOS::WINDOW_EVENT_TITLEBAR_CHANGE);
+			send_window_event(wd, DisplayServerEnums::WINDOW_EVENT_TITLEBAR_CHANGE);
 		} break;
 		case DisplayServerEnums::WINDOW_FLAG_BORDERLESS: {
 			if (wd.fullscreen) {
@@ -3537,7 +3537,7 @@ void DisplayServerMacOS::popup_open(DisplayServerEnums::WindowID p_window) {
 			}
 		}
 		if (C) {
-			send_window_event(windows[C->get()], DisplayServerMacOS::WINDOW_EVENT_CLOSE_REQUEST);
+			send_window_event(windows[C->get()], DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST);
 		}
 
 		if (was_empty && popup_list.is_empty()) {
@@ -3561,7 +3561,7 @@ void DisplayServerMacOS::popup_close(DisplayServerEnums::WindowID p_window) {
 
 		if (win_id != p_window) {
 			// Only request close on related windows, not this window.  We are already processing it.
-			send_window_event(windows[win_id], DisplayServerMacOS::WINDOW_EVENT_CLOSE_REQUEST);
+			send_window_event(windows[win_id], DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST);
 		}
 		E = F;
 	}
@@ -3580,7 +3580,7 @@ bool DisplayServerMacOS::mouse_process_popups(bool p_close) {
 		// Close all popups.
 		List<DisplayServerEnums::WindowID>::Element *E = popup_list.front();
 		if (E) {
-			send_window_event(windows[E->get()], DisplayServerMacOS::WINDOW_EVENT_CLOSE_REQUEST);
+			send_window_event(windows[E->get()], DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST);
 			closed = true;
 		}
 		if (!was_empty) {
@@ -3612,7 +3612,7 @@ bool DisplayServerMacOS::mouse_process_popups(bool p_close) {
 			}
 		}
 		if (C) {
-			send_window_event(windows[C->get()], DisplayServerMacOS::WINDOW_EVENT_CLOSE_REQUEST);
+			send_window_event(windows[C->get()], DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST);
 			closed = true;
 		}
 		if (!was_empty && popup_list.is_empty()) {

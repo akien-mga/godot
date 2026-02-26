@@ -4918,7 +4918,7 @@ void DisplayServerWindows::_drag_event(DisplayServerEnums::WindowID p_window, fl
 	curr->get() = Vector2(p_x, p_y);
 }
 
-void DisplayServerWindows::_send_window_event(const WindowData &wd, WindowEvent p_event) {
+void DisplayServerWindows::_send_window_event(const WindowData &wd, DisplayServerEnums::WindowEvent p_event) {
 	if (wd.event_callback.is_valid()) {
 		Variant event = int(p_event);
 		wd.event_callback.call(event);
@@ -5045,7 +5045,7 @@ void DisplayServerWindows::popup_open(DisplayServerEnums::WindowID p_window) {
 			}
 		}
 		if (C) {
-			_send_window_event(windows[C->get()], DisplayServerWindows::WINDOW_EVENT_CLOSE_REQUEST);
+			_send_window_event(windows[C->get()], DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST);
 		}
 
 		time_since_popup = OS::get_singleton()->get_ticks_msec();
@@ -5064,7 +5064,7 @@ void DisplayServerWindows::popup_close(DisplayServerEnums::WindowID p_window) {
 
 		if (win_id != p_window) {
 			// Only request close on related windows, not this window.  We are already processing it.
-			_send_window_event(windows[win_id], DisplayServerWindows::WINDOW_EVENT_CLOSE_REQUEST);
+			_send_window_event(windows[win_id], DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST);
 		}
 		E = F;
 	}
@@ -5126,7 +5126,7 @@ LRESULT DisplayServerWindows::MouseProc(int code, WPARAM wParam, LPARAM lParam) 
 					}
 				}
 				if (C) {
-					_send_window_event(windows[C->get()], DisplayServerWindows::WINDOW_EVENT_CLOSE_REQUEST);
+					_send_window_event(windows[C->get()], DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST);
 					return 1;
 				}
 			} break;
@@ -5405,7 +5405,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 				KillTimer(windows[window_id].hWnd, windows[window_id].activate_timer_id);
 				windows[window_id].activate_timer_id = 0;
 			}
-			_send_window_event(windows[window_id], WINDOW_EVENT_CLOSE_REQUEST);
+			_send_window_event(windows[window_id], DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST);
 			return 0;
 		}
 		case WM_MOUSELEAVE: {
@@ -5413,7 +5413,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 				old_invalid = true;
 				window_mouseover_id = DisplayServerEnums::INVALID_WINDOW_ID;
 
-				_send_window_event(windows[window_id], WINDOW_EVENT_MOUSE_EXIT);
+				_send_window_event(windows[window_id], DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT);
 			} else if (window_mouseover_id != DisplayServerEnums::INVALID_WINDOW_ID && windows.has(window_mouseover_id)) {
 				// This is reached during drag and drop, after dropping in a different window.
 				// Once-off notification, must call again.
@@ -5735,7 +5735,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 					}
 				}
 				if (C) {
-					_send_window_event(windows[C->get()], DisplayServerWindows::WINDOW_EVENT_CLOSE_REQUEST);
+					_send_window_event(windows[C->get()], DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST);
 				}
 			}
 
@@ -5807,9 +5807,9 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 				if (mouse_mode != MOUSE_MODE_CAPTURED) {
 					if (window_mouseover_id != DisplayServerEnums::INVALID_WINDOW_ID && windows.has(window_mouseover_id)) {
 						// Leave previous window.
-						_send_window_event(windows[window_mouseover_id], WINDOW_EVENT_MOUSE_EXIT);
+						_send_window_event(windows[window_mouseover_id], DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT);
 					}
-					_send_window_event(windows[window_id], WINDOW_EVENT_MOUSE_ENTER);
+					_send_window_event(windows[window_id], DisplayServerEnums::WINDOW_EVENT_MOUSE_ENTER);
 				}
 
 				CursorShape c = cursor_shape;
@@ -5937,11 +5937,11 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 				if (mouse_mode != MOUSE_MODE_CAPTURED) {
 					if (window_mouseover_id != DisplayServerEnums::INVALID_WINDOW_ID && windows.has(window_mouseover_id)) {
 						// Leave previous window.
-						_send_window_event(windows[window_mouseover_id], WINDOW_EVENT_MOUSE_EXIT);
+						_send_window_event(windows[window_mouseover_id], DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT);
 					}
 
 					if (over_id != DisplayServerEnums::INVALID_WINDOW_ID && windows.has(over_id)) {
-						_send_window_event(windows[over_id], WINDOW_EVENT_MOUSE_ENTER);
+						_send_window_event(windows[over_id], DisplayServerEnums::WINDOW_EVENT_MOUSE_ENTER);
 					}
 				}
 
@@ -6420,7 +6420,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			if (mouse_mode == MOUSE_MODE_CAPTURED) {
 				// When SetCapture is used, ALT+F4 hotkey is ignored by Windows, so handle it ourselves
 				if (wParam == VK_F4 && _get_mods().has_flag(WinKeyModifierMask::ALT) && (uMsg == WM_KEYDOWN || uMsg == WM_SYSKEYDOWN)) {
-					_send_window_event(windows[window_id], WINDOW_EVENT_CLOSE_REQUEST);
+					_send_window_event(windows[window_id], DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST);
 				}
 			}
 			[[fallthrough]];
@@ -6533,7 +6533,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			Input::get_singleton()->flush_buffered_events();
 			if (window_mouseover_id == window_id) {
 				window_mouseover_id = DisplayServerEnums::INVALID_WINDOW_ID;
-				_send_window_event(windows[window_id], WINDOW_EVENT_MOUSE_EXIT);
+				_send_window_event(windows[window_id], DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT);
 			}
 		} break;
 		case WM_SETCURSOR: {
@@ -6585,7 +6585,7 @@ void DisplayServerWindows::_process_activate_event(DisplayServerEnums::WindowID 
 		wd.window_focused = true;
 		AccessibilityServer::get_singleton()->set_window_focused(p_window_id, true);
 
-		_send_window_event(wd, WINDOW_EVENT_FOCUS_IN);
+		_send_window_event(wd, DisplayServerEnums::WINDOW_EVENT_FOCUS_IN);
 	} else { // WM_INACTIVE.
 		Input::get_singleton()->release_pressed_events();
 		track_mouse_leave_event(wd.hWnd);
@@ -6600,7 +6600,7 @@ void DisplayServerWindows::_process_activate_event(DisplayServerEnums::WindowID 
 		wd.window_focused = false;
 		AccessibilityServer::get_singleton()->set_window_focused(p_window_id, false);
 
-		_send_window_event(wd, WINDOW_EVENT_FOCUS_OUT);
+		_send_window_event(wd, DisplayServerEnums::WINDOW_EVENT_FOCUS_OUT);
 	}
 
 	if ((tablet_get_current_driver() == "wintab") && wintab_available && wd.wtctx) {

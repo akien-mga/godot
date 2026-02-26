@@ -52,9 +52,9 @@ void DisplayServerMock::_set_window_over(bool p_over) {
 		return;
 	}
 	window_over = p_over;
-	_send_window_event(p_over ? WINDOW_EVENT_MOUSE_ENTER : WINDOW_EVENT_MOUSE_EXIT);
+	_send_window_event(p_over ? DisplayServerEnums::WINDOW_EVENT_MOUSE_ENTER : DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT);
 }
-void DisplayServerMock::_send_window_event(WindowEvent p_event) {
+void DisplayServerMock::_send_window_event(DisplayServerEnums::WindowEvent p_event) {
 	if (event_callback.is_valid()) {
 		Variant event = int(p_event);
 		event_callback.call(event);

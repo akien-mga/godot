@@ -255,7 +255,7 @@ void DisplayServerAppleEmbedded::send_input_text(const String &p_text) const {
 	_window_callback(input_text_callback, p_text);
 }
 
-void DisplayServerAppleEmbedded::send_window_event(DisplayServer::WindowEvent p_event) const {
+void DisplayServerAppleEmbedded::send_window_event(DisplayServerEnums::WindowEvent p_event) const {
 	_window_callback(window_event_callback, int(p_event));
 }
 

@@ -145,7 +145,7 @@ void DisplayServerWeb::request_quit_callback() {
 void DisplayServerWeb::_request_quit_callback() {
 	DisplayServerWeb *ds = get_singleton();
 	if (ds && ds->window_event_callback.is_valid()) {
-		Variant event = int(DisplayServer::WINDOW_EVENT_CLOSE_REQUEST);
+		Variant event = int(DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST);
 		ds->window_event_callback.call(event);
 	}
 }
@@ -1054,10 +1054,10 @@ void DisplayServerWeb::_send_window_event_callback(int p_notification) {
 	if (!ds) {
 		return;
 	}
-	if (p_notification == DisplayServer::WINDOW_EVENT_MOUSE_ENTER || p_notification == DisplayServer::WINDOW_EVENT_MOUSE_EXIT) {
-		ds->cursor_inside_canvas = p_notification == DisplayServer::WINDOW_EVENT_MOUSE_ENTER;
+	if (p_notification == DisplayServerEnums::WINDOW_EVENT_MOUSE_ENTER || p_notification == DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT) {
+		ds->cursor_inside_canvas = p_notification == DisplayServerEnums::WINDOW_EVENT_MOUSE_ENTER;
 	}
-	if (godot_js_is_ime_focused() && (p_notification == DisplayServer::WINDOW_EVENT_FOCUS_IN || p_notification == DisplayServer::WINDOW_EVENT_FOCUS_OUT)) {
+	if (godot_js_is_ime_focused() && (p_notification == DisplayServerEnums::WINDOW_EVENT_FOCUS_IN || p_notification == DisplayServerEnums::WINDOW_EVENT_FOCUS_OUT)) {
 		return;
 	}
 	if (ds->window_event_callback.is_valid()) {
@@ -1176,10 +1176,10 @@ DisplayServerWeb::DisplayServerWeb(const String &p_rendering_driver, DisplayServ
 	godot_js_display_fullscreen_cb(&DisplayServerWeb::fullscreen_change_callback);
 	godot_js_display_window_blur_cb(&DisplayServerWeb::window_blur_callback);
 	godot_js_display_notification_cb(&DisplayServerWeb::send_window_event_callback,
-			WINDOW_EVENT_MOUSE_ENTER,
-			WINDOW_EVENT_MOUSE_EXIT,
-			WINDOW_EVENT_FOCUS_IN,
-			WINDOW_EVENT_FOCUS_OUT);
+			DisplayServerEnums::WINDOW_EVENT_MOUSE_ENTER,
+			DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT,
+			DisplayServerEnums::WINDOW_EVENT_FOCUS_IN,
+			DisplayServerEnums::WINDOW_EVENT_FOCUS_OUT);
 	godot_js_display_vk_cb(&DisplayServerWeb::vk_input_text_callback);
 
 	Input::get_singleton()->set_event_dispatch_function(_dispatch_input_event);

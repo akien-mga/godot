@@ -121,7 +121,7 @@ public:
 	static void _dispatch_input_events(const Ref<InputEvent> &p_event);
 	void send_input_event(const Ref<InputEvent> &p_event) const;
 	void send_input_text(const String &p_text) const;
-	void send_window_event(DisplayServer::WindowEvent p_event) const;
+	void send_window_event(DisplayServerEnums::WindowEvent p_event) const;
 	void _window_callback(const Callable &p_callable, const Variant &p_arg) const;
 
 	void emit_system_theme_changed();

@@ -1435,7 +1435,7 @@ void WaylandThread::_xdg_toplevel_on_close(void *data, struct xdg_toplevel *xdg_
 	Ref<WindowEventMessage> msg;
 	msg.instantiate();
 	msg->id = ws->id;
-	msg->event = DisplayServer::WINDOW_EVENT_CLOSE_REQUEST;
+	msg->event = DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST;
 	ws->wayland_thread->push_message(msg);
 }
 
@@ -1523,7 +1523,7 @@ void WaylandThread::_xdg_popup_on_popup_done(void *data, struct xdg_popup *xdg_p
 	Ref<WindowEventMessage> ev_msg;
 	ev_msg.instantiate();
 	ev_msg->id = ws->id;
-	ev_msg->event = DisplayServer::WINDOW_EVENT_FORCE_CLOSE;
+	ev_msg->event = DisplayServerEnums::WINDOW_EVENT_FORCE_CLOSE;
 
 	ws->wayland_thread->push_message(ev_msg);
 }
@@ -1642,7 +1642,7 @@ void WaylandThread::libdecor_frame_on_close(struct libdecor_frame *frame, void *
 	Ref<WindowEventMessage> winevent_msg;
 	winevent_msg.instantiate();
 	winevent_msg->id = ws->id;
-	winevent_msg->event = DisplayServer::WINDOW_EVENT_CLOSE_REQUEST;
+	winevent_msg->event = DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST;
 
 	ws->wayland_thread->push_message(winevent_msg);
 
@@ -1950,7 +1950,7 @@ void WaylandThread::_wl_pointer_on_frame(void *data, struct wl_pointer *wl_point
 			Ref<WindowEventMessage> msg;
 			msg.instantiate();
 			msg->id = old_pd.pointed_id;
-			msg->event = DisplayServer::WINDOW_EVENT_MOUSE_EXIT;
+			msg->event = DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT;
 
 			wayland_thread->push_message(msg);
 		}
@@ -1959,7 +1959,7 @@ void WaylandThread::_wl_pointer_on_frame(void *data, struct wl_pointer *wl_point
 			Ref<WindowEventMessage> msg;
 			msg.instantiate();
 			msg->id = pd.pointed_id;
-			msg->event = DisplayServer::WINDOW_EVENT_MOUSE_ENTER;
+			msg->event = DisplayServerEnums::WINDOW_EVENT_MOUSE_ENTER;
 
 			wayland_thread->push_message(msg);
 		}
@@ -2293,7 +2293,7 @@ void WaylandThread::_wl_keyboard_on_enter(void *data, struct wl_keyboard *wl_key
 	Ref<WindowEventMessage> msg;
 	msg.instantiate();
 	msg->id = ws->id;
-	msg->event = DisplayServer::WINDOW_EVENT_FOCUS_IN;
+	msg->event = DisplayServerEnums::WINDOW_EVENT_FOCUS_IN;
 	wayland_thread->push_message(msg);
 
 	DEBUG_LOG_WAYLAND_THREAD(vformat("Keyboard focused window %d.", ws->id));
@@ -2329,7 +2329,7 @@ void WaylandThread::_wl_keyboard_on_leave(void *data, struct wl_keyboard *wl_key
 	Ref<WindowEventMessage> msg;
 	msg.instantiate();
 	msg->id = ws->id;
-	msg->event = DisplayServer::WINDOW_EVENT_FOCUS_OUT;
+	msg->event = DisplayServerEnums::WINDOW_EVENT_FOCUS_OUT;
 	wayland_thread->push_message(msg);
 
 	ss->shift_pressed = false;
@@ -2978,7 +2978,7 @@ void WaylandThread::_wp_tablet_tool_on_frame(void *data, struct zwp_tablet_tool_
 			Ref<WindowEventMessage> msg;
 			msg.instantiate();
 			msg->id = old_td.proximal_id;
-			msg->event = DisplayServer::WINDOW_EVENT_MOUSE_EXIT;
+			msg->event = DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT;
 
 			wayland_thread->push_message(msg);
 		}
@@ -2987,7 +2987,7 @@ void WaylandThread::_wp_tablet_tool_on_frame(void *data, struct zwp_tablet_tool_
 			Ref<WindowEventMessage> msg;
 			msg.instantiate();
 			msg->id = td.proximal_id;
-			msg->event = DisplayServer::WINDOW_EVENT_MOUSE_ENTER;
+			msg->event = DisplayServerEnums::WINDOW_EVENT_MOUSE_ENTER;
 
 			wayland_thread->push_message(msg);
 		}
@@ -3617,7 +3617,7 @@ void WaylandThread::window_state_update_size(WindowState *p_ws, int p_width, int
 		Ref<WindowEventMessage> dpi_msg;
 		dpi_msg.instantiate();
 		dpi_msg->id = p_ws->id;
-		dpi_msg->event = DisplayServer::WINDOW_EVENT_DPI_CHANGE;
+		dpi_msg->event = DisplayServerEnums::WINDOW_EVENT_DPI_CHANGE;
 		p_ws->wayland_thread->push_message(dpi_msg);
 	}
 }

@@ -125,7 +125,7 @@ public:
 		GDSOFTCLASS(WindowEventMessage, WindowMessage);
 
 	public:
-		DisplayServer::WindowEvent event;
+		DisplayServerEnums::WindowEvent event;
 	};
 
 	class InputEventMessage : public Message {

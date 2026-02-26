@@ -557,10 +557,10 @@ void DisplayServerX11::_mouse_update_mode() {
 		DisplayServerEnums::WindowID window_id = get_window_at_screen_position(mouse_get_position());
 		if (window_id != DisplayServerEnums::INVALID_WINDOW_ID && window_mouseover_id != window_id) {
 			if (window_mouseover_id != DisplayServerEnums::INVALID_WINDOW_ID) {
-				_send_window_event(windows[window_mouseover_id], WINDOW_EVENT_MOUSE_EXIT);
+				_send_window_event(windows[window_mouseover_id], DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT);
 			}
 			window_mouseover_id = window_id;
-			_send_window_event(windows[window_id], WINDOW_EVENT_MOUSE_ENTER);
+			_send_window_event(windows[window_id], DisplayServerEnums::WINDOW_EVENT_MOUSE_ENTER);
 		}
 	}
 
@@ -2075,7 +2075,7 @@ void DisplayServerX11::delete_sub_window(DisplayServerEnums::WindowID p_id) {
 
 	if (window_mouseover_id == p_id) {
 		window_mouseover_id = DisplayServerEnums::INVALID_WINDOW_ID;
-		_send_window_event(windows[p_id], WINDOW_EVENT_MOUSE_EXIT);
+		_send_window_event(windows[p_id], DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT);
 	}
 
 	while (wd.transient_children.size()) {
@@ -4526,7 +4526,7 @@ void DisplayServerX11::_dispatch_input_event(const Ref<InputEvent> &p_event) {
 	}
 }
 
-void DisplayServerX11::_send_window_event(const WindowData &wd, WindowEvent p_event) {
+void DisplayServerX11::_send_window_event(const WindowData &wd, DisplayServerEnums::WindowEvent p_event) {
 	if (wd.event_callback.is_valid()) {
 		Variant event = int(p_event);
 		wd.event_callback.call(event);
@@ -4683,7 +4683,7 @@ void DisplayServerX11::popup_open(DisplayServerEnums::WindowID p_window) {
 			}
 		}
 		if (C) {
-			_send_window_event(windows[C->get()], DisplayServerX11::WINDOW_EVENT_CLOSE_REQUEST);
+			_send_window_event(windows[C->get()], DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST);
 		}
 
 		time_since_popup = OS::get_singleton()->get_ticks_msec();
@@ -4702,7 +4702,7 @@ void DisplayServerX11::popup_close(DisplayServerEnums::WindowID p_window) {
 
 		if (win_id != p_window) {
 			// Only request close on related windows, not this window.  We are already processing it.
-			_send_window_event(windows[win_id], DisplayServerX11::WINDOW_EVENT_CLOSE_REQUEST);
+			_send_window_event(windows[win_id], DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST);
 		}
 		E = F;
 	}
@@ -4750,7 +4750,7 @@ bool DisplayServerX11::mouse_process_popups() {
 						}
 					}
 					if (C) {
-						_send_window_event(windows[C->get()], DisplayServerX11::WINDOW_EVENT_CLOSE_REQUEST);
+						_send_window_event(windows[C->get()], DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST);
 						closed = true;
 					}
 				}
@@ -5084,7 +5084,7 @@ void DisplayServerX11::process_events() {
 
 				if (!mouse_mode_grab && window_mouseover_id == window_id) {
 					window_mouseover_id = DisplayServerEnums::INVALID_WINDOW_ID;
-					_send_window_event(windows[window_id], WINDOW_EVENT_MOUSE_EXIT);
+					_send_window_event(windows[window_id], DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT);
 				}
 
 			} break;
@@ -5097,10 +5097,10 @@ void DisplayServerX11::process_events() {
 
 				if (!mouse_mode_grab && window_mouseover_id != window_id) {
 					if (window_mouseover_id != DisplayServerEnums::INVALID_WINDOW_ID) {
-						_send_window_event(windows[window_mouseover_id], WINDOW_EVENT_MOUSE_EXIT);
+						_send_window_event(windows[window_mouseover_id], DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT);
 					}
 					window_mouseover_id = window_id;
-					_send_window_event(windows[window_id], WINDOW_EVENT_MOUSE_ENTER);
+					_send_window_event(windows[window_id], DisplayServerEnums::WINDOW_EVENT_MOUSE_ENTER);
 				}
 			} break;
 
@@ -5119,7 +5119,7 @@ void DisplayServerX11::process_events() {
 				wd.focus_order = ++focus_order;
 
 				AccessibilityServer::get_singleton()->set_window_focused(window_id, true);
-				_send_window_event(wd, WINDOW_EVENT_FOCUS_IN);
+				_send_window_event(wd, DisplayServerEnums::WINDOW_EVENT_FOCUS_IN);
 
 				if (mouse_mode_grab) {
 					// Show and update the cursor if confined and the window regained focus.
@@ -5172,7 +5172,7 @@ void DisplayServerX11::process_events() {
 				Input::get_singleton()->release_pressed_events();
 
 				AccessibilityServer::get_singleton()->set_window_focused(window_id, false);
-				_send_window_event(wd, WINDOW_EVENT_FOCUS_OUT);
+				_send_window_event(wd, DisplayServerEnums::WINDOW_EVENT_FOCUS_OUT);
 
 				if (mouse_mode_grab) {
 					for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
@@ -5552,7 +5552,7 @@ void DisplayServerX11::process_events() {
 					break;
 				}
 				if ((unsigned int)event.xclient.data.l[0] == (unsigned int)wm_delete) {
-					_send_window_event(windows[window_id], WINDOW_EVENT_CLOSE_REQUEST);
+					_send_window_event(windows[window_id], DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST);
 				}
 
 				else if ((unsigned int)event.xclient.message_type == (unsigned int)xdnd_enter) {

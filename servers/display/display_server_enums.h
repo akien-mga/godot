@@ -83,6 +83,18 @@ enum WindowFlagsBit {
 	WINDOW_FLAG_MAXIMIZE_DISABLED_BIT = (1 << WINDOW_FLAG_MAXIMIZE_DISABLED),
 };
 
+enum WindowEvent {
+	WINDOW_EVENT_MOUSE_ENTER,
+	WINDOW_EVENT_MOUSE_EXIT,
+	WINDOW_EVENT_FOCUS_IN,
+	WINDOW_EVENT_FOCUS_OUT,
+	WINDOW_EVENT_CLOSE_REQUEST,
+	WINDOW_EVENT_GO_BACK_REQUEST,
+	WINDOW_EVENT_DPI_CHANGE,
+	WINDOW_EVENT_TITLEBAR_CHANGE,
+	WINDOW_EVENT_FORCE_CLOSE,
+};
+
 // Keep the VSyncMode enum values in sync with the `display/window/vsync/vsync_mode`
 // project setting hint.
 enum VSyncMode {

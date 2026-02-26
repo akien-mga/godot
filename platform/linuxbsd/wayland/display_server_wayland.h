@@ -168,7 +168,7 @@ class DisplayServerWayland : public DisplayServer {
 #endif
 	static String _get_app_id_from_context(Context p_context);
 
-	void _send_window_event(WindowEvent p_event, DisplayServerEnums::WindowID p_window_id = DisplayServerEnums::MAIN_WINDOW_ID);
+	void _send_window_event(DisplayServerEnums::WindowEvent p_event, DisplayServerEnums::WindowID p_window_id = DisplayServerEnums::MAIN_WINDOW_ID);
 
 	static void dispatch_input_events(const Ref<InputEvent> &p_event);
 	void _dispatch_input_event(const Ref<InputEvent> &p_event);
