@@ -42,6 +42,8 @@
 class NativeMenu;
 class Texture2D;
 
+#undef CursorShape
+
 namespace InputClassEnums {
 enum MouseMode : int;
 enum CursorShape : int;
