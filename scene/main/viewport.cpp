@@ -1479,7 +1479,7 @@ Vector2 Viewport::get_mouse_position() const {
 		// Rely on the most recent mouse coordinate from an InputEventMouse in push_input.
 		// In this case get_screen_transform is not applicable, because it is ambiguous.
 		return gui.last_mouse_pos;
-	} else if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_MOUSE)) {
+	} else if (DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_MOUSE)) {
 		Transform2D xform = get_screen_transform_internal(true);
 		if (xform.determinant() == 0) {
 			// Screen transform can be non-invertible when the Window is minimized.
@@ -1710,7 +1710,7 @@ void Viewport::_gui_show_tooltip_at(const Point2i &p_pos) {
 	r.size = r.size.ceil();
 	r.size = r.size.min(panel->get_max_size());
 
-	if (!DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_SELF_FITTING_WINDOWS) || gui.tooltip_popup->is_embedded()) {
+	if (!DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_SELF_FITTING_WINDOWS) || gui.tooltip_popup->is_embedded()) {
 		if (r.size.x + r.position.x > vr.size.x + vr.position.x) {
 			// Place it in the opposite direction. If it fails, just hug the border.
 			r.position.x = gui.tooltip_pos.x - r.size.x - tooltip_offset.x;
@@ -2103,7 +2103,7 @@ void Viewport::_gui_input_event(Ref<InputEvent> p_event) {
 			over = gui_find_control(mpos);
 		}
 
-		DisplayServer::CursorShape ds_cursor_shape = (DisplayServer::CursorShape)Input::get_singleton()->get_default_cursor_shape();
+		DisplayServerEnums::CursorShape ds_cursor_shape = (DisplayServerEnums::CursorShape)Input::get_singleton()->get_default_cursor_shape();
 
 		if (over) {
 			Transform2D localizer = over->get_global_transform_with_canvas().affine_inverse();
@@ -2178,7 +2178,7 @@ void Viewport::_gui_input_event(Ref<InputEvent> p_event) {
 				}
 			}
 
-			ds_cursor_shape = (DisplayServer::CursorShape)cursor_shape;
+			ds_cursor_shape = (DisplayServerEnums::CursorShape)cursor_shape;
 
 			if (over->can_process()) {
 				_gui_call_input(over, mm);
@@ -2200,14 +2200,14 @@ void Viewport::_gui_input_event(Ref<InputEvent> p_event) {
 					gui.drag_mouse_over = nullptr;
 				}
 				if (gui.drag_mouse_over) {
-					ds_cursor_shape = DisplayServer::CURSOR_CAN_DROP;
+					ds_cursor_shape = DisplayServerEnums::CURSOR_CAN_DROP;
 				} else {
-					ds_cursor_shape = DisplayServer::CURSOR_FORBIDDEN;
+					ds_cursor_shape = DisplayServerEnums::CURSOR_FORBIDDEN;
 				}
 			}
 		}
 
-		if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_CURSOR_SHAPE) && (gui.dragging || (!section_root->gui.global_dragging && !Object::cast_to<SubViewportContainer>(over)))) {
+		if (DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_CURSOR_SHAPE) && (gui.dragging || (!section_root->gui.global_dragging && !Object::cast_to<SubViewportContainer>(over)))) {
 			// If dragging is active, then set the cursor shape only from the Viewport where dragging started.
 			// If dragging is inactive, then set the cursor shape only when not over a SubViewportContainer.
 			DisplayServer::get_singleton()->cursor_set_shape(ds_cursor_shape);
@@ -2970,8 +2970,8 @@ bool Viewport::_sub_windows_forward_input(const Ref<InputEvent> &p_event) {
 
 				gui.currently_dragged_subwindow->_rect_changed_callback(new_rect);
 
-				if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_CURSOR_SHAPE)) {
-					DisplayServer::get_singleton()->cursor_set_shape(DisplayServer::CURSOR_MOVE);
+				if (DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_CURSOR_SHAPE)) {
+					DisplayServer::get_singleton()->cursor_set_shape(DisplayServerEnums::CURSOR_MOVE);
 				}
 			}
 			if (gui.subwindow_drag == SUB_WINDOW_DRAG_CLOSE) {
@@ -3154,19 +3154,19 @@ bool Viewport::_sub_windows_forward_input(const Ref<InputEvent> &p_event) {
 		if (mm.is_valid()) {
 			SubWindowResize resize = _sub_window_get_resize_margin(gui.subwindow_focused, mm->get_position());
 			if (resize != SUB_WINDOW_RESIZE_DISABLED) {
-				DisplayServer::CursorShape shapes[SUB_WINDOW_RESIZE_MAX] = {
-					DisplayServer::CURSOR_ARROW,
-					DisplayServer::CURSOR_FDIAGSIZE,
-					DisplayServer::CURSOR_VSIZE,
-					DisplayServer::CURSOR_BDIAGSIZE,
-					DisplayServer::CURSOR_HSIZE,
-					DisplayServer::CURSOR_HSIZE,
-					DisplayServer::CURSOR_BDIAGSIZE,
-					DisplayServer::CURSOR_VSIZE,
-					DisplayServer::CURSOR_FDIAGSIZE
+				DisplayServerEnums::CursorShape shapes[SUB_WINDOW_RESIZE_MAX] = {
+					DisplayServerEnums::CURSOR_ARROW,
+					DisplayServerEnums::CURSOR_FDIAGSIZE,
+					DisplayServerEnums::CURSOR_VSIZE,
+					DisplayServerEnums::CURSOR_BDIAGSIZE,
+					DisplayServerEnums::CURSOR_HSIZE,
+					DisplayServerEnums::CURSOR_HSIZE,
+					DisplayServerEnums::CURSOR_BDIAGSIZE,
+					DisplayServerEnums::CURSOR_VSIZE,
+					DisplayServerEnums::CURSOR_FDIAGSIZE
 				};
 
-				if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_CURSOR_SHAPE)) {
+				if (DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_CURSOR_SHAPE)) {
 					DisplayServer::get_singleton()->cursor_set_shape(shapes[resize]);
 				}
 

@@ -132,7 +132,7 @@ public:
 	bool is_inhibit_supported();
 
 	// org.freedesktop.portal.FileChooser methods.
-	Error file_dialog_show(DisplayServerEnums::WindowID p_window_id, const String &p_xid, const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, DisplayServer::FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, bool p_options_in_cb);
+	Error file_dialog_show(DisplayServerEnums::WindowID p_window_id, const String &p_xid, const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, bool p_options_in_cb);
 	void process_callbacks();
 
 	// org.freedesktop.portal.Settings methods.

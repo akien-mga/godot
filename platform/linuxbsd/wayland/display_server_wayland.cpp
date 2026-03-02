@@ -84,19 +84,19 @@
 
 #define WAYLAND_MAX_FRAME_TIME_US (1'000'000)
 
-String DisplayServerWayland::_get_app_id_from_context(Context p_context) {
+String DisplayServerWayland::_get_app_id_from_context(DisplayServerEnums::Context p_context) {
 	String app_id;
 
 	switch (p_context) {
-		case CONTEXT_EDITOR: {
+		case DisplayServerEnums::CONTEXT_EDITOR: {
 			app_id = "org.godotengine.Editor";
 		} break;
 
-		case CONTEXT_PROJECTMAN: {
+		case DisplayServerEnums::CONTEXT_PROJECTMAN: {
 			app_id = "org.godotengine.ProjectManager";
 		} break;
 
-		case CONTEXT_ENGINE:
+		case DisplayServerEnums::CONTEXT_ENGINE:
 		default: {
 			String config_name = GLOBAL_GET("application/config/name");
 			if (config_name.length() != 0) {
@@ -190,52 +190,52 @@ void DisplayServerWayland::_update_window_rect(const Rect2i &p_rect, DisplayServ
 
 // Interface methods.
 
-bool DisplayServerWayland::has_feature(Feature p_feature) const {
+bool DisplayServerWayland::has_feature(DisplayServerEnums::Feature p_feature) const {
 	switch (p_feature) {
 #ifndef DISABLE_DEPRECATED
-		case FEATURE_GLOBAL_MENU: {
+		case DisplayServerEnums::FEATURE_GLOBAL_MENU: {
 			return (native_menu && native_menu->has_feature(NativeMenu::FEATURE_GLOBAL_MENU));
 		} break;
 #endif
-		case FEATURE_MOUSE:
-		case FEATURE_MOUSE_WARP:
-		case FEATURE_CLIPBOARD:
-		case FEATURE_CURSOR_SHAPE:
-		case FEATURE_CUSTOM_CURSOR_SHAPE:
-		case FEATURE_WINDOW_TRANSPARENCY:
-		case FEATURE_ICON:
-		case FEATURE_HIDPI:
-		case FEATURE_SWAP_BUFFERS:
-		case FEATURE_KEEP_SCREEN_ON:
-		case FEATURE_IME:
-		case FEATURE_WINDOW_DRAG:
-		case FEATURE_CLIPBOARD_PRIMARY:
-		case FEATURE_SUBWINDOWS:
-		case FEATURE_WINDOW_EMBEDDING:
-		case FEATURE_SELF_FITTING_WINDOWS: {
+		case DisplayServerEnums::FEATURE_MOUSE:
+		case DisplayServerEnums::FEATURE_MOUSE_WARP:
+		case DisplayServerEnums::FEATURE_CLIPBOARD:
+		case DisplayServerEnums::FEATURE_CURSOR_SHAPE:
+		case DisplayServerEnums::FEATURE_CUSTOM_CURSOR_SHAPE:
+		case DisplayServerEnums::FEATURE_WINDOW_TRANSPARENCY:
+		case DisplayServerEnums::FEATURE_ICON:
+		case DisplayServerEnums::FEATURE_HIDPI:
+		case DisplayServerEnums::FEATURE_SWAP_BUFFERS:
+		case DisplayServerEnums::FEATURE_KEEP_SCREEN_ON:
+		case DisplayServerEnums::FEATURE_IME:
+		case DisplayServerEnums::FEATURE_WINDOW_DRAG:
+		case DisplayServerEnums::FEATURE_CLIPBOARD_PRIMARY:
+		case DisplayServerEnums::FEATURE_SUBWINDOWS:
+		case DisplayServerEnums::FEATURE_WINDOW_EMBEDDING:
+		case DisplayServerEnums::FEATURE_SELF_FITTING_WINDOWS: {
 			return true;
 		} break;
 
-		//case FEATURE_NATIVE_DIALOG:
-		//case FEATURE_NATIVE_DIALOG_INPUT:
+		//case DisplayServerEnums::FEATURE_NATIVE_DIALOG:
+		//case DisplayServerEnums::FEATURE_NATIVE_DIALOG_INPUT:
 #ifdef DBUS_ENABLED
-		case FEATURE_NATIVE_DIALOG_FILE:
-		case FEATURE_NATIVE_DIALOG_FILE_EXTRA:
-		case FEATURE_NATIVE_DIALOG_FILE_MIME: {
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE_EXTRA:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE_MIME: {
 			return (portal_desktop && portal_desktop->is_supported() && portal_desktop->is_file_chooser_supported());
 		} break;
-		case FEATURE_NATIVE_COLOR_PICKER: {
+		case DisplayServerEnums::FEATURE_NATIVE_COLOR_PICKER: {
 			return (portal_desktop && portal_desktop->is_supported() && portal_desktop->is_screenshot_supported());
 		} break;
 #endif
 
 #ifdef SPEECHD_ENABLED
-		case FEATURE_TEXT_TO_SPEECH: {
+		case DisplayServerEnums::FEATURE_TEXT_TO_SPEECH: {
 			return true;
 		} break;
 #endif
 
-		case FEATURE_ACCESSIBILITY_SCREEN_READER: {
+		case DisplayServerEnums::FEATURE_ACCESSIBILITY_SCREEN_READER: {
 			return AccessibilityServer::get_singleton()->is_supported();
 		} break;
 
@@ -348,7 +348,7 @@ void DisplayServerWayland::set_system_theme_change_callback(const Callable &p_ca
 	portal_desktop->set_system_theme_change_callback(p_callable);
 }
 
-Error DisplayServerWayland::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
+Error DisplayServerWayland::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	ERR_FAIL_COND_V(!portal_desktop, ERR_UNAVAILABLE);
 	MutexLock mutex_lock(wayland_thread.mutex);
 
@@ -363,7 +363,7 @@ Error DisplayServerWayland::file_dialog_show(const String &p_title, const String
 	return portal_desktop->file_dialog_show(window_id, (ws ? ws->exported_handle : String()), p_title, p_current_directory, String(), p_filename, p_mode, p_filters, TypedArray<Dictionary>(), p_callback, false);
 }
 
-Error DisplayServerWayland::file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
+Error DisplayServerWayland::file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	ERR_FAIL_COND_V(!portal_desktop, ERR_UNAVAILABLE);
 	MutexLock mutex_lock(wayland_thread.mutex);
 
@@ -385,7 +385,7 @@ void DisplayServerWayland::beep() const {
 }
 
 void DisplayServerWayland::_mouse_update_mode() {
-	MouseMode wanted_mouse_mode = mouse_mode_override_enabled
+	DisplayServerEnums::MouseMode wanted_mouse_mode = mouse_mode_override_enabled
 			? mouse_mode_override
 			: mouse_mode_base;
 
@@ -395,19 +395,19 @@ void DisplayServerWayland::_mouse_update_mode() {
 
 	MutexLock mutex_lock(wayland_thread.mutex);
 
-	bool show_cursor = (wanted_mouse_mode == MOUSE_MODE_VISIBLE || wanted_mouse_mode == MOUSE_MODE_CONFINED);
+	bool show_cursor = (wanted_mouse_mode == DisplayServerEnums::MOUSE_MODE_VISIBLE || wanted_mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED);
 
 	wayland_thread.cursor_set_visible(show_cursor);
 
 	WaylandThread::PointerConstraint constraint = WaylandThread::PointerConstraint::NONE;
 
 	switch (wanted_mouse_mode) {
-		case DisplayServer::MOUSE_MODE_CAPTURED: {
+		case DisplayServerEnums::MOUSE_MODE_CAPTURED: {
 			constraint = WaylandThread::PointerConstraint::LOCKED;
 		} break;
 
-		case DisplayServer::MOUSE_MODE_CONFINED:
-		case DisplayServer::MOUSE_MODE_CONFINED_HIDDEN: {
+		case DisplayServerEnums::MOUSE_MODE_CONFINED:
+		case DisplayServerEnums::MOUSE_MODE_CONFINED_HIDDEN: {
 			constraint = WaylandThread::PointerConstraint::CONFINED;
 		} break;
 
@@ -417,7 +417,7 @@ void DisplayServerWayland::_mouse_update_mode() {
 
 	wayland_thread.pointer_set_constraint(constraint);
 
-	if (wanted_mouse_mode == DisplayServer::MOUSE_MODE_CAPTURED) {
+	if (wanted_mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 		WindowData *pointed_win = windows.getptr(wayland_thread.pointer_get_pointed_window_id());
 		ERR_FAIL_NULL(pointed_win);
 		wayland_thread.pointer_set_hint(pointed_win->rect.size / 2);
@@ -426,8 +426,8 @@ void DisplayServerWayland::_mouse_update_mode() {
 	mouse_mode = wanted_mouse_mode;
 }
 
-void DisplayServerWayland::mouse_set_mode(MouseMode p_mode) {
-	ERR_FAIL_INDEX(p_mode, MouseMode::MOUSE_MODE_MAX);
+void DisplayServerWayland::mouse_set_mode(DisplayServerEnums::MouseMode p_mode) {
+	ERR_FAIL_INDEX(p_mode, DisplayServerEnums::MouseMode::MOUSE_MODE_MAX);
 	if (p_mode == mouse_mode_base) {
 		return;
 	}
@@ -435,12 +435,12 @@ void DisplayServerWayland::mouse_set_mode(MouseMode p_mode) {
 	_mouse_update_mode();
 }
 
-DisplayServerWayland::MouseMode DisplayServerWayland::mouse_get_mode() const {
+DisplayServerEnums::MouseMode DisplayServerWayland::mouse_get_mode() const {
 	return mouse_mode;
 }
 
-void DisplayServerWayland::mouse_set_mode_override(MouseMode p_mode) {
-	ERR_FAIL_INDEX(p_mode, MouseMode::MOUSE_MODE_MAX);
+void DisplayServerWayland::mouse_set_mode_override(DisplayServerEnums::MouseMode p_mode) {
+	ERR_FAIL_INDEX(p_mode, DisplayServerEnums::MouseMode::MOUSE_MODE_MAX);
 	if (p_mode == mouse_mode_override) {
 		return;
 	}
@@ -448,7 +448,7 @@ void DisplayServerWayland::mouse_set_mode_override(MouseMode p_mode) {
 	_mouse_update_mode();
 }
 
-DisplayServerWayland::MouseMode DisplayServerWayland::mouse_get_mode_override() const {
+DisplayServerEnums::MouseMode DisplayServerWayland::mouse_get_mode_override() const {
 	return mouse_mode_override;
 }
 
@@ -650,7 +650,7 @@ int DisplayServerWayland::screen_get_dpi(int p_screen) const {
 float DisplayServerWayland::screen_get_scale(int p_screen) const {
 	MutexLock mutex_lock(wayland_thread.mutex);
 
-	if (p_screen == SCREEN_OF_MAIN_WINDOW) {
+	if (p_screen == DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) {
 		// Wayland does not expose fractional scale factors at the screen-level, but
 		// some code relies on it. Since this special screen is the default and a lot
 		// of code relies on it, we'll return the window's scale, which is what we
@@ -951,36 +951,36 @@ Rect2i DisplayServerWayland::window_get_popup_safe_rect(DisplayServerEnums::Wind
 	return windows[p_window].safe_rect;
 }
 
-int64_t DisplayServerWayland::window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
+int64_t DisplayServerWayland::window_get_native_handle(DisplayServerEnums::HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
 	MutexLock mutex_lock(wayland_thread.mutex);
 
 	switch (p_handle_type) {
-		case DISPLAY_HANDLE: {
+		case DisplayServerEnums::DISPLAY_HANDLE: {
 			return (int64_t)wayland_thread.get_wl_display();
 		} break;
 
-		case WINDOW_HANDLE: {
+		case DisplayServerEnums::WINDOW_HANDLE: {
 			return (int64_t)wayland_thread.window_get_wl_surface(p_window);
 		} break;
 
-		case WINDOW_VIEW: {
+		case DisplayServerEnums::WINDOW_VIEW: {
 			return 0; // Not supported.
 		} break;
 
 #ifdef GLES3_ENABLED
-		case OPENGL_CONTEXT: {
+		case DisplayServerEnums::OPENGL_CONTEXT: {
 			if (egl_manager) {
 				return (int64_t)egl_manager->get_context(p_window);
 			}
 			return 0;
 		} break;
-		case EGL_DISPLAY: {
+		case DisplayServerEnums::EGL_DISPLAY: {
 			if (egl_manager) {
 				return (int64_t)egl_manager->get_display(p_window);
 			}
 			return 0;
 		}
-		case EGL_CONFIG: {
+		case DisplayServerEnums::EGL_CONFIG: {
 			if (egl_manager) {
 				return (int64_t)egl_manager->get_config(p_window);
 			}
@@ -1075,7 +1075,7 @@ void DisplayServerWayland::window_set_drop_files_callback(const Callable &p_call
 }
 
 int DisplayServerWayland::window_get_current_screen(DisplayServerEnums::WindowID p_window_id) const {
-	ERR_FAIL_COND_V(!windows.has(p_window_id), INVALID_SCREEN);
+	ERR_FAIL_COND_V(!windows.has(p_window_id), DisplayServerEnums::INVALID_SCREEN);
 	// Standard Wayland APIs don't support getting the screen of a window.
 	return 0;
 }
@@ -1460,8 +1460,8 @@ void DisplayServerWayland::window_start_resize(DisplayServerEnums::WindowResizeE
 	wayland_thread.window_start_resize(p_edge, p_window);
 }
 
-void DisplayServerWayland::cursor_set_shape(CursorShape p_shape) {
-	ERR_FAIL_INDEX(p_shape, CURSOR_MAX);
+void DisplayServerWayland::cursor_set_shape(DisplayServerEnums::CursorShape p_shape) {
+	ERR_FAIL_INDEX(p_shape, DisplayServerEnums::CURSOR_MAX);
 
 	MutexLock mutex_lock(wayland_thread.mutex);
 
@@ -1471,7 +1471,7 @@ void DisplayServerWayland::cursor_set_shape(CursorShape p_shape) {
 
 	cursor_shape = p_shape;
 
-	if (mouse_mode != MOUSE_MODE_VISIBLE && mouse_mode != MOUSE_MODE_CONFINED) {
+	if (mouse_mode != DisplayServerEnums::MOUSE_MODE_VISIBLE && mouse_mode != DisplayServerEnums::MOUSE_MODE_CONFINED) {
 		// Hidden.
 		return;
 	}
@@ -1479,17 +1479,17 @@ void DisplayServerWayland::cursor_set_shape(CursorShape p_shape) {
 	wayland_thread.cursor_set_shape(p_shape);
 }
 
-DisplayServerWayland::CursorShape DisplayServerWayland::cursor_get_shape() const {
+DisplayServerEnums::CursorShape DisplayServerWayland::cursor_get_shape() const {
 	MutexLock mutex_lock(wayland_thread.mutex);
 
 	return cursor_shape;
 }
 
-void DisplayServerWayland::cursor_set_custom_image(const Ref<Resource> &p_cursor, CursorShape p_shape, const Vector2 &p_hotspot) {
+void DisplayServerWayland::cursor_set_custom_image(const Ref<Resource> &p_cursor, DisplayServerEnums::CursorShape p_shape, const Vector2 &p_hotspot) {
 	MutexLock mutex_lock(wayland_thread.mutex);
 
 	if (p_cursor.is_valid()) {
-		HashMap<CursorShape, CustomCursor>::Iterator cursor_c = custom_cursors.find(p_shape);
+		HashMap<DisplayServerEnums::CursorShape, CustomCursor>::Iterator cursor_c = custom_cursors.find(p_shape);
 
 		if (cursor_c) {
 			if (cursor_c->value.resource == p_cursor && cursor_c->value.hotspot == p_hotspot) {
@@ -1950,7 +1950,7 @@ void DisplayServerWayland::set_icon(const Ref<Image> &p_icon) {
 	wayland_thread.set_icon(p_icon);
 }
 
-void DisplayServerWayland::set_context(Context p_context) {
+void DisplayServerWayland::set_context(DisplayServerEnums::Context p_context) {
 	MutexLock mutex_lock(wayland_thread.mutex);
 
 	DEBUG_LOG_WAYLAND(vformat("Setting context %d.", p_context));
@@ -1986,7 +1986,7 @@ Vector<String> DisplayServerWayland::get_rendering_drivers_func() {
 	return drivers;
 }
 
-DisplayServer *DisplayServerWayland::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServerWayland::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error) {
 	DisplayServer *ds = memnew(DisplayServerWayland(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_resolution, p_context, p_parent_window, r_error));
 	if (r_error != OK) {
 		ERR_PRINT("Can't create the Wayland display server.");
@@ -1997,7 +1997,7 @@ DisplayServer *DisplayServerWayland::create_func(const String &p_rendering_drive
 	return ds;
 }
 
-DisplayServerWayland::DisplayServerWayland(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i &p_resolution, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerWayland::DisplayServerWayland(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i &p_resolution, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error) {
 #if defined(GLES3_ENABLED) || defined(DBUS_ENABLED)
 #ifdef SOWRAP_ENABLED
 #ifdef DEBUG_ENABLED
@@ -2201,7 +2201,7 @@ DisplayServerWayland::DisplayServerWayland(const String &p_rendering_driver, Dis
 		ERR_FAIL_MSG("Video driver not found.");
 	}
 
-	cursor_set_shape(CURSOR_BUSY);
+	cursor_set_shape(DisplayServerEnums::CURSOR_BUSY);
 
 	WindowData &wd = windows[DisplayServerEnums::MAIN_WINDOW_ID];
 

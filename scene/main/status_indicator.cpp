@@ -44,7 +44,7 @@ void StatusIndicator::_notification(int p_what) {
 
 	switch (p_what) {
 		case NOTIFICATION_ENTER_TREE: {
-			if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_STATUS_INDICATOR)) {
+			if (DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_STATUS_INDICATOR)) {
 				if (visible && iid == DisplayServerEnums::INVALID_INDICATOR_ID) {
 					iid = DisplayServer::get_singleton()->create_status_indicator(icon, tooltip, callable_mp(this, &StatusIndicator::_callback));
 					PopupMenu *pm = Object::cast_to<PopupMenu>(get_node_or_null(menu));
@@ -56,7 +56,7 @@ void StatusIndicator::_notification(int p_what) {
 			}
 		} break;
 		case NOTIFICATION_EXIT_TREE: {
-			if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_STATUS_INDICATOR)) {
+			if (DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_STATUS_INDICATOR)) {
 				if (iid != DisplayServerEnums::INVALID_INDICATOR_ID) {
 					PopupMenu *pm = Object::cast_to<PopupMenu>(get_node_or_null(menu));
 					if (pm) {
@@ -161,7 +161,7 @@ void StatusIndicator::set_visible(bool p_visible) {
 	}
 #endif
 
-	if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_STATUS_INDICATOR)) {
+	if (DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_STATUS_INDICATOR)) {
 		if (visible && iid == DisplayServerEnums::INVALID_INDICATOR_ID) {
 			iid = DisplayServer::get_singleton()->create_status_indicator(icon, tooltip, callable_mp(this, &StatusIndicator::_callback));
 			PopupMenu *pm = Object::cast_to<PopupMenu>(get_node_or_null(menu));

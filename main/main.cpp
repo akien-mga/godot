@@ -236,12 +236,12 @@ static bool single_threaded_scene = false;
 // Display
 
 static DisplayServerEnums::WindowMode window_mode = DisplayServerEnums::WINDOW_MODE_WINDOWED;
-static DisplayServer::ScreenOrientation window_orientation = DisplayServer::SCREEN_LANDSCAPE;
+static DisplayServerEnums::ScreenOrientation window_orientation = DisplayServerEnums::SCREEN_LANDSCAPE;
 static DisplayServerEnums::VSyncMode window_vsync_mode = DisplayServerEnums::VSYNC_ENABLED;
 static uint32_t window_flags = 0;
 static Size2i window_size = Size2i(1152, 648);
 
-static int init_screen = DisplayServer::SCREEN_PRIMARY;
+static int init_screen = DisplayServerEnums::SCREEN_PRIMARY;
 static bool init_fullscreen = false;
 static bool init_maximized = false;
 static bool init_windowed = false;
@@ -2680,7 +2680,7 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 			}
 		} else if (initial_position_type == Window::WINDOW_INITIAL_POSITION_CENTER_PRIMARY_SCREEN || initial_position_type == Window::WINDOW_INITIAL_POSITION_CENTER_MAIN_WINDOW_SCREEN) { // Center of Primary Screen.
 			if (!init_use_custom_screen) {
-				init_screen = DisplayServer::SCREEN_PRIMARY;
+				init_screen = DisplayServerEnums::SCREEN_PRIMARY;
 				init_use_custom_screen = true;
 			}
 		} else if (initial_position_type == Window::WINDOW_INITIAL_POSITION_CENTER_OTHER_SCREEN) { // Center of Other Screen.
@@ -2690,12 +2690,12 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 			}
 		} else if (initial_position_type == Window::WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS) { // Center of Screen With Mouse Pointer.
 			if (!init_use_custom_screen) {
-				init_screen = DisplayServer::SCREEN_WITH_MOUSE_FOCUS;
+				init_screen = DisplayServerEnums::SCREEN_WITH_MOUSE_FOCUS;
 				init_use_custom_screen = true;
 			}
 		} else if (initial_position_type == Window::WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_KEYBOARD_FOCUS) { // Center of Screen With Keyboard Focus.
 			if (!init_use_custom_screen) {
-				init_screen = DisplayServer::SCREEN_WITH_KEYBOARD_FOCUS;
+				init_screen = DisplayServerEnums::SCREEN_WITH_KEYBOARD_FOCUS;
 				init_use_custom_screen = true;
 			}
 		}
@@ -2778,7 +2778,7 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 	}
 
 	{
-		window_orientation = DisplayServer::ScreenOrientation(int(GLOBAL_DEF_BASIC("display/window/handheld/orientation", DisplayServer::ScreenOrientation::SCREEN_LANDSCAPE)));
+		window_orientation = DisplayServerEnums::ScreenOrientation(int(GLOBAL_DEF_BASIC("display/window/handheld/orientation", DisplayServerEnums::ScreenOrientation::SCREEN_LANDSCAPE)));
 	}
 	{
 		window_vsync_mode = DisplayServerEnums::VSyncMode(int(GLOBAL_DEF_BASIC("display/window/vsync/vsync_mode", DisplayServerEnums::VSyncMode::VSYNC_ENABLED)));
@@ -3133,7 +3133,7 @@ Error Main::setup2(bool p_show_boot_logo) {
 		}
 
 		if (init_screen == EditorSettings::InitialScreen::INITIAL_SCREEN_AUTO) {
-			init_screen = DisplayServer::SCREEN_PRIMARY;
+			init_screen = DisplayServerEnums::SCREEN_PRIMARY;
 		}
 
 		OS::get_singleton()->benchmark_end_measure("Startup", "Initialize Early Settings");
@@ -3222,13 +3222,13 @@ Error Main::setup2(bool p_show_boot_logo) {
 		Color boot_bg_color = GLOBAL_DEF_BASIC("application/boot_splash/bg_color", boot_splash_bg_color);
 		DisplayServer::set_early_window_clear_color_override(true, boot_bg_color);
 
-		DisplayServer::Context context;
+		DisplayServerEnums::Context context;
 		if (editor) {
-			context = DisplayServer::CONTEXT_EDITOR;
+			context = DisplayServerEnums::CONTEXT_EDITOR;
 		} else if (project_manager) {
-			context = DisplayServer::CONTEXT_PROJECTMAN;
+			context = DisplayServerEnums::CONTEXT_PROJECTMAN;
 		} else {
-			context = DisplayServer::CONTEXT_ENGINE;
+			context = DisplayServerEnums::CONTEXT_ENGINE;
 		}
 
 		if (init_embed_parent_window_id) {
@@ -3392,18 +3392,18 @@ Error Main::setup2(bool p_show_boot_logo) {
 			if (!(force_res || use_custom_res)) {
 				display_server->window_set_size(Size2(window_size) * ui_scale, DisplayServerEnums::MAIN_WINDOW_ID);
 			}
-			if (display_server->has_feature(DisplayServer::FEATURE_SUBWINDOWS) && !display_server->has_feature(DisplayServer::FEATURE_SELF_FITTING_WINDOWS)) {
+			if (display_server->has_feature(DisplayServerEnums::FEATURE_SUBWINDOWS) && !display_server->has_feature(DisplayServerEnums::FEATURE_SELF_FITTING_WINDOWS)) {
 				Size2 real_size = DisplayServer::get_singleton()->window_get_size();
 				Rect2i scr_rect = display_server->screen_get_usable_rect(init_screen);
 				display_server->window_set_position(scr_rect.position + (scr_rect.size - real_size) / 2, DisplayServerEnums::MAIN_WINDOW_ID);
 			}
 		}
 #endif
-		if (display_server->has_feature(DisplayServer::FEATURE_SUBWINDOWS)) {
+		if (display_server->has_feature(DisplayServerEnums::FEATURE_SUBWINDOWS)) {
 			display_server->show_window(DisplayServerEnums::MAIN_WINDOW_ID);
 		}
 
-		if (display_server->has_feature(DisplayServer::FEATURE_ORIENTATION)) {
+		if (display_server->has_feature(DisplayServerEnums::FEATURE_ORIENTATION)) {
 			display_server->screen_set_orientation(window_orientation);
 		}
 
@@ -3934,7 +3934,7 @@ void Main::setup_boot_logo() {
 		}
 
 #if defined(TOOLS_ENABLED) && defined(MACOS_ENABLED)
-		if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_ICON) && OS::get_singleton()->get_bundle_icon_path().is_empty()) {
+		if (DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_ICON) && OS::get_singleton()->get_bundle_icon_path().is_empty()) {
 			Ref<Image> icon = memnew(Image(app_icon_png));
 			DisplayServer::get_singleton()->set_icon(icon);
 		}
@@ -4431,7 +4431,7 @@ int Main::start() {
 
 		bool embed_subwindows = GLOBAL_GET("display/window/subwindows/embed_subwindows");
 
-		if (single_window || (!project_manager && !editor && embed_subwindows) || !DisplayServer::get_singleton()->has_feature(DisplayServer::Feature::FEATURE_SUBWINDOWS)) {
+		if (single_window || (!project_manager && !editor && embed_subwindows) || !DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_SUBWINDOWS)) {
 			sml->get_root()->set_embedding_subwindows(true);
 		}
 
@@ -4718,7 +4718,7 @@ int Main::start() {
 				}
 #endif
 				String mac_icon_path = GLOBAL_GET("application/config/macos_native_icon");
-				if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_NATIVE_ICON) && !mac_icon_path.is_empty() && !has_icon) {
+				if (DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_NATIVE_ICON) && !mac_icon_path.is_empty() && !has_icon) {
 					DisplayServer::get_singleton()->set_native_icon(mac_icon_path);
 					has_icon = true;
 				}
@@ -4726,14 +4726,14 @@ int Main::start() {
 
 #ifdef WINDOWS_ENABLED
 				String win_icon_path = GLOBAL_GET("application/config/windows_native_icon");
-				if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_NATIVE_ICON) && !win_icon_path.is_empty()) {
+				if (DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_NATIVE_ICON) && !win_icon_path.is_empty()) {
 					DisplayServer::get_singleton()->set_native_icon(win_icon_path);
 					has_icon = true;
 				}
 #endif
 
 				String icon_path = GLOBAL_GET("application/config/icon");
-				if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_ICON) && !icon_path.is_empty() && !has_icon) {
+				if (DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_ICON) && !icon_path.is_empty() && !has_icon) {
 					Ref<Image> icon;
 					icon.instantiate();
 					if (ImageLoader::load_image(icon_path, icon) == OK) {
@@ -4776,7 +4776,7 @@ int Main::start() {
 #endif
 	}
 
-	if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_ICON) && !has_icon && OS::get_singleton()->get_bundle_icon_path().is_empty()) {
+	if (DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_ICON) && !has_icon && OS::get_singleton()->get_bundle_icon_path().is_empty()) {
 		Ref<Image> icon = memnew(Image(app_icon_png));
 		DisplayServer::get_singleton()->set_icon(icon);
 	}

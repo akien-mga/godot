@@ -52,7 +52,7 @@ DisplayServerAppleEmbedded *DisplayServerAppleEmbedded::get_singleton() {
 	return (DisplayServerAppleEmbedded *)DisplayServer::get_singleton();
 }
 
-DisplayServerAppleEmbedded::DisplayServerAppleEmbedded(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerAppleEmbedded::DisplayServerAppleEmbedded(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error) {
 	KeyMappingAppleEmbedded::initialize();
 
 	rendering_driver = p_rendering_driver;
@@ -354,34 +354,34 @@ void DisplayServerAppleEmbedded::update_gyroscope(const Vector3 &p_gyroscope) {
 
 // MARK: -
 
-bool DisplayServerAppleEmbedded::has_feature(Feature p_feature) const {
+bool DisplayServerAppleEmbedded::has_feature(DisplayServerEnums::Feature p_feature) const {
 	switch (p_feature) {
 #ifndef DISABLE_DEPRECATED
-		case FEATURE_GLOBAL_MENU: {
+		case DisplayServerEnums::FEATURE_GLOBAL_MENU: {
 			return (native_menu && native_menu->has_feature(NativeMenu::FEATURE_GLOBAL_MENU));
 		} break;
 #endif
-		// case FEATURE_CURSOR_SHAPE:
-		// case FEATURE_CUSTOM_CURSOR_SHAPE:
-		// case FEATURE_HIDPI:
-		// case FEATURE_ICON:
-		// case FEATURE_IME:
-		// case FEATURE_MOUSE:
-		// case FEATURE_MOUSE_WARP:
-		// case FEATURE_NATIVE_DIALOG:
-		// case FEATURE_NATIVE_DIALOG_INPUT:
-		// case FEATURE_NATIVE_DIALOG_FILE:
-		// case FEATURE_NATIVE_DIALOG_FILE_EXTRA:
-		// case FEATURE_NATIVE_DIALOG_FILE_MIME:
-		// case FEATURE_NATIVE_ICON:
-		// case FEATURE_WINDOW_TRANSPARENCY:
-		case FEATURE_CLIPBOARD:
-		case FEATURE_HDR_OUTPUT:
-		case FEATURE_KEEP_SCREEN_ON:
-		case FEATURE_ORIENTATION:
-		case FEATURE_TOUCHSCREEN:
-		case FEATURE_VIRTUAL_KEYBOARD:
-		case FEATURE_TEXT_TO_SPEECH:
+		// case DisplayServerEnums::FEATURE_CURSOR_SHAPE:
+		// case DisplayServerEnums::FEATURE_CUSTOM_CURSOR_SHAPE:
+		// case DisplayServerEnums::FEATURE_HIDPI:
+		// case DisplayServerEnums::FEATURE_ICON:
+		// case DisplayServerEnums::FEATURE_IME:
+		// case DisplayServerEnums::FEATURE_MOUSE:
+		// case DisplayServerEnums::FEATURE_MOUSE_WARP:
+		// case DisplayServerEnums::FEATURE_NATIVE_DIALOG:
+		// case DisplayServerEnums::FEATURE_NATIVE_DIALOG_INPUT:
+		// case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE:
+		// case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE_EXTRA:
+		// case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE_MIME:
+		// case DisplayServerEnums::FEATURE_NATIVE_ICON:
+		// case DisplayServerEnums::FEATURE_WINDOW_TRANSPARENCY:
+		case DisplayServerEnums::FEATURE_CLIPBOARD:
+		case DisplayServerEnums::FEATURE_HDR_OUTPUT:
+		case DisplayServerEnums::FEATURE_KEEP_SCREEN_ON:
+		case DisplayServerEnums::FEATURE_ORIENTATION:
+		case DisplayServerEnums::FEATURE_TOUCHSCREEN:
+		case DisplayServerEnums::FEATURE_VIRTUAL_KEYBOARD:
+		case DisplayServerEnums::FEATURE_TEXT_TO_SPEECH:
 			return true;
 		default:
 			return false;
@@ -539,16 +539,16 @@ DisplayServerEnums::WindowID DisplayServerAppleEmbedded::get_window_at_screen_po
 	return DisplayServerEnums::MAIN_WINDOW_ID;
 }
 
-int64_t DisplayServerAppleEmbedded::window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
+int64_t DisplayServerAppleEmbedded::window_get_native_handle(DisplayServerEnums::HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
 	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, 0);
 	switch (p_handle_type) {
-		case DISPLAY_HANDLE: {
+		case DisplayServerEnums::DISPLAY_HANDLE: {
 			return 0; // Not supported.
 		}
-		case WINDOW_HANDLE: {
+		case DisplayServerEnums::WINDOW_HANDLE: {
 			return (int64_t)GDTAppDelegateService.viewController;
 		}
-		case WINDOW_VIEW: {
+		case DisplayServerEnums::WINDOW_VIEW: {
 			return (int64_t)GDTAppDelegateService.viewController.godotView;
 		}
 		default: {
@@ -570,7 +570,7 @@ void DisplayServerAppleEmbedded::window_set_title(const String &p_title, Display
 }
 
 int DisplayServerAppleEmbedded::window_get_current_screen(DisplayServerEnums::WindowID p_window) const {
-	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, INVALID_SCREEN);
+	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, DisplayServerEnums::INVALID_SCREEN);
 	return 0;
 }
 
@@ -656,10 +656,10 @@ bool DisplayServerAppleEmbedded::window_is_focused(DisplayServerEnums::WindowID 
 }
 
 float DisplayServerAppleEmbedded::screen_get_max_scale() const {
-	return screen_get_scale(SCREEN_OF_MAIN_WINDOW);
+	return screen_get_scale(DisplayServerEnums::SCREEN_OF_MAIN_WINDOW);
 }
 
-void DisplayServerAppleEmbedded::screen_set_orientation(DisplayServer::ScreenOrientation p_orientation, int p_screen) {
+void DisplayServerAppleEmbedded::screen_set_orientation(DisplayServerEnums::ScreenOrientation p_orientation, int p_screen) {
 	p_screen = _get_screen_index(p_screen);
 	int screen_count = get_screen_count();
 	ERR_FAIL_INDEX(p_screen, screen_count);
@@ -675,10 +675,10 @@ void DisplayServerAppleEmbedded::screen_set_orientation(DisplayServer::ScreenOri
 #endif
 }
 
-DisplayServer::ScreenOrientation DisplayServerAppleEmbedded::screen_get_orientation(int p_screen) const {
+DisplayServerEnums::ScreenOrientation DisplayServerAppleEmbedded::screen_get_orientation(int p_screen) const {
 	p_screen = _get_screen_index(p_screen);
 	int screen_count = get_screen_count();
-	ERR_FAIL_INDEX_V(p_screen, screen_count, SCREEN_LANDSCAPE);
+	ERR_FAIL_INDEX_V(p_screen, screen_count, DisplayServerEnums::SCREEN_LANDSCAPE);
 
 	return screen_orientation;
 }
@@ -705,37 +705,37 @@ _FORCE_INLINE_ int _convert_utf32_offset_to_utf16(const String &p_existing_text,
 	return limit;
 }
 
-void DisplayServerAppleEmbedded::virtual_keyboard_show(const String &p_existing_text, const Rect2 &p_screen_rect, VirtualKeyboardType p_type, int p_max_length, int p_cursor_start, int p_cursor_end) {
+void DisplayServerAppleEmbedded::virtual_keyboard_show(const String &p_existing_text, const Rect2 &p_screen_rect, DisplayServerEnums::VirtualKeyboardType p_type, int p_max_length, int p_cursor_start, int p_cursor_end) {
 	NSString *existingString = [[NSString alloc] initWithUTF8String:p_existing_text.utf8().get_data()];
 
 	GDTAppDelegateService.viewController.keyboardView.keyboardType = UIKeyboardTypeDefault;
 	GDTAppDelegateService.viewController.keyboardView.textContentType = nil;
 	switch (p_type) {
-		case KEYBOARD_TYPE_DEFAULT: {
+		case DisplayServerEnums::KEYBOARD_TYPE_DEFAULT: {
 			GDTAppDelegateService.viewController.keyboardView.keyboardType = UIKeyboardTypeDefault;
 		} break;
-		case KEYBOARD_TYPE_MULTILINE: {
+		case DisplayServerEnums::KEYBOARD_TYPE_MULTILINE: {
 			GDTAppDelegateService.viewController.keyboardView.keyboardType = UIKeyboardTypeDefault;
 		} break;
-		case KEYBOARD_TYPE_NUMBER: {
+		case DisplayServerEnums::KEYBOARD_TYPE_NUMBER: {
 			GDTAppDelegateService.viewController.keyboardView.keyboardType = UIKeyboardTypeNumberPad;
 		} break;
-		case KEYBOARD_TYPE_NUMBER_DECIMAL: {
+		case DisplayServerEnums::KEYBOARD_TYPE_NUMBER_DECIMAL: {
 			GDTAppDelegateService.viewController.keyboardView.keyboardType = UIKeyboardTypeDecimalPad;
 		} break;
-		case KEYBOARD_TYPE_PHONE: {
+		case DisplayServerEnums::KEYBOARD_TYPE_PHONE: {
 			GDTAppDelegateService.viewController.keyboardView.keyboardType = UIKeyboardTypePhonePad;
 			GDTAppDelegateService.viewController.keyboardView.textContentType = UITextContentTypeTelephoneNumber;
 		} break;
-		case KEYBOARD_TYPE_EMAIL_ADDRESS: {
+		case DisplayServerEnums::KEYBOARD_TYPE_EMAIL_ADDRESS: {
 			GDTAppDelegateService.viewController.keyboardView.keyboardType = UIKeyboardTypeEmailAddress;
 			GDTAppDelegateService.viewController.keyboardView.textContentType = UITextContentTypeEmailAddress;
 		} break;
-		case KEYBOARD_TYPE_PASSWORD: {
+		case DisplayServerEnums::KEYBOARD_TYPE_PASSWORD: {
 			GDTAppDelegateService.viewController.keyboardView.keyboardType = UIKeyboardTypeDefault;
 			GDTAppDelegateService.viewController.keyboardView.textContentType = UITextContentTypePassword;
 		} break;
-		case KEYBOARD_TYPE_URL: {
+		case DisplayServerEnums::KEYBOARD_TYPE_URL: {
 			GDTAppDelegateService.viewController.keyboardView.keyboardType = UIKeyboardTypeWebSearch;
 			GDTAppDelegateService.viewController.keyboardView.textContentType = UITextContentTypeURL;
 		} break;

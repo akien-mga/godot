@@ -69,7 +69,6 @@
 #endif
 
 #undef BitMap
-#undef CursorShape
 #undef FontVariation
 
 #ifdef TOOLS_ENABLED
@@ -185,7 +184,7 @@ private:
 	NativeMenuMacOS *native_menu = nullptr;
 
 	CGEventSourceRef event_source;
-	void _mouse_apply_mode(MouseMode p_prev_mode, MouseMode p_new_mode) override;
+	void _mouse_apply_mode(DisplayServerEnums::MouseMode p_prev_mode, DisplayServerEnums::MouseMode p_new_mode) override;
 
 	HDROutput &_get_hdr_output(DisplayServerEnums::WindowID p_window) override;
 	const HDROutput &_get_hdr_output(DisplayServerEnums::WindowID p_window) const override;
@@ -201,8 +200,8 @@ private:
 	mutable bool displays_arrangement_dirty = true;
 	bool is_resizing = false;
 
-	NSCursor *cursors[CURSOR_MAX];
-	HashMap<CursorShape, Vector<Variant>> cursors_cache;
+	NSCursor *cursors[DisplayServerEnums::CURSOR_MAX];
+	HashMap<DisplayServerEnums::CursorShape, Vector<Variant>> cursors_cache;
 
 	HashMap<DisplayServerEnums::WindowID, WindowData> windows;
 
@@ -237,7 +236,7 @@ private:
 
 	static NSCursor *_cursor_from_selector(SEL p_selector, SEL p_fallback = nil);
 
-	Error _file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, bool p_options_in_cb, DisplayServerEnums::WindowID p_window_id);
+	Error _file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, bool p_options_in_cb, DisplayServerEnums::WindowID p_window_id);
 
 #ifdef TOOLS_ENABLED
 	struct EmbeddedProcessData {
@@ -291,7 +290,7 @@ public:
 	void window_set_custom_window_buttons(WindowData &p_wd, bool p_enabled);
 	void set_window_per_pixel_transparency_enabled(bool p_enabled, DisplayServerEnums::WindowID p_window);
 
-	virtual bool has_feature(Feature p_feature) const override;
+	virtual bool has_feature(DisplayServerEnums::Feature p_feature) const override;
 	virtual String get_name() const override;
 
 	virtual void help_set_search_callbacks(const Callable &p_search_callback = Callable(), const Callable &p_action_callback = Callable()) override;
@@ -301,8 +300,8 @@ public:
 	virtual Error dialog_show(String p_title, String p_description, Vector<String> p_buttons, const Callable &p_callback) override;
 	virtual Error dialog_input_text(String p_title, String p_description, String p_partial, const Callable &p_callback) override;
 
-	virtual Error file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) override;
-	virtual Error file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) override;
+	virtual Error file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) override;
+	virtual Error file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) override;
 
 	bool update_mouse_wrap(WindowData &p_wd, NSPoint &r_delta, NSPoint &r_mpos, NSTimeInterval p_timestamp);
 	virtual void warp_mouse(const Point2i &p_position) override;
@@ -311,14 +310,14 @@ public:
 
 	virtual int get_screen_count() const override;
 	virtual int get_keyboard_focus_screen() const override;
-	virtual Point2i screen_get_position(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
-	virtual Size2i screen_get_size(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
-	virtual int screen_get_dpi(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
-	virtual float screen_get_scale(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
+	virtual Point2i screen_get_position(int p_screen = DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) const override;
+	virtual Size2i screen_get_size(int p_screen = DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) const override;
+	virtual int screen_get_dpi(int p_screen = DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) const override;
+	virtual float screen_get_scale(int p_screen = DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) const override;
 	virtual float screen_get_max_scale() const override;
-	virtual Rect2i screen_get_usable_rect(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
+	virtual Rect2i screen_get_usable_rect(int p_screen = DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) const override;
 	virtual Color screen_get_pixel(const Point2i &p_position) const override;
-	virtual Ref<Image> screen_get_image(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
+	virtual Ref<Image> screen_get_image(int p_screen = DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) const override;
 	virtual Ref<Image> screen_get_image_rect(const Rect2i &p_rect) const override;
 	virtual Vector<int> get_window_list() const override;
 
@@ -385,7 +384,7 @@ public:
 
 	virtual DisplayServerEnums::WindowID get_window_at_screen_position(const Point2i &p_position) const override;
 
-	virtual int64_t window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const override;
+	virtual int64_t window_get_native_handle(DisplayServerEnums::HandleType p_handle_type, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const override;
 
 	virtual void window_attach_instance_id(ObjectID p_instance, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) override;
 	virtual ObjectID window_get_attached_instance_id(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const override;
@@ -407,8 +406,8 @@ public:
 	virtual Vector3i window_get_safe_title_margins(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const override;
 
 	void cursor_update_shape();
-	virtual void cursor_set_shape(CursorShape p_shape) override;
-	virtual void cursor_set_custom_image(const Ref<Resource> &p_cursor, CursorShape p_shape = CURSOR_ARROW, const Vector2 &p_hotspot = Vector2()) override;
+	virtual void cursor_set_shape(DisplayServerEnums::CursorShape p_shape) override;
+	virtual void cursor_set_custom_image(const Ref<Resource> &p_cursor, DisplayServerEnums::CursorShape p_shape = DisplayServerEnums::CURSOR_ARROW, const Vector2 &p_hotspot = Vector2()) override;
 
 	virtual bool get_swap_cancel_ok() override;
 
@@ -441,11 +440,11 @@ public:
 
 	void window_get_edr_values(DisplayServerEnums::WindowID p_window, CGFloat *r_max_potential_edr_value, CGFloat *r_max_edr_value) const override;
 
-	static DisplayServer *create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error);
+	static DisplayServer *create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error);
 	static Vector<String> get_rendering_drivers_func();
 
 	static void register_macos_driver();
 
-	DisplayServerMacOS(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error);
+	DisplayServerMacOS(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error);
 	~DisplayServerMacOS();
 };

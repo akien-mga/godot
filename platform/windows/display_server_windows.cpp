@@ -118,44 +118,44 @@ static void track_mouse_leave_event(HWND hWnd) {
 	TrackMouseEvent(&tme);
 }
 
-bool DisplayServerWindows::has_feature(Feature p_feature) const {
+bool DisplayServerWindows::has_feature(DisplayServerEnums::Feature p_feature) const {
 	switch (p_feature) {
 #ifndef DISABLE_DEPRECATED
-		case FEATURE_GLOBAL_MENU: {
+		case DisplayServerEnums::FEATURE_GLOBAL_MENU: {
 			return (native_menu && native_menu->has_feature(NativeMenu::FEATURE_GLOBAL_MENU));
 		} break;
 #endif
-		case FEATURE_SUBWINDOWS:
-		case FEATURE_TOUCHSCREEN:
-		case FEATURE_MOUSE:
-		case FEATURE_MOUSE_WARP:
-		case FEATURE_CLIPBOARD:
-		case FEATURE_CURSOR_SHAPE:
-		case FEATURE_CUSTOM_CURSOR_SHAPE:
-		case FEATURE_IME:
-		case FEATURE_WINDOW_TRANSPARENCY:
-		case FEATURE_HIDPI:
-		case FEATURE_ICON:
-		case FEATURE_NATIVE_ICON:
-		case FEATURE_NATIVE_DIALOG:
-		case FEATURE_NATIVE_DIALOG_INPUT:
-		case FEATURE_NATIVE_DIALOG_FILE:
-		case FEATURE_NATIVE_DIALOG_FILE_EXTRA:
-		//case FEATURE_NATIVE_DIALOG_FILE_MIME:
-		case FEATURE_SWAP_BUFFERS:
-		case FEATURE_KEEP_SCREEN_ON:
-		case FEATURE_TEXT_TO_SPEECH:
-		case FEATURE_SCREEN_CAPTURE:
-		case FEATURE_STATUS_INDICATOR:
-		case FEATURE_WINDOW_EMBEDDING:
-		case FEATURE_WINDOW_DRAG:
-		case FEATURE_HDR_OUTPUT:
+		case DisplayServerEnums::FEATURE_SUBWINDOWS:
+		case DisplayServerEnums::FEATURE_TOUCHSCREEN:
+		case DisplayServerEnums::FEATURE_MOUSE:
+		case DisplayServerEnums::FEATURE_MOUSE_WARP:
+		case DisplayServerEnums::FEATURE_CLIPBOARD:
+		case DisplayServerEnums::FEATURE_CURSOR_SHAPE:
+		case DisplayServerEnums::FEATURE_CUSTOM_CURSOR_SHAPE:
+		case DisplayServerEnums::FEATURE_IME:
+		case DisplayServerEnums::FEATURE_WINDOW_TRANSPARENCY:
+		case DisplayServerEnums::FEATURE_HIDPI:
+		case DisplayServerEnums::FEATURE_ICON:
+		case DisplayServerEnums::FEATURE_NATIVE_ICON:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG_INPUT:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE_EXTRA:
+		//case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE_MIME:
+		case DisplayServerEnums::FEATURE_SWAP_BUFFERS:
+		case DisplayServerEnums::FEATURE_KEEP_SCREEN_ON:
+		case DisplayServerEnums::FEATURE_TEXT_TO_SPEECH:
+		case DisplayServerEnums::FEATURE_SCREEN_CAPTURE:
+		case DisplayServerEnums::FEATURE_STATUS_INDICATOR:
+		case DisplayServerEnums::FEATURE_WINDOW_EMBEDDING:
+		case DisplayServerEnums::FEATURE_WINDOW_DRAG:
+		case DisplayServerEnums::FEATURE_HDR_OUTPUT:
 			return true;
-		case FEATURE_SCREEN_EXCLUDE_FROM_CAPTURE:
+		case DisplayServerEnums::FEATURE_SCREEN_EXCLUDE_FROM_CAPTURE:
 			return (os_ver.dwBuildNumber >= 19041); // Fully supported on Windows 10 Vibranium R1 (2004)+ only, captured as black rect on older versions.
-		case FEATURE_EMOJI_AND_SYMBOL_PICKER:
+		case DisplayServerEnums::FEATURE_EMOJI_AND_SYMBOL_PICKER:
 			return (os_ver.dwBuildNumber >= 17134); // Windows 10 Redstone 4 (1803)+ only.
-		case FEATURE_ACCESSIBILITY_SCREEN_READER: {
+		case DisplayServerEnums::FEATURE_ACCESSIBILITY_SCREEN_READER: {
 			return AccessibilityServer::get_singleton()->is_supported();
 		} break;
 		default:
@@ -210,8 +210,8 @@ Vector2i DisplayServerWindows::_get_screen_expand_offset(int p_screen) const {
 	}
 }
 
-void DisplayServerWindows::_set_mouse_mode_impl(MouseMode p_mode) {
-	if (p_mode == MOUSE_MODE_HIDDEN || p_mode == MOUSE_MODE_CAPTURED || p_mode == MOUSE_MODE_CONFINED_HIDDEN) {
+void DisplayServerWindows::_set_mouse_mode_impl(DisplayServerEnums::MouseMode p_mode) {
+	if (p_mode == DisplayServerEnums::MOUSE_MODE_HIDDEN || p_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED || p_mode == DisplayServerEnums::MOUSE_MODE_CONFINED_HIDDEN) {
 		// Hide cursor before moving.
 		if (hCursor == nullptr) {
 			hCursor = SetCursor(nullptr);
@@ -220,7 +220,7 @@ void DisplayServerWindows::_set_mouse_mode_impl(MouseMode p_mode) {
 		}
 	}
 
-	if (windows.has(DisplayServerEnums::MAIN_WINDOW_ID) && (p_mode == MOUSE_MODE_CAPTURED || p_mode == MOUSE_MODE_CONFINED || p_mode == MOUSE_MODE_CONFINED_HIDDEN)) {
+	if (windows.has(DisplayServerEnums::MAIN_WINDOW_ID) && (p_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED || p_mode == DisplayServerEnums::MOUSE_MODE_CONFINED || p_mode == DisplayServerEnums::MOUSE_MODE_CONFINED_HIDDEN)) {
 		// Mouse is grabbed (captured or confined).
 		DisplayServerEnums::WindowID window_id = _get_focused_window_or_popup();
 		if (!windows.has(window_id)) {
@@ -238,7 +238,7 @@ void DisplayServerWindows::_set_mouse_mode_impl(MouseMode p_mode) {
 		ClientToScreen(wd.hWnd, (POINT *)&clipRect.left);
 		ClientToScreen(wd.hWnd, (POINT *)&clipRect.right);
 		ClipCursor(&clipRect);
-		if (p_mode == MOUSE_MODE_CAPTURED) {
+		if (p_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 			center = window_get_size() / 2;
 			POINT pos = { (int)center.x, (int)center.y };
 			ClientToScreen(wd.hWnd, &pos);
@@ -260,10 +260,10 @@ void DisplayServerWindows::_set_mouse_mode_impl(MouseMode p_mode) {
 		_register_raw_input_devices(DisplayServerEnums::INVALID_WINDOW_ID);
 	}
 
-	if (p_mode == MOUSE_MODE_VISIBLE || p_mode == MOUSE_MODE_CONFINED) {
+	if (p_mode == DisplayServerEnums::MOUSE_MODE_VISIBLE || p_mode == DisplayServerEnums::MOUSE_MODE_CONFINED) {
 		// Show cursor.
-		CursorShape c = cursor_shape;
-		cursor_shape = CURSOR_MAX;
+		DisplayServerEnums::CursorShape c = cursor_shape;
+		cursor_shape = DisplayServerEnums::CURSOR_MAX;
 		cursor_set_shape(c);
 	}
 }
@@ -374,11 +374,11 @@ void DisplayServerWindows::tts_stop() {
 	tts->stop();
 }
 
-Error DisplayServerWindows::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
+Error DisplayServerWindows::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	return _file_dialog_with_options_show(p_title, p_current_directory, String(), p_filename, p_show_hidden, p_mode, p_filters, TypedArray<Dictionary>(), p_callback, false, p_window_id);
 }
 
-Error DisplayServerWindows::file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
+Error DisplayServerWindows::file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	return _file_dialog_with_options_show(p_title, p_current_directory, p_root, p_filename, p_show_hidden, p_mode, p_filters, p_options, p_callback, true, p_window_id);
 }
 
@@ -535,7 +535,7 @@ void DisplayServerWindows::_thread_fd_monitor(void *p_ud) {
 	DisplayServerWindows *ds = static_cast<DisplayServerWindows *>(get_singleton());
 	FileDialogData *fd = (FileDialogData *)p_ud;
 
-	if (fd->mode < 0 && fd->mode >= DisplayServer::FILE_DIALOG_MODE_SAVE_MAX) {
+	if (fd->mode < 0 && fd->mode >= DisplayServerEnums::FILE_DIALOG_MODE_SAVE_MAX) {
 		fd->finished.set();
 		return;
 	}
@@ -616,7 +616,7 @@ void DisplayServerWindows::_thread_fd_monitor(void *p_ud) {
 
 	HRESULT hr = S_OK;
 	IFileDialog *pfd = nullptr;
-	if (fd->mode == DisplayServer::FILE_DIALOG_MODE_SAVE_FILE) {
+	if (fd->mode == DisplayServerEnums::FILE_DIALOG_MODE_SAVE_FILE) {
 		hr = CoCreateInstance(CLSID_FileSaveDialog, nullptr, CLSCTX_INPROC_SERVER, IID_IFileSaveDialog, (void **)&pfd);
 	} else {
 		hr = CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC_SERVER, IID_IFileOpenDialog, (void **)&pfd);
@@ -645,10 +645,10 @@ void DisplayServerWindows::_thread_fd_monitor(void *p_ud) {
 
 		DWORD flags;
 		pfd->GetOptions(&flags);
-		if (fd->mode == DisplayServer::FILE_DIALOG_MODE_OPEN_FILES) {
+		if (fd->mode == DisplayServerEnums::FILE_DIALOG_MODE_OPEN_FILES) {
 			flags |= FOS_ALLOWMULTISELECT;
 		}
-		if (fd->mode == DisplayServer::FILE_DIALOG_MODE_OPEN_DIR) {
+		if (fd->mode == DisplayServerEnums::FILE_DIALOG_MODE_OPEN_DIR) {
 			flags |= FOS_PICKFOLDERS;
 		}
 		if (fd->show_hidden) {
@@ -703,7 +703,7 @@ void DisplayServerWindows::_thread_fd_monitor(void *p_ud) {
 		if (SUCCEEDED(hr)) {
 			Vector<String> file_names;
 
-			if (fd->mode == DisplayServer::FILE_DIALOG_MODE_OPEN_FILES) {
+			if (fd->mode == DisplayServerEnums::FILE_DIALOG_MODE_OPEN_FILES) {
 				IShellItemArray *results;
 				hr = static_cast<IFileOpenDialog *>(pfd)->GetResults(&results);
 				if (SUCCEEDED(hr)) {
@@ -799,10 +799,10 @@ void DisplayServerWindows::_thread_fd_monitor(void *p_ud) {
 	}
 }
 
-Error DisplayServerWindows::_file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, bool p_options_in_cb, DisplayServerEnums::WindowID p_window_id) {
+Error DisplayServerWindows::_file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, bool p_options_in_cb, DisplayServerEnums::WindowID p_window_id) {
 	_THREAD_SAFE_METHOD_
 
-	ERR_FAIL_INDEX_V(int(p_mode), FILE_DIALOG_MODE_SAVE_MAX, FAILED);
+	ERR_FAIL_INDEX_V(int(p_mode), DisplayServerEnums::FILE_DIALOG_MODE_SAVE_MAX, FAILED);
 
 	String appname;
 	if (Engine::get_singleton()->is_editor_hint()) {
@@ -890,7 +890,7 @@ void DisplayServerWindows::beep() const {
 void DisplayServerWindows::_mouse_update_mode() {
 	_THREAD_SAFE_METHOD_
 
-	MouseMode wanted_mouse_mode = mouse_mode_override_enabled
+	DisplayServerEnums::MouseMode wanted_mouse_mode = mouse_mode_override_enabled
 			? mouse_mode_override
 			: mouse_mode_base;
 
@@ -904,8 +904,8 @@ void DisplayServerWindows::_mouse_update_mode() {
 	_set_mouse_mode_impl(wanted_mouse_mode);
 }
 
-void DisplayServerWindows::mouse_set_mode(MouseMode p_mode) {
-	ERR_FAIL_INDEX(p_mode, MouseMode::MOUSE_MODE_MAX);
+void DisplayServerWindows::mouse_set_mode(DisplayServerEnums::MouseMode p_mode) {
+	ERR_FAIL_INDEX(p_mode, DisplayServerEnums::MouseMode::MOUSE_MODE_MAX);
 	if (p_mode == mouse_mode_base) {
 		return;
 	}
@@ -913,12 +913,12 @@ void DisplayServerWindows::mouse_set_mode(MouseMode p_mode) {
 	_mouse_update_mode();
 }
 
-DisplayServer::MouseMode DisplayServerWindows::mouse_get_mode() const {
+DisplayServerEnums::MouseMode DisplayServerWindows::mouse_get_mode() const {
 	return mouse_mode;
 }
 
-void DisplayServerWindows::mouse_set_mode_override(MouseMode p_mode) {
-	ERR_FAIL_INDEX(p_mode, MouseMode::MOUSE_MODE_MAX);
+void DisplayServerWindows::mouse_set_mode_override(DisplayServerEnums::MouseMode p_mode) {
+	ERR_FAIL_INDEX(p_mode, DisplayServerEnums::MouseMode::MOUSE_MODE_MAX);
 	if (p_mode == mouse_mode_override) {
 		return;
 	}
@@ -926,7 +926,7 @@ void DisplayServerWindows::mouse_set_mode_override(MouseMode p_mode) {
 	_mouse_update_mode();
 }
 
-DisplayServer::MouseMode DisplayServerWindows::mouse_get_mode_override() const {
+DisplayServerEnums::MouseMode DisplayServerWindows::mouse_get_mode_override() const {
 	return mouse_mode_override;
 }
 
@@ -951,7 +951,7 @@ void DisplayServerWindows::warp_mouse(const Point2i &p_position) {
 		return; // No focused window?
 	}
 
-	if (mouse_mode == MOUSE_MODE_CAPTURED) {
+	if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 		old_x = p_position.x;
 		old_y = p_position.y;
 	} else {
@@ -1958,24 +1958,24 @@ void DisplayServerWindows::gl_window_make_current(DisplayServerEnums::WindowID p
 #endif
 }
 
-int64_t DisplayServerWindows::window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
+int64_t DisplayServerWindows::window_get_native_handle(DisplayServerEnums::HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
 	ERR_FAIL_COND_V(!windows.has(p_window), 0);
 	switch (p_handle_type) {
-		case DISPLAY_HANDLE: {
+		case DisplayServerEnums::DISPLAY_HANDLE: {
 			return 0; // Not supported.
 		}
-		case WINDOW_HANDLE: {
+		case DisplayServerEnums::WINDOW_HANDLE: {
 			return (int64_t)windows[p_window].hWnd;
 		}
 #if defined(GLES3_ENABLED)
-		case WINDOW_VIEW: {
+		case DisplayServerEnums::WINDOW_VIEW: {
 			if (gl_manager_native) {
 				return (int64_t)gl_manager_native->get_hdc(p_window);
 			} else {
 				return (int64_t)GetDC(windows[p_window].hWnd);
 			}
 		}
-		case OPENGL_CONTEXT: {
+		case DisplayServerEnums::OPENGL_CONTEXT: {
 			if (gl_manager_native) {
 				return (int64_t)gl_manager_native->get_hglrc(p_window);
 			}
@@ -1984,13 +1984,13 @@ int64_t DisplayServerWindows::window_get_native_handle(HandleType p_handle_type,
 			}
 			return 0;
 		}
-		case EGL_DISPLAY: {
+		case DisplayServerEnums::EGL_DISPLAY: {
 			if (gl_manager_angle) {
 				return (int64_t)gl_manager_angle->get_display(p_window);
 			}
 			return 0;
 		}
-		case EGL_CONFIG: {
+		case DisplayServerEnums::EGL_CONFIG: {
 			if (gl_manager_angle) {
 				return (int64_t)gl_manager_angle->get_config(p_window);
 			}
@@ -2156,7 +2156,7 @@ void DisplayServerWindows::_update_window_mouse_passthrough(DisplayServerEnums::
 int DisplayServerWindows::window_get_current_screen(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
 
-	ERR_FAIL_COND_V(!windows.has(p_window), INVALID_SCREEN);
+	ERR_FAIL_COND_V(!windows.has(p_window), DisplayServerEnums::INVALID_SCREEN);
 
 	EnumScreenData data = { 0, 0, MonitorFromWindow(windows[p_window].hWnd, MONITOR_DEFAULTTONEAREST) };
 	EnumDisplayMonitors(nullptr, nullptr, _MonitorEnumProcScreen, (LPARAM)&data);
@@ -3169,21 +3169,21 @@ void DisplayServerWindows::window_set_ime_position(const Point2i &p_pos, Display
 	ImmReleaseContext(wd.hWnd, himc);
 }
 
-void DisplayServerWindows::cursor_set_shape(CursorShape p_shape) {
+void DisplayServerWindows::cursor_set_shape(DisplayServerEnums::CursorShape p_shape) {
 	_THREAD_SAFE_METHOD_
 
-	ERR_FAIL_INDEX(p_shape, CURSOR_MAX);
+	ERR_FAIL_INDEX(p_shape, DisplayServerEnums::CURSOR_MAX);
 
 	if (cursor_shape == p_shape) {
 		return;
 	}
 
-	if (mouse_mode != MOUSE_MODE_VISIBLE && mouse_mode != MOUSE_MODE_CONFINED) {
+	if (mouse_mode != DisplayServerEnums::MOUSE_MODE_VISIBLE && mouse_mode != DisplayServerEnums::MOUSE_MODE_CONFINED) {
 		cursor_shape = p_shape;
 		return;
 	}
 
-	static const LPCTSTR win_cursors[CURSOR_MAX] = {
+	static const LPCTSTR win_cursors[DisplayServerEnums::CURSOR_MAX] = {
 		IDC_ARROW,
 		IDC_IBEAM,
 		IDC_HAND, // Finger.
@@ -3212,17 +3212,17 @@ void DisplayServerWindows::cursor_set_shape(CursorShape p_shape) {
 	cursor_shape = p_shape;
 }
 
-DisplayServer::CursorShape DisplayServerWindows::cursor_get_shape() const {
+DisplayServerEnums::CursorShape DisplayServerWindows::cursor_get_shape() const {
 	return cursor_shape;
 }
 
-void DisplayServerWindows::cursor_set_custom_image(const Ref<Resource> &p_cursor, CursorShape p_shape, const Vector2 &p_hotspot) {
+void DisplayServerWindows::cursor_set_custom_image(const Ref<Resource> &p_cursor, DisplayServerEnums::CursorShape p_shape, const Vector2 &p_hotspot) {
 	_THREAD_SAFE_METHOD_
 
-	ERR_FAIL_INDEX(p_shape, CURSOR_MAX);
+	ERR_FAIL_INDEX(p_shape, DisplayServerEnums::CURSOR_MAX);
 
 	if (p_cursor.is_valid()) {
-		RBMap<CursorShape, Vector<Variant>>::Element *cursor_c = cursors_cache.find(p_shape);
+		RBMap<DisplayServerEnums::CursorShape, Vector<Variant>>::Element *cursor_c = cursors_cache.find(p_shape);
 
 		if (cursor_c) {
 			if (cursor_c->get()[0] == p_cursor && cursor_c->get()[1] == p_hotspot) {
@@ -3293,7 +3293,7 @@ void DisplayServerWindows::cursor_set_custom_image(const Ref<Resource> &p_cursor
 		cursors_cache.insert(p_shape, params);
 
 		if (p_shape == cursor_shape) {
-			if (mouse_mode == MOUSE_MODE_VISIBLE || mouse_mode == MOUSE_MODE_CONFINED) {
+			if (mouse_mode == DisplayServerEnums::MOUSE_MODE_VISIBLE || mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED) {
 				SetCursor(cursors[p_shape]);
 			}
 		}
@@ -3310,8 +3310,8 @@ void DisplayServerWindows::cursor_set_custom_image(const Ref<Resource> &p_cursor
 
 		cursors_cache.erase(p_shape);
 
-		CursorShape c = cursor_shape;
-		cursor_shape = CURSOR_MAX;
+		DisplayServerEnums::CursorShape c = cursor_shape;
+		cursor_shape = DisplayServerEnums::CURSOR_MAX;
 		cursor_set_shape(c);
 	}
 }
@@ -4854,7 +4854,7 @@ void DisplayServerWindows::window_start_resize(DisplayServerEnums::WindowResizeE
 	}
 }
 
-void DisplayServerWindows::set_context(Context p_context) {
+void DisplayServerWindows::set_context(DisplayServerEnums::Context p_context) {
 }
 
 bool DisplayServerWindows::is_window_transparency_available() const {
@@ -5469,7 +5469,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 						}
 					}
 				}
-			} else if (mouse_mode == MOUSE_MODE_CAPTURED && raw->header.dwType == RIM_TYPEMOUSE) {
+			} else if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED && raw->header.dwType == RIM_TYPEMOUSE) {
 				Ref<InputEventMouseMotion> mm;
 				mm.instantiate();
 
@@ -5568,7 +5568,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 					windows[window_id].last_pen_inverted = inverted;
 
 					// Don't calculate relative mouse movement if we don't have focus in CAPTURED mode.
-					if (!windows[window_id].window_focused && mouse_mode == MOUSE_MODE_CAPTURED) {
+					if (!windows[window_id].window_focused && mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 						break;
 					}
 
@@ -5590,7 +5590,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 					mm->set_position(Vector2(coords.x, coords.y));
 					mm->set_global_position(Vector2(coords.x, coords.y));
 
-					if (mouse_mode == MOUSE_MODE_CAPTURED) {
+					if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 						Point2i c(windows[window_id].width / 2, windows[window_id].height / 2);
 						old_x = c.x;
 						old_y = c.y;
@@ -5629,7 +5629,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			}
 		} break;
 		case WM_POINTERENTER: {
-			if (mouse_mode == MOUSE_MODE_CAPTURED && use_raw_input) {
+			if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED && use_raw_input) {
 				break;
 			}
 
@@ -5658,7 +5658,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 		} break;
 		case WM_POINTERDOWN:
 		case WM_POINTERUP: {
-			if (mouse_mode == MOUSE_MODE_CAPTURED && use_raw_input) {
+			if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED && use_raw_input) {
 				break;
 			}
 
@@ -5770,7 +5770,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			return 0;
 		} break;
 		case WM_POINTERUPDATE: {
-			if (mouse_mode == MOUSE_MODE_CAPTURED && use_raw_input) {
+			if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED && use_raw_input) {
 				break;
 			}
 
@@ -5804,7 +5804,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			if (window_mouseover_id != window_id) {
 				// Mouse enter.
 
-				if (mouse_mode != MOUSE_MODE_CAPTURED) {
+				if (mouse_mode != DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 					if (window_mouseover_id != DisplayServerEnums::INVALID_WINDOW_ID && windows.has(window_mouseover_id)) {
 						// Leave previous window.
 						_send_window_event(windows[window_mouseover_id], DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT);
@@ -5812,8 +5812,8 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 					_send_window_event(windows[window_id], DisplayServerEnums::WINDOW_EVENT_MOUSE_ENTER);
 				}
 
-				CursorShape c = cursor_shape;
-				cursor_shape = CURSOR_MAX;
+				DisplayServerEnums::CursorShape c = cursor_shape;
+				cursor_shape = DisplayServerEnums::CURSOR_MAX;
 				cursor_set_shape(c);
 				window_mouseover_id = window_id;
 
@@ -5822,7 +5822,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			}
 
 			// Don't calculate relative mouse movement if we don't have focus in CAPTURED mode.
-			if (!windows[window_id].window_focused && mouse_mode == MOUSE_MODE_CAPTURED) {
+			if (!windows[window_id].window_focused && mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 				break;
 			}
 
@@ -5873,7 +5873,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			mm->set_position(Vector2(coords.x, coords.y));
 			mm->set_global_position(Vector2(coords.x, coords.y));
 
-			if (mouse_mode == MOUSE_MODE_CAPTURED) {
+			if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 				Point2i c(windows[window_id].width / 2, windows[window_id].height / 2);
 				old_x = c.x;
 				old_y = c.y;
@@ -5914,7 +5914,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 				break;
 			}
 
-			if (mouse_mode == MOUSE_MODE_CAPTURED && use_raw_input) {
+			if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED && use_raw_input) {
 				break;
 			}
 
@@ -5934,7 +5934,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			if (window_mouseover_id != over_id) {
 				// Mouse enter.
 
-				if (mouse_mode != MOUSE_MODE_CAPTURED) {
+				if (mouse_mode != DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 					if (window_mouseover_id != DisplayServerEnums::INVALID_WINDOW_ID && windows.has(window_mouseover_id)) {
 						// Leave previous window.
 						_send_window_event(windows[window_mouseover_id], DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT);
@@ -5945,8 +5945,8 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 					}
 				}
 
-				CursorShape c = cursor_shape;
-				cursor_shape = CURSOR_MAX;
+				DisplayServerEnums::CursorShape c = cursor_shape;
+				cursor_shape = DisplayServerEnums::CURSOR_MAX;
 				cursor_set_shape(c);
 				window_mouseover_id = over_id;
 
@@ -5955,7 +5955,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			}
 
 			// Don't calculate relative mouse movement if we don't have focus in CAPTURED mode.
-			if (!windows[window_id].window_focused && mouse_mode == MOUSE_MODE_CAPTURED) {
+			if (!windows[window_id].window_focused && mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 				break;
 			}
 
@@ -6000,7 +6000,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			mm->set_position(Vector2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)));
 			mm->set_global_position(Vector2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)));
 
-			if (mouse_mode == MOUSE_MODE_CAPTURED) {
+			if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 				Point2i c(windows[window_id].width / 2, windows[window_id].height / 2);
 				old_x = c.x;
 				old_y = c.y;
@@ -6181,18 +6181,18 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 
 			mb->set_position(Vector2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)));
 
-			if (mouse_mode == MOUSE_MODE_CAPTURED && !use_raw_input) {
+			if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED && !use_raw_input) {
 				mb->set_position(Vector2(old_x, old_y));
 			}
 
 			if (uMsg != WM_MOUSEWHEEL && uMsg != WM_MOUSEHWHEEL) {
 				if (mb->is_pressed()) {
-					if (++pressrc > 0 && mouse_mode != MOUSE_MODE_CAPTURED) {
+					if (++pressrc > 0 && mouse_mode != DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 						SetCapture(hWnd);
 					}
 				} else {
 					if (--pressrc <= 0 || mouse_get_button_state().is_empty()) {
-						if (mouse_mode != MOUSE_MODE_CAPTURED) {
+						if (mouse_mode != DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 							ReleaseCapture();
 						}
 						pressrc = 0;
@@ -6337,7 +6337,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 				_update_hdr_output_for_tracked_windows();
 
 				// Update cursor clip region after window rect has changed.
-				if (mouse_mode == MOUSE_MODE_CAPTURED || mouse_mode == MOUSE_MODE_CONFINED || mouse_mode == MOUSE_MODE_CONFINED_HIDDEN) {
+				if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED || mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED || mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED_HIDDEN) {
 					RECT crect;
 					GetClientRect(window.hWnd, &crect);
 					crect.right -= off.x;
@@ -6417,7 +6417,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 				break;
 			}
 
-			if (mouse_mode == MOUSE_MODE_CAPTURED) {
+			if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 				// When SetCapture is used, ALT+F4 hotkey is ignored by Windows, so handle it ourselves
 				if (wParam == VK_F4 && _get_mods().has_flag(WinKeyModifierMask::ALT) && (uMsg == WM_KEYDOWN || uMsg == WM_SYSKEYDOWN)) {
 					_send_window_event(windows[window_id], DisplayServerEnums::WINDOW_EVENT_CLOSE_REQUEST);
@@ -6538,7 +6538,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 		} break;
 		case WM_SETCURSOR: {
 			if (LOWORD(lParam) == HTCLIENT) {
-				if (windows[window_id].window_focused && (mouse_mode == MOUSE_MODE_HIDDEN || mouse_mode == MOUSE_MODE_CAPTURED || mouse_mode == MOUSE_MODE_CONFINED_HIDDEN)) {
+				if (windows[window_id].window_focused && (mouse_mode == DisplayServerEnums::MOUSE_MODE_HIDDEN || mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED || mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED_HIDDEN)) {
 					// Hide the cursor.
 					if (hCursor == nullptr) {
 						hCursor = SetCursor(nullptr);
@@ -6547,8 +6547,8 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 					}
 				} else {
 					if (hCursor != nullptr) {
-						CursorShape c = cursor_shape;
-						cursor_shape = CURSOR_MAX;
+						DisplayServerEnums::CursorShape c = cursor_shape;
+						cursor_shape = DisplayServerEnums::CURSOR_MAX;
 						cursor_set_shape(c);
 						hCursor = nullptr;
 					}
@@ -7400,7 +7400,7 @@ void DisplayServerWindows::tablet_set_current_driver(const String &p_driver) {
 	}
 }
 
-DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error) {
 	KeyMappingWindows::initialize();
 
 	tested_drivers.clear();
@@ -7412,7 +7412,7 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Dis
 
 	pressrc = 0;
 	old_invalid = true;
-	mouse_mode = MOUSE_MODE_VISIBLE;
+	mouse_mode = DisplayServerEnums::MOUSE_MODE_VISIBLE;
 
 	rendering_driver = p_rendering_driver;
 
@@ -7617,8 +7617,8 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Dis
 	if (p_position != nullptr) {
 		window_position = *p_position;
 	} else {
-		if (p_screen == SCREEN_OF_MAIN_WINDOW) {
-			p_screen = SCREEN_PRIMARY;
+		if (p_screen == DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) {
+			p_screen = DisplayServerEnums::SCREEN_PRIMARY;
 		}
 		Rect2i scr_rect = screen_get_usable_rect(p_screen);
 		window_position = scr_rect.position + (scr_rect.size - p_resolution) / 2;
@@ -7980,7 +7980,7 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Dis
 		SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 	}
 
-	cursor_shape = CURSOR_ARROW;
+	cursor_shape = DisplayServerEnums::CURSOR_ARROW;
 
 	_update_real_mouse_position(DisplayServerEnums::MAIN_WINDOW_ID);
 
@@ -8008,7 +8008,7 @@ Vector<String> DisplayServerWindows::get_rendering_drivers_func() {
 	return drivers;
 }
 
-DisplayServer *DisplayServerWindows::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServerWindows::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error) {
 	DisplayServer *ds = memnew(DisplayServerWindows(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, p_parent_window, r_error));
 	if (r_error != OK) {
 		if (tested_drivers == 0) {

@@ -64,33 +64,33 @@ DisplayServerAndroid *DisplayServerAndroid::get_singleton() {
 	return static_cast<DisplayServerAndroid *>(DisplayServer::get_singleton());
 }
 
-bool DisplayServerAndroid::has_feature(Feature p_feature) const {
+bool DisplayServerAndroid::has_feature(DisplayServerEnums::Feature p_feature) const {
 	switch (p_feature) {
 #ifndef DISABLE_DEPRECATED
-		case FEATURE_GLOBAL_MENU: {
+		case DisplayServerEnums::FEATURE_GLOBAL_MENU: {
 			return (native_menu && native_menu->has_feature(NativeMenu::FEATURE_GLOBAL_MENU));
 		} break;
 #endif
-		case FEATURE_CURSOR_SHAPE:
-		//case FEATURE_CUSTOM_CURSOR_SHAPE:
-		//case FEATURE_HIDPI:
-		//case FEATURE_ICON:
-		//case FEATURE_IME:
-		case FEATURE_MOUSE:
-		//case FEATURE_MOUSE_WARP:
-		case FEATURE_NATIVE_DIALOG:
-		case FEATURE_NATIVE_DIALOG_INPUT:
-		case FEATURE_NATIVE_DIALOG_FILE:
-		//case FEATURE_NATIVE_DIALOG_FILE_EXTRA:
-		case FEATURE_NATIVE_DIALOG_FILE_MIME:
-		//case FEATURE_NATIVE_ICON:
-		case FEATURE_WINDOW_TRANSPARENCY:
-		case FEATURE_CLIPBOARD:
-		case FEATURE_KEEP_SCREEN_ON:
-		case FEATURE_ORIENTATION:
-		case FEATURE_TOUCHSCREEN:
-		case FEATURE_VIRTUAL_KEYBOARD:
-		case FEATURE_TEXT_TO_SPEECH:
+		case DisplayServerEnums::FEATURE_CURSOR_SHAPE:
+		//case DisplayServerEnums::FEATURE_CUSTOM_CURSOR_SHAPE:
+		//case DisplayServerEnums::FEATURE_HIDPI:
+		//case DisplayServerEnums::FEATURE_ICON:
+		//case DisplayServerEnums::FEATURE_IME:
+		case DisplayServerEnums::FEATURE_MOUSE:
+		//case DisplayServerEnums::FEATURE_MOUSE_WARP:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG_INPUT:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE:
+		//case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE_EXTRA:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE_MIME:
+		//case DisplayServerEnums::FEATURE_NATIVE_ICON:
+		case DisplayServerEnums::FEATURE_WINDOW_TRANSPARENCY:
+		case DisplayServerEnums::FEATURE_CLIPBOARD:
+		case DisplayServerEnums::FEATURE_KEEP_SCREEN_ON:
+		case DisplayServerEnums::FEATURE_ORIENTATION:
+		case DisplayServerEnums::FEATURE_TOUCHSCREEN:
+		case DisplayServerEnums::FEATURE_VIRTUAL_KEYBOARD:
+		case DisplayServerEnums::FEATURE_TEXT_TO_SPEECH:
 			return true;
 		default:
 			return false;
@@ -222,7 +222,7 @@ void DisplayServerAndroid::emit_input_dialog_callback(String p_text) {
 	}
 }
 
-Error DisplayServerAndroid::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
+Error DisplayServerAndroid::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	GodotJavaWrapper *godot_java = OS_Android::get_singleton()->get_godot_java();
 	ERR_FAIL_NULL_V(godot_java, FAILED);
 	file_picker_callback = p_callback;
@@ -271,7 +271,7 @@ bool DisplayServerAndroid::screen_is_kept_on() const {
 	return keep_screen_on;
 }
 
-void DisplayServerAndroid::screen_set_orientation(DisplayServer::ScreenOrientation p_orientation, int p_screen) {
+void DisplayServerAndroid::screen_set_orientation(DisplayServerEnums::ScreenOrientation p_orientation, int p_screen) {
 	p_screen = _get_screen_index(p_screen);
 	int screen_count = get_screen_count();
 	ERR_FAIL_INDEX(p_screen, screen_count);
@@ -282,17 +282,17 @@ void DisplayServerAndroid::screen_set_orientation(DisplayServer::ScreenOrientati
 	godot_io_java->set_screen_orientation(p_orientation);
 }
 
-DisplayServer::ScreenOrientation DisplayServerAndroid::screen_get_orientation(int p_screen) const {
+DisplayServerEnums::ScreenOrientation DisplayServerAndroid::screen_get_orientation(int p_screen) const {
 	p_screen = _get_screen_index(p_screen);
 	int screen_count = get_screen_count();
-	ERR_FAIL_INDEX_V(p_screen, screen_count, SCREEN_LANDSCAPE);
+	ERR_FAIL_INDEX_V(p_screen, screen_count, DisplayServerEnums::SCREEN_LANDSCAPE);
 
 	GodotIOJavaWrapper *godot_io_java = OS_Android::get_singleton()->get_godot_io_java();
-	ERR_FAIL_NULL_V(godot_io_java, SCREEN_LANDSCAPE);
+	ERR_FAIL_NULL_V(godot_io_java, DisplayServerEnums::SCREEN_LANDSCAPE);
 
 	const int orientation = godot_io_java->get_screen_orientation();
-	ERR_FAIL_INDEX_V_MSG(orientation, 7, SCREEN_LANDSCAPE, "Unrecognized screen orientation");
-	return (ScreenOrientation)orientation;
+	ERR_FAIL_INDEX_V_MSG(orientation, 7, DisplayServerEnums::SCREEN_LANDSCAPE, "Unrecognized screen orientation");
+	return (DisplayServerEnums::ScreenOrientation)orientation;
 }
 
 int DisplayServerAndroid::get_display_rotation() const {
@@ -385,7 +385,7 @@ bool DisplayServerAndroid::is_touchscreen_available() const {
 	return true;
 }
 
-void DisplayServerAndroid::virtual_keyboard_show(const String &p_existing_text, const Rect2 &p_screen_rect, VirtualKeyboardType p_type, int p_max_length, int p_cursor_start, int p_cursor_end) {
+void DisplayServerAndroid::virtual_keyboard_show(const String &p_existing_text, const Rect2 &p_screen_rect, DisplayServerEnums::VirtualKeyboardType p_type, int p_max_length, int p_cursor_start, int p_cursor_end) {
 	GodotIOJavaWrapper *godot_io_java = OS_Android::get_singleton()->get_godot_io_java();
 	ERR_FAIL_NULL(godot_io_java);
 
@@ -478,33 +478,33 @@ DisplayServerEnums::WindowID DisplayServerAndroid::get_window_at_screen_position
 	return DisplayServerEnums::MAIN_WINDOW_ID;
 }
 
-int64_t DisplayServerAndroid::window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
+int64_t DisplayServerAndroid::window_get_native_handle(DisplayServerEnums::HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
 	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, 0);
 	switch (p_handle_type) {
-		case WINDOW_HANDLE: {
+		case DisplayServerEnums::WINDOW_HANDLE: {
 			return reinterpret_cast<int64_t>(static_cast<OS_Android *>(OS::get_singleton())->get_godot_java()->get_activity());
 		}
-		case WINDOW_VIEW: {
+		case DisplayServerEnums::WINDOW_VIEW: {
 			return 0; // Not supported.
 		}
 #ifdef GLES3_ENABLED
-		case DISPLAY_HANDLE: {
+		case DisplayServerEnums::DISPLAY_HANDLE: {
 			if (rendering_driver == "opengl3") {
 				return reinterpret_cast<int64_t>(eglGetCurrentDisplay());
 			}
 			return 0;
 		}
-		case OPENGL_CONTEXT: {
+		case DisplayServerEnums::OPENGL_CONTEXT: {
 			if (rendering_driver == "opengl3") {
 				return reinterpret_cast<int64_t>(eglGetCurrentContext());
 			}
 			return 0;
 		}
-		case EGL_DISPLAY: {
+		case DisplayServerEnums::EGL_DISPLAY: {
 			// @todo Find a way to get this from the Java side.
 			return 0;
 		}
-		case EGL_CONFIG: {
+		case DisplayServerEnums::EGL_CONFIG: {
 			// @todo Find a way to get this from the Java side.
 			return 0;
 		}
@@ -528,7 +528,7 @@ void DisplayServerAndroid::window_set_title(const String &p_title, DisplayServer
 }
 
 int DisplayServerAndroid::window_get_current_screen(DisplayServerEnums::WindowID p_window) const {
-	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, INVALID_SCREEN);
+	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, DisplayServerEnums::INVALID_SCREEN);
 	return 0;
 }
 
@@ -654,7 +654,7 @@ Vector<String> DisplayServerAndroid::get_rendering_drivers_func() {
 	return drivers;
 }
 
-DisplayServer *DisplayServerAndroid::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServerAndroid::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error) {
 	DisplayServer *ds = memnew(DisplayServerAndroid(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, p_parent_window, r_error));
 	if (r_error != OK) {
 		if (p_rendering_driver == "vulkan") {
@@ -771,7 +771,7 @@ void DisplayServerAndroid::notify_application_paused() {
 #endif // defined(RD_ENABLED)
 }
 
-DisplayServerAndroid::DisplayServerAndroid(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerAndroid::DisplayServerAndroid(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error) {
 	rendering_driver = p_rendering_driver;
 
 	keep_screen_on = GLOBAL_GET("display/window/energy_saving/keep_screen_on");
@@ -859,7 +859,7 @@ void DisplayServerAndroid::process_gyroscope(const Vector3 &p_gyroscope) {
 }
 
 void DisplayServerAndroid::_mouse_update_mode() {
-	MouseMode wanted_mouse_mode = mouse_mode_override_enabled
+	DisplayServerEnums::MouseMode wanted_mouse_mode = mouse_mode_override_enabled
 			? mouse_mode_override
 			: mouse_mode_base;
 
@@ -870,13 +870,13 @@ void DisplayServerAndroid::_mouse_update_mode() {
 		return;
 	}
 
-	if (wanted_mouse_mode == MouseMode::MOUSE_MODE_HIDDEN) {
+	if (wanted_mouse_mode == DisplayServerEnums::MouseMode::MOUSE_MODE_HIDDEN) {
 		OS_Android::get_singleton()->get_godot_java()->get_godot_view()->set_pointer_icon(CURSOR_TYPE_NULL);
 	} else {
 		cursor_set_shape(cursor_shape);
 	}
 
-	if (wanted_mouse_mode == MouseMode::MOUSE_MODE_CAPTURED) {
+	if (wanted_mouse_mode == DisplayServerEnums::MouseMode::MOUSE_MODE_CAPTURED) {
 		OS_Android::get_singleton()->get_godot_java()->get_godot_view()->request_pointer_capture();
 	} else {
 		OS_Android::get_singleton()->get_godot_java()->get_godot_view()->release_pointer_capture();
@@ -885,8 +885,8 @@ void DisplayServerAndroid::_mouse_update_mode() {
 	mouse_mode = wanted_mouse_mode;
 }
 
-void DisplayServerAndroid::mouse_set_mode(MouseMode p_mode) {
-	ERR_FAIL_INDEX(p_mode, MouseMode::MOUSE_MODE_MAX);
+void DisplayServerAndroid::mouse_set_mode(DisplayServerEnums::MouseMode p_mode) {
+	ERR_FAIL_INDEX(p_mode, DisplayServerEnums::MouseMode::MOUSE_MODE_MAX);
 	if (p_mode == mouse_mode_base) {
 		return;
 	}
@@ -894,12 +894,12 @@ void DisplayServerAndroid::mouse_set_mode(MouseMode p_mode) {
 	_mouse_update_mode();
 }
 
-DisplayServer::MouseMode DisplayServerAndroid::mouse_get_mode() const {
+DisplayServerEnums::MouseMode DisplayServerAndroid::mouse_get_mode() const {
 	return mouse_mode;
 }
 
-void DisplayServerAndroid::mouse_set_mode_override(MouseMode p_mode) {
-	ERR_FAIL_INDEX(p_mode, MouseMode::MOUSE_MODE_MAX);
+void DisplayServerAndroid::mouse_set_mode_override(DisplayServerEnums::MouseMode p_mode) {
+	ERR_FAIL_INDEX(p_mode, DisplayServerEnums::MouseMode::MOUSE_MODE_MAX);
 	if (p_mode == mouse_mode_override) {
 		return;
 	}
@@ -907,7 +907,7 @@ void DisplayServerAndroid::mouse_set_mode_override(MouseMode p_mode) {
 	_mouse_update_mode();
 }
 
-DisplayServer::MouseMode DisplayServerAndroid::mouse_get_mode_override() const {
+DisplayServerEnums::MouseMode DisplayServerAndroid::mouse_get_mode_override() const {
 	return mouse_mode_override;
 }
 
@@ -928,7 +928,7 @@ BitField<MouseButtonMask> DisplayServerAndroid::mouse_get_button_state() const {
 	return Input::get_singleton()->get_mouse_button_mask();
 }
 
-void DisplayServerAndroid::_cursor_set_shape_helper(CursorShape p_shape, bool force) {
+void DisplayServerAndroid::_cursor_set_shape_helper(DisplayServerEnums::CursorShape p_shape, bool force) {
 	if (!OS_Android::get_singleton()->get_godot_java()->get_godot_view()->can_update_pointer_icon()) {
 		return;
 	}
@@ -938,22 +938,22 @@ void DisplayServerAndroid::_cursor_set_shape_helper(CursorShape p_shape, bool fo
 
 	cursor_shape = p_shape;
 
-	if (mouse_mode == MouseMode::MOUSE_MODE_VISIBLE || mouse_mode == MouseMode::MOUSE_MODE_CONFINED) {
+	if (mouse_mode == DisplayServerEnums::MouseMode::MOUSE_MODE_VISIBLE || mouse_mode == DisplayServerEnums::MouseMode::MOUSE_MODE_CONFINED) {
 		OS_Android::get_singleton()->get_godot_java()->get_godot_view()->set_pointer_icon(android_cursors[cursor_shape]);
 	}
 }
 
-void DisplayServerAndroid::cursor_set_shape(DisplayServer::CursorShape p_shape) {
-	ERR_FAIL_INDEX(p_shape, CURSOR_MAX);
+void DisplayServerAndroid::cursor_set_shape(DisplayServerEnums::CursorShape p_shape) {
+	ERR_FAIL_INDEX(p_shape, DisplayServerEnums::CURSOR_MAX);
 	_cursor_set_shape_helper(p_shape);
 }
 
-DisplayServer::CursorShape DisplayServerAndroid::cursor_get_shape() const {
+DisplayServerEnums::CursorShape DisplayServerAndroid::cursor_get_shape() const {
 	return cursor_shape;
 }
 
-void DisplayServerAndroid::cursor_set_custom_image(const Ref<Resource> &p_cursor, CursorShape p_shape, const Vector2 &p_hotspot) {
-	ERR_FAIL_INDEX(p_shape, CURSOR_MAX);
+void DisplayServerAndroid::cursor_set_custom_image(const Ref<Resource> &p_cursor, DisplayServerEnums::CursorShape p_shape, const Vector2 &p_hotspot) {
+	ERR_FAIL_INDEX(p_shape, DisplayServerEnums::CURSOR_MAX);
 	String cursor_path = p_cursor.is_valid() ? p_cursor->get_path() : "";
 	if (!cursor_path.is_empty()) {
 		cursor_path = ProjectSettings::get_singleton()->globalize_path(cursor_path);

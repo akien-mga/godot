@@ -60,7 +60,7 @@
 #import "core/os/main_loop.h"
 #import "servers/display/native_menu.h"
 
-DisplayServerMacOSEmbedded::DisplayServerMacOSEmbedded(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, Error &r_error) {
+DisplayServerMacOSEmbedded::DisplayServerMacOSEmbedded(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, Error &r_error) {
 	EmbeddedDebugger::initialize(this);
 
 	r_error = OK; // default to OK
@@ -243,7 +243,7 @@ DisplayServerMacOSEmbedded::~DisplayServerMacOSEmbedded() {
 #endif
 }
 
-DisplayServer *DisplayServerMacOSEmbedded::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t /* p_parent_window */, Error &r_error) {
+DisplayServer *DisplayServerMacOSEmbedded::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t /* p_parent_window */, Error &r_error) {
 	return memnew(DisplayServerMacOSEmbedded(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, r_error));
 }
 
@@ -269,7 +269,7 @@ void DisplayServerMacOSEmbedded::register_embedded_driver() {
 
 // MARK: - Mouse
 
-void DisplayServerMacOSEmbedded::_mouse_apply_mode(MouseMode p_prev_mode, MouseMode p_new_mode) {
+void DisplayServerMacOSEmbedded::_mouse_apply_mode(DisplayServerEnums::MouseMode p_prev_mode, DisplayServerEnums::MouseMode p_new_mode) {
 	EngineDebugger::get_singleton()->send_message("game_view:mouse_set_mode", { p_new_mode });
 }
 
@@ -392,30 +392,30 @@ void DisplayServerMacOSEmbedded::_window_callback(const Callable &p_callable, co
 
 // MARK: -
 
-bool DisplayServerMacOSEmbedded::has_feature(Feature p_feature) const {
+bool DisplayServerMacOSEmbedded::has_feature(DisplayServerEnums::Feature p_feature) const {
 	switch (p_feature) {
 #ifndef DISABLE_DEPRECATED
-		case FEATURE_GLOBAL_MENU: {
+		case DisplayServerEnums::FEATURE_GLOBAL_MENU: {
 			return (native_menu && native_menu->has_feature(NativeMenu::FEATURE_GLOBAL_MENU));
 		} break;
 #endif
-		case FEATURE_CURSOR_SHAPE:
-		case FEATURE_IME:
-		case FEATURE_CUSTOM_CURSOR_SHAPE:
-			// case FEATURE_HIDPI:
-			// case FEATURE_ICON:
-			// case FEATURE_MOUSE:
-		case FEATURE_HDR_OUTPUT:
-		case FEATURE_MOUSE_WARP:
-			// case FEATURE_NATIVE_DIALOG:
-			// case FEATURE_NATIVE_ICON:
-			// case FEATURE_WINDOW_TRANSPARENCY:
-		case FEATURE_CLIPBOARD:
-			// case FEATURE_KEEP_SCREEN_ON:
-			// case FEATURE_ORIENTATION:
-			// case FEATURE_VIRTUAL_KEYBOARD:
-		case FEATURE_TEXT_TO_SPEECH:
-			// case FEATURE_TOUCHSCREEN:
+		case DisplayServerEnums::FEATURE_CURSOR_SHAPE:
+		case DisplayServerEnums::FEATURE_IME:
+		case DisplayServerEnums::FEATURE_CUSTOM_CURSOR_SHAPE:
+			// case DisplayServerEnums::FEATURE_HIDPI:
+			// case DisplayServerEnums::FEATURE_ICON:
+			// case DisplayServerEnums::FEATURE_MOUSE:
+		case DisplayServerEnums::FEATURE_HDR_OUTPUT:
+		case DisplayServerEnums::FEATURE_MOUSE_WARP:
+			// case DisplayServerEnums::FEATURE_NATIVE_DIALOG:
+			// case DisplayServerEnums::FEATURE_NATIVE_ICON:
+			// case DisplayServerEnums::FEATURE_WINDOW_TRANSPARENCY:
+		case DisplayServerEnums::FEATURE_CLIPBOARD:
+			// case DisplayServerEnums::FEATURE_KEEP_SCREEN_ON:
+			// case DisplayServerEnums::FEATURE_ORIENTATION:
+			// case DisplayServerEnums::FEATURE_VIRTUAL_KEYBOARD:
+		case DisplayServerEnums::FEATURE_TEXT_TO_SPEECH:
+			// case DisplayServerEnums::FEATURE_TOUCHSCREEN:
 			return true;
 		default:
 			return false;
@@ -474,10 +474,10 @@ float DisplayServerMacOSEmbedded::screen_get_scale(int p_screen) const {
 	_THREAD_SAFE_METHOD_
 
 	switch (p_screen) {
-		case SCREEN_WITH_MOUSE_FOCUS:
-		case SCREEN_WITH_KEYBOARD_FOCUS:
-		case SCREEN_PRIMARY:
-		case SCREEN_OF_MAIN_WINDOW:
+		case DisplayServerEnums::SCREEN_WITH_MOUSE_FOCUS:
+		case DisplayServerEnums::SCREEN_WITH_KEYBOARD_FOCUS:
+		case DisplayServerEnums::SCREEN_PRIMARY:
+		case DisplayServerEnums::SCREEN_OF_MAIN_WINDOW:
 		case 0:
 			return state.screen_window_scale;
 		default:
@@ -509,7 +509,7 @@ void DisplayServerMacOSEmbedded::window_set_title(const String &p_title, Display
 
 int DisplayServerMacOSEmbedded::window_get_current_screen(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
-	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, INVALID_SCREEN);
+	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, DisplayServerEnums::INVALID_SCREEN);
 
 	return 0;
 }
@@ -758,12 +758,12 @@ DisplayServerEnums::VSyncMode DisplayServerMacOSEmbedded::window_get_vsync_mode(
 	return DisplayServerEnums::VSYNC_ENABLED;
 }
 
-void DisplayServerMacOSEmbedded::cursor_set_shape(CursorShape p_shape) {
+void DisplayServerMacOSEmbedded::cursor_set_shape(DisplayServerEnums::CursorShape p_shape) {
 	cursor_shape = p_shape;
 	EngineDebugger::get_singleton()->send_message("game_view:cursor_set_shape", { p_shape });
 }
 
-void DisplayServerMacOSEmbedded::cursor_set_custom_image(const Ref<Resource> &p_cursor, CursorShape p_shape, const Vector2 &p_hotspot) {
+void DisplayServerMacOSEmbedded::cursor_set_custom_image(const Ref<Resource> &p_cursor, DisplayServerEnums::CursorShape p_shape, const Vector2 &p_hotspot) {
 	PackedByteArray data;
 	if (p_cursor.is_valid()) {
 		Ref<Image> image = _get_cursor_image_from_resource(p_cursor, p_hotspot);

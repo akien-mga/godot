@@ -56,7 +56,6 @@
 #include "x11/dynwrappers/xinerama-so_wrap.h"
 #include "x11/dynwrappers/xrender-so_wrap.h"
 #else // !SOWRAP_ENABLED
-#undef CursorShape
 #include <X11/XKBlib.h>
 #include <X11/Xutil.h>
 
@@ -179,60 +178,60 @@ static String get_atom_name(Display *p_disp, Atom p_atom) {
 	return ret;
 }
 
-bool DisplayServerX11::has_feature(Feature p_feature) const {
+bool DisplayServerX11::has_feature(DisplayServerEnums::Feature p_feature) const {
 	switch (p_feature) {
 #ifndef DISABLE_DEPRECATED
-		case FEATURE_GLOBAL_MENU: {
+		case DisplayServerEnums::FEATURE_GLOBAL_MENU: {
 			return (native_menu && native_menu->has_feature(NativeMenu::FEATURE_GLOBAL_MENU));
 		} break;
 #endif
-		case FEATURE_SUBWINDOWS:
+		case DisplayServerEnums::FEATURE_SUBWINDOWS:
 #ifdef TOUCH_ENABLED
-		case FEATURE_TOUCHSCREEN:
+		case DisplayServerEnums::FEATURE_TOUCHSCREEN:
 #endif
-		case FEATURE_MOUSE:
-		case FEATURE_MOUSE_WARP:
-		case FEATURE_CLIPBOARD:
-		case FEATURE_CURSOR_SHAPE:
-		case FEATURE_CUSTOM_CURSOR_SHAPE:
-		case FEATURE_IME:
-		case FEATURE_WINDOW_TRANSPARENCY:
-		//case FEATURE_HIDPI:
-		case FEATURE_ICON:
-		//case FEATURE_NATIVE_ICON:
-		case FEATURE_SWAP_BUFFERS:
+		case DisplayServerEnums::FEATURE_MOUSE:
+		case DisplayServerEnums::FEATURE_MOUSE_WARP:
+		case DisplayServerEnums::FEATURE_CLIPBOARD:
+		case DisplayServerEnums::FEATURE_CURSOR_SHAPE:
+		case DisplayServerEnums::FEATURE_CUSTOM_CURSOR_SHAPE:
+		case DisplayServerEnums::FEATURE_IME:
+		case DisplayServerEnums::FEATURE_WINDOW_TRANSPARENCY:
+		//case DisplayServerEnums::FEATURE_HIDPI:
+		case DisplayServerEnums::FEATURE_ICON:
+		//case DisplayServerEnums::FEATURE_NATIVE_ICON:
+		case DisplayServerEnums::FEATURE_SWAP_BUFFERS:
 #ifdef DBUS_ENABLED
-		case FEATURE_KEEP_SCREEN_ON:
+		case DisplayServerEnums::FEATURE_KEEP_SCREEN_ON:
 #endif
-		case FEATURE_CLIPBOARD_PRIMARY:
-		case FEATURE_WINDOW_EMBEDDING:
-		case FEATURE_WINDOW_DRAG: {
+		case DisplayServerEnums::FEATURE_CLIPBOARD_PRIMARY:
+		case DisplayServerEnums::FEATURE_WINDOW_EMBEDDING:
+		case DisplayServerEnums::FEATURE_WINDOW_DRAG: {
 			return true;
 		} break;
 
-		//case FEATURE_NATIVE_DIALOG:
-		//case FEATURE_NATIVE_DIALOG_INPUT:
+		//case DisplayServerEnums::FEATURE_NATIVE_DIALOG:
+		//case DisplayServerEnums::FEATURE_NATIVE_DIALOG_INPUT:
 #ifdef DBUS_ENABLED
-		case FEATURE_NATIVE_DIALOG_FILE:
-		case FEATURE_NATIVE_DIALOG_FILE_EXTRA:
-		case FEATURE_NATIVE_DIALOG_FILE_MIME: {
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE_EXTRA:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE_MIME: {
 			return (portal_desktop && portal_desktop->is_supported() && portal_desktop->is_file_chooser_supported());
 		} break;
-		case FEATURE_NATIVE_COLOR_PICKER: {
+		case DisplayServerEnums::FEATURE_NATIVE_COLOR_PICKER: {
 			return (portal_desktop && portal_desktop->is_supported() && portal_desktop->is_screenshot_supported());
 		} break;
 #endif
-		case FEATURE_SCREEN_CAPTURE: {
+		case DisplayServerEnums::FEATURE_SCREEN_CAPTURE: {
 			return !xwayland;
 		} break;
 
 #ifdef SPEECHD_ENABLED
-		case FEATURE_TEXT_TO_SPEECH: {
+		case DisplayServerEnums::FEATURE_TEXT_TO_SPEECH: {
 			return true;
 		} break;
 #endif
 
-		case FEATURE_ACCESSIBILITY_SCREEN_READER: {
+		case DisplayServerEnums::FEATURE_ACCESSIBILITY_SCREEN_READER: {
 			return AccessibilityServer::get_singleton()->is_supported();
 		} break;
 
@@ -504,7 +503,7 @@ void DisplayServerX11::set_system_theme_change_callback(const Callable &p_callab
 	portal_desktop->set_system_theme_change_callback(p_callable);
 }
 
-Error DisplayServerX11::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
+Error DisplayServerX11::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	ERR_FAIL_COND_V(!portal_desktop, ERR_UNAVAILABLE);
 	DisplayServerEnums::WindowID window_id = p_window_id;
 
@@ -516,7 +515,7 @@ Error DisplayServerX11::file_dialog_show(const String &p_title, const String &p_
 	return portal_desktop->file_dialog_show(p_window_id, xid, p_title, p_current_directory, String(), p_filename, p_mode, p_filters, TypedArray<Dictionary>(), p_callback, false);
 }
 
-Error DisplayServerX11::file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
+Error DisplayServerX11::file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	ERR_FAIL_COND_V(!portal_desktop, ERR_UNAVAILABLE);
 	DisplayServerEnums::WindowID window_id = p_window_id;
 
@@ -537,7 +536,7 @@ void DisplayServerX11::beep() const {
 void DisplayServerX11::_mouse_update_mode() {
 	_THREAD_SAFE_METHOD_
 
-	MouseMode wanted_mouse_mode = mouse_mode_override_enabled
+	DisplayServerEnums::MouseMode wanted_mouse_mode = mouse_mode_override_enabled
 			? mouse_mode_override
 			: mouse_mode_base;
 
@@ -545,13 +544,13 @@ void DisplayServerX11::_mouse_update_mode() {
 		return;
 	}
 
-	if (mouse_mode == MOUSE_MODE_CAPTURED || mouse_mode == MOUSE_MODE_CONFINED || mouse_mode == MOUSE_MODE_CONFINED_HIDDEN) {
+	if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED || mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED || mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED_HIDDEN) {
 		XUngrabPointer(x11_display, CurrentTime);
 	}
 
 	// The only modes that show a cursor are VISIBLE and CONFINED
-	bool show_cursor = (wanted_mouse_mode == MOUSE_MODE_VISIBLE || wanted_mouse_mode == MOUSE_MODE_CONFINED);
-	bool previously_shown = (mouse_mode == MOUSE_MODE_VISIBLE || mouse_mode == MOUSE_MODE_CONFINED);
+	bool show_cursor = (wanted_mouse_mode == DisplayServerEnums::MOUSE_MODE_VISIBLE || wanted_mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED);
+	bool previously_shown = (mouse_mode == DisplayServerEnums::MOUSE_MODE_VISIBLE || mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED);
 
 	if (show_cursor && !previously_shown) {
 		DisplayServerEnums::WindowID window_id = get_window_at_screen_position(mouse_get_position());
@@ -573,7 +572,7 @@ void DisplayServerX11::_mouse_update_mode() {
 	}
 	mouse_mode = wanted_mouse_mode;
 
-	if (mouse_mode == MOUSE_MODE_CAPTURED || mouse_mode == MOUSE_MODE_CONFINED || mouse_mode == MOUSE_MODE_CONFINED_HIDDEN) {
+	if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED || mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED || mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED_HIDDEN) {
 		//flush pending motion events
 		_flush_mouse_motion();
 		DisplayServerEnums::WindowID window_id = _get_focused_window_or_popup();
@@ -589,7 +588,7 @@ void DisplayServerX11::_mouse_update_mode() {
 			ERR_PRINT("NO GRAB");
 		}
 
-		if (mouse_mode == MOUSE_MODE_CAPTURED) {
+		if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 			center.x = window.size.width / 2;
 			center.y = window.size.height / 2;
 
@@ -605,8 +604,8 @@ void DisplayServerX11::_mouse_update_mode() {
 	XFlush(x11_display);
 }
 
-void DisplayServerX11::mouse_set_mode(MouseMode p_mode) {
-	ERR_FAIL_INDEX(p_mode, MouseMode::MOUSE_MODE_MAX);
+void DisplayServerX11::mouse_set_mode(DisplayServerEnums::MouseMode p_mode) {
+	ERR_FAIL_INDEX(p_mode, DisplayServerEnums::MouseMode::MOUSE_MODE_MAX);
 	if (p_mode == mouse_mode_base) {
 		return;
 	}
@@ -614,12 +613,12 @@ void DisplayServerX11::mouse_set_mode(MouseMode p_mode) {
 	_mouse_update_mode();
 }
 
-DisplayServerX11::MouseMode DisplayServerX11::mouse_get_mode() const {
+DisplayServerEnums::MouseMode DisplayServerX11::mouse_get_mode() const {
 	return mouse_mode;
 }
 
-void DisplayServerX11::mouse_set_mode_override(MouseMode p_mode) {
-	ERR_FAIL_INDEX(p_mode, MouseMode::MOUSE_MODE_MAX);
+void DisplayServerX11::mouse_set_mode_override(DisplayServerEnums::MouseMode p_mode) {
+	ERR_FAIL_INDEX(p_mode, DisplayServerEnums::MouseMode::MOUSE_MODE_MAX);
 	if (p_mode == mouse_mode_override) {
 		return;
 	}
@@ -627,7 +626,7 @@ void DisplayServerX11::mouse_set_mode_override(MouseMode p_mode) {
 	_mouse_update_mode();
 }
 
-DisplayServerX11::MouseMode DisplayServerX11::mouse_get_mode_override() const {
+DisplayServerEnums::MouseMode DisplayServerX11::mouse_get_mode_override() const {
 	return mouse_mode_override;
 }
 
@@ -646,7 +645,7 @@ bool DisplayServerX11::mouse_is_mode_override_enabled() const {
 void DisplayServerX11::warp_mouse(const Point2i &p_position) {
 	_THREAD_SAFE_METHOD_
 
-	if (mouse_mode == MOUSE_MODE_CAPTURED) {
+	if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 		last_mouse_pos = p_position;
 	} else {
 		DisplayServerEnums::WindowID window_id = _get_focused_window_or_popup();
@@ -2136,20 +2135,20 @@ void DisplayServerX11::delete_sub_window(DisplayServerEnums::WindowID p_id) {
 	}
 }
 
-int64_t DisplayServerX11::window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
+int64_t DisplayServerX11::window_get_native_handle(DisplayServerEnums::HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
 	ERR_FAIL_COND_V(!windows.has(p_window), 0);
 	switch (p_handle_type) {
-		case DISPLAY_HANDLE: {
+		case DisplayServerEnums::DISPLAY_HANDLE: {
 			return (int64_t)x11_display;
 		}
-		case WINDOW_HANDLE: {
+		case DisplayServerEnums::WINDOW_HANDLE: {
 			return (int64_t)windows[p_window].x11_window;
 		}
-		case WINDOW_VIEW: {
+		case DisplayServerEnums::WINDOW_VIEW: {
 			return 0; // Not supported.
 		}
 #ifdef GLES3_ENABLED
-		case OPENGL_CONTEXT: {
+		case DisplayServerEnums::OPENGL_CONTEXT: {
 			if (gl_manager) {
 				return (int64_t)gl_manager->get_glx_context(p_window);
 			}
@@ -2158,25 +2157,25 @@ int64_t DisplayServerX11::window_get_native_handle(HandleType p_handle_type, Dis
 			}
 			return 0;
 		}
-		case EGL_DISPLAY: {
+		case DisplayServerEnums::EGL_DISPLAY: {
 			if (gl_manager_egl) {
 				return (int64_t)gl_manager_egl->get_display(p_window);
 			}
 			return 0;
 		}
-		case EGL_CONFIG: {
+		case DisplayServerEnums::EGL_CONFIG: {
 			if (gl_manager_egl) {
 				return (int64_t)gl_manager_egl->get_config(p_window);
 			}
 			return 0;
 		}
-		case GLX_VISUALID: {
+		case DisplayServerEnums::GLX_VISUALID: {
 			if (gl_manager) {
 				return (int64_t)gl_manager->get_glx_visualid(p_window);
 			}
 			return 0;
 		}
-		case GLX_FBCONFIG: {
+		case DisplayServerEnums::GLX_FBCONFIG: {
 			if (gl_manager) {
 				return (int64_t)gl_manager->get_glx_fbconfig(p_window);
 			}
@@ -2332,7 +2331,7 @@ int DisplayServerX11::window_get_current_screen(DisplayServerEnums::WindowID p_w
 		return 0;
 	}
 
-	ERR_FAIL_COND_V(!windows.has(p_window), INVALID_SCREEN);
+	ERR_FAIL_COND_V(!windows.has(p_window), DisplayServerEnums::INVALID_SCREEN);
 	const WindowData &wd = windows[p_window];
 
 	const Rect2i window_rect(wd.position, wd.size);
@@ -3495,23 +3494,23 @@ String DisplayServerX11::ime_get_text() const {
 	return im_text;
 }
 
-void DisplayServerX11::cursor_set_shape(CursorShape p_shape) {
+void DisplayServerX11::cursor_set_shape(DisplayServerEnums::CursorShape p_shape) {
 	_THREAD_SAFE_METHOD_
 
-	ERR_FAIL_INDEX(p_shape, CURSOR_MAX);
+	ERR_FAIL_INDEX(p_shape, DisplayServerEnums::CURSOR_MAX);
 
 	if (p_shape == current_cursor) {
 		return;
 	}
 
-	if (mouse_mode == MOUSE_MODE_VISIBLE || mouse_mode == MOUSE_MODE_CONFINED) {
+	if (mouse_mode == DisplayServerEnums::MOUSE_MODE_VISIBLE || mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED) {
 		if (cursors[p_shape] != None) {
 			for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 				XDefineCursor(x11_display, E.value.x11_window, cursors[p_shape]);
 			}
-		} else if (cursors[CURSOR_ARROW] != None) {
+		} else if (cursors[DisplayServerEnums::CURSOR_ARROW] != None) {
 			for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
-				XDefineCursor(x11_display, E.value.x11_window, cursors[CURSOR_ARROW]);
+				XDefineCursor(x11_display, E.value.x11_window, cursors[DisplayServerEnums::CURSOR_ARROW]);
 			}
 		}
 	}
@@ -3519,17 +3518,17 @@ void DisplayServerX11::cursor_set_shape(CursorShape p_shape) {
 	current_cursor = p_shape;
 }
 
-DisplayServerX11::CursorShape DisplayServerX11::cursor_get_shape() const {
+DisplayServerEnums::CursorShape DisplayServerX11::cursor_get_shape() const {
 	return current_cursor;
 }
 
-void DisplayServerX11::cursor_set_custom_image(const Ref<Resource> &p_cursor, CursorShape p_shape, const Vector2 &p_hotspot) {
+void DisplayServerX11::cursor_set_custom_image(const Ref<Resource> &p_cursor, DisplayServerEnums::CursorShape p_shape, const Vector2 &p_hotspot) {
 	_THREAD_SAFE_METHOD_
 
-	ERR_FAIL_INDEX(p_shape, CURSOR_MAX);
+	ERR_FAIL_INDEX(p_shape, DisplayServerEnums::CURSOR_MAX);
 
 	if (p_cursor.is_valid()) {
-		HashMap<CursorShape, Vector<Variant>>::Iterator cursor_c = cursors_cache.find(p_shape);
+		HashMap<DisplayServerEnums::CursorShape, Vector<Variant>>::Iterator cursor_c = cursors_cache.find(p_shape);
 
 		if (cursor_c) {
 			if (cursor_c->value[0] == p_cursor && cursor_c->value[1] == p_hotspot) {
@@ -3575,7 +3574,7 @@ void DisplayServerX11::cursor_set_custom_image(const Ref<Resource> &p_cursor, Cu
 		cursors_cache.insert(p_shape, params);
 
 		if (p_shape == current_cursor) {
-			if (mouse_mode == MOUSE_MODE_VISIBLE || mouse_mode == MOUSE_MODE_CONFINED) {
+			if (mouse_mode == DisplayServerEnums::MOUSE_MODE_VISIBLE || mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED) {
 				for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 					XDefineCursor(x11_display, E.value.x11_window, cursors[p_shape]);
 				}
@@ -3592,8 +3591,8 @@ void DisplayServerX11::cursor_set_custom_image(const Ref<Resource> &p_cursor, Cu
 
 		cursors_cache.erase(p_shape);
 
-		CursorShape c = current_cursor;
-		current_cursor = CURSOR_MAX;
+		DisplayServerEnums::CursorShape c = current_cursor;
+		current_cursor = DisplayServerEnums::CURSOR_MAX;
 		cursor_set_shape(c);
 	}
 }
@@ -4818,7 +4817,7 @@ void DisplayServerX11::process_events() {
 	do_mouse_warp = false;
 
 	// Is the current mouse mode one where it needs to be grabbed.
-	bool mouse_mode_grab = mouse_mode == MOUSE_MODE_CAPTURED || mouse_mode == MOUSE_MODE_CONFINED || mouse_mode == MOUSE_MODE_CONFINED_HIDDEN;
+	bool mouse_mode_grab = mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED || mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED || mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED_HIDDEN;
 
 	xi.pressure = 0;
 	xi.tilt = Vector2();
@@ -5125,9 +5124,9 @@ void DisplayServerX11::process_events() {
 					// Show and update the cursor if confined and the window regained focus.
 
 					for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
-						if (mouse_mode == MOUSE_MODE_CONFINED) {
+						if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED) {
 							XUndefineCursor(x11_display, E.value.x11_window);
-						} else if (mouse_mode == MOUSE_MODE_CAPTURED || mouse_mode == MOUSE_MODE_CONFINED_HIDDEN) { // Or re-hide it.
+						} else if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED || mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED_HIDDEN) { // Or re-hide it.
 							XDefineCursor(x11_display, E.value.x11_window, null_cursor);
 						}
 
@@ -5177,7 +5176,7 @@ void DisplayServerX11::process_events() {
 				if (mouse_mode_grab) {
 					for (const KeyValue<DisplayServerEnums::WindowID, WindowData> &E : windows) {
 						//dear X11, I try, I really try, but you never work, you do whatever you want.
-						if (mouse_mode == MOUSE_MODE_CAPTURED) {
+						if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 							// Show the cursor if we're in captured mode so it doesn't look weird.
 							XUndefineCursor(x11_display, E.value.x11_window);
 						}
@@ -5225,7 +5224,7 @@ void DisplayServerX11::process_events() {
 				}
 				/* exit in case of a mouse button press */
 				last_timestamp = event.xbutton.time;
-				if (mouse_mode == MOUSE_MODE_CAPTURED) {
+				if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 					event.xbutton.x = last_mouse_pos.x;
 					event.xbutton.y = last_mouse_pos.y;
 				}
@@ -5334,7 +5333,7 @@ void DisplayServerX11::process_events() {
 				}
 
 				while (true) {
-					if (mouse_mode == MOUSE_MODE_CAPTURED && event.xmotion.x == windows[focused_window_id].size.width / 2 && event.xmotion.y == windows[focused_window_id].size.height / 2) {
+					if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED && event.xmotion.x == windows[focused_window_id].size.width / 2 && event.xmotion.y == windows[focused_window_id].size.height / 2) {
 						//this is likely the warp event since it was warped here
 						center = Vector2(event.xmotion.x, event.xmotion.y);
 						break;
@@ -5375,7 +5374,7 @@ void DisplayServerX11::process_events() {
 				const WindowData &wd = windows[window_id];
 				bool focused = wd.focused;
 
-				if (mouse_mode == MOUSE_MODE_CAPTURED) {
+				if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 					if (xi.relative_motion.x == 0 && xi.relative_motion.y == 0) {
 						break;
 					}
@@ -5400,7 +5399,7 @@ void DisplayServerX11::process_events() {
 				Point2i rel;
 
 				// Only use raw input if in capture mode. Otherwise use the classic behavior.
-				if (mouse_mode == MOUSE_MODE_CAPTURED) {
+				if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 					rel = xi.relative_motion;
 				} else {
 					rel = pos - last_mouse_pos;
@@ -5409,7 +5408,7 @@ void DisplayServerX11::process_events() {
 				// Reset to prevent lingering motion
 				xi.relative_motion.x = 0;
 				xi.relative_motion.y = 0;
-				if (mouse_mode == MOUSE_MODE_CAPTURED) {
+				if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 					pos = Point2i(windows[focused_window_id].size.width / 2, windows[focused_window_id].size.height / 2);
 				}
 
@@ -5671,19 +5670,19 @@ void DisplayServerX11::_update_context(WindowData &wd) {
 	if (classHint) {
 		CharString name_str;
 		switch (context) {
-			case CONTEXT_EDITOR:
+			case DisplayServerEnums::CONTEXT_EDITOR:
 				name_str = "Godot_Editor";
 				break;
-			case CONTEXT_PROJECTMAN:
+			case DisplayServerEnums::CONTEXT_PROJECTMAN:
 				name_str = "Godot_ProjectList";
 				break;
-			case CONTEXT_ENGINE:
+			case DisplayServerEnums::CONTEXT_ENGINE:
 				name_str = "Godot_Engine";
 				break;
 		}
 
 		CharString class_str;
-		if (context == CONTEXT_ENGINE) {
+		if (context == DisplayServerEnums::CONTEXT_ENGINE) {
 			String config_name = GLOBAL_GET("application/config/name");
 			if (config_name.length() == 0) {
 				class_str = "Godot_Engine";
@@ -5702,7 +5701,7 @@ void DisplayServerX11::_update_context(WindowData &wd) {
 	}
 }
 
-void DisplayServerX11::set_context(Context p_context) {
+void DisplayServerX11::set_context(DisplayServerEnums::Context p_context) {
 	_THREAD_SAFE_METHOD_
 
 	context = p_context;
@@ -6286,7 +6285,7 @@ Vector<String> DisplayServerX11::get_rendering_drivers_func() {
 	return drivers;
 }
 
-DisplayServer *DisplayServerX11::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServerX11::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error) {
 	DisplayServer *ds = memnew(DisplayServerX11(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, p_parent_window, r_error));
 	return ds;
 }
@@ -6759,7 +6758,7 @@ void DisplayServerX11::_xim_instantiate_callback(::Display *display, ::XPointer 
 	}
 }
 
-DisplayServerX11::DisplayServerX11(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerX11::DisplayServerX11(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error) {
 	KeyMappingX11::initialize();
 
 	String current_desk = OS::get_singleton()->get_environment("XDG_CURRENT_DESKTOP").to_lower();
@@ -6864,7 +6863,7 @@ DisplayServerX11::DisplayServerX11(const String &p_rendering_driver, DisplayServ
 	}
 #endif
 
-	for (int i = 0; i < CURSOR_MAX; i++) {
+	for (int i = 0; i < DisplayServerEnums::CURSOR_MAX; i++) {
 		cursors[i] = None;
 		cursor_img[i] = nullptr;
 	}
@@ -7186,8 +7185,8 @@ DisplayServerX11::DisplayServerX11(const String &p_rendering_driver, DisplayServ
 	if (p_position != nullptr) {
 		window_position = *p_position;
 	} else {
-		if (p_screen == SCREEN_OF_MAIN_WINDOW) {
-			p_screen = SCREEN_PRIMARY;
+		if (p_screen == DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) {
+			p_screen = DisplayServerEnums::SCREEN_PRIMARY;
 		}
 		Rect2i scr_rect = screen_get_usable_rect(p_screen);
 		window_position = scr_rect.position + (scr_rect.size - p_resolution) / 2;
@@ -7241,7 +7240,7 @@ DisplayServerX11::DisplayServerX11(const String &p_rendering_driver, DisplayServ
 		cursor_theme = "default";
 	}
 
-	for (int i = 0; i < CURSOR_MAX; i++) {
+	for (int i = 0; i < DisplayServerEnums::CURSOR_MAX; i++) {
 		static const char *cursor_file[] = {
 			"left_ptr",
 			"xterm",
@@ -7267,49 +7266,49 @@ DisplayServerX11::DisplayServerX11(const String &p_rendering_driver, DisplayServ
 			const char *fallback = nullptr;
 
 			switch (i) {
-				case CURSOR_POINTING_HAND:
+				case DisplayServerEnums::CURSOR_POINTING_HAND:
 					fallback = "pointer";
 					break;
-				case CURSOR_CROSS:
+				case DisplayServerEnums::CURSOR_CROSS:
 					fallback = "crosshair";
 					break;
-				case CURSOR_WAIT:
+				case DisplayServerEnums::CURSOR_WAIT:
 					fallback = "wait";
 					break;
-				case CURSOR_BUSY:
+				case DisplayServerEnums::CURSOR_BUSY:
 					fallback = "progress";
 					break;
-				case CURSOR_DRAG:
+				case DisplayServerEnums::CURSOR_DRAG:
 					fallback = "grabbing";
 					break;
-				case CURSOR_CAN_DROP:
+				case DisplayServerEnums::CURSOR_CAN_DROP:
 					fallback = "hand1";
 					break;
-				case CURSOR_FORBIDDEN:
+				case DisplayServerEnums::CURSOR_FORBIDDEN:
 					fallback = "forbidden";
 					break;
-				case CURSOR_VSIZE:
+				case DisplayServerEnums::CURSOR_VSIZE:
 					fallback = "ns-resize";
 					break;
-				case CURSOR_HSIZE:
+				case DisplayServerEnums::CURSOR_HSIZE:
 					fallback = "ew-resize";
 					break;
-				case CURSOR_BDIAGSIZE:
+				case DisplayServerEnums::CURSOR_BDIAGSIZE:
 					fallback = "fd_double_arrow";
 					break;
-				case CURSOR_FDIAGSIZE:
+				case DisplayServerEnums::CURSOR_FDIAGSIZE:
 					fallback = "bd_double_arrow";
 					break;
-				case CURSOR_MOVE:
-					cursor_img[i] = cursor_img[CURSOR_DRAG];
+				case DisplayServerEnums::CURSOR_MOVE:
+					cursor_img[i] = cursor_img[DisplayServerEnums::CURSOR_DRAG];
 					break;
-				case CURSOR_VSPLIT:
+				case DisplayServerEnums::CURSOR_VSPLIT:
 					fallback = "sb_v_double_arrow";
 					break;
-				case CURSOR_HSPLIT:
+				case DisplayServerEnums::CURSOR_HSPLIT:
 					fallback = "sb_h_double_arrow";
 					break;
-				case CURSOR_HELP:
+				case DisplayServerEnums::CURSOR_HELP:
 					fallback = "help";
 					break;
 			}
@@ -7354,7 +7353,7 @@ DisplayServerX11::DisplayServerX11(const String &p_rendering_driver, DisplayServ
 
 		null_cursor = cursor;
 	}
-	cursor_set_shape(CURSOR_BUSY);
+	cursor_set_shape(DisplayServerEnums::CURSOR_BUSY);
 
 	// Search the X11 event queue for ConfigureNotify events and process all
 	// that are currently queued early, so we can get the final window size
@@ -7495,7 +7494,7 @@ DisplayServerX11::~DisplayServerX11() {
 		dlclose(xrandr_handle);
 	}
 
-	for (int i = 0; i < CURSOR_MAX; i++) {
+	for (int i = 0; i < DisplayServerEnums::CURSOR_MAX; i++) {
 		if (cursors[i] != None) {
 			XFreeCursor(x11_display, cursors[i]);
 		}

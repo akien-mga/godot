@@ -708,15 +708,15 @@ void Window::_make_window() {
 	if (initial_position == WINDOW_INITIAL_POSITION_ABSOLUTE) {
 		window_rect = Rect2i(position, size);
 	} else if (initial_position == WINDOW_INITIAL_POSITION_CENTER_PRIMARY_SCREEN) {
-		window_rect = Rect2i(DisplayServer::get_singleton()->screen_get_position(DisplayServer::SCREEN_PRIMARY) + (DisplayServer::get_singleton()->screen_get_size(DisplayServer::SCREEN_PRIMARY) - size) / 2, size);
+		window_rect = Rect2i(DisplayServer::get_singleton()->screen_get_position(DisplayServerEnums::SCREEN_PRIMARY) + (DisplayServer::get_singleton()->screen_get_size(DisplayServerEnums::SCREEN_PRIMARY) - size) / 2, size);
 	} else if (initial_position == WINDOW_INITIAL_POSITION_CENTER_MAIN_WINDOW_SCREEN) {
-		window_rect = Rect2i(DisplayServer::get_singleton()->screen_get_position(DisplayServer::SCREEN_OF_MAIN_WINDOW) + (DisplayServer::get_singleton()->screen_get_size(DisplayServer::SCREEN_OF_MAIN_WINDOW) - size) / 2, size);
+		window_rect = Rect2i(DisplayServer::get_singleton()->screen_get_position(DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) + (DisplayServer::get_singleton()->screen_get_size(DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) - size) / 2, size);
 	} else if (initial_position == WINDOW_INITIAL_POSITION_CENTER_OTHER_SCREEN) {
 		window_rect = Rect2i(DisplayServer::get_singleton()->screen_get_position(current_screen) + (DisplayServer::get_singleton()->screen_get_size(current_screen) - size) / 2, size);
 	} else if (initial_position == WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_MOUSE_FOCUS) {
-		window_rect = Rect2i(DisplayServer::get_singleton()->screen_get_position(DisplayServer::SCREEN_WITH_MOUSE_FOCUS) + (DisplayServer::get_singleton()->screen_get_size(DisplayServer::SCREEN_WITH_MOUSE_FOCUS) - size) / 2, size);
+		window_rect = Rect2i(DisplayServer::get_singleton()->screen_get_position(DisplayServerEnums::SCREEN_WITH_MOUSE_FOCUS) + (DisplayServer::get_singleton()->screen_get_size(DisplayServerEnums::SCREEN_WITH_MOUSE_FOCUS) - size) / 2, size);
 	} else if (initial_position == WINDOW_INITIAL_POSITION_CENTER_SCREEN_WITH_KEYBOARD_FOCUS) {
-		window_rect = Rect2i(DisplayServer::get_singleton()->screen_get_position(DisplayServer::SCREEN_WITH_KEYBOARD_FOCUS) + (DisplayServer::get_singleton()->screen_get_size(DisplayServer::SCREEN_WITH_KEYBOARD_FOCUS) - size) / 2, size);
+		window_rect = Rect2i(DisplayServer::get_singleton()->screen_get_position(DisplayServerEnums::SCREEN_WITH_KEYBOARD_FOCUS) + (DisplayServer::get_singleton()->screen_get_size(DisplayServerEnums::SCREEN_WITH_KEYBOARD_FOCUS) - size) / 2, size);
 	}
 
 	window_id = DisplayServer::get_singleton()->create_sub_window(DisplayServerEnums::WindowMode(mode), vsync_mode, f, window_rect, is_in_edited_scene_root() ? false : exclusive, transient_parent ? transient_parent->window_id : DisplayServerEnums::INVALID_WINDOW_ID);
@@ -758,7 +758,7 @@ void Window::_clear_window() {
 
 	bool had_focus = has_focus();
 
-	if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_SELF_FITTING_WINDOWS)) {
+	if (DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_SELF_FITTING_WINDOWS)) {
 		float win_scale = DisplayServer::get_singleton()->window_get_scale(window_id);
 
 		Size2i adjusted_size = Size2i(size.width / win_scale, size.height / win_scale);
@@ -810,7 +810,7 @@ void Window::_rect_changed_callback(const Rect2i &p_callback) {
 		size = p_callback.size;
 		_update_viewport_size();
 	}
-	if (window_id != DisplayServerEnums::INVALID_WINDOW_ID && !DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_SELF_FITTING_WINDOWS)) {
+	if (window_id != DisplayServerEnums::INVALID_WINDOW_ID && !DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_SELF_FITTING_WINDOWS)) {
 		Vector2 sz_out = DisplayServer::get_singleton()->window_get_size_with_decorations(window_id);
 		Vector2 pos_out = DisplayServer::get_singleton()->window_get_position_with_decorations(window_id);
 		Vector2 sz_in = DisplayServer::get_singleton()->window_get_size(window_id);
@@ -851,8 +851,8 @@ void Window::_event_callback(DisplayServerEnums::WindowEvent p_event) {
 			_propagate_window_notification(this, NOTIFICATION_WM_MOUSE_ENTER);
 			root->gui.windowmanager_window_over = this;
 			mouse_in_window = true;
-			if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_CURSOR_SHAPE)) {
-				DisplayServer::get_singleton()->cursor_set_shape(DisplayServer::CURSOR_ARROW); //restore cursor shape
+			if (DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_CURSOR_SHAPE)) {
+				DisplayServer::get_singleton()->cursor_set_shape(DisplayServerEnums::CURSOR_ARROW); //restore cursor shape
 			}
 		} break;
 		case DisplayServerEnums::WINDOW_EVENT_MOUSE_EXIT: {
@@ -1460,7 +1460,7 @@ bool Window::get_force_native() const {
 
 Viewport *Window::get_embedder() const {
 	ERR_READ_THREAD_GUARD_V(nullptr);
-	if (force_native && DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_SUBWINDOWS) && !is_in_edited_scene_root()) {
+	if (force_native && DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_SUBWINDOWS) && !is_in_edited_scene_root()) {
 		return nullptr;
 	}
 
@@ -2185,7 +2185,7 @@ void Window::_popup_base(const Rect2i &p_screen_rect) {
 	// Update window size to calculate the actual window size based on contents minimum size and minimum size.
 	_update_window_size();
 
-	bool should_fit = is_embedded() || !DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_SELF_FITTING_WINDOWS);
+	bool should_fit = is_embedded() || !DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_SELF_FITTING_WINDOWS);
 
 	if (p_screen_rect != Rect2i()) {
 		set_position(p_screen_rect.position);
@@ -3196,7 +3196,7 @@ Transform2D Window::get_screen_transform_internal(bool p_absolute_position) cons
 
 Transform2D Window::get_popup_base_transform_native() const {
 	ERR_READ_THREAD_GUARD_V(Transform2D());
-	if (!DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_SUBWINDOWS)) {
+	if (!DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_SUBWINDOWS)) {
 		return Transform2D();
 	}
 	Transform2D popup_base_transform;

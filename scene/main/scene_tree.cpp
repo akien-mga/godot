@@ -210,7 +210,7 @@ void SceneTree::flush_transform_notifications() {
 }
 
 bool SceneTree::is_accessibility_enabled() const {
-	if (!DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_ACCESSIBILITY_SCREEN_READER)) {
+	if (!DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_ACCESSIBILITY_SCREEN_READER)) {
 		return false;
 	}
 
@@ -223,7 +223,7 @@ bool SceneTree::is_accessibility_enabled() const {
 }
 
 bool SceneTree::is_accessibility_supported() const {
-	if (!DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_ACCESSIBILITY_SCREEN_READER)) {
+	if (!DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_ACCESSIBILITY_SCREEN_READER)) {
 		return false;
 	}
 

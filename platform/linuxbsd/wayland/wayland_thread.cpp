@@ -444,7 +444,7 @@ bool WaylandThread::_load_cursor_theme(int p_cursor_size) {
 		"help"
 	};
 
-	for (int i = 0; i < DisplayServer::CURSOR_MAX; i++) {
+	for (int i = 0; i < DisplayServerEnums::CURSOR_MAX; i++) {
 		struct wl_cursor *cursor = wl_cursor_theme_get_cursor(wl_cursor_theme, cursor_names[i]);
 
 		if (!cursor && cursor_names_fallback[i]) {
@@ -3734,7 +3734,7 @@ void WaylandThread::seat_state_update_cursor(SeatState *p_ss) {
 	int scale = 1;
 
 	if (thread->cursor_visible) {
-		DisplayServer::CursorShape shape = thread->cursor_shape;
+		DisplayServerEnums::CursorShape shape = thread->cursor_shape;
 
 		struct CustomCursor *custom_cursor = thread->custom_cursors.getptr(shape);
 
@@ -4984,7 +4984,7 @@ Error WaylandThread::init() {
 	}
 
 	// Update the cursor.
-	cursor_set_shape(DisplayServer::CURSOR_ARROW);
+	cursor_set_shape(DisplayServerEnums::CURSOR_ARROW);
 
 	events_thread.start(_poll_events_thread, &thread_data);
 
@@ -5003,7 +5003,7 @@ void WaylandThread::cursor_set_visible(bool p_visible) {
 	}
 }
 
-void WaylandThread::cursor_set_shape(DisplayServer::CursorShape p_cursor_shape) {
+void WaylandThread::cursor_set_shape(DisplayServerEnums::CursorShape p_cursor_shape) {
 	cursor_shape = p_cursor_shape;
 
 	for (struct wl_seat *wl_seat : registry.wl_seats) {
@@ -5014,7 +5014,7 @@ void WaylandThread::cursor_set_shape(DisplayServer::CursorShape p_cursor_shape) 
 	}
 }
 
-void WaylandThread::cursor_shape_set_custom_image(DisplayServer::CursorShape p_cursor_shape, Ref<Image> p_image, const Point2i &p_hotspot) {
+void WaylandThread::cursor_shape_set_custom_image(DisplayServerEnums::CursorShape p_cursor_shape, Ref<Image> p_image, const Point2i &p_hotspot) {
 	ERR_FAIL_COND(p_image.is_null());
 
 	Size2i image_size = p_image->get_size();
@@ -5068,7 +5068,7 @@ void WaylandThread::cursor_shape_set_custom_image(DisplayServer::CursorShape p_c
 	}
 }
 
-void WaylandThread::cursor_shape_clear_custom_image(DisplayServer::CursorShape p_cursor_shape) {
+void WaylandThread::cursor_shape_clear_custom_image(DisplayServerEnums::CursorShape p_cursor_shape) {
 	if (custom_cursors.has(p_cursor_shape)) {
 		CustomCursor cursor = custom_cursors[p_cursor_shape];
 		custom_cursors.erase(p_cursor_shape);

@@ -195,7 +195,7 @@ void EmbeddedProcess::embed_process(OS::ProcessID p_pid) {
 		return;
 	}
 
-	ERR_FAIL_COND_MSG(!DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_WINDOW_EMBEDDING), "Embedded process not supported by this display server.");
+	ERR_FAIL_COND_MSG(!DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_WINDOW_EMBEDDING), "Embedded process not supported by this display server.");
 
 	if (current_process_id != 0) {
 		// Stop embedding the last process.

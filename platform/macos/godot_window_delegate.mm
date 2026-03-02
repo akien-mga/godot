@@ -317,7 +317,7 @@
 		[wd.window_button_view displayButtons];
 	}
 
-	if (ds->mouse_get_mode() == DisplayServer::MOUSE_MODE_CAPTURED) {
+	if (ds->mouse_get_mode() == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 		const NSRect content_rect = [wd.window_view frame];
 		NSRect point_in_window_rect = NSMakeRect(content_rect.size.width / 2, content_rect.size.height / 2, 0, 0);
 		NSPoint point_on_screen = [[wd.window_view window] convertRectToScreen:point_in_window_rect].origin;

@@ -612,34 +612,34 @@ private:
 	int cursor_scale = 1;
 
 	// Use cursor-shape-v1 protocol if the compositor supports it.
-	wp_cursor_shape_device_v1_shape standard_cursors[DisplayServer::CURSOR_MAX] = {
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_DEFAULT, //CURSOR_ARROW
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_TEXT, //CURSOR_IBEAM
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_POINTER, //CURSOR_POINTING_HAND
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_CROSSHAIR, //CURSOR_CROSS
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_WAIT, //CURSOR_WAIT
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_PROGRESS, //CURSOR_BUSY
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_GRAB, //CURSOR_DRAG
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_GRABBING, //CURSOR_CAN_DROP
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_NO_DROP, //CURSOR_FORBIDDEN
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_NS_RESIZE, //CURSOR_VSIZE
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_EW_RESIZE, //CURSOR_HSIZE
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_NESW_RESIZE, //CURSOR_BDIAGSIZE
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_NWSE_RESIZE, //CURSOR_FDIAGSIZE
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_MOVE, //CURSOR_MOVE
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_ROW_RESIZE, //CURSOR_VSPLIT
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_COL_RESIZE, //CURSOR_HSPLIT
-		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_HELP, //CURSOR_HELP
+	wp_cursor_shape_device_v1_shape standard_cursors[DisplayServerEnums::CURSOR_MAX] = {
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_DEFAULT, //DisplayServerEnums::CURSOR_ARROW
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_TEXT, //DisplayServerEnums::CURSOR_IBEAM
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_POINTER, //DisplayServerEnums::CURSOR_POINTING_HAND
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_CROSSHAIR, //DisplayServerEnums::CURSOR_CROSS
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_WAIT, //DisplayServerEnums::CURSOR_WAIT
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_PROGRESS, //DisplayServerEnums::CURSOR_BUSY
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_GRAB, //DisplayServerEnums::CURSOR_DRAG
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_GRABBING, //DisplayServerEnums::CURSOR_CAN_DROP
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_NO_DROP, //DisplayServerEnums::CURSOR_FORBIDDEN
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_NS_RESIZE, //DisplayServerEnums::CURSOR_VSIZE
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_EW_RESIZE, //DisplayServerEnums::CURSOR_HSIZE
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_NESW_RESIZE, //DisplayServerEnums::CURSOR_BDIAGSIZE
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_NWSE_RESIZE, //DisplayServerEnums::CURSOR_FDIAGSIZE
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_MOVE, //DisplayServerEnums::CURSOR_MOVE
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_ROW_RESIZE, //DisplayServerEnums::CURSOR_VSPLIT
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_COL_RESIZE, //DisplayServerEnums::CURSOR_HSPLIT
+		wp_cursor_shape_device_v1_shape::WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_HELP, //DisplayServerEnums::CURSOR_HELP
 	};
 
 	// Fallback to reading $XCURSOR and system themes if the compositor does not.
 	struct wl_cursor_theme *wl_cursor_theme = nullptr;
-	struct wl_cursor *wl_cursors[DisplayServer::CURSOR_MAX] = {};
+	struct wl_cursor *wl_cursors[DisplayServerEnums::CURSOR_MAX] = {};
 
 	// User-defined cursor overrides. Take precedence over standard and wl cursors.
-	HashMap<DisplayServer::CursorShape, CustomCursor> custom_cursors;
+	HashMap<DisplayServerEnums::CursorShape, CustomCursor> custom_cursors;
 
-	DisplayServer::CursorShape cursor_shape = DisplayServer::CURSOR_ARROW;
+	DisplayServerEnums::CursorShape cursor_shape = DisplayServerEnums::CURSOR_ARROW;
 	bool cursor_visible = true;
 
 	PointerConstraint pointer_constraint = PointerConstraint::NONE;
@@ -1158,11 +1158,11 @@ public:
 	BitField<MouseButtonMask> pointer_get_button_mask() const;
 
 	void cursor_set_visible(bool p_visible);
-	void cursor_set_shape(DisplayServer::CursorShape p_cursor_shape);
+	void cursor_set_shape(DisplayServerEnums::CursorShape p_cursor_shape);
 
-	void cursor_set_custom_shape(DisplayServer::CursorShape p_cursor_shape);
-	void cursor_shape_set_custom_image(DisplayServer::CursorShape p_cursor_shape, Ref<Image> p_image, const Point2i &p_hotspot);
-	void cursor_shape_clear_custom_image(DisplayServer::CursorShape p_cursor_shape);
+	void cursor_set_custom_shape(DisplayServerEnums::CursorShape p_cursor_shape);
+	void cursor_shape_set_custom_image(DisplayServerEnums::CursorShape p_cursor_shape, Ref<Image> p_image, const Point2i &p_hotspot);
+	void cursor_shape_clear_custom_image(DisplayServerEnums::CursorShape p_cursor_shape);
 
 	void window_set_ime_active(const bool p_active, DisplayServerEnums::WindowID p_window_id);
 	void window_set_ime_position(const Point2i &p_pos, DisplayServerEnums::WindowID p_window_id);

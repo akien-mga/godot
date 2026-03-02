@@ -464,22 +464,22 @@ void DisplayServer::tts_stop() {
 	WARN_PRINT("TTS is not supported by this display server.");
 }
 
-void DisplayServer::tts_set_utterance_callback(TTSUtteranceEvent p_event, const Callable &p_callable) {
-	ERR_FAIL_INDEX(p_event, DisplayServer::TTS_UTTERANCE_MAX);
+void DisplayServer::tts_set_utterance_callback(DisplayServerEnums::TTSUtteranceEvent p_event, const Callable &p_callable) {
+	ERR_FAIL_INDEX(p_event, DisplayServerEnums::TTS_UTTERANCE_MAX);
 	utterance_callback[p_event] = p_callable;
 }
 
-void DisplayServer::tts_post_utterance_event(TTSUtteranceEvent p_event, int64_t p_id, int p_pos) {
-	ERR_FAIL_INDEX(p_event, DisplayServer::TTS_UTTERANCE_MAX);
+void DisplayServer::tts_post_utterance_event(DisplayServerEnums::TTSUtteranceEvent p_event, int64_t p_id, int p_pos) {
+	ERR_FAIL_INDEX(p_event, DisplayServerEnums::TTS_UTTERANCE_MAX);
 	switch (p_event) {
-		case DisplayServer::TTS_UTTERANCE_STARTED:
-		case DisplayServer::TTS_UTTERANCE_ENDED:
-		case DisplayServer::TTS_UTTERANCE_CANCELED: {
+		case DisplayServerEnums::TTS_UTTERANCE_STARTED:
+		case DisplayServerEnums::TTS_UTTERANCE_ENDED:
+		case DisplayServerEnums::TTS_UTTERANCE_CANCELED: {
 			if (utterance_callback[p_event].is_valid()) {
 				utterance_callback[p_event].call_deferred(p_id); // Should be deferred, on some platforms utterance events can be called from different threads in a rapid succession.
 			}
 		} break;
-		case DisplayServer::TTS_UTTERANCE_BOUNDARY: {
+		case DisplayServerEnums::TTS_UTTERANCE_BOUNDARY: {
 			if (utterance_callback[p_event].is_valid()) {
 				utterance_callback[p_event].call_deferred(p_pos, p_id); // Should be deferred, on some platforms utterance events can be called from different threads in a rapid succession.
 			}
@@ -506,20 +506,20 @@ void DisplayServer::set_early_window_clear_color_override(bool p_enabled, Color 
 	window_early_clear_override_color = p_color;
 }
 
-void DisplayServer::mouse_set_mode(MouseMode p_mode) {
+void DisplayServer::mouse_set_mode(DisplayServerEnums::MouseMode p_mode) {
 	WARN_PRINT("Mouse is not supported by this display server.");
 }
 
-DisplayServer::MouseMode DisplayServer::mouse_get_mode() const {
-	return MOUSE_MODE_VISIBLE;
+DisplayServerEnums::MouseMode DisplayServer::mouse_get_mode() const {
+	return DisplayServerEnums::MOUSE_MODE_VISIBLE;
 }
 
-void DisplayServer::mouse_set_mode_override(MouseMode p_mode) {
+void DisplayServer::mouse_set_mode_override(DisplayServerEnums::MouseMode p_mode) {
 	WARN_PRINT("Mouse is not supported by this display server.");
 }
 
-DisplayServer::MouseMode DisplayServer::mouse_get_mode_override() const {
-	return MOUSE_MODE_VISIBLE;
+DisplayServerEnums::MouseMode DisplayServer::mouse_get_mode_override() const {
+	return DisplayServerEnums::MOUSE_MODE_VISIBLE;
 }
 
 void DisplayServer::mouse_set_mode_override_enabled(bool p_override_enabled) {
@@ -569,12 +569,12 @@ String DisplayServer::clipboard_get_primary() const {
 	ERR_FAIL_V_MSG(String(), "Primary clipboard is not supported by this display server.");
 }
 
-void DisplayServer::screen_set_orientation(ScreenOrientation p_orientation, int p_screen) {
+void DisplayServer::screen_set_orientation(DisplayServerEnums::ScreenOrientation p_orientation, int p_screen) {
 	WARN_PRINT("Orientation not supported by this display server.");
 }
 
-DisplayServer::ScreenOrientation DisplayServer::screen_get_orientation(int p_screen) const {
-	return SCREEN_LANDSCAPE;
+DisplayServerEnums::ScreenOrientation DisplayServer::screen_get_orientation(int p_screen) const {
+	return DisplayServerEnums::SCREEN_LANDSCAPE;
 }
 
 float DisplayServer::screen_get_scale(int p_screen) const {
@@ -595,7 +595,7 @@ bool DisplayServer::screen_is_kept_on() const {
 
 int DisplayServer::get_screen_from_rect(const Rect2 &p_rect) const {
 	int nearest_area = 0;
-	int pos_screen = INVALID_SCREEN;
+	int pos_screen = DisplayServerEnums::INVALID_SCREEN;
 	for (int i = 0; i < get_screen_count(); i++) {
 		Rect2i r;
 		r.position = screen_get_position(i);
@@ -644,7 +644,7 @@ void DisplayServer::window_set_ime_position(const Point2i &p_pos, DisplayServerE
 
 #ifndef DISABLE_DEPRECATED
 
-RID DisplayServer::accessibility_create_element(DisplayServerEnums::WindowID p_window, AccessibilityRole p_role) {
+RID DisplayServer::accessibility_create_element(DisplayServerEnums::WindowID p_window, DisplayServerEnums::AccessibilityRole p_role) {
 	if (AccessibilityServer::get_singleton()) {
 		return AccessibilityServer::get_singleton()->create_element(p_window, (AccessibilityServerEnums::AccessibilityRole)p_role);
 	} else {
@@ -652,7 +652,7 @@ RID DisplayServer::accessibility_create_element(DisplayServerEnums::WindowID p_w
 	}
 }
 
-RID DisplayServer::accessibility_create_sub_element(const RID &p_parent_rid, AccessibilityRole p_role, int p_insert_pos) {
+RID DisplayServer::accessibility_create_sub_element(const RID &p_parent_rid, DisplayServerEnums::AccessibilityRole p_role, int p_insert_pos) {
 	if (AccessibilityServer::get_singleton()) {
 		return AccessibilityServer::get_singleton()->create_sub_element(p_parent_rid, (AccessibilityServerEnums::AccessibilityRole)p_role, p_insert_pos);
 	} else {
@@ -746,7 +746,7 @@ void DisplayServer::accessibility_window_deactivation_completed(DisplayServerEnu
 	}
 }
 
-void DisplayServer::accessibility_update_set_role(const RID &p_id, AccessibilityRole p_role) {
+void DisplayServer::accessibility_update_set_role(const RID &p_id, DisplayServerEnums::AccessibilityRole p_role) {
 	if (AccessibilityServer::get_singleton()) {
 		AccessibilityServer::get_singleton()->update_set_role(p_id, (AccessibilityServerEnums::AccessibilityRole)p_role);
 	}
@@ -872,13 +872,13 @@ void DisplayServer::accessibility_update_set_error_message(const RID &p_id, cons
 	}
 }
 
-void DisplayServer::accessibility_update_set_live(const RID &p_id, AccessibilityLiveMode p_live) {
+void DisplayServer::accessibility_update_set_live(const RID &p_id, DisplayServerEnums::AccessibilityLiveMode p_live) {
 	if (AccessibilityServer::get_singleton()) {
 		AccessibilityServer::get_singleton()->update_set_live(p_id, (AccessibilityServerEnums::AccessibilityLiveMode)p_live);
 	}
 }
 
-void DisplayServer::accessibility_update_add_action(const RID &p_id, AccessibilityAction p_action, const Callable &p_callable) {
+void DisplayServer::accessibility_update_add_action(const RID &p_id, DisplayServerEnums::AccessibilityAction p_action, const Callable &p_callable) {
 	if (AccessibilityServer::get_singleton()) {
 		AccessibilityServer::get_singleton()->update_add_action(p_id, (AccessibilityServerEnums::AccessibilityAction)p_action, p_callable);
 	}
@@ -956,7 +956,7 @@ void DisplayServer::accessibility_update_set_list_item_expanded(const RID &p_id,
 	}
 }
 
-void DisplayServer::accessibility_update_set_popup_type(const RID &p_id, AccessibilityPopupType p_popup) {
+void DisplayServer::accessibility_update_set_popup_type(const RID &p_id, DisplayServerEnums::AccessibilityPopupType p_popup) {
 	if (AccessibilityServer::get_singleton()) {
 		AccessibilityServer::get_singleton()->update_set_popup_type(p_id, (AccessibilityServerEnums::AccessibilityPopupType)p_popup);
 	}
@@ -1034,7 +1034,7 @@ void DisplayServer::accessibility_update_set_text_selection(const RID &p_id, con
 	}
 }
 
-void DisplayServer::accessibility_update_set_flag(const RID &p_id, AccessibilityFlags p_flag, bool p_value) {
+void DisplayServer::accessibility_update_set_flag(const RID &p_id, DisplayServerEnums::AccessibilityFlags p_flag, bool p_value) {
 	if (AccessibilityServer::get_singleton()) {
 		AccessibilityServer::get_singleton()->update_set_flag(p_id, (AccessibilityServerEnums::AccessibilityFlags)p_flag, p_value);
 	}
@@ -1122,7 +1122,7 @@ String DisplayServer::ime_get_text() const {
 	ERR_FAIL_V_MSG(String(), "IME or NOTIFICATION_WM_IME_UPDATE not supported by this display server.");
 }
 
-void DisplayServer::virtual_keyboard_show(const String &p_existing_text, const Rect2 &p_screen_rect, VirtualKeyboardType p_type, int p_max_length, int p_cursor_start, int p_cursor_end) {
+void DisplayServer::virtual_keyboard_show(const String &p_existing_text, const Rect2 &p_screen_rect, DisplayServerEnums::VirtualKeyboardType p_type, int p_max_length, int p_cursor_start, int p_cursor_end) {
 	WARN_PRINT("Virtual keyboard not supported by this display server.");
 }
 
@@ -1140,15 +1140,15 @@ bool DisplayServer::has_hardware_keyboard() const {
 	return true;
 }
 
-void DisplayServer::cursor_set_shape(CursorShape p_shape) {
+void DisplayServer::cursor_set_shape(DisplayServerEnums::CursorShape p_shape) {
 	WARN_PRINT("Cursor shape not supported by this display server.");
 }
 
-DisplayServer::CursorShape DisplayServer::cursor_get_shape() const {
-	return CURSOR_ARROW;
+DisplayServerEnums::CursorShape DisplayServer::cursor_get_shape() const {
+	return DisplayServerEnums::CURSOR_ARROW;
 }
 
-void DisplayServer::cursor_set_custom_image(const Ref<Resource> &p_cursor, CursorShape p_shape, const Vector2 &p_hotspot) {
+void DisplayServer::cursor_set_custom_image(const Ref<Resource> &p_cursor, DisplayServerEnums::CursorShape p_shape, const Vector2 &p_hotspot) {
 	WARN_PRINT("Custom cursor shape not supported by this display server.");
 }
 
@@ -1189,12 +1189,12 @@ Error DisplayServer::dialog_input_text(String p_title, String p_description, Str
 	return ERR_UNAVAILABLE;
 }
 
-Error DisplayServer::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
+Error DisplayServer::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	WARN_PRINT("Native dialogs not supported by this display server.");
 	return ERR_UNAVAILABLE;
 }
 
-Error DisplayServer::file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
+Error DisplayServer::file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	WARN_PRINT("Native dialogs not supported by this display server.");
 	return ERR_UNAVAILABLE;
 }
@@ -1285,7 +1285,7 @@ void DisplayServer::delete_status_indicator(DisplayServerEnums::IndicatorID p_id
 	WARN_PRINT("Status indicator not supported by this display server.");
 }
 
-int64_t DisplayServer::window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
+int64_t DisplayServer::window_get_native_handle(DisplayServerEnums::HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
 	WARN_PRINT("Native handle not supported by this display server.");
 	return 0;
 }
@@ -1349,7 +1349,7 @@ DisplayServerEnums::WindowID DisplayServer::get_focused_window() const {
 	return DisplayServerEnums::MAIN_WINDOW_ID; // Proper value for single windows.
 }
 
-void DisplayServer::set_context(Context p_context) {
+void DisplayServer::set_context(DisplayServerEnums::Context p_context) {
 }
 
 void DisplayServer::register_additional_output(Object *p_object) {
@@ -1470,20 +1470,20 @@ void DisplayServer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_primary_screen"), &DisplayServer::get_primary_screen);
 	ClassDB::bind_method(D_METHOD("get_keyboard_focus_screen"), &DisplayServer::get_keyboard_focus_screen);
 	ClassDB::bind_method(D_METHOD("get_screen_from_rect", "rect"), &DisplayServer::get_screen_from_rect);
-	ClassDB::bind_method(D_METHOD("screen_get_position", "screen"), &DisplayServer::screen_get_position, DEFVAL(SCREEN_OF_MAIN_WINDOW));
-	ClassDB::bind_method(D_METHOD("screen_get_size", "screen"), &DisplayServer::screen_get_size, DEFVAL(SCREEN_OF_MAIN_WINDOW));
-	ClassDB::bind_method(D_METHOD("screen_get_usable_rect", "screen"), &DisplayServer::screen_get_usable_rect, DEFVAL(SCREEN_OF_MAIN_WINDOW));
-	ClassDB::bind_method(D_METHOD("screen_get_dpi", "screen"), &DisplayServer::screen_get_dpi, DEFVAL(SCREEN_OF_MAIN_WINDOW));
-	ClassDB::bind_method(D_METHOD("screen_get_scale", "screen"), &DisplayServer::screen_get_scale, DEFVAL(SCREEN_OF_MAIN_WINDOW));
+	ClassDB::bind_method(D_METHOD("screen_get_position", "screen"), &DisplayServer::screen_get_position, DEFVAL(DisplayServerEnums::SCREEN_OF_MAIN_WINDOW));
+	ClassDB::bind_method(D_METHOD("screen_get_size", "screen"), &DisplayServer::screen_get_size, DEFVAL(DisplayServerEnums::SCREEN_OF_MAIN_WINDOW));
+	ClassDB::bind_method(D_METHOD("screen_get_usable_rect", "screen"), &DisplayServer::screen_get_usable_rect, DEFVAL(DisplayServerEnums::SCREEN_OF_MAIN_WINDOW));
+	ClassDB::bind_method(D_METHOD("screen_get_dpi", "screen"), &DisplayServer::screen_get_dpi, DEFVAL(DisplayServerEnums::SCREEN_OF_MAIN_WINDOW));
+	ClassDB::bind_method(D_METHOD("screen_get_scale", "screen"), &DisplayServer::screen_get_scale, DEFVAL(DisplayServerEnums::SCREEN_OF_MAIN_WINDOW));
 	ClassDB::bind_method(D_METHOD("is_touchscreen_available"), &DisplayServer::is_touchscreen_available);
 	ClassDB::bind_method(D_METHOD("screen_get_max_scale"), &DisplayServer::screen_get_max_scale);
-	ClassDB::bind_method(D_METHOD("screen_get_refresh_rate", "screen"), &DisplayServer::screen_get_refresh_rate, DEFVAL(SCREEN_OF_MAIN_WINDOW));
+	ClassDB::bind_method(D_METHOD("screen_get_refresh_rate", "screen"), &DisplayServer::screen_get_refresh_rate, DEFVAL(DisplayServerEnums::SCREEN_OF_MAIN_WINDOW));
 	ClassDB::bind_method(D_METHOD("screen_get_pixel", "position"), &DisplayServer::screen_get_pixel);
-	ClassDB::bind_method(D_METHOD("screen_get_image", "screen"), &DisplayServer::screen_get_image, DEFVAL(SCREEN_OF_MAIN_WINDOW));
+	ClassDB::bind_method(D_METHOD("screen_get_image", "screen"), &DisplayServer::screen_get_image, DEFVAL(DisplayServerEnums::SCREEN_OF_MAIN_WINDOW));
 	ClassDB::bind_method(D_METHOD("screen_get_image_rect", "rect"), &DisplayServer::screen_get_image_rect);
 
-	ClassDB::bind_method(D_METHOD("screen_set_orientation", "orientation", "screen"), &DisplayServer::screen_set_orientation, DEFVAL(SCREEN_OF_MAIN_WINDOW));
-	ClassDB::bind_method(D_METHOD("screen_get_orientation", "screen"), &DisplayServer::screen_get_orientation, DEFVAL(SCREEN_OF_MAIN_WINDOW));
+	ClassDB::bind_method(D_METHOD("screen_set_orientation", "orientation", "screen"), &DisplayServer::screen_set_orientation, DEFVAL(DisplayServerEnums::SCREEN_OF_MAIN_WINDOW));
+	ClassDB::bind_method(D_METHOD("screen_get_orientation", "screen"), &DisplayServer::screen_get_orientation, DEFVAL(DisplayServerEnums::SCREEN_OF_MAIN_WINDOW));
 
 	ClassDB::bind_method(D_METHOD("screen_set_keep_on", "enable"), &DisplayServer::screen_set_keep_on);
 	ClassDB::bind_method(D_METHOD("screen_is_kept_on"), &DisplayServer::screen_is_kept_on);
@@ -1663,7 +1663,7 @@ void DisplayServer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("ime_get_selection"), &DisplayServer::ime_get_selection);
 	ClassDB::bind_method(D_METHOD("ime_get_text"), &DisplayServer::ime_get_text);
 
-	ClassDB::bind_method(D_METHOD("virtual_keyboard_show", "existing_text", "position", "type", "max_length", "cursor_start", "cursor_end"), &DisplayServer::virtual_keyboard_show, DEFVAL(Rect2()), DEFVAL(KEYBOARD_TYPE_DEFAULT), DEFVAL(-1), DEFVAL(-1), DEFVAL(-1));
+	ClassDB::bind_method(D_METHOD("virtual_keyboard_show", "existing_text", "position", "type", "max_length", "cursor_start", "cursor_end"), &DisplayServer::virtual_keyboard_show, DEFVAL(Rect2()), DEFVAL(DisplayServerEnums::KEYBOARD_TYPE_DEFAULT), DEFVAL(-1), DEFVAL(-1), DEFVAL(-1));
 	ClassDB::bind_method(D_METHOD("virtual_keyboard_hide"), &DisplayServer::virtual_keyboard_hide);
 
 	ClassDB::bind_method(D_METHOD("virtual_keyboard_get_height"), &DisplayServer::virtual_keyboard_get_height);
@@ -1673,7 +1673,7 @@ void DisplayServer::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("cursor_set_shape", "shape"), &DisplayServer::cursor_set_shape);
 	ClassDB::bind_method(D_METHOD("cursor_get_shape"), &DisplayServer::cursor_get_shape);
-	ClassDB::bind_method(D_METHOD("cursor_set_custom_image", "cursor", "shape", "hotspot"), &DisplayServer::cursor_set_custom_image, DEFVAL(CURSOR_ARROW), DEFVAL(Vector2()));
+	ClassDB::bind_method(D_METHOD("cursor_set_custom_image", "cursor", "shape", "hotspot"), &DisplayServer::cursor_set_custom_image, DEFVAL(DisplayServerEnums::CURSOR_ARROW), DEFVAL(Vector2()));
 
 	ClassDB::bind_method(D_METHOD("get_swap_cancel_ok"), &DisplayServer::get_swap_cancel_ok);
 
@@ -1724,206 +1724,206 @@ void DisplayServer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("has_additional_outputs"), &DisplayServer::has_additional_outputs);
 
 #ifndef DISABLE_DEPRECATED
-	BIND_ENUM_CONSTANT(FEATURE_GLOBAL_MENU);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_GLOBAL_MENU);
 #endif // DISABLE_DEPRECATED
-	BIND_ENUM_CONSTANT(FEATURE_SUBWINDOWS);
-	BIND_ENUM_CONSTANT(FEATURE_TOUCHSCREEN);
-	BIND_ENUM_CONSTANT(FEATURE_MOUSE);
-	BIND_ENUM_CONSTANT(FEATURE_MOUSE_WARP);
-	BIND_ENUM_CONSTANT(FEATURE_CLIPBOARD);
-	BIND_ENUM_CONSTANT(FEATURE_VIRTUAL_KEYBOARD);
-	BIND_ENUM_CONSTANT(FEATURE_CURSOR_SHAPE);
-	BIND_ENUM_CONSTANT(FEATURE_CUSTOM_CURSOR_SHAPE);
-	BIND_ENUM_CONSTANT(FEATURE_NATIVE_DIALOG);
-	BIND_ENUM_CONSTANT(FEATURE_IME);
-	BIND_ENUM_CONSTANT(FEATURE_WINDOW_TRANSPARENCY);
-	BIND_ENUM_CONSTANT(FEATURE_HIDPI);
-	BIND_ENUM_CONSTANT(FEATURE_ICON);
-	BIND_ENUM_CONSTANT(FEATURE_NATIVE_ICON);
-	BIND_ENUM_CONSTANT(FEATURE_ORIENTATION);
-	BIND_ENUM_CONSTANT(FEATURE_SWAP_BUFFERS);
-	BIND_ENUM_CONSTANT(FEATURE_CLIPBOARD_PRIMARY);
-	BIND_ENUM_CONSTANT(FEATURE_TEXT_TO_SPEECH);
-	BIND_ENUM_CONSTANT(FEATURE_EXTEND_TO_TITLE);
-	BIND_ENUM_CONSTANT(FEATURE_SCREEN_CAPTURE);
-	BIND_ENUM_CONSTANT(FEATURE_STATUS_INDICATOR);
-	BIND_ENUM_CONSTANT(FEATURE_NATIVE_HELP);
-	BIND_ENUM_CONSTANT(FEATURE_NATIVE_DIALOG_INPUT);
-	BIND_ENUM_CONSTANT(FEATURE_NATIVE_DIALOG_FILE);
-	BIND_ENUM_CONSTANT(FEATURE_NATIVE_DIALOG_FILE_EXTRA);
-	BIND_ENUM_CONSTANT(FEATURE_WINDOW_DRAG);
-	BIND_ENUM_CONSTANT(FEATURE_SCREEN_EXCLUDE_FROM_CAPTURE);
-	BIND_ENUM_CONSTANT(FEATURE_WINDOW_EMBEDDING);
-	BIND_ENUM_CONSTANT(FEATURE_NATIVE_DIALOG_FILE_MIME);
-	BIND_ENUM_CONSTANT(FEATURE_EMOJI_AND_SYMBOL_PICKER);
-	BIND_ENUM_CONSTANT(FEATURE_NATIVE_COLOR_PICKER);
-	BIND_ENUM_CONSTANT(FEATURE_SELF_FITTING_WINDOWS);
-	BIND_ENUM_CONSTANT(FEATURE_ACCESSIBILITY_SCREEN_READER);
-	BIND_ENUM_CONSTANT(FEATURE_HDR_OUTPUT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_SUBWINDOWS);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_TOUCHSCREEN);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_MOUSE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_MOUSE_WARP);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_CLIPBOARD);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_VIRTUAL_KEYBOARD);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_CURSOR_SHAPE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_CUSTOM_CURSOR_SHAPE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_NATIVE_DIALOG);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_IME);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_WINDOW_TRANSPARENCY);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_HIDPI);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_ICON);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_NATIVE_ICON);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_ORIENTATION);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_SWAP_BUFFERS);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_CLIPBOARD_PRIMARY);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_TEXT_TO_SPEECH);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_EXTEND_TO_TITLE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_SCREEN_CAPTURE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_STATUS_INDICATOR);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_NATIVE_HELP);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_NATIVE_DIALOG_INPUT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE_EXTRA);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_WINDOW_DRAG);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_SCREEN_EXCLUDE_FROM_CAPTURE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_WINDOW_EMBEDDING);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE_MIME);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_EMOJI_AND_SYMBOL_PICKER);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_NATIVE_COLOR_PICKER);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_SELF_FITTING_WINDOWS);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_ACCESSIBILITY_SCREEN_READER);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FEATURE_HDR_OUTPUT);
 
 #ifndef DISABLE_DEPRECATED
-	BIND_ENUM_CONSTANT(ROLE_UNKNOWN);
-	BIND_ENUM_CONSTANT(ROLE_DEFAULT_BUTTON);
-	BIND_ENUM_CONSTANT(ROLE_AUDIO);
-	BIND_ENUM_CONSTANT(ROLE_VIDEO);
-	BIND_ENUM_CONSTANT(ROLE_STATIC_TEXT);
-	BIND_ENUM_CONSTANT(ROLE_CONTAINER);
-	BIND_ENUM_CONSTANT(ROLE_PANEL);
-	BIND_ENUM_CONSTANT(ROLE_BUTTON);
-	BIND_ENUM_CONSTANT(ROLE_LINK);
-	BIND_ENUM_CONSTANT(ROLE_CHECK_BOX);
-	BIND_ENUM_CONSTANT(ROLE_RADIO_BUTTON);
-	BIND_ENUM_CONSTANT(ROLE_CHECK_BUTTON);
-	BIND_ENUM_CONSTANT(ROLE_SCROLL_BAR);
-	BIND_ENUM_CONSTANT(ROLE_SCROLL_VIEW);
-	BIND_ENUM_CONSTANT(ROLE_SPLITTER);
-	BIND_ENUM_CONSTANT(ROLE_SLIDER);
-	BIND_ENUM_CONSTANT(ROLE_SPIN_BUTTON);
-	BIND_ENUM_CONSTANT(ROLE_PROGRESS_INDICATOR);
-	BIND_ENUM_CONSTANT(ROLE_TEXT_FIELD);
-	BIND_ENUM_CONSTANT(ROLE_MULTILINE_TEXT_FIELD);
-	BIND_ENUM_CONSTANT(ROLE_COLOR_PICKER);
-	BIND_ENUM_CONSTANT(ROLE_TABLE);
-	BIND_ENUM_CONSTANT(ROLE_CELL);
-	BIND_ENUM_CONSTANT(ROLE_ROW);
-	BIND_ENUM_CONSTANT(ROLE_ROW_GROUP);
-	BIND_ENUM_CONSTANT(ROLE_ROW_HEADER);
-	BIND_ENUM_CONSTANT(ROLE_COLUMN_HEADER);
-	BIND_ENUM_CONSTANT(ROLE_TREE);
-	BIND_ENUM_CONSTANT(ROLE_TREE_ITEM);
-	BIND_ENUM_CONSTANT(ROLE_LIST);
-	BIND_ENUM_CONSTANT(ROLE_LIST_ITEM);
-	BIND_ENUM_CONSTANT(ROLE_LIST_BOX);
-	BIND_ENUM_CONSTANT(ROLE_LIST_BOX_OPTION);
-	BIND_ENUM_CONSTANT(ROLE_TAB_BAR);
-	BIND_ENUM_CONSTANT(ROLE_TAB);
-	BIND_ENUM_CONSTANT(ROLE_TAB_PANEL);
-	BIND_ENUM_CONSTANT(ROLE_MENU_BAR);
-	BIND_ENUM_CONSTANT(ROLE_MENU);
-	BIND_ENUM_CONSTANT(ROLE_MENU_ITEM);
-	BIND_ENUM_CONSTANT(ROLE_MENU_ITEM_CHECK_BOX);
-	BIND_ENUM_CONSTANT(ROLE_MENU_ITEM_RADIO);
-	BIND_ENUM_CONSTANT(ROLE_IMAGE);
-	BIND_ENUM_CONSTANT(ROLE_WINDOW);
-	BIND_ENUM_CONSTANT(ROLE_TITLE_BAR);
-	BIND_ENUM_CONSTANT(ROLE_DIALOG);
-	BIND_ENUM_CONSTANT(ROLE_TOOLTIP);
-	BIND_ENUM_CONSTANT(ROLE_REGION);
-	BIND_ENUM_CONSTANT(ROLE_TEXT_RUN);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_UNKNOWN);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_DEFAULT_BUTTON);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_AUDIO);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_VIDEO);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_STATIC_TEXT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_CONTAINER);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_PANEL);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_BUTTON);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_LINK);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_CHECK_BOX);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_RADIO_BUTTON);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_CHECK_BUTTON);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_SCROLL_BAR);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_SCROLL_VIEW);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_SPLITTER);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_SLIDER);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_SPIN_BUTTON);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_PROGRESS_INDICATOR);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_TEXT_FIELD);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_MULTILINE_TEXT_FIELD);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_COLOR_PICKER);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_TABLE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_CELL);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_ROW);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_ROW_GROUP);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_ROW_HEADER);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_COLUMN_HEADER);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_TREE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_TREE_ITEM);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_LIST);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_LIST_ITEM);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_LIST_BOX);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_LIST_BOX_OPTION);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_TAB_BAR);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_TAB);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_TAB_PANEL);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_MENU_BAR);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_MENU);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_MENU_ITEM);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_MENU_ITEM_CHECK_BOX);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_MENU_ITEM_RADIO);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_IMAGE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_WINDOW);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_TITLE_BAR);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_DIALOG);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_TOOLTIP);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_REGION);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ROLE_TEXT_RUN);
 
-	BIND_ENUM_CONSTANT(POPUP_MENU);
-	BIND_ENUM_CONSTANT(POPUP_LIST);
-	BIND_ENUM_CONSTANT(POPUP_TREE);
-	BIND_ENUM_CONSTANT(POPUP_DIALOG);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::POPUP_MENU);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::POPUP_LIST);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::POPUP_TREE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::POPUP_DIALOG);
 
-	BIND_ENUM_CONSTANT(FLAG_HIDDEN);
-	BIND_ENUM_CONSTANT(FLAG_MULTISELECTABLE);
-	BIND_ENUM_CONSTANT(FLAG_REQUIRED);
-	BIND_ENUM_CONSTANT(FLAG_VISITED);
-	BIND_ENUM_CONSTANT(FLAG_BUSY);
-	BIND_ENUM_CONSTANT(FLAG_MODAL);
-	BIND_ENUM_CONSTANT(FLAG_TOUCH_PASSTHROUGH);
-	BIND_ENUM_CONSTANT(FLAG_READONLY);
-	BIND_ENUM_CONSTANT(FLAG_DISABLED);
-	BIND_ENUM_CONSTANT(FLAG_CLIPS_CHILDREN);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FLAG_HIDDEN);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FLAG_MULTISELECTABLE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FLAG_REQUIRED);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FLAG_VISITED);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FLAG_BUSY);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FLAG_MODAL);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FLAG_TOUCH_PASSTHROUGH);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FLAG_READONLY);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FLAG_DISABLED);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FLAG_CLIPS_CHILDREN);
 
-	BIND_ENUM_CONSTANT(ACTION_CLICK);
-	BIND_ENUM_CONSTANT(ACTION_FOCUS);
-	BIND_ENUM_CONSTANT(ACTION_BLUR);
-	BIND_ENUM_CONSTANT(ACTION_COLLAPSE);
-	BIND_ENUM_CONSTANT(ACTION_EXPAND);
-	BIND_ENUM_CONSTANT(ACTION_DECREMENT);
-	BIND_ENUM_CONSTANT(ACTION_INCREMENT);
-	BIND_ENUM_CONSTANT(ACTION_HIDE_TOOLTIP);
-	BIND_ENUM_CONSTANT(ACTION_SHOW_TOOLTIP);
-	BIND_ENUM_CONSTANT(ACTION_SET_TEXT_SELECTION);
-	BIND_ENUM_CONSTANT(ACTION_REPLACE_SELECTED_TEXT);
-	BIND_ENUM_CONSTANT(ACTION_SCROLL_BACKWARD);
-	BIND_ENUM_CONSTANT(ACTION_SCROLL_DOWN);
-	BIND_ENUM_CONSTANT(ACTION_SCROLL_FORWARD);
-	BIND_ENUM_CONSTANT(ACTION_SCROLL_LEFT);
-	BIND_ENUM_CONSTANT(ACTION_SCROLL_RIGHT);
-	BIND_ENUM_CONSTANT(ACTION_SCROLL_UP);
-	BIND_ENUM_CONSTANT(ACTION_SCROLL_INTO_VIEW);
-	BIND_ENUM_CONSTANT(ACTION_SCROLL_TO_POINT);
-	BIND_ENUM_CONSTANT(ACTION_SET_SCROLL_OFFSET);
-	BIND_ENUM_CONSTANT(ACTION_SET_VALUE);
-	BIND_ENUM_CONSTANT(ACTION_SHOW_CONTEXT_MENU);
-	BIND_ENUM_CONSTANT(ACTION_CUSTOM);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_CLICK);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_FOCUS);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_BLUR);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_COLLAPSE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_EXPAND);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_DECREMENT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_INCREMENT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_HIDE_TOOLTIP);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_SHOW_TOOLTIP);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_SET_TEXT_SELECTION);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_REPLACE_SELECTED_TEXT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_SCROLL_BACKWARD);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_SCROLL_DOWN);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_SCROLL_FORWARD);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_SCROLL_LEFT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_SCROLL_RIGHT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_SCROLL_UP);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_SCROLL_INTO_VIEW);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_SCROLL_TO_POINT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_SET_SCROLL_OFFSET);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_SET_VALUE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_SHOW_CONTEXT_MENU);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::ACTION_CUSTOM);
 
-	BIND_ENUM_CONSTANT(LIVE_OFF);
-	BIND_ENUM_CONSTANT(LIVE_POLITE);
-	BIND_ENUM_CONSTANT(LIVE_ASSERTIVE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::LIVE_OFF);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::LIVE_POLITE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::LIVE_ASSERTIVE);
 
-	BIND_ENUM_CONSTANT(SCROLL_UNIT_ITEM);
-	BIND_ENUM_CONSTANT(SCROLL_UNIT_PAGE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::SCROLL_UNIT_ITEM);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::SCROLL_UNIT_PAGE);
 
-	BIND_ENUM_CONSTANT(SCROLL_HINT_TOP_LEFT);
-	BIND_ENUM_CONSTANT(SCROLL_HINT_BOTTOM_RIGHT);
-	BIND_ENUM_CONSTANT(SCROLL_HINT_TOP_EDGE);
-	BIND_ENUM_CONSTANT(SCROLL_HINT_BOTTOM_EDGE);
-	BIND_ENUM_CONSTANT(SCROLL_HINT_LEFT_EDGE);
-	BIND_ENUM_CONSTANT(SCROLL_HINT_RIGHT_EDGE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::SCROLL_HINT_TOP_LEFT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::SCROLL_HINT_BOTTOM_RIGHT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::SCROLL_HINT_TOP_EDGE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::SCROLL_HINT_BOTTOM_EDGE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::SCROLL_HINT_LEFT_EDGE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::SCROLL_HINT_RIGHT_EDGE);
 
-	BIND_ENUM_CONSTANT(MOUSE_MODE_VISIBLE);
-	BIND_ENUM_CONSTANT(MOUSE_MODE_HIDDEN);
-	BIND_ENUM_CONSTANT(MOUSE_MODE_CAPTURED);
-	BIND_ENUM_CONSTANT(MOUSE_MODE_CONFINED);
-	BIND_ENUM_CONSTANT(MOUSE_MODE_CONFINED_HIDDEN);
-	BIND_ENUM_CONSTANT(MOUSE_MODE_MAX);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::MOUSE_MODE_VISIBLE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::MOUSE_MODE_HIDDEN);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::MOUSE_MODE_CAPTURED);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::MOUSE_MODE_CONFINED);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::MOUSE_MODE_CONFINED_HIDDEN);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::MOUSE_MODE_MAX);
 #endif // DISABLE_DEPRECATED
 
-	BIND_CONSTANT(INVALID_SCREEN);
-	BIND_CONSTANT(SCREEN_WITH_MOUSE_FOCUS);
-	BIND_CONSTANT(SCREEN_WITH_KEYBOARD_FOCUS);
-	BIND_CONSTANT(SCREEN_PRIMARY);
-	BIND_CONSTANT(SCREEN_OF_MAIN_WINDOW);
+	BIND_CONSTANT(DisplayServerEnums::INVALID_SCREEN);
+	BIND_CONSTANT(DisplayServerEnums::SCREEN_WITH_MOUSE_FOCUS);
+	BIND_CONSTANT(DisplayServerEnums::SCREEN_WITH_KEYBOARD_FOCUS);
+	BIND_CONSTANT(DisplayServerEnums::SCREEN_PRIMARY);
+	BIND_CONSTANT(DisplayServerEnums::SCREEN_OF_MAIN_WINDOW);
 
 	BIND_CONSTANT(DisplayServerEnums::MAIN_WINDOW_ID);
 	BIND_CONSTANT(DisplayServerEnums::INVALID_WINDOW_ID);
 	BIND_CONSTANT(DisplayServerEnums::INVALID_INDICATOR_ID);
 
-	BIND_ENUM_CONSTANT(SCREEN_LANDSCAPE);
-	BIND_ENUM_CONSTANT(SCREEN_PORTRAIT);
-	BIND_ENUM_CONSTANT(SCREEN_REVERSE_LANDSCAPE);
-	BIND_ENUM_CONSTANT(SCREEN_REVERSE_PORTRAIT);
-	BIND_ENUM_CONSTANT(SCREEN_SENSOR_LANDSCAPE);
-	BIND_ENUM_CONSTANT(SCREEN_SENSOR_PORTRAIT);
-	BIND_ENUM_CONSTANT(SCREEN_SENSOR);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::SCREEN_LANDSCAPE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::SCREEN_PORTRAIT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::SCREEN_REVERSE_LANDSCAPE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::SCREEN_REVERSE_PORTRAIT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::SCREEN_SENSOR_LANDSCAPE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::SCREEN_SENSOR_PORTRAIT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::SCREEN_SENSOR);
 
-	BIND_ENUM_CONSTANT(KEYBOARD_TYPE_DEFAULT);
-	BIND_ENUM_CONSTANT(KEYBOARD_TYPE_MULTILINE);
-	BIND_ENUM_CONSTANT(KEYBOARD_TYPE_NUMBER);
-	BIND_ENUM_CONSTANT(KEYBOARD_TYPE_NUMBER_DECIMAL);
-	BIND_ENUM_CONSTANT(KEYBOARD_TYPE_PHONE);
-	BIND_ENUM_CONSTANT(KEYBOARD_TYPE_EMAIL_ADDRESS);
-	BIND_ENUM_CONSTANT(KEYBOARD_TYPE_PASSWORD);
-	BIND_ENUM_CONSTANT(KEYBOARD_TYPE_URL);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::KEYBOARD_TYPE_DEFAULT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::KEYBOARD_TYPE_MULTILINE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::KEYBOARD_TYPE_NUMBER);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::KEYBOARD_TYPE_NUMBER_DECIMAL);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::KEYBOARD_TYPE_PHONE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::KEYBOARD_TYPE_EMAIL_ADDRESS);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::KEYBOARD_TYPE_PASSWORD);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::KEYBOARD_TYPE_URL);
 
-	BIND_ENUM_CONSTANT(CURSOR_ARROW);
-	BIND_ENUM_CONSTANT(CURSOR_IBEAM);
-	BIND_ENUM_CONSTANT(CURSOR_POINTING_HAND);
-	BIND_ENUM_CONSTANT(CURSOR_CROSS);
-	BIND_ENUM_CONSTANT(CURSOR_WAIT);
-	BIND_ENUM_CONSTANT(CURSOR_BUSY);
-	BIND_ENUM_CONSTANT(CURSOR_DRAG);
-	BIND_ENUM_CONSTANT(CURSOR_CAN_DROP);
-	BIND_ENUM_CONSTANT(CURSOR_FORBIDDEN);
-	BIND_ENUM_CONSTANT(CURSOR_VSIZE);
-	BIND_ENUM_CONSTANT(CURSOR_HSIZE);
-	BIND_ENUM_CONSTANT(CURSOR_BDIAGSIZE);
-	BIND_ENUM_CONSTANT(CURSOR_FDIAGSIZE);
-	BIND_ENUM_CONSTANT(CURSOR_MOVE);
-	BIND_ENUM_CONSTANT(CURSOR_VSPLIT);
-	BIND_ENUM_CONSTANT(CURSOR_HSPLIT);
-	BIND_ENUM_CONSTANT(CURSOR_HELP);
-	BIND_ENUM_CONSTANT(CURSOR_MAX);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_ARROW);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_IBEAM);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_POINTING_HAND);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_CROSS);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_WAIT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_BUSY);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_DRAG);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_CAN_DROP);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_FORBIDDEN);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_VSIZE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_HSIZE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_BDIAGSIZE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_FDIAGSIZE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_MOVE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_VSPLIT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_HSPLIT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_HELP);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::CURSOR_MAX);
 
-	BIND_ENUM_CONSTANT(FILE_DIALOG_MODE_OPEN_FILE);
-	BIND_ENUM_CONSTANT(FILE_DIALOG_MODE_OPEN_FILES);
-	BIND_ENUM_CONSTANT(FILE_DIALOG_MODE_OPEN_DIR);
-	BIND_ENUM_CONSTANT(FILE_DIALOG_MODE_OPEN_ANY);
-	BIND_ENUM_CONSTANT(FILE_DIALOG_MODE_SAVE_FILE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FILE_DIALOG_MODE_OPEN_FILE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FILE_DIALOG_MODE_OPEN_FILES);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FILE_DIALOG_MODE_OPEN_DIR);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FILE_DIALOG_MODE_OPEN_ANY);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::FILE_DIALOG_MODE_SAVE_FILE);
 
 	BIND_ENUM_CONSTANT(DisplayServerEnums::WINDOW_MODE_WINDOWED);
 	BIND_ENUM_CONSTANT(DisplayServerEnums::WINDOW_MODE_MINIMIZED);
@@ -1977,19 +1977,19 @@ void DisplayServer::_bind_methods() {
 	BIND_ENUM_CONSTANT(DisplayServerEnums::VSYNC_ADAPTIVE);
 	BIND_ENUM_CONSTANT(DisplayServerEnums::VSYNC_MAILBOX);
 
-	BIND_ENUM_CONSTANT(DISPLAY_HANDLE);
-	BIND_ENUM_CONSTANT(WINDOW_HANDLE);
-	BIND_ENUM_CONSTANT(WINDOW_VIEW);
-	BIND_ENUM_CONSTANT(OPENGL_CONTEXT);
-	BIND_ENUM_CONSTANT(EGL_DISPLAY);
-	BIND_ENUM_CONSTANT(EGL_CONFIG);
-	BIND_ENUM_CONSTANT(GLX_VISUALID);
-	BIND_ENUM_CONSTANT(GLX_FBCONFIG);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::DISPLAY_HANDLE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::WINDOW_HANDLE);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::WINDOW_VIEW);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::OPENGL_CONTEXT);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::EGL_DISPLAY);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::EGL_CONFIG);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::GLX_VISUALID);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::GLX_FBCONFIG);
 
-	BIND_ENUM_CONSTANT(TTS_UTTERANCE_STARTED);
-	BIND_ENUM_CONSTANT(TTS_UTTERANCE_ENDED);
-	BIND_ENUM_CONSTANT(TTS_UTTERANCE_CANCELED);
-	BIND_ENUM_CONSTANT(TTS_UTTERANCE_BOUNDARY);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::TTS_UTTERANCE_STARTED);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::TTS_UTTERANCE_ENDED);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::TTS_UTTERANCE_CANCELED);
+	BIND_ENUM_CONSTANT(DisplayServerEnums::TTS_UTTERANCE_BOUNDARY);
 }
 
 Ref<Image> DisplayServer::_get_cursor_image_from_resource(const Ref<Resource> &p_cursor, const Vector2 &p_hotspot) {
@@ -2040,13 +2040,13 @@ Vector<String> DisplayServer::get_create_function_rendering_drivers(int p_index)
 	return server_create_functions[p_index].get_rendering_drivers_function();
 }
 
-DisplayServer *DisplayServer::create(int p_index, const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServer::create(int p_index, const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error) {
 	ERR_FAIL_INDEX_V(p_index, server_create_count, nullptr);
 	return server_create_functions[p_index].create_function(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, p_parent_window, r_error);
 }
 
 void DisplayServer::_input_set_mouse_mode(InputClassEnums::MouseMode p_mode) {
-	singleton->mouse_set_mode(MouseMode(p_mode));
+	singleton->mouse_set_mode(DisplayServerEnums::MouseMode(p_mode));
 }
 
 InputClassEnums::MouseMode DisplayServer::_input_get_mouse_mode() {
@@ -2054,7 +2054,7 @@ InputClassEnums::MouseMode DisplayServer::_input_get_mouse_mode() {
 }
 
 void DisplayServer::_input_set_mouse_mode_override(InputClassEnums::MouseMode p_mode) {
-	singleton->mouse_set_mode_override(MouseMode(p_mode));
+	singleton->mouse_set_mode_override(DisplayServerEnums::MouseMode(p_mode));
 }
 
 InputClassEnums::MouseMode DisplayServer::_input_get_mouse_mode_override() {
@@ -2078,7 +2078,7 @@ InputClassEnums::CursorShape DisplayServer::_input_get_current_cursor_shape() {
 }
 
 void DisplayServer::_input_set_custom_mouse_cursor_func(const Ref<Resource> &p_image, InputClassEnums::CursorShape p_shape, const Vector2 &p_hotspot) {
-	singleton->cursor_set_custom_image(p_image, (CursorShape)p_shape, p_hotspot);
+	singleton->cursor_set_custom_image(p_image, (DisplayServerEnums::CursorShape)p_shape, p_hotspot);
 }
 
 bool DisplayServer::is_rendering_device_supported() {
@@ -2088,9 +2088,9 @@ bool DisplayServer::is_rendering_device_supported() {
 		return true;
 	}
 
-	if (supported_rendering_device == RenderingDeviceCreationStatus::SUCCESS) {
+	if (supported_rendering_device == DisplayServerEnums::RenderingDeviceCreationStatus::SUCCESS) {
 		return true;
-	} else if (supported_rendering_device == RenderingDeviceCreationStatus::FAILURE) {
+	} else if (supported_rendering_device == DisplayServerEnums::RenderingDeviceCreationStatus::FAILURE) {
 		return false;
 	}
 
@@ -2109,10 +2109,10 @@ bool DisplayServer::is_rendering_device_supported() {
 	int exitcode = 0;
 	err = OS::get_singleton()->execute(OS::get_singleton()->get_executable_path(), arguments, &pipe, &exitcode);
 	if (err == OK && exitcode == 0) {
-		supported_rendering_device = RenderingDeviceCreationStatus::SUCCESS;
+		supported_rendering_device = DisplayServerEnums::RenderingDeviceCreationStatus::SUCCESS;
 		return true;
 	} else {
-		supported_rendering_device = RenderingDeviceCreationStatus::FAILURE;
+		supported_rendering_device = DisplayServerEnums::RenderingDeviceCreationStatus::FAILURE;
 	}
 #else // WINDOWS_ENABLED
 
@@ -2145,12 +2145,12 @@ bool DisplayServer::is_rendering_device_supported() {
 			if (err == OK) {
 				// Creating a RenderingDevice is quite slow.
 				// Cache the result for future usage, so that it's much faster on subsequent calls.
-				supported_rendering_device = RenderingDeviceCreationStatus::SUCCESS;
+				supported_rendering_device = DisplayServerEnums::RenderingDeviceCreationStatus::SUCCESS;
 				memdelete(rcd);
 				rcd = nullptr;
 				return true;
 			} else {
-				supported_rendering_device = RenderingDeviceCreationStatus::FAILURE;
+				supported_rendering_device = DisplayServerEnums::RenderingDeviceCreationStatus::FAILURE;
 			}
 		}
 
@@ -2174,9 +2174,9 @@ bool DisplayServer::can_create_rendering_device() {
 		return true;
 	}
 
-	if (created_rendering_device == RenderingDeviceCreationStatus::SUCCESS) {
+	if (created_rendering_device == DisplayServerEnums::RenderingDeviceCreationStatus::SUCCESS) {
 		return true;
-	} else if (created_rendering_device == RenderingDeviceCreationStatus::FAILURE) {
+	} else if (created_rendering_device == DisplayServerEnums::RenderingDeviceCreationStatus::FAILURE) {
 		return false;
 	}
 
@@ -2191,10 +2191,10 @@ bool DisplayServer::can_create_rendering_device() {
 	int exitcode = 0;
 	err = OS::get_singleton()->execute(OS::get_singleton()->get_executable_path(), arguments, &pipe, &exitcode);
 	if (err == OK && exitcode == 0) {
-		created_rendering_device = RenderingDeviceCreationStatus::SUCCESS;
+		created_rendering_device = DisplayServerEnums::RenderingDeviceCreationStatus::SUCCESS;
 		return true;
 	} else {
-		created_rendering_device = RenderingDeviceCreationStatus::FAILURE;
+		created_rendering_device = DisplayServerEnums::RenderingDeviceCreationStatus::FAILURE;
 	}
 #else // WINDOWS_ENABLED
 
@@ -2227,12 +2227,12 @@ bool DisplayServer::can_create_rendering_device() {
 			if (err == OK) {
 				// Creating a RenderingDevice is quite slow.
 				// Cache the result for future usage, so that it's much faster on subsequent calls.
-				created_rendering_device = RenderingDeviceCreationStatus::SUCCESS;
+				created_rendering_device = DisplayServerEnums::RenderingDeviceCreationStatus::SUCCESS;
 				memdelete(rcd);
 				rcd = nullptr;
 				return true;
 			} else {
-				created_rendering_device = RenderingDeviceCreationStatus::FAILURE;
+				created_rendering_device = DisplayServerEnums::RenderingDeviceCreationStatus::FAILURE;
 			}
 		}
 

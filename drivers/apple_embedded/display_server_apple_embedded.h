@@ -71,7 +71,7 @@ class DisplayServerAppleEmbedded : public DisplayServer {
 
 	id tts = nullptr;
 
-	DisplayServer::ScreenOrientation screen_orientation;
+	DisplayServerEnums::ScreenOrientation screen_orientation;
 
 	ObjectID window_attached_instance_id;
 
@@ -98,7 +98,7 @@ protected:
 	virtual float _screen_current_edr_headroom() const { return 1.0f; }
 	float hardware_reference_luminance_nits = 100.0f;
 
-	DisplayServerAppleEmbedded(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error);
+	DisplayServerAppleEmbedded(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error);
 	~DisplayServerAppleEmbedded();
 
 public:
@@ -148,7 +148,7 @@ public:
 
 	// MARK: -
 
-	virtual bool has_feature(Feature p_feature) const override;
+	virtual bool has_feature(DisplayServerEnums::Feature p_feature) const override;
 
 	virtual bool tts_is_speaking() const override;
 	virtual bool tts_is_paused() const override;
@@ -167,15 +167,15 @@ public:
 
 	virtual int get_screen_count() const override;
 	virtual int get_primary_screen() const override;
-	virtual Point2i screen_get_position(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
-	virtual Size2i screen_get_size(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
-	virtual Rect2i screen_get_usable_rect(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
+	virtual Point2i screen_get_position(int p_screen = DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) const override;
+	virtual Size2i screen_get_size(int p_screen = DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) const override;
+	virtual Rect2i screen_get_usable_rect(int p_screen = DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) const override;
 
 	virtual Vector<DisplayServerEnums::WindowID> get_window_list() const override;
 
 	virtual DisplayServerEnums::WindowID get_window_at_screen_position(const Point2i &p_position) const override;
 
-	virtual int64_t window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const override;
+	virtual int64_t window_get_native_handle(DisplayServerEnums::HandleType p_handle_type, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const override;
 
 	virtual void window_attach_instance_id(ObjectID p_instance, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) override;
 	virtual ObjectID window_get_attached_instance_id(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const override;
@@ -215,8 +215,8 @@ public:
 
 	virtual float screen_get_max_scale() const override;
 
-	virtual void screen_set_orientation(DisplayServer::ScreenOrientation p_orientation, int p_screen) override;
-	virtual DisplayServer::ScreenOrientation screen_get_orientation(int p_screen) const override;
+	virtual void screen_set_orientation(DisplayServerEnums::ScreenOrientation p_orientation, int p_screen) override;
+	virtual DisplayServerEnums::ScreenOrientation screen_get_orientation(int p_screen) const override;
 
 	virtual bool window_can_draw(DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) const override;
 
@@ -227,7 +227,7 @@ public:
 
 	virtual bool is_touchscreen_available() const override;
 
-	virtual void virtual_keyboard_show(const String &p_existing_text, const Rect2 &p_screen_rect, VirtualKeyboardType p_type, int p_max_length, int p_cursor_start, int p_cursor_end) override;
+	virtual void virtual_keyboard_show(const String &p_existing_text, const Rect2 &p_screen_rect, DisplayServerEnums::VirtualKeyboardType p_type, int p_max_length, int p_cursor_start, int p_cursor_end) override;
 	virtual void virtual_keyboard_hide() override;
 
 	void virtual_keyboard_set_height(int height);

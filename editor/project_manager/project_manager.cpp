@@ -1422,7 +1422,7 @@ ProjectManager::ProjectManager() {
 	root_container->add_child(main_vbox);
 
 	// Title bar.
-	bool can_expand = bool(EDITOR_GET("interface/editor/appearance/expand_to_title")) && DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_EXTEND_TO_TITLE);
+	bool can_expand = bool(EDITOR_GET("interface/editor/appearance/expand_to_title")) && DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_EXTEND_TO_TITLE);
 
 	{
 		title_bar = memnew(EditorTitleBar);

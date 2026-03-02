@@ -91,7 +91,7 @@ Error EmbeddedDebugger::_msg_window_size(const Array &p_args) {
 
 Error EmbeddedDebugger::_msg_mouse_set_mode(const Array &p_args) {
 	ERR_FAIL_COND_V_MSG(p_args.size() != 1, ERR_INVALID_PARAMETER, "Invalid number of arguments for 'mouse_set_mode' message.");
-	DisplayServer::MouseMode mode = p_args[0];
+	DisplayServerEnums::MouseMode mode = p_args[0];
 	ds->mouse_set_mode(mode);
 	return OK;
 }

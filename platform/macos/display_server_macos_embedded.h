@@ -97,7 +97,7 @@ class DisplayServerMacOSEmbedded : public DisplayServerMacOSBase {
 
 	Point2i ime_last_position;
 
-	void _mouse_apply_mode(MouseMode p_prev_mode, MouseMode p_new_mode) override;
+	void _mouse_apply_mode(DisplayServerEnums::MouseMode p_prev_mode, DisplayServerEnums::MouseMode p_new_mode) override;
 
 	struct Joy {
 		String name;
@@ -111,7 +111,7 @@ class DisplayServerMacOSEmbedded : public DisplayServerMacOSBase {
 
 public:
 	static void register_embedded_driver();
-	static DisplayServer *create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error);
+	static DisplayServer *create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error);
 	static Vector<String> get_rendering_drivers_func();
 
 	void _window_set_size(const Size2i p_size, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID);
@@ -139,15 +139,15 @@ public:
 
 	// MARK: - Window
 
-	virtual bool has_feature(Feature p_feature) const override;
+	virtual bool has_feature(DisplayServerEnums::Feature p_feature) const override;
 	virtual String get_name() const override;
 
 	virtual int get_screen_count() const override;
-	virtual Point2i screen_get_position(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
-	virtual Size2i screen_get_size(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
-	virtual Rect2i screen_get_usable_rect(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
-	virtual int screen_get_dpi(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
-	virtual float screen_get_scale(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
+	virtual Point2i screen_get_position(int p_screen = DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) const override;
+	virtual Size2i screen_get_size(int p_screen = DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) const override;
+	virtual Rect2i screen_get_usable_rect(int p_screen = DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) const override;
+	virtual int screen_get_dpi(int p_screen = DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) const override;
+	virtual float screen_get_scale(int p_screen = DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) const override;
 	virtual Vector<DisplayServerEnums::WindowID> get_window_list() const override;
 
 	virtual DisplayServerEnums::WindowID get_window_at_screen_position(const Point2i &p_position) const override;
@@ -202,8 +202,8 @@ public:
 	virtual void window_set_vsync_mode(DisplayServerEnums::VSyncMode p_vsync_mode, DisplayServerEnums::WindowID p_window = DisplayServerEnums::MAIN_WINDOW_ID) override;
 	virtual DisplayServerEnums::VSyncMode window_get_vsync_mode(DisplayServerEnums::WindowID p_vsync_mode) const override;
 
-	virtual void cursor_set_shape(CursorShape p_shape) override;
-	virtual void cursor_set_custom_image(const Ref<Resource> &p_cursor, CursorShape p_shape = CURSOR_ARROW, const Vector2 &p_hotspot = Vector2()) override;
+	virtual void cursor_set_shape(DisplayServerEnums::CursorShape p_shape) override;
+	virtual void cursor_set_custom_image(const Ref<Resource> &p_cursor, DisplayServerEnums::CursorShape p_shape = DisplayServerEnums::CURSOR_ARROW, const Vector2 &p_hotspot = Vector2()) override;
 
 	void window_get_edr_values(DisplayServerEnums::WindowID p_window, CGFloat *r_max_potential_edr_value, CGFloat *r_max_edr_value) const override;
 	void update_screen_parameters();
@@ -211,6 +211,6 @@ public:
 	void set_state(const DisplayServerMacOSEmbeddedState &p_state);
 	virtual void swap_buffers() override;
 
-	DisplayServerMacOSEmbedded(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, Error &r_error);
+	DisplayServerMacOSEmbedded(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, Error &r_error);
 	~DisplayServerMacOSEmbedded();
 };

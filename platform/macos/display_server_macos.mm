@@ -788,44 +788,44 @@ void DisplayServerMacOS::window_resize(DisplayServerEnums::WindowID p_window, in
 #endif
 }
 
-bool DisplayServerMacOS::has_feature(Feature p_feature) const {
+bool DisplayServerMacOS::has_feature(DisplayServerEnums::Feature p_feature) const {
 	switch (p_feature) {
 #ifndef DISABLE_DEPRECATED
-		case FEATURE_GLOBAL_MENU: {
+		case DisplayServerEnums::FEATURE_GLOBAL_MENU: {
 			return (native_menu && native_menu->has_feature(NativeMenu::FEATURE_GLOBAL_MENU));
 		} break;
 #endif
-		case FEATURE_SUBWINDOWS:
-		//case FEATURE_TOUCHSCREEN:
-		case FEATURE_MOUSE:
-		case FEATURE_MOUSE_WARP:
-		case FEATURE_CLIPBOARD:
-		case FEATURE_CURSOR_SHAPE:
-		case FEATURE_CUSTOM_CURSOR_SHAPE:
-		case FEATURE_NATIVE_DIALOG:
-		case FEATURE_NATIVE_DIALOG_INPUT:
-		case FEATURE_NATIVE_DIALOG_FILE:
-		case FEATURE_NATIVE_DIALOG_FILE_EXTRA:
-		case FEATURE_NATIVE_DIALOG_FILE_MIME:
-		case FEATURE_IME:
-		case FEATURE_WINDOW_TRANSPARENCY:
-		case FEATURE_HIDPI:
-		case FEATURE_ICON:
-		case FEATURE_NATIVE_ICON:
-		//case FEATURE_KEEP_SCREEN_ON:
-		case FEATURE_SWAP_BUFFERS:
-		case FEATURE_TEXT_TO_SPEECH:
-		case FEATURE_EXTEND_TO_TITLE:
-		case FEATURE_SCREEN_CAPTURE:
-		case FEATURE_STATUS_INDICATOR:
-		case FEATURE_NATIVE_HELP:
-		case FEATURE_WINDOW_DRAG:
-		case FEATURE_SCREEN_EXCLUDE_FROM_CAPTURE:
-		case FEATURE_EMOJI_AND_SYMBOL_PICKER:
-		case FEATURE_WINDOW_EMBEDDING:
-		case FEATURE_HDR_OUTPUT:
+		case DisplayServerEnums::FEATURE_SUBWINDOWS:
+		//case DisplayServerEnums::FEATURE_TOUCHSCREEN:
+		case DisplayServerEnums::FEATURE_MOUSE:
+		case DisplayServerEnums::FEATURE_MOUSE_WARP:
+		case DisplayServerEnums::FEATURE_CLIPBOARD:
+		case DisplayServerEnums::FEATURE_CURSOR_SHAPE:
+		case DisplayServerEnums::FEATURE_CUSTOM_CURSOR_SHAPE:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG_INPUT:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE_EXTRA:
+		case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE_MIME:
+		case DisplayServerEnums::FEATURE_IME:
+		case DisplayServerEnums::FEATURE_WINDOW_TRANSPARENCY:
+		case DisplayServerEnums::FEATURE_HIDPI:
+		case DisplayServerEnums::FEATURE_ICON:
+		case DisplayServerEnums::FEATURE_NATIVE_ICON:
+		//case DisplayServerEnums::FEATURE_KEEP_SCREEN_ON:
+		case DisplayServerEnums::FEATURE_SWAP_BUFFERS:
+		case DisplayServerEnums::FEATURE_TEXT_TO_SPEECH:
+		case DisplayServerEnums::FEATURE_EXTEND_TO_TITLE:
+		case DisplayServerEnums::FEATURE_SCREEN_CAPTURE:
+		case DisplayServerEnums::FEATURE_STATUS_INDICATOR:
+		case DisplayServerEnums::FEATURE_NATIVE_HELP:
+		case DisplayServerEnums::FEATURE_WINDOW_DRAG:
+		case DisplayServerEnums::FEATURE_SCREEN_EXCLUDE_FROM_CAPTURE:
+		case DisplayServerEnums::FEATURE_EMOJI_AND_SYMBOL_PICKER:
+		case DisplayServerEnums::FEATURE_WINDOW_EMBEDDING:
+		case DisplayServerEnums::FEATURE_HDR_OUTPUT:
 			return true;
-		case FEATURE_ACCESSIBILITY_SCREEN_READER: {
+		case DisplayServerEnums::FEATURE_ACCESSIBILITY_SCREEN_READER: {
 			return AccessibilityServer::get_singleton()->is_supported();
 		} break;
 		default: {
@@ -892,18 +892,18 @@ Error DisplayServerMacOS::dialog_show(String p_title, String p_description, Vect
 	return OK;
 }
 
-Error DisplayServerMacOS::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
+Error DisplayServerMacOS::file_dialog_show(const String &p_title, const String &p_current_directory, const String &p_filename, bool p_show_hidden, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	return _file_dialog_with_options_show(p_title, p_current_directory, String(), p_filename, p_show_hidden, p_mode, p_filters, TypedArray<Dictionary>(), p_callback, false, p_window_id);
 }
 
-Error DisplayServerMacOS::file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
+Error DisplayServerMacOS::file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, DisplayServerEnums::WindowID p_window_id) {
 	return _file_dialog_with_options_show(p_title, p_current_directory, p_root, p_filename, p_show_hidden, p_mode, p_filters, p_options, p_callback, true, p_window_id);
 }
 
-Error DisplayServerMacOS::_file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, bool p_options_in_cb, DisplayServerEnums::WindowID p_window_id) {
+Error DisplayServerMacOS::_file_dialog_with_options_show(const String &p_title, const String &p_current_directory, const String &p_root, const String &p_filename, bool p_show_hidden, DisplayServerEnums::FileDialogMode p_mode, const Vector<String> &p_filters, const TypedArray<Dictionary> &p_options, const Callable &p_callback, bool p_options_in_cb, DisplayServerEnums::WindowID p_window_id) {
 	_THREAD_SAFE_METHOD_
 
-	ERR_FAIL_INDEX_V(int(p_mode), FILE_DIALOG_MODE_SAVE_MAX, FAILED);
+	ERR_FAIL_INDEX_V(int(p_mode), DisplayServerEnums::FILE_DIALOG_MODE_SAVE_MAX, FAILED);
 
 	NSString *url = [NSString stringWithUTF8String:p_current_directory.utf8().get_data()];
 
@@ -917,7 +917,7 @@ Error DisplayServerMacOS::_file_dialog_with_options_show(const String &p_title, 
 		[panel_delegate setRootPath:p_root];
 	}
 	Callable callback = p_callback; // Make a copy for async completion handler.
-	if (p_mode == FILE_DIALOG_MODE_SAVE_FILE) {
+	if (p_mode == DisplayServerEnums::FILE_DIALOG_MODE_SAVE_FILE) {
 		NSSavePanel *panel = [NSSavePanel savePanel];
 
 		[panel setDirectoryURL:[NSURL fileURLWithPath:url]];
@@ -1036,8 +1036,8 @@ Error DisplayServerMacOS::_file_dialog_with_options_show(const String &p_title, 
 		[panel setExtensionHidden:YES];
 		[panel setCanSelectHiddenExtension:YES];
 		[panel setCanCreateDirectories:YES];
-		[panel setCanChooseFiles:(p_mode != FILE_DIALOG_MODE_OPEN_DIR)];
-		[panel setCanChooseDirectories:(p_mode == FILE_DIALOG_MODE_OPEN_DIR || p_mode == FILE_DIALOG_MODE_OPEN_ANY)];
+		[panel setCanChooseFiles:(p_mode != DisplayServerEnums::FILE_DIALOG_MODE_OPEN_DIR)];
+		[panel setCanChooseDirectories:(p_mode == DisplayServerEnums::FILE_DIALOG_MODE_OPEN_DIR || p_mode == DisplayServerEnums::FILE_DIALOG_MODE_OPEN_ANY)];
 		[panel setTreatsFilePackagesAsDirectories:YES];
 		[panel setShowsHiddenFiles:p_show_hidden];
 		[panel setDelegate:panel_delegate];
@@ -1045,7 +1045,7 @@ Error DisplayServerMacOS::_file_dialog_with_options_show(const String &p_title, 
 			NSString *fileurl = [NSString stringWithUTF8String:p_filename.utf8().get_data()];
 			[panel setNameFieldStringValue:fileurl];
 		}
-		[panel setAllowsMultipleSelection:(p_mode == FILE_DIALOG_MODE_OPEN_FILES)];
+		[panel setAllowsMultipleSelection:(p_mode == DisplayServerEnums::FILE_DIALOG_MODE_OPEN_FILES)];
 
 		void (^completion_handler)(NSInteger ret) = ^(NSInteger ret) {
 			if (ret == NSModalResponseOK) {
@@ -1190,7 +1190,7 @@ Error DisplayServerMacOS::dialog_input_text(String p_title, String p_description
 	return OK;
 }
 
-void DisplayServerMacOS::_mouse_apply_mode(MouseMode p_prev_mode, MouseMode p_new_mode) {
+void DisplayServerMacOS::_mouse_apply_mode(DisplayServerEnums::MouseMode p_prev_mode, DisplayServerEnums::MouseMode p_new_mode) {
 	_THREAD_SAFE_METHOD_
 
 	DisplayServerEnums::WindowID window_id = _get_focused_window_or_popup();
@@ -1199,15 +1199,15 @@ void DisplayServerMacOS::_mouse_apply_mode(MouseMode p_prev_mode, MouseMode p_ne
 	}
 	WindowData &wd = windows[window_id];
 
-	bool show_cursor = (p_new_mode == MOUSE_MODE_VISIBLE || p_new_mode == MOUSE_MODE_CONFINED);
-	bool previously_shown = (p_prev_mode == MOUSE_MODE_VISIBLE || p_prev_mode == MOUSE_MODE_CONFINED);
+	bool show_cursor = (p_new_mode == DisplayServerEnums::MOUSE_MODE_VISIBLE || p_new_mode == DisplayServerEnums::MOUSE_MODE_CONFINED);
+	bool previously_shown = (p_prev_mode == DisplayServerEnums::MOUSE_MODE_VISIBLE || p_prev_mode == DisplayServerEnums::MOUSE_MODE_CONFINED);
 
 	if (show_cursor && !previously_shown) {
 		window_id = get_window_at_screen_position(mouse_get_position());
 		mouse_enter_window(window_id);
 	}
 
-	if (p_new_mode == MOUSE_MODE_CAPTURED) {
+	if (p_new_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 		// Apple Docs state that the display parameter is not used.
 		// "This parameter is not used. By default, you may pass kCGDirectMainDisplay."
 		// https://developer.apple.com/library/mac/documentation/graphicsimaging/reference/Quartz_Services_Ref/Reference/reference.html
@@ -1221,23 +1221,23 @@ void DisplayServerMacOS::_mouse_apply_mode(MouseMode p_prev_mode, MouseMode p_ne
 		NSPoint pointOnScreen = [[wd.window_view window] convertRectToScreen:pointInWindowRect].origin;
 		CGPoint lMouseWarpPos = { pointOnScreen.x, CGDisplayBounds(CGMainDisplayID()).size.height - pointOnScreen.y };
 		CGWarpMouseCursorPosition(lMouseWarpPos);
-	} else if (p_new_mode == MOUSE_MODE_HIDDEN) {
+	} else if (p_new_mode == DisplayServerEnums::MOUSE_MODE_HIDDEN) {
 		if (previously_shown) {
 			CGDisplayHideCursor(kCGDirectMainDisplay);
 		}
 		[wd.window_object setMovable:YES];
 		CGAssociateMouseAndMouseCursorPosition(true);
-	} else if (p_new_mode == MOUSE_MODE_CONFINED) {
+	} else if (p_new_mode == DisplayServerEnums::MOUSE_MODE_CONFINED) {
 		CGDisplayShowCursor(kCGDirectMainDisplay);
 		[wd.window_object setMovable:NO];
 		CGAssociateMouseAndMouseCursorPosition(false);
-	} else if (p_new_mode == MOUSE_MODE_CONFINED_HIDDEN) {
+	} else if (p_new_mode == DisplayServerEnums::MOUSE_MODE_CONFINED_HIDDEN) {
 		if (previously_shown) {
 			CGDisplayHideCursor(kCGDirectMainDisplay);
 		}
 		[wd.window_object setMovable:NO];
 		CGAssociateMouseAndMouseCursorPosition(false);
-	} else { // MOUSE_MODE_VISIBLE
+	} else { // DisplayServerEnums::MOUSE_MODE_VISIBLE
 		CGDisplayShowCursor(kCGDirectMainDisplay);
 		[wd.window_object setMovable:YES];
 		CGAssociateMouseAndMouseCursorPosition(true);
@@ -1264,7 +1264,7 @@ bool DisplayServerMacOS::update_mouse_wrap(WindowData &p_wd, NSPoint &r_delta, N
 		return true;
 	}
 
-	if (mouse_mode == DisplayServer::MOUSE_MODE_CONFINED || mouse_mode == DisplayServer::MOUSE_MODE_CONFINED_HIDDEN) {
+	if (mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED || mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED_HIDDEN) {
 		// Discard late events.
 		if (p_timestamp < last_warp) {
 			return true;
@@ -1321,7 +1321,7 @@ bool DisplayServerMacOS::update_mouse_wrap(WindowData &p_wd, NSPoint &r_delta, N
 void DisplayServerMacOS::warp_mouse(const Point2i &p_position) {
 	_THREAD_SAFE_METHOD_
 
-	if (mouse_mode != MOUSE_MODE_CAPTURED) {
+	if (mouse_mode != DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 		DisplayServerEnums::WindowID window_id = _get_focused_window_or_popup();
 		if (!windows.has(window_id)) {
 			window_id = DisplayServerEnums::MAIN_WINDOW_ID;
@@ -1342,7 +1342,7 @@ void DisplayServerMacOS::warp_mouse(const Point2i &p_position) {
 		CGEventSourceSetLocalEventsSuppressionInterval(lEventRef, 0.0);
 		CGAssociateMouseAndMouseCursorPosition(false);
 		CGWarpMouseCursorPosition(lMouseWarpPos);
-		if (mouse_mode != MOUSE_MODE_CONFINED && mouse_mode != MOUSE_MODE_CONFINED_HIDDEN) {
+		if (mouse_mode != DisplayServerEnums::MOUSE_MODE_CONFINED && mouse_mode != DisplayServerEnums::MOUSE_MODE_CONFINED_HIDDEN) {
 			CGAssociateMouseAndMouseCursorPosition(true);
 		}
 	}
@@ -1820,7 +1820,7 @@ void DisplayServerMacOS::window_set_mouse_passthrough(const Vector<Vector2> &p_r
 
 int DisplayServerMacOS::window_get_current_screen(DisplayServerEnums::WindowID p_window) const {
 	_THREAD_SAFE_METHOD_
-	ERR_FAIL_COND_V(!windows.has(p_window), INVALID_SCREEN);
+	ERR_FAIL_COND_V(!windows.has(p_window), DisplayServerEnums::INVALID_SCREEN);
 	const WindowData &wd = windows[p_window];
 
 	const NSUInteger index = [[NSScreen screens] indexOfObject:[wd.window_object screen]];
@@ -2728,20 +2728,20 @@ DisplayServerEnums::WindowID DisplayServerMacOS::get_window_at_screen_position(c
 	return DisplayServerEnums::INVALID_WINDOW_ID;
 }
 
-int64_t DisplayServerMacOS::window_get_native_handle(HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
+int64_t DisplayServerMacOS::window_get_native_handle(DisplayServerEnums::HandleType p_handle_type, DisplayServerEnums::WindowID p_window) const {
 	ERR_FAIL_COND_V(!windows.has(p_window), 0);
 	switch (p_handle_type) {
-		case DISPLAY_HANDLE: {
+		case DisplayServerEnums::DISPLAY_HANDLE: {
 			return 0; // Not supported.
 		}
-		case WINDOW_HANDLE: {
+		case DisplayServerEnums::WINDOW_HANDLE: {
 			return (int64_t)windows[p_window].window_object;
 		}
-		case WINDOW_VIEW: {
+		case DisplayServerEnums::WINDOW_VIEW: {
 			return (int64_t)windows[p_window].window_view;
 		}
 #ifdef GLES3_ENABLED
-		case OPENGL_CONTEXT: {
+		case DisplayServerEnums::OPENGL_CONTEXT: {
 			if (gl_manager_legacy) {
 				return (int64_t)gl_manager_legacy->get_context(p_window);
 			}
@@ -2750,13 +2750,13 @@ int64_t DisplayServerMacOS::window_get_native_handle(HandleType p_handle_type, D
 			}
 			return 0;
 		}
-		case EGL_DISPLAY: {
+		case DisplayServerEnums::EGL_DISPLAY: {
 			if (gl_manager_angle) {
 				return (int64_t)gl_manager_angle->get_display(p_window);
 			}
 			return 0;
 		}
-		case EGL_CONFIG: {
+		case DisplayServerEnums::EGL_CONFIG: {
 			if (gl_manager_angle) {
 				return (int64_t)gl_manager_angle->get_config(p_window);
 			}
@@ -2881,55 +2881,55 @@ void DisplayServerMacOS::cursor_update_shape() {
 		[cursors[cursor_shape] set];
 	} else {
 		switch (cursor_shape) {
-			case CURSOR_ARROW:
+			case DisplayServerEnums::CURSOR_ARROW:
 				[[NSCursor arrowCursor] set];
 				break;
-			case CURSOR_IBEAM:
+			case DisplayServerEnums::CURSOR_IBEAM:
 				[[NSCursor IBeamCursor] set];
 				break;
-			case CURSOR_POINTING_HAND:
+			case DisplayServerEnums::CURSOR_POINTING_HAND:
 				[[NSCursor pointingHandCursor] set];
 				break;
-			case CURSOR_CROSS:
+			case DisplayServerEnums::CURSOR_CROSS:
 				[[NSCursor crosshairCursor] set];
 				break;
-			case CURSOR_WAIT:
+			case DisplayServerEnums::CURSOR_WAIT:
 				[[NSCursor arrowCursor] set];
 				break;
-			case CURSOR_BUSY:
+			case DisplayServerEnums::CURSOR_BUSY:
 				[[NSCursor arrowCursor] set];
 				break;
-			case CURSOR_DRAG:
+			case DisplayServerEnums::CURSOR_DRAG:
 				[[NSCursor closedHandCursor] set];
 				break;
-			case CURSOR_CAN_DROP:
+			case DisplayServerEnums::CURSOR_CAN_DROP:
 				[[NSCursor openHandCursor] set];
 				break;
-			case CURSOR_FORBIDDEN:
+			case DisplayServerEnums::CURSOR_FORBIDDEN:
 				[[NSCursor operationNotAllowedCursor] set];
 				break;
-			case CURSOR_VSIZE:
+			case DisplayServerEnums::CURSOR_VSIZE:
 				[_cursor_from_selector(@selector(_windowResizeNorthSouthCursor), @selector(resizeUpDownCursor)) set];
 				break;
-			case CURSOR_HSIZE:
+			case DisplayServerEnums::CURSOR_HSIZE:
 				[_cursor_from_selector(@selector(_windowResizeEastWestCursor), @selector(resizeLeftRightCursor)) set];
 				break;
-			case CURSOR_BDIAGSIZE:
+			case DisplayServerEnums::CURSOR_BDIAGSIZE:
 				[_cursor_from_selector(@selector(_windowResizeNorthEastSouthWestCursor)) set];
 				break;
-			case CURSOR_FDIAGSIZE:
+			case DisplayServerEnums::CURSOR_FDIAGSIZE:
 				[_cursor_from_selector(@selector(_windowResizeNorthWestSouthEastCursor)) set];
 				break;
-			case CURSOR_MOVE:
+			case DisplayServerEnums::CURSOR_MOVE:
 				[[[GodotCoreCursor alloc] initWithType:GDCoreCursorWindowMove] set];
 				break;
-			case CURSOR_VSPLIT:
+			case DisplayServerEnums::CURSOR_VSPLIT:
 				[[NSCursor resizeUpDownCursor] set];
 				break;
-			case CURSOR_HSPLIT:
+			case DisplayServerEnums::CURSOR_HSPLIT:
 				[[NSCursor resizeLeftRightCursor] set];
 				break;
-			case CURSOR_HELP:
+			case DisplayServerEnums::CURSOR_HELP:
 				[_cursor_from_selector(@selector(_helpCursor)) set];
 				break;
 			default: {
@@ -2938,10 +2938,10 @@ void DisplayServerMacOS::cursor_update_shape() {
 	}
 }
 
-void DisplayServerMacOS::cursor_set_shape(CursorShape p_shape) {
+void DisplayServerMacOS::cursor_set_shape(DisplayServerEnums::CursorShape p_shape) {
 	_THREAD_SAFE_METHOD_
 
-	ERR_FAIL_INDEX(p_shape, CURSOR_MAX);
+	ERR_FAIL_INDEX(p_shape, DisplayServerEnums::CURSOR_MAX);
 
 	if (cursor_shape == p_shape) {
 		return;
@@ -2949,20 +2949,20 @@ void DisplayServerMacOS::cursor_set_shape(CursorShape p_shape) {
 
 	cursor_shape = p_shape;
 
-	if (mouse_mode != MOUSE_MODE_VISIBLE && mouse_mode != MOUSE_MODE_CONFINED) {
+	if (mouse_mode != DisplayServerEnums::MOUSE_MODE_VISIBLE && mouse_mode != DisplayServerEnums::MOUSE_MODE_CONFINED) {
 		return;
 	}
 
 	cursor_update_shape();
 }
 
-void DisplayServerMacOS::cursor_set_custom_image(const Ref<Resource> &p_cursor, CursorShape p_shape, const Vector2 &p_hotspot) {
+void DisplayServerMacOS::cursor_set_custom_image(const Ref<Resource> &p_cursor, DisplayServerEnums::CursorShape p_shape, const Vector2 &p_hotspot) {
 	_THREAD_SAFE_METHOD_
 
-	ERR_FAIL_INDEX(p_shape, CURSOR_MAX);
+	ERR_FAIL_INDEX(p_shape, DisplayServerEnums::CURSOR_MAX);
 
 	if (p_cursor.is_valid()) {
-		HashMap<CursorShape, Vector<Variant>>::Iterator cursor_c = cursors_cache.find(p_shape);
+		HashMap<DisplayServerEnums::CursorShape, Vector<Variant>>::Iterator cursor_c = cursors_cache.find(p_shape);
 
 		if (cursor_c) {
 			if (cursor_c->value[0] == p_cursor && cursor_c->value[1] == p_hotspot) {
@@ -3019,7 +3019,7 @@ void DisplayServerMacOS::cursor_set_custom_image(const Ref<Resource> &p_cursor, 
 		cursors_cache.insert(p_shape, params);
 
 		if (p_shape == cursor_shape) {
-			if (mouse_mode == MOUSE_MODE_VISIBLE || mouse_mode == MOUSE_MODE_CONFINED) {
+			if (mouse_mode == DisplayServerEnums::MOUSE_MODE_VISIBLE || mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED) {
 				[cursor set];
 			}
 		}
@@ -3427,7 +3427,7 @@ bool DisplayServerMacOS::is_window_transparency_available() const {
 	return OS::get_singleton()->is_layered_allowed();
 }
 
-DisplayServer *DisplayServerMacOS::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServerMacOS::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error) {
 	DisplayServer *ds = memnew(DisplayServerMacOS(p_rendering_driver, p_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, p_parent_window, r_error));
 	if (r_error != OK) {
 		if (p_rendering_driver == "vulkan") {
@@ -3623,7 +3623,7 @@ bool DisplayServerMacOS::mouse_process_popups(bool p_close) {
 	return closed;
 }
 
-DisplayServerMacOS::DisplayServerMacOS(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerMacOS::DisplayServerMacOS(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error) {
 	Input::get_singleton()->set_event_dispatch_function(_dispatch_input_events);
 
 	r_error = OK;
@@ -3820,8 +3820,8 @@ DisplayServerMacOS::DisplayServerMacOS(const String &p_rendering_driver, Display
 	if (p_position != nullptr) {
 		window_position = *p_position;
 	} else {
-		if (p_screen == SCREEN_OF_MAIN_WINDOW) {
-			p_screen = SCREEN_PRIMARY;
+		if (p_screen == DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) {
+			p_screen = DisplayServerEnums::SCREEN_PRIMARY;
 		}
 		Rect2i scr_rect = screen_get_usable_rect(p_screen);
 		window_position = scr_rect.position + (scr_rect.size - p_resolution) / 2;

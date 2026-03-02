@@ -54,18 +54,18 @@
 		pos++;
 	}
 
-	DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServer::TTS_UTTERANCE_BOUNDARY, ids[utterance], pos);
+	DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServerEnums::TTS_UTTERANCE_BOUNDARY, ids[utterance], pos);
 }
 
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)av_synth didCancelSpeechUtterance:(AVSpeechUtterance *)utterance {
-	DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServer::TTS_UTTERANCE_CANCELED, ids[utterance]);
+	DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServerEnums::TTS_UTTERANCE_CANCELED, ids[utterance]);
 	ids.erase(utterance);
 	speaking = false;
 	[self update];
 }
 
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)av_synth didFinishSpeechUtterance:(AVSpeechUtterance *)utterance {
-	DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServer::TTS_UTTERANCE_ENDED, ids[utterance]);
+	DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServerEnums::TTS_UTTERANCE_ENDED, ids[utterance]);
 	ids.erase(utterance);
 	speaking = false;
 	[self update];
@@ -87,7 +87,7 @@
 
 		ids[new_utterance] = message.id;
 		[av_synth speakUtterance:new_utterance];
-		DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServer::TTS_UTTERANCE_STARTED, message.id);
+		DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServerEnums::TTS_UTTERANCE_STARTED, message.id);
 
 		queue.pop_front();
 		speaking = true;
@@ -104,7 +104,7 @@
 
 - (void)stopSpeaking {
 	for (DisplayServer::TTSUtterance &message : queue) {
-		DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServer::TTS_UTTERANCE_CANCELED, message.id);
+		DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServerEnums::TTS_UTTERANCE_CANCELED, message.id);
 	}
 	queue.clear();
 	[av_synth stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
@@ -125,7 +125,7 @@
 	}
 
 	if (text.is_empty()) {
-		DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServer::TTS_UTTERANCE_CANCELED, utterance_id);
+		DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServerEnums::TTS_UTTERANCE_CANCELED, utterance_id);
 		return;
 	}
 

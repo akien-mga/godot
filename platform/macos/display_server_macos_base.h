@@ -73,18 +73,18 @@ public:
 protected:
 	_THREAD_SAFE_CLASS_
 
-	MouseMode mouse_mode = MOUSE_MODE_VISIBLE;
-	MouseMode mouse_mode_base = MOUSE_MODE_VISIBLE;
-	MouseMode mouse_mode_override = MOUSE_MODE_VISIBLE;
+	DisplayServerEnums::MouseMode mouse_mode = DisplayServerEnums::MOUSE_MODE_VISIBLE;
+	DisplayServerEnums::MouseMode mouse_mode_base = DisplayServerEnums::MOUSE_MODE_VISIBLE;
+	DisplayServerEnums::MouseMode mouse_mode_override = DisplayServerEnums::MOUSE_MODE_VISIBLE;
 	bool mouse_mode_override_enabled = false;
 
 	void _mouse_update_mode();
-	virtual void _mouse_apply_mode(MouseMode p_prev_mode, MouseMode p_new_mode) = 0;
+	virtual void _mouse_apply_mode(DisplayServerEnums::MouseMode p_prev_mode, DisplayServerEnums::MouseMode p_new_mode) = 0;
 
 	String im_text;
 	Point2i im_selection;
 
-	CursorShape cursor_shape = CURSOR_ARROW;
+	DisplayServerEnums::CursorShape cursor_shape = DisplayServerEnums::CURSOR_ARROW;
 
 	void initialize_tts() const;
 
@@ -121,10 +121,10 @@ public:
 	virtual Color get_base_color() const override;
 	virtual void set_system_theme_change_callback(const Callable &p_callable) override;
 
-	virtual void mouse_set_mode(MouseMode p_mode) override;
-	virtual MouseMode mouse_get_mode() const override;
-	virtual void mouse_set_mode_override(MouseMode p_mode) override;
-	virtual MouseMode mouse_get_mode_override() const override;
+	virtual void mouse_set_mode(DisplayServerEnums::MouseMode p_mode) override;
+	virtual DisplayServerEnums::MouseMode mouse_get_mode() const override;
+	virtual void mouse_set_mode_override(DisplayServerEnums::MouseMode p_mode) override;
+	virtual DisplayServerEnums::MouseMode mouse_get_mode_override() const override;
 	virtual void mouse_set_mode_override_enabled(bool p_override_enabled) override;
 	virtual bool mouse_is_mode_override_enabled() const override;
 
@@ -135,7 +135,7 @@ public:
 	virtual bool clipboard_has_image() const override;
 
 	virtual int get_primary_screen() const override;
-	virtual float screen_get_refresh_rate(int p_screen = SCREEN_OF_MAIN_WINDOW) const override;
+	virtual float screen_get_refresh_rate(int p_screen = DisplayServerEnums::SCREEN_OF_MAIN_WINDOW) const override;
 	virtual void screen_set_keep_on(bool p_enable) override;
 	virtual bool screen_is_kept_on() const override;
 
@@ -148,7 +148,7 @@ public:
 	virtual Point2i ime_get_selection() const override;
 	virtual String ime_get_text() const override;
 
-	virtual CursorShape cursor_get_shape() const override;
+	virtual DisplayServerEnums::CursorShape cursor_get_shape() const override;
 
 	virtual void beep() const override;
 

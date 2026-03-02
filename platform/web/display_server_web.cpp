@@ -351,41 +351,41 @@ void DisplayServerWeb::_mouse_move_callback(double p_x, double p_y, double p_rel
 }
 
 // Cursor
-const char *DisplayServerWeb::godot2dom_cursor(DisplayServer::CursorShape p_shape) {
+const char *DisplayServerWeb::godot2dom_cursor(DisplayServerEnums::CursorShape p_shape) {
 	switch (p_shape) {
-		case DisplayServer::CURSOR_ARROW:
+		case DisplayServerEnums::CURSOR_ARROW:
 			return "default";
-		case DisplayServer::CURSOR_IBEAM:
+		case DisplayServerEnums::CURSOR_IBEAM:
 			return "text";
-		case DisplayServer::CURSOR_POINTING_HAND:
+		case DisplayServerEnums::CURSOR_POINTING_HAND:
 			return "pointer";
-		case DisplayServer::CURSOR_CROSS:
+		case DisplayServerEnums::CURSOR_CROSS:
 			return "crosshair";
-		case DisplayServer::CURSOR_WAIT:
+		case DisplayServerEnums::CURSOR_WAIT:
 			return "wait";
-		case DisplayServer::CURSOR_BUSY:
+		case DisplayServerEnums::CURSOR_BUSY:
 			return "progress";
-		case DisplayServer::CURSOR_DRAG:
+		case DisplayServerEnums::CURSOR_DRAG:
 			return "grab";
-		case DisplayServer::CURSOR_CAN_DROP:
+		case DisplayServerEnums::CURSOR_CAN_DROP:
 			return "grabbing";
-		case DisplayServer::CURSOR_FORBIDDEN:
+		case DisplayServerEnums::CURSOR_FORBIDDEN:
 			return "no-drop";
-		case DisplayServer::CURSOR_VSIZE:
+		case DisplayServerEnums::CURSOR_VSIZE:
 			return "ns-resize";
-		case DisplayServer::CURSOR_HSIZE:
+		case DisplayServerEnums::CURSOR_HSIZE:
 			return "ew-resize";
-		case DisplayServer::CURSOR_BDIAGSIZE:
+		case DisplayServerEnums::CURSOR_BDIAGSIZE:
 			return "nesw-resize";
-		case DisplayServer::CURSOR_FDIAGSIZE:
+		case DisplayServerEnums::CURSOR_FDIAGSIZE:
 			return "nwse-resize";
-		case DisplayServer::CURSOR_MOVE:
+		case DisplayServerEnums::CURSOR_MOVE:
 			return "move";
-		case DisplayServer::CURSOR_VSPLIT:
+		case DisplayServerEnums::CURSOR_VSPLIT:
 			return "row-resize";
-		case DisplayServer::CURSOR_HSPLIT:
+		case DisplayServerEnums::CURSOR_HSPLIT:
 			return "col-resize";
-		case DisplayServer::CURSOR_HELP:
+		case DisplayServerEnums::CURSOR_HELP:
 			return "help";
 		default:
 			return "default";
@@ -441,7 +441,7 @@ void DisplayServerWeb::tts_speak(const String &p_text, const String &p_voice, in
 	}
 
 	if (p_text.is_empty()) {
-		tts_post_utterance_event(DisplayServer::TTS_UTTERANCE_CANCELED, p_utterance_id);
+		tts_post_utterance_event(DisplayServerEnums::TTS_UTTERANCE_CANCELED, p_utterance_id);
 		return;
 	}
 
@@ -461,7 +461,7 @@ void DisplayServerWeb::tts_resume() {
 
 void DisplayServerWeb::tts_stop() {
 	for (const KeyValue<int64_t, CharString> &E : utterance_ids) {
-		tts_post_utterance_event(DisplayServer::TTS_UTTERANCE_CANCELED, E.key);
+		tts_post_utterance_event(DisplayServerEnums::TTS_UTTERANCE_CANCELED, E.key);
 	}
 	utterance_ids.clear();
 	godot_js_tts_stop();
@@ -482,7 +482,7 @@ void DisplayServerWeb::_js_utterance_callback(int p_event, int64_t p_id, int p_p
 	DisplayServerWeb *ds = (DisplayServerWeb *)DisplayServer::get_singleton();
 	if (ds->utterance_ids.has(p_id)) {
 		int pos = 0;
-		if ((TTSUtteranceEvent)p_event == DisplayServer::TTS_UTTERANCE_BOUNDARY) {
+		if ((DisplayServerEnums::TTSUtteranceEvent)p_event == DisplayServerEnums::TTS_UTTERANCE_BOUNDARY) {
 			// Convert position from UTF-8 to UTF-32.
 			const CharString &string = ds->utterance_ids[p_id];
 			for (int i = 0; i < MIN(p_pos, string.length()); i++) {
@@ -496,15 +496,15 @@ void DisplayServerWeb::_js_utterance_callback(int p_event, int64_t p_id, int p_p
 				}
 				pos++;
 			}
-		} else if ((TTSUtteranceEvent)p_event != DisplayServer::TTS_UTTERANCE_STARTED) {
+		} else if ((DisplayServerEnums::TTSUtteranceEvent)p_event != DisplayServerEnums::TTS_UTTERANCE_STARTED) {
 			ds->utterance_ids.erase(p_id);
 		}
-		ds->tts_post_utterance_event((TTSUtteranceEvent)p_event, p_id, pos);
+		ds->tts_post_utterance_event((DisplayServerEnums::TTSUtteranceEvent)p_event, p_id, pos);
 	}
 }
 
-void DisplayServerWeb::cursor_set_shape(CursorShape p_shape) {
-	ERR_FAIL_INDEX(p_shape, CURSOR_MAX);
+void DisplayServerWeb::cursor_set_shape(DisplayServerEnums::CursorShape p_shape) {
+	ERR_FAIL_INDEX(p_shape, DisplayServerEnums::CURSOR_MAX);
 	if (cursor_shape == p_shape) {
 		return;
 	}
@@ -512,12 +512,12 @@ void DisplayServerWeb::cursor_set_shape(CursorShape p_shape) {
 	godot_js_display_cursor_set_shape(godot2dom_cursor(cursor_shape));
 }
 
-DisplayServer::CursorShape DisplayServerWeb::cursor_get_shape() const {
+DisplayServerEnums::CursorShape DisplayServerWeb::cursor_get_shape() const {
 	return cursor_shape;
 }
 
-void DisplayServerWeb::cursor_set_custom_image(const Ref<Resource> &p_cursor, CursorShape p_shape, const Vector2 &p_hotspot) {
-	ERR_FAIL_INDEX(p_shape, CURSOR_MAX);
+void DisplayServerWeb::cursor_set_custom_image(const Ref<Resource> &p_cursor, DisplayServerEnums::CursorShape p_shape, const Vector2 &p_hotspot) {
+	ERR_FAIL_INDEX(p_shape, DisplayServerEnums::CURSOR_MAX);
 	if (p_cursor.is_valid()) {
 		Ref<Image> image = _get_cursor_image_from_resource(p_cursor, p_hotspot);
 		ERR_FAIL_COND(image.is_null());
@@ -553,31 +553,31 @@ void DisplayServerWeb::cursor_set_custom_image(const Ref<Resource> &p_cursor, Cu
 
 // Mouse mode
 void DisplayServerWeb::_mouse_update_mode() {
-	MouseMode wanted_mouse_mode = mouse_mode_override_enabled
+	DisplayServerEnums::MouseMode wanted_mouse_mode = mouse_mode_override_enabled
 			? mouse_mode_override
 			: mouse_mode_base;
 
-	ERR_FAIL_COND_MSG(wanted_mouse_mode == MOUSE_MODE_CONFINED || wanted_mouse_mode == MOUSE_MODE_CONFINED_HIDDEN, "MOUSE_MODE_CONFINED is not supported for the Web platform.");
+	ERR_FAIL_COND_MSG(wanted_mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED || wanted_mouse_mode == DisplayServerEnums::MOUSE_MODE_CONFINED_HIDDEN, "DisplayServerEnums::MOUSE_MODE_CONFINED is not supported for the Web platform.");
 	if (wanted_mouse_mode == mouse_get_mode()) {
 		return;
 	}
 
-	if (wanted_mouse_mode == MOUSE_MODE_VISIBLE) {
+	if (wanted_mouse_mode == DisplayServerEnums::MOUSE_MODE_VISIBLE) {
 		godot_js_display_cursor_set_visible(1);
 		godot_js_display_cursor_lock_set(0);
 
-	} else if (wanted_mouse_mode == MOUSE_MODE_HIDDEN) {
+	} else if (wanted_mouse_mode == DisplayServerEnums::MOUSE_MODE_HIDDEN) {
 		godot_js_display_cursor_set_visible(0);
 		godot_js_display_cursor_lock_set(0);
 
-	} else if (wanted_mouse_mode == MOUSE_MODE_CAPTURED) {
+	} else if (wanted_mouse_mode == DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 		godot_js_display_cursor_set_visible(1);
 		godot_js_display_cursor_lock_set(1);
 	}
 }
 
-void DisplayServerWeb::mouse_set_mode(MouseMode p_mode) {
-	ERR_FAIL_INDEX(p_mode, MouseMode::MOUSE_MODE_MAX);
+void DisplayServerWeb::mouse_set_mode(DisplayServerEnums::MouseMode p_mode) {
+	ERR_FAIL_INDEX(p_mode, DisplayServerEnums::MouseMode::MOUSE_MODE_MAX);
 
 	if (mouse_mode_override_enabled) {
 		mouse_mode_base = p_mode;
@@ -593,19 +593,19 @@ void DisplayServerWeb::mouse_set_mode(MouseMode p_mode) {
 	_mouse_update_mode();
 }
 
-DisplayServer::MouseMode DisplayServerWeb::mouse_get_mode() const {
+DisplayServerEnums::MouseMode DisplayServerWeb::mouse_get_mode() const {
 	if (godot_js_display_cursor_is_hidden()) {
-		return MOUSE_MODE_HIDDEN;
+		return DisplayServerEnums::MOUSE_MODE_HIDDEN;
 	}
 
 	if (godot_js_display_cursor_is_locked()) {
-		return MOUSE_MODE_CAPTURED;
+		return DisplayServerEnums::MOUSE_MODE_CAPTURED;
 	}
-	return MOUSE_MODE_VISIBLE;
+	return DisplayServerEnums::MOUSE_MODE_VISIBLE;
 }
 
-void DisplayServerWeb::mouse_set_mode_override(MouseMode p_mode) {
-	ERR_FAIL_INDEX(p_mode, MouseMode::MOUSE_MODE_MAX);
+void DisplayServerWeb::mouse_set_mode_override(DisplayServerEnums::MouseMode p_mode) {
+	ERR_FAIL_INDEX(p_mode, DisplayServerEnums::MouseMode::MOUSE_MODE_MAX);
 
 	if (!mouse_mode_override_enabled) {
 		mouse_mode_override = p_mode;
@@ -621,7 +621,7 @@ void DisplayServerWeb::mouse_set_mode_override(MouseMode p_mode) {
 	_mouse_update_mode();
 }
 
-DisplayServer::MouseMode DisplayServerWeb::mouse_get_mode_override() const {
+DisplayServerEnums::MouseMode DisplayServerWeb::mouse_get_mode_override() const {
 	return mouse_mode_override;
 }
 
@@ -821,7 +821,7 @@ void DisplayServerWeb::_vk_input_text_callback(const String &p_text, int p_curso
 	}
 }
 
-void DisplayServerWeb::virtual_keyboard_show(const String &p_existing_text, const Rect2 &p_screen_rect, VirtualKeyboardType p_type, int p_max_input_length, int p_cursor_start, int p_cursor_end) {
+void DisplayServerWeb::virtual_keyboard_show(const String &p_existing_text, const Rect2 &p_screen_rect, DisplayServerEnums::VirtualKeyboardType p_type, int p_max_input_length, int p_cursor_start, int p_cursor_end) {
 	godot_js_display_vk_show(p_existing_text.utf8().get_data(), p_type, p_cursor_start, p_cursor_end);
 }
 
@@ -1110,11 +1110,11 @@ void DisplayServerWeb::_dispatch_input_event(const Ref<InputEvent> &p_event) {
 	}
 }
 
-DisplayServer *DisplayServerWeb::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_window_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServer *DisplayServerWeb::create_func(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_window_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error) {
 	return memnew(DisplayServerWeb(p_rendering_driver, p_window_mode, p_vsync_mode, p_flags, p_position, p_resolution, p_screen, p_context, p_parent_window, r_error));
 }
 
-DisplayServerWeb::DisplayServerWeb(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_window_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, Context p_context, int64_t p_parent_window, Error &r_error) {
+DisplayServerWeb::DisplayServerWeb(const String &p_rendering_driver, DisplayServerEnums::WindowMode p_window_mode, DisplayServerEnums::VSyncMode p_vsync_mode, uint32_t p_flags, const Point2i *p_position, const Size2i &p_resolution, int p_screen, DisplayServerEnums::Context p_context, int64_t p_parent_window, Error &r_error) {
 	r_error = OK; // Always succeeds for now.
 
 	native_menu = memnew(NativeMenu); // Dummy native menu.
@@ -1198,37 +1198,37 @@ DisplayServerWeb::~DisplayServerWeb() {
 #endif
 }
 
-bool DisplayServerWeb::has_feature(Feature p_feature) const {
+bool DisplayServerWeb::has_feature(DisplayServerEnums::Feature p_feature) const {
 	switch (p_feature) {
 #ifndef DISABLE_DEPRECATED
-		case FEATURE_GLOBAL_MENU: {
+		case DisplayServerEnums::FEATURE_GLOBAL_MENU: {
 			return (native_menu && native_menu->has_feature(NativeMenu::FEATURE_GLOBAL_MENU));
 		} break;
 #endif
-		//case FEATURE_HIDPI:
-		case FEATURE_ICON:
-		case FEATURE_CLIPBOARD:
-		case FEATURE_CURSOR_SHAPE:
-		case FEATURE_CUSTOM_CURSOR_SHAPE:
-		case FEATURE_MOUSE:
-		case FEATURE_TOUCHSCREEN:
+		//case DisplayServerEnums::FEATURE_HIDPI:
+		case DisplayServerEnums::FEATURE_ICON:
+		case DisplayServerEnums::FEATURE_CLIPBOARD:
+		case DisplayServerEnums::FEATURE_CURSOR_SHAPE:
+		case DisplayServerEnums::FEATURE_CUSTOM_CURSOR_SHAPE:
+		case DisplayServerEnums::FEATURE_MOUSE:
+		case DisplayServerEnums::FEATURE_TOUCHSCREEN:
 			return true;
-		//case FEATURE_MOUSE_WARP:
-		//case FEATURE_NATIVE_DIALOG:
-		//case FEATURE_NATIVE_DIALOG_INPUT:
-		//case FEATURE_NATIVE_DIALOG_FILE:
-		//case FEATURE_NATIVE_DIALOG_FILE_EXTRA:
-		//case FEATURE_NATIVE_DIALOG_FILE_MIME:
-		//case FEATURE_NATIVE_ICON:
-		//case FEATURE_WINDOW_TRANSPARENCY:
-		//case FEATURE_KEEP_SCREEN_ON:
-		//case FEATURE_ORIENTATION:
-		case FEATURE_IME:
+		//case DisplayServerEnums::FEATURE_MOUSE_WARP:
+		//case DisplayServerEnums::FEATURE_NATIVE_DIALOG:
+		//case DisplayServerEnums::FEATURE_NATIVE_DIALOG_INPUT:
+		//case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE:
+		//case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE_EXTRA:
+		//case DisplayServerEnums::FEATURE_NATIVE_DIALOG_FILE_MIME:
+		//case DisplayServerEnums::FEATURE_NATIVE_ICON:
+		//case DisplayServerEnums::FEATURE_WINDOW_TRANSPARENCY:
+		//case DisplayServerEnums::FEATURE_KEEP_SCREEN_ON:
+		//case DisplayServerEnums::FEATURE_ORIENTATION:
+		case DisplayServerEnums::FEATURE_IME:
 			// IME does not work with experimental VK support.
 			return godot_js_display_vk_available() == 0;
-		case FEATURE_VIRTUAL_KEYBOARD:
+		case DisplayServerEnums::FEATURE_VIRTUAL_KEYBOARD:
 			return godot_js_display_vk_available() != 0;
-		case FEATURE_TEXT_TO_SPEECH:
+		case DisplayServerEnums::FEATURE_TEXT_TO_SPEECH:
 			return godot_js_display_tts_available() != 0;
 		default:
 			return false;
@@ -1346,7 +1346,7 @@ void DisplayServerWeb::window_set_title(const String &p_title, DisplayServerEnum
 }
 
 int DisplayServerWeb::window_get_current_screen(DisplayServerEnums::WindowID p_window) const {
-	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, INVALID_SCREEN);
+	ERR_FAIL_COND_V(p_window != DisplayServerEnums::MAIN_WINDOW_ID, DisplayServerEnums::INVALID_SCREEN);
 	return 0;
 }
 

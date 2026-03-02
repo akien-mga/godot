@@ -45,7 +45,7 @@
 #import <Carbon/Carbon.h>
 
 void DisplayServerMacOSBase::_mouse_update_mode() {
-	MouseMode wanted_mouse_mode = mouse_mode_override_enabled
+	DisplayServerEnums::MouseMode wanted_mouse_mode = mouse_mode_override_enabled
 			? mouse_mode_override
 			: mouse_mode_base;
 
@@ -53,13 +53,13 @@ void DisplayServerMacOSBase::_mouse_update_mode() {
 		return;
 	}
 
-	MouseMode prev_mode = mouse_mode;
+	DisplayServerEnums::MouseMode prev_mode = mouse_mode;
 	mouse_mode = wanted_mouse_mode;
 	_mouse_apply_mode(prev_mode, wanted_mouse_mode);
 }
 
-void DisplayServerMacOSBase::mouse_set_mode(MouseMode p_mode) {
-	ERR_FAIL_INDEX(p_mode, MouseMode::MOUSE_MODE_MAX);
+void DisplayServerMacOSBase::mouse_set_mode(DisplayServerEnums::MouseMode p_mode) {
+	ERR_FAIL_INDEX(p_mode, DisplayServerEnums::MouseMode::MOUSE_MODE_MAX);
 	if (p_mode == mouse_mode_base) {
 		return;
 	}
@@ -67,12 +67,12 @@ void DisplayServerMacOSBase::mouse_set_mode(MouseMode p_mode) {
 	_mouse_update_mode();
 }
 
-DisplayServer::MouseMode DisplayServerMacOSBase::mouse_get_mode() const {
+DisplayServerEnums::MouseMode DisplayServerMacOSBase::mouse_get_mode() const {
 	return mouse_mode;
 }
 
-void DisplayServerMacOSBase::mouse_set_mode_override(MouseMode p_mode) {
-	ERR_FAIL_INDEX(p_mode, MouseMode::MOUSE_MODE_MAX);
+void DisplayServerMacOSBase::mouse_set_mode_override(DisplayServerEnums::MouseMode p_mode) {
+	ERR_FAIL_INDEX(p_mode, DisplayServerEnums::MouseMode::MOUSE_MODE_MAX);
 	if (p_mode == mouse_mode_override) {
 		return;
 	}
@@ -80,7 +80,7 @@ void DisplayServerMacOSBase::mouse_set_mode_override(MouseMode p_mode) {
 	_mouse_update_mode();
 }
 
-DisplayServer::MouseMode DisplayServerMacOSBase::mouse_get_mode_override() const {
+DisplayServerEnums::MouseMode DisplayServerMacOSBase::mouse_get_mode_override() const {
 	return mouse_mode_override;
 }
 
@@ -500,7 +500,7 @@ String DisplayServerMacOSBase::ime_get_text() const {
 	return im_text;
 }
 
-DisplayServer::CursorShape DisplayServerMacOSBase::cursor_get_shape() const {
+DisplayServerEnums::CursorShape DisplayServerMacOSBase::cursor_get_shape() const {
 	return cursor_shape;
 }
 

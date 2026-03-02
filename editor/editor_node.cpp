@@ -5333,7 +5333,7 @@ void EditorNode::request_instantiate_scenes(const Vector<String> &p_files) {
 
 String EditorNode::get_multiwindow_support_tooltip_text() const {
 	if (SceneTree::get_singleton()->get_root()->is_embedding_subwindows()) {
-		if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_SUBWINDOWS)) {
+		if (DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_SUBWINDOWS)) {
 			return TTR("Multi-window support is not available because the `--single-window` command line argument was used to start the editor.");
 		} else {
 			return TTR("Multi-window support is not available because the current platform doesn't support multiple windows.");
@@ -8080,7 +8080,7 @@ void EditorNode::_add_to_main_menu(const String &p_name, PopupMenu *p_menu) {
 }
 
 void EditorNode::_update_main_menu_type() {
-	bool can_expand = bool(EDITOR_GET("interface/editor/appearance/expand_to_title")) && DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_EXTEND_TO_TITLE);
+	bool can_expand = bool(EDITOR_GET("interface/editor/appearance/expand_to_title")) && DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_EXTEND_TO_TITLE);
 	bool use_menu_button = EDITOR_GET("interface/editor/appearance/collapse_main_menu");
 	bool global_menu = !bool(EDITOR_GET("interface/editor/appearance/use_embedded_menu")) && NativeMenu::get_singleton()->has_feature(NativeMenu::FEATURE_GLOBAL_MENU);
 	MenuType new_menu_type;
@@ -8282,7 +8282,7 @@ EditorNode::EditorNode() {
 			// Only if no touchscreen ui hint, disable emulation just in case.
 			Input::get_singleton()->set_emulate_touch_from_mouse(false);
 		}
-		if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_CUSTOM_CURSOR_SHAPE)) {
+		if (DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_CUSTOM_CURSOR_SHAPE)) {
 			DisplayServer::get_singleton()->cursor_set_custom_image(Ref<Resource>());
 		}
 	}
@@ -8899,7 +8899,7 @@ EditorNode::EditorNode() {
 	ED_SHORTCUT_AND_COMMAND("editor/editor_prev", TTRC("Open the previous Editor"));
 
 	// Editor menu and toolbar.
-	bool can_expand = bool(EDITOR_GET("interface/editor/appearance/expand_to_title")) && DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_EXTEND_TO_TITLE);
+	bool can_expand = bool(EDITOR_GET("interface/editor/appearance/expand_to_title")) && DisplayServer::get_singleton()->has_feature(DisplayServerEnums::FEATURE_EXTEND_TO_TITLE);
 
 #ifdef MACOS_ENABLED
 	if (NativeMenu::get_singleton()->has_system_menu(NativeMenu::APPLICATION_MENU_ID)) {

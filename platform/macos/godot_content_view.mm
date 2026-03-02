@@ -622,7 +622,7 @@
 		return;
 	}
 
-	if (ds->mouse_get_mode() != DisplayServer::MOUSE_MODE_CAPTURED) {
+	if (ds->mouse_get_mode() != DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 		ds->mouse_exit_window(window_id);
 	}
 }
@@ -633,7 +633,7 @@
 		return;
 	}
 
-	if (ds->mouse_get_mode() != DisplayServer::MOUSE_MODE_CAPTURED) {
+	if (ds->mouse_get_mode() != DisplayServerEnums::MOUSE_MODE_CAPTURED) {
 		ds->mouse_enter_window(window_id);
 	}
 
