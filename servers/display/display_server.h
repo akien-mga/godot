@@ -48,6 +48,16 @@ enum MouseMode : int;
 enum CursorShape : int;
 } //namespace InputClassEnums
 
+// Defined here so it can be forward-declared.
+struct TTSUtterance {
+	String text;
+	String voice;
+	int volume = 50;
+	float pitch = 1.f;
+	float rate = 1.f;
+	int64_t id = 0;
+};
+
 class DisplayServer : public Object {
 	GDCLASS(DisplayServer, Object)
 
@@ -170,15 +180,6 @@ public:
 
 	virtual Dictionary global_menu_get_system_menu_roots() const;
 #endif // DISABLE_DEPRECATED
-
-	struct TTSUtterance {
-		String text;
-		String voice;
-		int volume = 50;
-		float pitch = 1.f;
-		float rate = 1.f;
-		int64_t id = 0;
-	};
 
 private:
 	Callable utterance_callback[DisplayServerEnums::TTS_UTTERANCE_MAX];

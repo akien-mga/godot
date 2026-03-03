@@ -30,6 +30,8 @@
 
 #import "tts_apple_embedded.h"
 
+#include "servers/display/display_server.h"
+
 @implementation GDTTTS
 
 - (id)init {
@@ -73,7 +75,7 @@
 
 - (void)update {
 	if (!speaking && queue.size() > 0) {
-		DisplayServer::TTSUtterance &message = queue.front()->get();
+		TTSUtterance &message = queue.front()->get();
 
 		AVSpeechUtterance *new_utterance = [[AVSpeechUtterance alloc] initWithString:[NSString stringWithUTF8String:message.text.utf8().get_data()]];
 		[new_utterance setVoice:[AVSpeechSynthesisVoice voiceWithIdentifier:[NSString stringWithUTF8String:message.voice.utf8().get_data()]]];
@@ -103,7 +105,7 @@
 }
 
 - (void)stopSpeaking {
-	for (DisplayServer::TTSUtterance &message : queue) {
+	for (TTSUtterance &message : queue) {
 		DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServerEnums::TTS_UTTERANCE_CANCELED, message.id);
 	}
 	queue.clear();
@@ -129,7 +131,7 @@
 		return;
 	}
 
-	DisplayServer::TTSUtterance message;
+	TTSUtterance message;
 	message.text = text;
 	message.voice = voice;
 	message.volume = CLAMP(volume, 0, 100);

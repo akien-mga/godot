@@ -32,6 +32,7 @@
 
 #include "core/config/project_settings.h"
 #include "core/object/callable_method_pointer.h"
+#include "servers/display/display_server.h"
 #include "servers/text/text_server.h"
 
 TTS_Linux *TTS_Linux::singleton = nullptr;
@@ -137,7 +138,7 @@ void TTS_Linux::_speech_event(int p_msg_id, int p_type) {
 		}
 	}
 	if (!speaking && queue.size() > 0) {
-		DisplayServer::TTSUtterance &message = queue.front()->get();
+		TTSUtterance &message = queue.front()->get();
 
 		// Inject index mark after each word.
 		String text;
@@ -221,7 +222,7 @@ void TTS_Linux::speak(const String &p_text, const String &p_voice, int p_volume,
 		return;
 	}
 
-	DisplayServer::TTSUtterance message;
+	TTSUtterance message;
 	message.text = p_text;
 	message.voice = p_voice;
 	message.volume = CLAMP(p_volume, 0, 100);
@@ -258,7 +259,7 @@ void TTS_Linux::stop() {
 	_THREAD_SAFE_METHOD_
 
 	ERR_FAIL_NULL(synth);
-	for (DisplayServer::TTSUtterance &message : queue) {
+	for (TTSUtterance &message : queue) {
 		DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServerEnums::TTS_UTTERANCE_CANCELED, message.id);
 	}
 	if ((last_msg_id != -1) && ids.has(last_msg_id)) {

@@ -30,6 +30,8 @@
 
 #import "tts_macos.h"
 
+#include "servers/display/display_server.h"
+
 @implementation TTS_MacOS
 
 - (id)init {
@@ -119,7 +121,7 @@
 
 - (void)update {
 	if (!speaking && queue.size() > 0) {
-		DisplayServer::TTSUtterance &message = queue.front()->get();
+		TTSUtterance &message = queue.front()->get();
 
 		if (@available(macOS 10.14, *)) {
 			AVSpeechSynthesizer *av_synth = synth;
@@ -178,7 +180,7 @@
 }
 
 - (void)stopSpeaking {
-	for (DisplayServer::TTSUtterance &message : queue) {
+	for (TTSUtterance &message : queue) {
 		DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServerEnums::TTS_UTTERANCE_CANCELED, message.id);
 	}
 	queue.clear();
@@ -220,7 +222,7 @@
 		return;
 	}
 
-	DisplayServer::TTSUtterance message;
+	TTSUtterance message;
 	message.text = text;
 	message.voice = voice;
 	message.volume = CLAMP(volume, 0, 100);

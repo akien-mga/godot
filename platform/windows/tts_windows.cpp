@@ -30,6 +30,8 @@
 
 #include "tts_windows.h"
 
+#include "servers/display/display_server.h"
+
 TTS_Windows *TTS_Windows::singleton = nullptr;
 
 void __stdcall TTS_Windows::speech_event_callback(WPARAM wParam, LPARAM lParam) {
@@ -62,7 +64,7 @@ void __stdcall TTS_Windows::speech_event_callback(WPARAM wParam, LPARAM lParam) 
 
 void TTS_Windows::process_events() {
 	if (update_requested && !paused && queue.size() > 0 && !is_speaking()) {
-		DisplayServer::TTSUtterance &message = queue.front()->get();
+		TTSUtterance &message = queue.front()->get();
 
 		String text;
 		DWORD flags = SPF_ASYNC | SPF_PURGEBEFORESPEAK | SPF_IS_XML;
@@ -197,7 +199,7 @@ void TTS_Windows::speak(const String &p_text, const String &p_voice, int p_volum
 		return;
 	}
 
-	DisplayServer::TTSUtterance message;
+	TTSUtterance message;
 	message.text = p_text;
 	message.voice = p_voice;
 	message.volume = CLAMP(p_volume, 0, 100);
@@ -238,7 +240,7 @@ void TTS_Windows::stop() {
 		DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServerEnums::TTS_UTTERANCE_CANCELED, ids[current_stream].id);
 		ids.erase(current_stream);
 	}
-	for (DisplayServer::TTSUtterance &message : queue) {
+	for (TTSUtterance &message : queue) {
 		DisplayServer::get_singleton()->tts_post_utterance_event(DisplayServerEnums::TTS_UTTERANCE_CANCELED, message.id);
 	}
 	queue.clear();
