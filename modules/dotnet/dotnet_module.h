@@ -80,6 +80,7 @@ private:
 	String editor_integration_version;
 	String loaded_user_assembly_name;
 	UserAssemblyState user_assembly_state = UserAssemblyState::PROJECT_NOT_FOUND;
+	bool changing_project_assembly = false;
 #endif
 
 public:
@@ -125,7 +126,8 @@ public:
 #ifdef TOOLS_ENABLED
 private:
 	void _start_fs_watcher();
-	void on_project_assembly_changed(FileSystemWatcher::FileSystemChange change_type);
+	void _on_project_assembly_changed(FileSystemWatcher::FileSystemChange change_type);
+	void _on_project_settings_changed();
 
 public:
 	void change_project_assembly(const String &p_assembly_name);

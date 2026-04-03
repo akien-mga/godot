@@ -130,9 +130,12 @@ void DotNetModule::initialize() {
 	bool should_load_project_assembly = true;
 
 #ifdef TOOLS_ENABLED
+	// Listen for changes to the assembly name setting so we can update the loaded assembly accordingly.
+	ProjectSettings::get_singleton()->connect("settings_changed", callable_mp(this, &DotNetModule::_on_project_settings_changed));
+
 	fs_watcher.instantiate();
 	fs_watcher->set_path(assemblies_dir.path_join(assembly_name + ".dll"));
-	fs_watcher->callable = callable_mp(this, &DotNetModule::on_project_assembly_changed);
+	fs_watcher->callable = callable_mp(this, &DotNetModule::_on_project_assembly_changed);
 	callable_mp(this, &DotNetModule::_start_fs_watcher).call_deferred();
 
 	should_load_project_assembly = FileAccess::exists(fs_watcher->get_path());
@@ -364,7 +367,7 @@ void DotNetModule::_start_fs_watcher() {
 	fs_watcher->start();
 }
 
-void DotNetModule::on_project_assembly_changed(FileSystemWatcher::FileSystemChange change_type) {
+void DotNetModule::_on_project_assembly_changed(FileSystemWatcher::FileSystemChange change_type) {
 	DEV_ASSERT(runtime_manager != nullptr);
 
 	const String assemblies_dir = Dirs::get_project_assemblies_path();
@@ -403,8 +406,29 @@ void DotNetModule::on_project_assembly_changed(FileSystemWatcher::FileSystemChan
 	}
 }
 
+void DotNetModule::_on_project_settings_changed() {
+	if (init_state != InitState::INITIALIZED) {
+		return;
+	}
+
+	const String assembly_name = Dirs::get_project_assembly_name();
+	if (loaded_user_assembly_name == assembly_name) {
+		// The assembly name didn't change, so no need to do anything.
+		return;
+	}
+
+	change_project_assembly(assembly_name);
+}
+
 void DotNetModule::change_project_assembly(const String &p_assembly_name) {
 	DEV_ASSERT(runtime_manager != nullptr);
+
+	if (changing_project_assembly) {
+		// The project assembly is already changing.
+		return;
+	}
+
+	changing_project_assembly = true;
 
 	const String old_assembly_name = loaded_user_assembly_name;
 	const String old_assemblies_dir = Dirs::get_project_assemblies_path();
@@ -442,6 +466,8 @@ void DotNetModule::change_project_assembly(const String &p_assembly_name) {
 	} else {
 		_set_user_assembly_load_failed(UserAssemblyState::PROJECT_NOT_FOUND);
 	}
+
+	changing_project_assembly = false;
 }
 
 bool DotNetModule::try_restore_editor_packages(const String &p_editor_assemblies_path) {
