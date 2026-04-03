@@ -272,8 +272,14 @@ void DotNetStatusPanel::_update_content() {
 					select_project_button->set_text(TTR("Change"));
 				}
 				select_project_button->connect(SceneStringName(pressed), callable_mp(this, &DotNetStatusPanel::_select_project));
+				hbox->add_child(select_project_button);
+
 				// TODO(@raulsntos): Hiding the button because changing the loaded assembly crashes the editor. Need to investigate further, but it looks like unloading when a scene is open with C# nodes makes it crash because it still tries to access some of the registered class callbacks that are now dangling pointers.
-				// hbox->add_child(select_project_button);
+				if (module->get_user_assembly_state() != DotNetModule::UserAssemblyState::LOADED) {
+					select_project_button->show();
+				} else {
+					select_project_button->hide();
+				}
 
 				if (module->get_user_assembly_state() == DotNetModule::UserAssemblyState::DLL_NOT_FOUND) {
 					// If the C# project needs to be built, show a build button.
