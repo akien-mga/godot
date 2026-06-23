@@ -47,6 +47,7 @@
 
 #ifdef MODULE_SKIA_ENABLED
 #include <thirdparty/skia/include/core/SkPath.h>
+#include <thirdparty/skia/include/core/SkPathBuilder.h>
 #include <thirdparty/skia/include/pathops/SkPathOps.h>
 #endif
 
@@ -3148,7 +3149,8 @@ void TextMesh::_generate_glyph_mesh_data(const GlyphMeshKey &p_key, const Glyph 
 	// Decompose FT Outline and convert to Skia path or Polygon.
 	// See https://freetype.org/freetype2/docs/glyphs/glyphs-6.html, for more info.
 #ifdef MODULE_SKIA_ENABLED
-	SkPath sk_path;
+	// Recent Skia milestones build paths through SkPathBuilder rather than mutating SkPath directly.
+	SkPathBuilder sk_path_builder;
 #else
 	bool orientation = d["orientation"];
 #endif
@@ -3165,9 +3167,9 @@ void TextMesh::_generate_glyph_mesh_data(const GlyphMeshKey &p_key, const Glyph 
 #ifdef MODULE_SKIA_ENABLED
 				Vector2 p = Vector2(points[j].x, points[j].y);
 				if (j == start) {
-					sk_path.moveTo(SkPoint::Make((SkScalar)p.x, (SkScalar)p.y));
+					sk_path_builder.moveTo(SkPoint::Make((SkScalar)p.x, (SkScalar)p.y));
 				} else {
-					sk_path.lineTo(SkPoint::Make((SkScalar)p.x, (SkScalar)p.y));
+					sk_path_builder.lineTo(SkPoint::Make((SkScalar)p.x, (SkScalar)p.y));
 				}
 #else
 				Vector2 p = Vector2(points[j].x, points[j].y) * pixel_size;
@@ -3200,9 +3202,9 @@ void TextMesh::_generate_glyph_mesh_data(const GlyphMeshKey &p_key, const Glyph 
 				}
 #ifdef MODULE_SKIA_ENABLED
 				if (j == start) {
-					sk_path.moveTo(SkPoint::Make((SkScalar)p0.x, (SkScalar)p0.y));
+					sk_path_builder.moveTo(SkPoint::Make((SkScalar)p0.x, (SkScalar)p0.y));
 				}
-				sk_path.quadTo(SkPoint::Make((SkScalar)p1.x, (SkScalar)p1.y), SkPoint::Make((SkScalar)p2.x, (SkScalar)p2.y));
+				sk_path_builder.quadTo(SkPoint::Make((SkScalar)p1.x, (SkScalar)p1.y), SkPoint::Make((SkScalar)p2.x, (SkScalar)p2.y));
 #else
 				_approx_conic(pixel_size, curve_step, p0, p1, p2, gl_data.contours.size(), polygon, nullptr, nullptr);
 #endif
@@ -3234,9 +3236,9 @@ void TextMesh::_generate_glyph_mesh_data(const GlyphMeshKey &p_key, const Glyph 
 
 #ifdef MODULE_SKIA_ENABLED
 				if (j == start) {
-					sk_path.moveTo(SkPoint::Make((SkScalar)p0.x, (SkScalar)p0.y));
+					sk_path_builder.moveTo(SkPoint::Make((SkScalar)p0.x, (SkScalar)p0.y));
 				}
-				sk_path.cubicTo(SkPoint::Make((SkScalar)p1.x, (SkScalar)p1.y), SkPoint::Make((SkScalar)p2.x, (SkScalar)p2.y), SkPoint::Make((SkScalar)p3.x, (SkScalar)p3.y));
+				sk_path_builder.cubicTo(SkPoint::Make((SkScalar)p1.x, (SkScalar)p1.y), SkPoint::Make((SkScalar)p2.x, (SkScalar)p2.y), SkPoint::Make((SkScalar)p3.x, (SkScalar)p3.y));
 #else
 				_approx_cubic(pixel_size, curve_step, p0, p1, p2, p3, gl_data.contours.size(), polygon, nullptr, nullptr);
 #endif
@@ -3263,6 +3265,8 @@ void TextMesh::_generate_glyph_mesh_data(const GlyphMeshKey &p_key, const Glyph 
 	}
 
 #ifdef MODULE_SKIA_ENABLED
+	SkPath sk_path = sk_path_builder.detach();
+
 	// Simplify path to remove self-intersections.
 	if (!Simplify(sk_path, &sk_path)) {
 		ERR_FAIL_MSG("Contour simplification failed.");

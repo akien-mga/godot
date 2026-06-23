@@ -7,8 +7,12 @@
 
 #include "include/core/SkRect.h"
 
-#include "include/private/SkMalloc.h"
+#include "include/core/SkM44.h"
+#include "include/private/base/SkDebug.h"
+#include "include/private/base/SkTPin.h"
 #include "src/core/SkRectPriv.h"
+
+class SkMatrix;
 
 bool SkIRect::intersect(const SkIRect& a, const SkIRect& b) {
     SkIRect tmp = {
@@ -43,67 +47,100 @@ void SkIRect::join(const SkIRect& r) {
 
 /////////////////////////////////////////////////////////////////////////////
 
-void SkRect::toQuad(SkPoint quad[4]) const {
-    SkASSERT(quad);
+std::optional<SkRect> SkRect::Bounds(SkSpan<const SkPoint> points) {
+    if (points.empty()) {
+        return SkRect::MakeEmpty();
+    }
 
-    quad[0].set(fLeft, fTop);
-    quad[1].set(fRight, fTop);
-    quad[2].set(fRight, fBottom);
-    quad[3].set(fLeft, fBottom);
+    /*
+     *  Both of these variants compute the same numerics.
+     *
+     *  But, the "simple" one (no explicit skvx) runs faster (most of the time) on 64bit
+     *  machines, and the tricky skvx version runs faster (most of the time) on 32bit machines.
+     *
+     *  Hence the if/else
+     */
+
+    if constexpr (sizeof(void*) == 8) {
+        float L = points[0].fX, T = points[0].fY, R = points[0].fX, B = points[0].fY;
+        float nx = 0, ny = 0;
+        for (auto p : points) {
+            L = std::fminf(p.fX, L);
+            T = std::fminf(p.fY, T);
+            R = std::fmaxf(p.fX, R);
+            B = std::fmaxf(p.fY, B);
+
+            // we do this to look for infinities or nans
+            nx *= p.fX;
+            ny *= p.fY;
+        }
+
+        // if this is true, all our values were finite
+        if (nx == 0 && ny == 0) {
+            return {{L, T, R, B}};
+        }
+    } else {
+        auto count = points.size();
+        auto pts = points.data();
+
+        skvx::float4 min, max;
+        if (count & 1) {
+            min = max = skvx::float2::Load(pts).xyxy();
+            pts   += 1;
+            count -= 1;
+        } else {
+            min = max = skvx::float4::Load(pts);
+            pts   += 2;
+            count -= 2;
+        }
+
+        skvx::float4 accum = min * 0;
+        while (count) {
+            skvx::float4 xy = skvx::float4::Load(pts);
+            accum = accum * xy;
+            min = skvx::min(min, xy);
+            max = skvx::max(max, xy);
+            pts   += 2;
+            count -= 2;
+        }
+
+        const bool all_finite = all(accum * 0 == 0);
+        if (all_finite) {
+            return MakeLTRB(std::min(min[0], min[2]), std::min(min[1], min[3]),
+                            std::max(max[0], max[2]), std::max(max[1], max[3]));
+        }
+    }
+
+    /*
+     *  If we got here, we were not empty, and at least one of the span values was
+     *  either an Infinity or NaN -- so we return failure (no finite bounds)
+     */
+    return {};
 }
 
-#include "include/private/SkVx.h"
-
-bool SkRect::setBoundsCheck(const SkPoint pts[], int count) {
-    SkASSERT((pts && count > 0) || count == 0);
-
-    if (count <= 0) {
-        this->setEmpty();
+bool SkRect::setBoundsCheck(SkSpan<const SkPoint> pts) {
+    if (auto bounds = Bounds(pts)) {
+        *this = bounds.value();
         return true;
-    }
-
-    skvx::float4 min, max;
-    if (count & 1) {
-        min = max = skvx::float2::Load(pts).xyxy();
-        pts   += 1;
-        count -= 1;
     } else {
-        min = max = skvx::float4::Load(pts);
-        pts   += 2;
-        count -= 2;
+        *this = MakeEmpty();
+        return false;
     }
-
-    skvx::float4 accum = min * 0;
-    while (count) {
-        skvx::float4 xy = skvx::float4::Load(pts);
-        accum = accum * xy;
-        min = skvx::min(min, xy);
-        max = skvx::max(max, xy);
-        pts   += 2;
-        count -= 2;
-    }
-
-    const bool all_finite = all(accum * 0 == 0);
-    if (all_finite) {
-        this->setLTRB(std::min(min[0], min[2]), std::min(min[1], min[3]),
-                      std::max(max[0], max[2]), std::max(max[1], max[3]));
-    } else {
-        this->setEmpty();
-    }
-    return all_finite;
 }
 
-void SkRect::setBoundsNoCheck(const SkPoint pts[], int count) {
-    if (!this->setBoundsCheck(pts, count)) {
-        this->setLTRB(SK_ScalarNaN, SK_ScalarNaN, SK_ScalarNaN, SK_ScalarNaN);
+void SkRect::setBoundsNoCheck(SkSpan<const SkPoint> pts) {
+    if (auto bounds = Bounds(pts)) {
+        *this = bounds.value();
+    } else {
+        this->setLTRB(SK_FloatNaN, SK_FloatNaN, SK_FloatNaN, SK_FloatNaN);
     }
 }
 
 #define CHECK_INTERSECT(al, at, ar, ab, bl, bt, br, bb) \
-    SkScalar L = std::max(al, bl);                   \
-    SkScalar R = std::min(ar, br);                   \
-    SkScalar T = std::max(at, bt);                   \
-    SkScalar B = std::min(ab, bb);                   \
+    float L = std::max(al, bl);                         \
+    float R = std::min(ar, br);                         \
+    float T = std::max(at, bt);                         \
+    float B = std::min(ab, bb);                         \
     do { if (!(L < R && T < B)) return false; } while (0)
     // do the !(opposite) check so we return false if either arg is NaN
 
@@ -136,27 +173,25 @@ void SkRect::join(const SkRect& r) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-// -- GODOT start --
-/*
 #include "include/core/SkString.h"
 #include "src/core/SkStringUtils.h"
 
-static const char* set_scalar(SkString* storage, SkScalar value, SkScalarAsStringType asType) {
+static const char* set_scalar(SkString* storage, float value, SkScalarAsStringType asType) {
     storage->reset();
     SkAppendScalar(storage, value, asType);
     return storage->c_str();
 }
 
-void SkRect::dump(bool asHex) const {
+SkString SkRect::dumpToString(bool asHex) const {
     SkScalarAsStringType asType = asHex ? kHex_SkScalarAsStringType : kDec_SkScalarAsStringType;
 
     SkString line;
     if (asHex) {
         SkString tmp;
-        line.printf( "SkRect::MakeLTRB(%s, %f\n", set_scalar(&tmp, fLeft, asType), fLeft);
-        line.appendf("                 %s, %f\n", set_scalar(&tmp, fTop, asType), fTop);
-        line.appendf("                 %s, %f\n", set_scalar(&tmp, fRight, asType), fRight);
-        line.appendf("                 %s  %f);", set_scalar(&tmp, fBottom, asType), fBottom);
+        line.printf( "SkRect::MakeLTRB(%s, /* %f */\n", set_scalar(&tmp, fLeft, asType), fLeft);
+        line.appendf("                 %s, /* %f */\n", set_scalar(&tmp, fTop, asType), fTop);
+        line.appendf("                 %s, /* %f */\n", set_scalar(&tmp, fRight, asType), fRight);
+        line.appendf("                 %s  /* %f */);", set_scalar(&tmp, fBottom, asType), fBottom);
     } else {
         SkString strL, strT, strR, strB;
         SkAppendScalarDec(&strL, fLeft);
@@ -166,10 +201,12 @@ void SkRect::dump(bool asHex) const {
         line.printf("SkRect::MakeLTRB(%s, %s, %s, %s);",
                     strL.c_str(), strT.c_str(), strR.c_str(), strB.c_str());
     }
-    SkDebugf("%s\n", line.c_str());
+    return line;
 }
-*/
-// -- GODOT end --
+
+void SkRect::dump(bool asHex) const {
+    SkDebugf("%s\n", this->dumpToString(asHex).c_str());
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -255,4 +292,102 @@ bool SkRectPriv::Subtract(const SkRect& a, const SkRect& b, SkRect* out) {
 
 bool SkRectPriv::Subtract(const SkIRect& a, const SkIRect& b, SkIRect* out) {
     return subtract<SkIRect>(a, b, out);
+}
+
+
+bool SkRectPriv::QuadContainsRect(const SkMatrix& m,
+                                  const SkIRect& a,
+                                  const SkIRect& b,
+                                  float tol) {
+    return QuadContainsRect(SkM44(m), SkRect::Make(a), SkRect::Make(b), tol);
+}
+
+bool SkRectPriv::QuadContainsRect(const SkM44& m, const SkRect& a, const SkRect& b, float tol) {
+    return all(QuadContainsRectMask(m, a, b, tol));
+}
+
+skvx::int4 SkRectPriv::QuadContainsRectMask(const SkM44& m,
+                                            const SkRect& a,
+                                            const SkRect& b,
+                                            float tol) {
+    SkDEBUGCODE(SkM44 inverse;)
+    SkASSERT(m.invert(&inverse));
+    // With empty rectangles, the calculated edges could give surprising results. If 'a' were not
+    // sorted, its normals would point outside the sorted rectangle, so lots of potential rects
+    // would be seen as "contained". If 'a' is all 0s, its edge equations are also (0,0,0) so every
+    // point has a distance of 0, and would be interpreted as inside.
+    if (a.isEmpty()) {
+        return skvx::int4(0); // all "false"
+    }
+    // However, 'b' is only used to define its 4 corners to check against the transformed edges.
+    // This is valid regardless of b's emptiness or sortedness.
+
+    // Calculate the 4 homogenous coordinates of 'a' transformed by 'm' where Z=0 and W=1.
+    auto ax = skvx::float4{a.fLeft, a.fRight, a.fRight, a.fLeft};
+    auto ay = skvx::float4{a.fTop, a.fTop, a.fBottom, a.fBottom};
+
+    auto max = m.rc(0,0)*ax + m.rc(0,1)*ay + m.rc(0,3);
+    auto may = m.rc(1,0)*ax + m.rc(1,1)*ay + m.rc(1,3);
+    auto maw = m.rc(3,0)*ax + m.rc(3,1)*ay + m.rc(3,3);
+
+    if (all(maw < 0.f)) {
+        // If all points of A are mapped to w < 0, then the edge equations end up representing the
+        // convex hull of projected points when A should in fact be considered empty.
+        return skvx::int4(0); // all "false"
+    }
+
+    // Cross product of adjacent vertices provides homogenous lines for the 4 sides of the quad
+    auto lA = may*skvx::shuffle<1,2,3,0>(maw) - maw*skvx::shuffle<1,2,3,0>(may);
+    auto lB = maw*skvx::shuffle<1,2,3,0>(max) - max*skvx::shuffle<1,2,3,0>(maw);
+    auto lC = max*skvx::shuffle<1,2,3,0>(may) - may*skvx::shuffle<1,2,3,0>(max);
+
+    // Before transforming, the corners of 'a' were in CW order, but afterwards they may become CCW,
+    // so the sign corrects the direction of the edge normals to point inwards.
+    float sign = (lA[0]*lB[1] - lB[0]*lA[1]) < 0 ? -1.f : 1.f;
+
+    // Calculate distance from 'b' to each edge. Since 'b' has presumably been transformed by 'm'
+    // *and* projected, this assumes W = 1.
+    SkRect bInset = b.makeInset(tol, tol);
+    auto d0 = sign * (lA*bInset.fLeft  + lB*bInset.fTop    + lC);
+    auto d1 = sign * (lA*bInset.fRight + lB*bInset.fTop    + lC);
+    auto d2 = sign * (lA*bInset.fRight + lB*bInset.fBottom + lC);
+    auto d3 = sign * (lA*bInset.fLeft  + lB*bInset.fBottom + lC);
+
+    // 'b' is contained in the mapped rectangle if all distances are >= 0
+    return (d0 >= 0.f) & (d1 >= 0.f) & (d2 >= 0.f) & (d3 >= 0.f);
+}
+
+SkIRect SkRectPriv::ClosestDisjointEdge(const SkIRect& src, const SkIRect& dst) {
+    if (src.isEmpty() || dst.isEmpty()) {
+        return SkIRect::MakeEmpty();
+    }
+
+    int l = src.fLeft;
+    int r = src.fRight;
+    if (r <= dst.fLeft) {
+        // Select right column of pixels in crop
+        l = r - 1;
+    } else if (l >= dst.fRight) {
+        // Left column of 'crop'
+        r = l + 1;
+    } else {
+        // Regular intersection along X axis.
+        l = SkTPin(l, dst.fLeft, dst.fRight);
+        r = SkTPin(r, dst.fLeft, dst.fRight);
+    }
+
+    int t = src.fTop;
+    int b = src.fBottom;
+    if (b <= dst.fTop) {
+        // Select bottom row of pixels in crop
+        t = b - 1;
+    } else if (t >= dst.fBottom) {
+        // Top row of 'crop'
+        b = t + 1;
+    } else {
+        t = SkTPin(t, dst.fTop, dst.fBottom);
+        b = SkTPin(b, dst.fTop, dst.fBottom);
+    }
+
+    return SkIRect::MakeLTRB(l,t,r,b);
 }

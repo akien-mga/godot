@@ -4,16 +4,24 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-#include "include/private/SkTPin.h"
+#include "src/pathops/SkPathOpsCubic.h"
+
+#include "include/private/base/SkFloatingPoint.h"
+#include "include/private/base/SkTPin.h"
+#include "include/private/base/SkTo.h"
+#include "src/base/SkTSort.h"
 #include "src/core/SkGeometry.h"
-#include "src/core/SkTSort.h"
+#include "src/pathops/SkIntersections.h"
 #include "src/pathops/SkLineParameters.h"
 #include "src/pathops/SkPathOpsConic.h"
-#include "src/pathops/SkPathOpsCubic.h"
-#include "src/pathops/SkPathOpsCurve.h"
-#include "src/pathops/SkPathOpsLine.h"
 #include "src/pathops/SkPathOpsQuad.h"
 #include "src/pathops/SkPathOpsRect.h"
+#include "src/pathops/SkPathOpsTypes.h"
+
+#include <algorithm>
+#include <cmath>
+
+struct SkDLine;
 
 const int SkDCubic::gPrecisionUnit = 256;  // FIXME: test different values in test framework
 
@@ -122,6 +130,7 @@ SkDCubicPair SkDCubic::chopAt(double t) const {
     return dst;
 }
 
+// TODO(skbug.com/40045140) deduplicate this with SkBezierCubic::ConvertToPolynomial
 void SkDCubic::Coefficients(const double* src, double* A, double* B, double* C, double* D) {
     *A = src[6];  // d
     *B = src[4] * 3;  // 3*c
@@ -366,9 +375,8 @@ int SkDCubic::searchRoots(double extremeTs[6], int extrema, double axisIntercept
 
 // cubic roots
 
-static const double PI = 3.141592653589793;
-
 // from SkGeometry.cpp (and Numeric Solutions, 5.6)
+// // TODO(skbug.com/40045140) Deduplicate with SkCubics::RootsValidT
 int SkDCubic::RootsValidT(double A, double B, double C, double D, double t[3]) {
     double s[3];
     int realRoots = RootsReal(A, B, C, D, s);
@@ -398,6 +406,7 @@ nextRoot:
     return foundRoots;
 }
 
+// TODO(skbug.com/40045140) Deduplicate with SkCubics::RootsReal
 int SkDCubic::RootsReal(double A, double B, double C, double D, double s[3]) {
 #ifdef SK_DEBUG
     #if ONE_OFF_DEBUG && ONE_OFF_DEBUG_MATHEMATICA
@@ -406,7 +415,7 @@ int SkDCubic::RootsReal(double A, double B, double C, double D, double s[3]) {
     //     set print elements 400 # if line doesn't fit
     char str[1024];
     sk_bzero(str, sizeof(str));
-    SK_SNPRINTF(str, sizeof(str), "Solve[%1.19g x^3 + %1.19g x^2 + %1.19g x + %1.19g == 0, x]",
+    snprintf(str, sizeof(str), "Solve[%1.19g x^3 + %1.19g x^2 + %1.19g x + %1.19g == 0, x]",
             A, B, C, D);
     SkPathOpsDebug::MathematicaIze(str, sizeof(str));
     SkDebugf("%s\n", str);
@@ -464,18 +473,18 @@ int SkDCubic::RootsReal(double A, double B, double C, double D, double s[3]) {
         r = neg2RootQ * cos(theta / 3) - adiv3;
         *roots++ = r;
 
-        r = neg2RootQ * cos((theta + 2 * PI) / 3) - adiv3;
+        r = neg2RootQ * cos((theta + 2 * SK_DoublePI) / 3) - adiv3;
         if (!AlmostDequalUlps(s[0], r)) {
             *roots++ = r;
         }
-        r = neg2RootQ * cos((theta - 2 * PI) / 3) - adiv3;
+        r = neg2RootQ * cos((theta - 2 * SK_DoublePI) / 3) - adiv3;
         if (!AlmostDequalUlps(s[0], r) && (roots - s == 1 || !AlmostDequalUlps(s[1], r))) {
             *roots++ = r;
         }
     } else {  // we have 1 real root
         double sqrtR2MinusQ3 = sqrt(R2MinusQ3);
         A = fabs(R) + sqrtR2MinusQ3;
-        A = SkDCubeRoot(A);
+        A = std::cbrt(A); // cube root
         if (R > 0) {
             A = -A;
         }
@@ -514,7 +523,8 @@ SkDVector SkDCubic::dxdyAtT(double t) const {
 }
 
 // OPTIMIZE? share code with formulate_F1DotF2
-int SkDCubic::findInflections(double tValues[]) const {
+// e.g. https://stackoverflow.com/a/35927917
+int SkDCubic::findInflections(double tValues[2]) const {
     double Ax = fPts[1].fX - fPts[0].fX;
     double Ay = fPts[1].fY - fPts[0].fY;
     double Bx = fPts[2].fX - 2 * fPts[1].fX + fPts[0].fX;
@@ -717,7 +727,7 @@ bool SkDCubic::toFloatPoints(SkPoint* pts) const {
             cubic[index] = 0;
         }
     }
-    return SkScalarsAreFinite(&pts->fX, kPointCount * 2);
+    return SkIsFinite(&pts->fX, kPointCount * 2);
 }
 
 double SkDCubic::top(const SkDCubic& dCurve, double startT, double endT, SkDPoint*topPt) const {

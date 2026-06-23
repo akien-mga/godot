@@ -4,10 +4,21 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+#include "include/core/SkPath.h"
+#include "include/core/SkPathTypes.h"
+#include "include/core/SkTypes.h"
+#include "include/pathops/SkPathOps.h"
+#include "include/private/base/SkPoint_impl.h"
+#include "include/private/base/SkTDArray.h"
+#include "src/base/SkArenaAlloc.h"
 #include "src/pathops/SkAddIntersections.h"
 #include "src/pathops/SkOpCoincidence.h"
+#include "src/pathops/SkOpContour.h"
 #include "src/pathops/SkOpEdgeBuilder.h"
+#include "src/pathops/SkOpSegment.h"
+#include "src/pathops/SkOpSpan.h"
 #include "src/pathops/SkPathOpsCommon.h"
+#include "src/pathops/SkPathOpsTypes.h"
 #include "src/pathops/SkPathWriter.h"
 
 static bool bridgeWinding(SkOpContourHead* contourList, SkPathWriter* writer) {
@@ -136,18 +147,70 @@ static bool bridgeXor(SkOpContourHead* contourList, SkPathWriter* writer) {
     return true;
 }
 
-// FIXME : add this as a member of SkPath
-bool SimplifyDebug(const SkPath& path, SkPath* result
-        SkDEBUGPARAMS(bool skipAssert) SkDEBUGPARAMS(const char* testName)) {
+static bool path_is_trivial(const SkPath& path) {
+    SkPath::Iter iter(path, true);
+
+    class Trivializer {
+        SkPoint prevPt{0,0};
+        SkVector prevVec{0,0};
+    public:
+        void moveTo(const SkPoint& currPt) {
+            prevPt = currPt;
+            prevVec = {0, 0};
+        }
+        bool addTrivialContourPoint(const SkPoint& currPt) {
+            if (currPt == prevPt) {
+                return true;
+            }
+            // There are more numericaly stable ways of determining if many points are co-linear.
+            // However, this mirrors SkPath's Convexicator for consistency.
+            SkVector currVec = currPt - prevPt;
+            if (SkPoint::CrossProduct(prevVec, currVec) != 0) {
+                return false;
+            }
+            prevVec = currVec;
+            prevPt = currPt;
+            return true;
+        }
+    } triv;
+
+    while (auto rec = iter.next()) {
+        SkSpan<const SkPoint> points = rec->fPoints;
+        switch (rec->fVerb) {
+            case SkPathVerb::kMove:
+                triv.moveTo(points[0]);
+                break;
+            case SkPathVerb::kCubic:
+                if (!triv.addTrivialContourPoint(points[3])) { return false; }
+                [[fallthrough]];
+            case SkPathVerb::kConic:
+            case SkPathVerb::kQuad:
+                if (!triv.addTrivialContourPoint(points[2])) { return false; }
+                [[fallthrough]];
+            case SkPathVerb::kLine:
+                if (!triv.addTrivialContourPoint(points[1])) { return false; }
+                if (!triv.addTrivialContourPoint(points[0])) { return false; }
+                break;
+            case SkPathVerb::kClose:
+                break;
+        }
+    }
+    return true;
+}
+
+std::optional<SkPath> SimplifyDebug(const SkPath& path SkDEBUGPARAMS(bool skipAssert)
+                                                       SkDEBUGPARAMS(const char* testName)) {
     // returns 1 for evenodd, -1 for winding, regardless of inverse-ness
     SkPathFillType fillType = path.isInverseFillType() ? SkPathFillType::kInverseEvenOdd
             : SkPathFillType::kEvenOdd;
+
     if (path.isConvex()) {
-        if (result != &path) {
-            *result = path;
+        SkPath result;
+        // If the path is trivially convex, simplify to empty, else copy
+        if (!path_is_trivial(path)) {
+            result = path;
         }
-        result->setFillType(fillType);
-        return true;
+        return result.makeFillType(fillType);
     }
     // turn path into list of segments
     SkSTArenaAlloc<4096> allocator;  // FIXME: constant-ize, tune
@@ -161,7 +224,7 @@ bool SimplifyDebug(const SkPath& path, SkPath* result
     const char* testName = "release";
 #endif
     if (SkPathOpsDebug::gDumpOp) {
-        SkPathOpsDebug::DumpSimplify(path, testName);
+        DumpSimplify(path, testName);
     }
 #endif
 #if DEBUG_SORT
@@ -169,15 +232,13 @@ bool SimplifyDebug(const SkPath& path, SkPath* result
 #endif
     SkOpEdgeBuilder builder(path, contourList, &globalState);
     if (!builder.finish()) {
-        return false;
+        return {};
     }
 #if DEBUG_DUMP_SEGMENTS
     contour.dumpSegments();
 #endif
     if (!SortContourList(&contourList, false, false)) {
-        result->reset();
-        result->setFillType(fillType);
-        return true;
+        return SkPath().makeFillType(fillType);
     }
     // find all intersections between segments
     SkOpContour* current = contourList;
@@ -194,33 +255,31 @@ bool SimplifyDebug(const SkPath& path, SkPath* result
     globalState.debugAddToGlobalCoinDicts();
 #endif
     if (!success) {
-        return false;
+        return {};
     }
 #if DEBUG_DUMP_ALIGNMENT
     contour.dumpSegments("aligned");
 #endif
     // construct closed contours
-    result->reset();
-    result->setFillType(fillType);
-    SkPathWriter wrapper(*result);
+    SkPathWriter wrapper(fillType);
     if (builder.xorMask() == kWinding_PathOpsMask ? !bridgeWinding(contourList, &wrapper)
             : !bridgeXor(contourList, &wrapper)) {
-        return false;
+        return {};
     }
     wrapper.assemble();  // if some edges could not be resolved, assemble remaining
-    return true;
+    return wrapper.nativePath();
 }
 
-bool Simplify(const SkPath& path, SkPath* result) {
+std::optional<SkPath> Simplify(const SkPath& path) {
+    auto result = SimplifyDebug(path  SkDEBUGPARAMS(true) SkDEBUGPARAMS(nullptr));
 #if DEBUG_DUMP_VERIFY
     if (SkPathOpsDebug::gVerifyOp) {
-        if (!SimplifyDebug(path, result  SkDEBUGPARAMS(false) SkDEBUGPARAMS(nullptr))) {
-            SkPathOpsDebug::ReportSimplifyFail(path);
-            return false;
+        if (result.has_value()) {
+            VerifySimplify(path, *result);
+        } else {
+            ReportSimplifyFail(path);
         }
-        SkPathOpsDebug::VerifySimplify(path, *result);
-        return true;
     }
 #endif
-    return SimplifyDebug(path, result  SkDEBUGPARAMS(true) SkDEBUGPARAMS(nullptr));
+    return result;
 }

@@ -4,10 +4,23 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-#include "src/core/SkTSort.h"
 #include "src/pathops/SkOpAngle.h"
+
+#include "include/core/SkPoint.h"
+#include "include/core/SkScalar.h"
+#include "include/private/base/SkFloatingPoint.h"
+#include "include/private/base/SkTemplates.h"
+#include "src/base/SkTSort.h"
+#include "src/pathops/SkIntersections.h"
 #include "src/pathops/SkOpSegment.h"
+#include "src/pathops/SkOpSpan.h"
+#include "src/pathops/SkPathOpsCubic.h"
 #include "src/pathops/SkPathOpsCurve.h"
+#include "src/pathops/SkPathOpsLine.h"
+#include "src/pathops/SkPathOpsPoint.h"
+
+#include <algorithm>
+#include <cmath>
 
 /* Angles are sorted counterclockwise. The smallest angle has a positive x and the smallest
    positive y. The largest angle has a positive x and a zero y. */
@@ -63,10 +76,12 @@ bool SkOpAngle::after(SkOpAngle* test) {
     SkOpAngle* rh = lh->fNext;
     SkASSERT(lh != rh);
     fPart.fCurve = fOriginalCurvePart;
+    // Adjust lh and rh to share the same origin (floating point error in intersections can mean
+    // they aren't exactly the same).
     lh->fPart.fCurve = lh->fOriginalCurvePart;
-    lh->fPart.fCurve.offset(lh->segment()->verb(), fPart.fCurve[0] - lh->fPart.fCurve[0]);
+    lh->fPart.fCurve[0] = fPart.fCurve[0];
     rh->fPart.fCurve = rh->fOriginalCurvePart;
-    rh->fPart.fCurve.offset(rh->segment()->verb(), fPart.fCurve[0] - rh->fPart.fCurve[0]);
+    rh->fPart.fCurve[0] = fPart.fCurve[0];
 
 #if DEBUG_ANGLE
     SkString bugOut;
@@ -588,7 +603,7 @@ bool SkOpAngle::endsIntersect(SkOpAngle* rh) {
         double maxWidth = std::max(maxX - minX, maxY - minY);
         delta = sk_ieee_double_divide(delta, maxWidth);
         // FIXME: move these magic numbers
-        // This fixes skbug.com/8380
+        // This fixes skbug.com/40039654
         // Larger changes (like changing the constant in the next block) cause other
         // tests to fail as documented in the bug.
         // This could probably become a more general test: e.g., if translating the
@@ -770,7 +785,7 @@ bool SkOpAngle::insert(SkOpAngle* angle) {
             last->fNext = angle;
             angle->fNext = next;
             debugValidateNext();
-            return true;
+            break;
         }
         last = next;
         if (last == this) {

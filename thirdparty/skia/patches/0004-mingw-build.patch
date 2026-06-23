@@ -1,0 +1,54 @@
+diff --git a/include/private/base/SkAttributes.h b/include/private/base/SkAttributes.h
+index ff1adaa..b25d8da 100644
+--- a/include/private/base/SkAttributes.h
++++ b/include/private/base/SkAttributes.h
+@@ -49,7 +49,15 @@
+  * `B` is the (1 based) index of the first argument used by the format string.
+  */
+ #if !defined(SK_PRINTF_LIKE)
+-#  define SK_PRINTF_LIKE(A, B) SK_ATTRIBUTE(format(printf, (A), (B)))
++// -- GODOT start --
++// MinGW defaults the `printf` format archetype to the msvcrt one, which rejects
++// the C99 length modifiers (e.g. `%zu`) that Skia uses.
++#  if defined(__MINGW32__)
++#    define SK_PRINTF_LIKE(A, B) SK_ATTRIBUTE(format(gnu_printf, (A), (B)))
++#  else
++#    define SK_PRINTF_LIKE(A, B) SK_ATTRIBUTE(format(printf, (A), (B)))
++#  endif
++// -- GODOT end --
+ #endif
+ 
+ /**
+diff --git a/include/private/base/SkFloatingPoint.h b/include/private/base/SkFloatingPoint.h
+index a732d59..f387a3d 100644
+--- a/include/private/base/SkFloatingPoint.h
++++ b/include/private/base/SkFloatingPoint.h
+@@ -152,10 +152,14 @@ static inline float sk_float_rsqrt (float x) { return 1.0f / std::sqrt(x); }
+ 
+ // IEEE defines how float divide behaves for non-finite values and zero-denoms, but C does not,
+ // so we have a helper that suppresses the possible undefined-behavior warnings.
+-#ifdef SK_BUILD_FOR_WIN
++// -- GODOT start --
++// SK_BUILD_FOR_WIN is also defined for MinGW, which errors out on the MSVC
++// pragmas with -Wunknown-pragmas. Skia uses _MSC_VER for this elsewhere.
++#ifdef _MSC_VER
+ #pragma warning(push)
+ #pragma warning(disable : 4723)
+ #endif
++// -- GODOT end --
+ SK_NO_SANITIZE("float-divide-by-zero")
+ static constexpr float sk_ieee_float_divide(float numer, float denom) {
+     return numer / denom;
+@@ -165,9 +169,11 @@ SK_NO_SANITIZE("float-divide-by-zero")
+ static constexpr double sk_ieee_double_divide(double numer, double denom) {
+     return numer / denom;
+ }
+-#ifdef SK_BUILD_FOR_WIN
++// -- GODOT start --
++#ifdef _MSC_VER
+ #pragma warning( pop )
+ #endif
++// -- GODOT end --
+ 
+ // Returns true iff the provided number is within a small epsilon of 0.
+ bool sk_double_nearly_zero(double a);

@@ -1,0 +1,25 @@
+diff --git a/include/private/base/SkTArray.h b/include/private/base/SkTArray.h
+index 1a833f1086..756fa19fec 100644
+--- a/include/private/base/SkTArray.h
++++ b/include/private/base/SkTArray.h
+@@ -774,12 +774,16 @@ public:
+         : Storage{}
+         , TArray<T, MEM_MOVE>{array, count, this} {}
+ 
+-    STArray(SkSpan<const T> data)
++// -- GODOT start --
++    // Renamed `data` parameters to avoid shadowing the inherited `data()` member
++    // (Godot builds with `-Wshadow -Werror`).
++    STArray(SkSpan<const T> src)
+         : Storage{}
+-        , TArray<T, MEM_MOVE>{data, this} {}
++        , TArray<T, MEM_MOVE>{src, this} {}
+ 
+-    STArray(std::initializer_list<T> data)
+-        : STArray{data.begin(), SkToInt(data.size())} {}
++    STArray(std::initializer_list<T> src)
++        : STArray{src.begin(), SkToInt(src.size())} {}
++// -- GODOT end --
+ 
+     explicit STArray(int reserveCount)
+         : STArray() { this->reserve_exact(reserveCount); }

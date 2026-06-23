@@ -8,6 +8,8 @@
 #define SkPathOpsPoint_DEFINED
 
 #include "include/core/SkPoint.h"
+#include "include/core/SkTypes.h"
+#include "include/private/base/SkTemplates.h"
 #include "src/pathops/SkPathOpsTypes.h"
 
 inline bool AlmostEqualUlps(const SkPoint& pt1, const SkPoint& pt2) {
@@ -93,7 +95,7 @@ struct SkDVector {
     }
 
     bool isFinite() const {
-        return std::isfinite(fX) && std::isfinite(fY);
+        return SkIsFinite(fX, fY);
     }
 };
 
@@ -266,7 +268,7 @@ struct SkDPoint {
         float largestNumber = std::max(SkTAbs(a.fX), std::max(SkTAbs(a.fY),
                 std::max(SkTAbs(b.fX), SkTAbs(b.fY))));
         SkVector diffs = a - b;
-        float largestDiff = std::max(diffs.fX, diffs.fY);
+        float largestDiff = std::max(SkTAbs(diffs.fX), SkTAbs(diffs.fY));
         return roughly_zero_when_compared_to(largestDiff, largestNumber);
     }
 

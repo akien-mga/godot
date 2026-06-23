@@ -1,14 +1,16 @@
 diff --git a/thirdparty/msdfgen/ext/resolve-shape-geometry.cpp b/thirdparty/msdfgen/ext/resolve-shape-geometry.cpp
-index a24dbeb67e..9df3899d60 100644
+index a83fa4e..7af8a31 100644
 --- a/thirdparty/msdfgen/ext/resolve-shape-geometry.cpp
 +++ b/thirdparty/msdfgen/ext/resolve-shape-geometry.cpp
-@@ -3,8 +3,8 @@
+@@ -3,9 +3,9 @@
  
  #ifdef MSDFGEN_USE_SKIA
  
 -#include <skia/core/SkPath.h>
+-#include <skia/core/SkPathBuilder.h>
 -#include <skia/pathops/SkPathOps.h>
 +#include <core/SkPath.h>
++#include <core/SkPathBuilder.h>
 +#include <pathops/SkPathOps.h>
  #include "../core/arithmetics.hpp"
  #include "../core/Vector2.hpp"

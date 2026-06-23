@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Google Inc.
+ * Copyright 2018 Google LLC
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
@@ -30,7 +30,7 @@ public:
 
     // Looser version of IsSimpleCircular, where the x & y values of the radii
     // only have to be nearly equal instead of strictly equal.
-    static bool IsNearlySimpleCircular(const SkRRect& rr, SkScalar tolerance = SK_ScalarNearlyZero);
+    static bool IsNearlySimpleCircular(const SkRRect& rr, float tolerance = SK_ScalarNearlyZero);
 
     static bool EqualRadii(const SkRRect& rr) {
         return rr.isRect() || SkRRectPriv::IsCircle(rr)  || SkRRectPriv::IsSimpleCircular(rr);
@@ -38,13 +38,19 @@ public:
 
     static const SkVector* GetRadiiArray(const SkRRect& rr) { return rr.fRadii; }
 
-    static bool AllCornersCircular(const SkRRect& rr, SkScalar tolerance = SK_ScalarNearlyZero);
+    static bool AllCornersCircular(const SkRRect& rr, float tolerance = SK_ScalarNearlyZero);
 
-// -- GODOT start --
-    //static bool ReadFromBuffer(SkRBuffer* buffer, SkRRect* rr);
+    // Prefer this over AllCornersCircular, which compares radii by absolute difference, which is
+    // a less stable decision as scale changes.
+    static bool AllCornersRelativelyCircular(const SkRRect& rr,
+                                             float tolerance = SK_ScalarNearlyZero);
 
-    //static void WriteToBuffer(const SkRRect& rr, SkWBuffer* buffer);
-// -- GODOT end --
+    // The same test used in AllCornersRelativelyCircular, but for provided radii.
+    static bool IsRelativelyCircular(float rx, float ry, float tolerance = SK_ScalarNearlyZero);
+
+    static bool ReadFromBuffer(SkRBuffer* buffer, SkRRect* rr);
+
+    static void WriteToBuffer(const SkRRect& rr, SkWBuffer* buffer);
 
     // Test if a point is in the rrect, if it were a closed set.
     static bool ContainsPoint(const SkRRect& rr, const SkPoint& p) {

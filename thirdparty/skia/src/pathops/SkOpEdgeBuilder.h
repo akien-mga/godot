@@ -7,21 +7,19 @@
 #ifndef SkOpEdgeBuilder_DEFINED
 #define SkOpEdgeBuilder_DEFINED
 
+#include "include/core/SkPoint.h"
+#include "include/core/SkScalar.h"
+#include "include/private/base/SkTDArray.h"
 #include "src/pathops/SkOpContour.h"
+#include "src/pathops/SkPathOpsTypes.h"
 #include "src/pathops/SkPathWriter.h"
+
+#include <cstdint>
+
+class SkPath;
 
 class SkOpEdgeBuilder {
 public:
-    SkOpEdgeBuilder(const SkPathWriter& path, SkOpContourHead* contours2,
-            SkOpGlobalState* globalState)
-        : fGlobalState(globalState)
-        , fPath(path.nativePath())
-        , fContourBuilder(contours2)
-        , fContoursHead(contours2)
-        , fAllowOpenContours(true) {
-        init();
-    }
-
     SkOpEdgeBuilder(const SkPath& path, SkOpContourHead* contours2, SkOpGlobalState* globalState)
         : fGlobalState(globalState)
         , fPath(&path)

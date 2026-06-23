@@ -7,24 +7,28 @@
 #ifndef SkPathOpsTSect_DEFINED
 #define SkPathOpsTSect_DEFINED
 
-#include "include/private/SkMacros.h"
-#include "src/core/SkArenaAlloc.h"
-#include "src/pathops/SkIntersections.h"
-#include "src/pathops/SkPathOpsBounds.h"
+#include "include/core/SkScalar.h"
+#include "include/core/SkTypes.h"
+#include "include/private/base/SkDebug.h"
+#include "include/private/base/SkTo.h"
+#include "src/base/SkArenaAlloc.h"
+#include "src/pathops/SkPathOpsPoint.h"
 #include "src/pathops/SkPathOpsRect.h"
 #include "src/pathops/SkPathOpsTCurve.h"
+#include "src/pathops/SkPathOpsTypes.h"
 
-#include <utility>
+#include <cstdint>
+
+class SkIntersections;
+class SkTSect;
+class SkTSpan;
+struct SkDLine;
 
 #ifdef SK_DEBUG
 typedef uint8_t SkOpDebugBool;
 #else
 typedef bool SkOpDebugBool;
 #endif
-
-static inline bool SkDoubleIsNaN(double x) {
-    return x != x;
-}
 
 class SkTCoincident {
 public:
@@ -76,9 +80,6 @@ private:
     double fPerpT;  // perpendicular intersection on opposite curve
     SkOpDebugBool fMatch;
 };
-
-class SkTSect;
-class SkTSpan;
 
 struct SkTSpanBounded {
     SkTSpan* fBounded;
@@ -235,9 +236,9 @@ private:
     SkOpDebugBool fIsLinear;
     SkOpDebugBool fIsLine;
     SkOpDebugBool fDeleted;
-    SkDEBUGCODE(SkOpGlobalState* fDebugGlobalState);
-    SkDEBUGCODE(SkTSect* fDebugSect);
-    PATH_OPS_DEBUG_T_SECT_CODE(int fID);
+    SkDEBUGCODE(SkOpGlobalState* fDebugGlobalState;)
+    SkDEBUGCODE(SkTSect* fDebugSect;)
+    PATH_OPS_DEBUG_T_SECT_CODE(int fID;)
     friend class SkTSect;
 };
 
@@ -360,10 +361,10 @@ private:
     bool fRemovedStartT;
     bool fRemovedEndT;
     bool fHung;
-    SkDEBUGCODE(SkOpGlobalState* fDebugGlobalState);
-    SkDEBUGCODE(SkTSect* fOppSect);
-    PATH_OPS_DEBUG_T_SECT_CODE(int fID);
-    PATH_OPS_DEBUG_T_SECT_CODE(int fDebugCount);
+    SkDEBUGCODE(SkOpGlobalState* fDebugGlobalState;)
+    SkDEBUGCODE(SkTSect* fOppSect;)
+    PATH_OPS_DEBUG_T_SECT_CODE(int fID;)
+    PATH_OPS_DEBUG_T_SECT_CODE(int fDebugCount;)
 #if DEBUG_T_SECT
     int fDebugAllocatedCount;
 #endif

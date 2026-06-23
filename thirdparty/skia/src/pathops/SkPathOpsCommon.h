@@ -7,12 +7,19 @@
 #ifndef SkPathOpsCommon_DEFINED
 #define SkPathOpsCommon_DEFINED
 
-#include "include/private/SkTDArray.h"
-#include "src/pathops/SkOpAngle.h"
+#include "include/pathops/SkPathOps.h"
+#include "src/pathops/SkPathOpsTypes.h"
 
+class SkOpAngle;
 class SkOpCoincidence;
-class SkOpContour;
-class SkPathWriter;
+class SkOpContourHead;
+class SkOpSegment;
+class SkOpSpan;
+class SkOpSpanBase;
+class SkPath;
+struct SkRect;
+
+template <typename T> class SkTDArray;
 
 const SkOpAngle* AngleWinding(SkOpSpanBase* start, SkOpSpanBase* end, int* windingPtr,
                               bool* sortable);
@@ -23,8 +30,14 @@ SkOpSpan* FindUndone(SkOpContourHead* );
 bool FixWinding(SkPath* path);
 bool SortContourList(SkOpContourHead** , bool evenOdd, bool oppEvenOdd);
 bool HandleCoincidence(SkOpContourHead* , SkOpCoincidence* );
-bool OpDebug(const SkPath& one, const SkPath& two, SkPathOp op, SkPath* result
+
+std::optional<SkPath> OpDebug(const SkPath& one, const SkPath& two, SkPathOp op
              SkDEBUGPARAMS(bool skipAssert)
              SkDEBUGPARAMS(const char* testName));
+std::optional<SkPath> SimplifyDebug(const SkPath& path
+             SkDEBUGPARAMS(bool skipAssert)
+             SkDEBUGPARAMS(const char* testName));
+
+bool ComputeTightBounds(const SkPath&, SkRect*);
 
 #endif

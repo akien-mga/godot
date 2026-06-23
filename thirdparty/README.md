@@ -868,7 +868,7 @@ Collection of single-file libraries used in Godot components.
 ## msdfgen
 
 - Upstream: https://github.com/Chlumsky/msdfgen
-- Version: 1.13 (1874bcf7d9624ccc85b4bc9a85d78116f690f35b, 2025)
+- Version: git (1c106ed8117893bf943e577f62eb0665fb271e46, 2026)
 - License: MIT
 
 Files extracted from the upstream source:
@@ -985,90 +985,33 @@ proposed by these libraries and better integrate them with Godot.
 ## skia
 
 - Upstream: https://skia.googlesource.com/skia
-- Version: git (153bd188e606c7cc14b933c288075b824633bb44, 2022)
+- Version: chrome/m150 (9c7b2dffb2433f5a0cc2b77f06025a09126807ed, 2026)
 - License: BSD-3-Clause
+
+Only the `SkPathOps` geometry subset is vendored. Its sole use in Godot is
+`Simplify()` to resolve font contour self-intersections (e.g. from `embolden`)
+from `TextMesh` and `msdfgen` (see the `msdfgen` section).
 
 Files extracted from upstream source:
 
-- `include/config/SkUserConfig.h`
-- `include/core/SkM44.h`
-- `include/core/SkMath.h`
-- `include/core/SkMatrix.h`
-- `include/core/SkPath.h`
-- `include/core/SkPathBuilder.h`
-- `include/core/SkPathTypes.h`
-- `include/core/SkPoint.h`
-- `include/core/SkPoint3.h`
-- `include/core/SkRRect.h`
-- `include/core/SkRSXform.h`
-- `include/core/SkRect.h`
-- `include/core/SkRefCnt.h`
-- `include/core/SkScalar.h`
-- `include/core/SkSize.h`
-- `include/core/SkTypes.h`
-- `include/pathops/SkPathOps.h`
-- `include/private/SkFixed.h`
-- `include/private/SkFloatBits.h`
-- `include/private/SkFloatingPoint.h`
-- `include/private/SkIDChangeListener.h`
-- `include/private/SkMacros.h`
-- `include/private/SkMalloc.h`
-- `include/private/SkMutex.h`
-- `include/private/SkOnce.h`
-- `include/private/SkPathRef.h`
-- `include/private/SkSafe32.h`
-- `include/private/SkSafe_math.h`
-- `include/private/SkSemaphore.h`
-- `include/private/SkTArray.h`
-- `include/private/SkTDArray.h`
-- `include/private/SkTFitsIn.h`
-- `include/private/SkTLogic.h`
-- `include/private/SkTPin.h`
-- `include/private/SkTemplates.h`
-- `include/private/SkThreadAnnotations.h`
-- `include/private/SkThreadID.h`
-- `include/private/SkTo.h`
-- `include/private/SkVx.h`
-- `src/core/SkArenaAlloc.{cpp,h}`
-- `src/core/SkCubicClipper.{cpp,h}`
-- `src/core/SkEdgeClipper.{cpp,h}`
-- `src/core/SkGeometry.{cpp,h}`
-- `src/core/SkIDChangeListener.cpp`
-- `src/core/SkLeanWindows.h`
-- `src/core/SkLineClipper.{cpp,h}`
-- `src/core/SkMalloc.cpp`
-- `src/core/SkMath.cpp`
-- `src/core/SkMathPriv.h`
-- `src/core/SkMatrix.cpp`
-- `src/core/SkMatrixPriv.h`
-- `src/core/SkPath.cpp`
-- `src/core/SkPathBuilder.cpp`
-- `src/core/SkPathMakers.h`
-- `src/core/SkPathPriv.h`
-- `src/core/SkPathRef.cpp`
-- `src/core/SkPoint.cpp`
-- `src/core/SkPointPriv.h`
-- `src/core/SkRRect.cpp`
-- `src/core/SkRRectPriv.h`
-- `src/core/SkRect.cpp`
-- `src/core/SkRectPriv.h`
-- `src/core/SkSafeMath.h`
-- `src/core/SkScaleToSides.h`
-- `src/core/SkSemaphore.cpp`
-- `src/core/SkTLazy.h`
-- `src/core/SkTSort.h`
-- `src/core/SkThreadID.cpp`
-- `src/pathops` folder
-- `src/ports/SkDebug_android.cpp`
-- `src/ports/SkDebug_stdio.cpp`
-- `src/ports/SkDebug_win.cpp`
-- `src/ports/SkMemory_malloc.cpp`
+- The `.cpp` source files listed in `modules/skia/SCsub`.
+- The headers those sources actually include, at their upstream paths.
 - `LICENSE`
 
-Some downstream changes have been made and are identified by
-`// -- GODOT begin --` and `// -- GODOT end --` comments.
-They can be reapplied using the patch included in the `patches`
-folder.
+Use `update-skia.sh` to update the bundled files, and to refresh them after
+adding or dropping a source file in `modules/skia/SCsub`. It derives the header
+set with the compiler, so the two don't drift apart, and applies the patches
+below.
+
+Patches:
+
+- `0001-cpp17-bit-builtins.patch` ([GH-61555](https://github.com/godotengine/godot/pull/61555))
+- `0002-trim-debug-dump.patch` ([GH-61555](https://github.com/godotengine/godot/pull/61555))
+- `0003-wshadow-tarray.patch` ([GH-61555](https://github.com/godotengine/godot/pull/61555))
+- `0004-mingw-build.patch` ([GH-61555](https://github.com/godotengine/godot/pull/61555))
+
+Downstream changes are identified by `// -- GODOT start --` and
+`// -- GODOT end --` comments and can be reapplied using the patches above.
 
 
 ## smaa
