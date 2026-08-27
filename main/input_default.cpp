@@ -768,6 +768,7 @@ InputDefault::InputDefault() {
 uint32_t InputDefault::joy_button(uint32_t p_last_id, int p_device, int p_button, bool p_pressed) {
 
 	_THREAD_SAFE_METHOD_;
+	ERR_FAIL_INDEX_V(p_button, JOY_BUTTON_MAX + 19, p_last_id);
 	Joystick &joy = joy_names[p_device];
 	//printf("got button %i, mapping is %i\n", p_button, joy.mapping);
 	if (joy.last_buttons[p_button] == p_pressed) {
