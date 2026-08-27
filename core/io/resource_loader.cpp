@@ -114,8 +114,6 @@ Ref<ResourceInteractiveLoader> ResourceFormatLoader::load_interactive(const Stri
 
 RES ResourceFormatLoader::load(const String &p_path, const String &p_original_path, Error *r_error) {
 
-	String path = p_path;
-
 	//or this must be implemented
 	Ref<ResourceInteractiveLoader> ril = load_interactive(p_path, r_error);
 	if (!ril.is_valid())
