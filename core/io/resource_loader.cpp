@@ -162,16 +162,10 @@ RES ResourceLoader::load(const String &p_path, const String &p_type_hint, bool p
 
 	if (!p_no_cache && ResourceCache::has(local_path)) {
 
-		if (OS::get_singleton()->is_stdout_verbose())
-			print_line("load resource: " + local_path + " (cached)");
-
 		return RES(ResourceCache::get(local_path));
 	}
 
 	String remapped_path = PathRemap::get_singleton()->get_remap(local_path);
-
-	if (OS::get_singleton()->is_stdout_verbose())
-		print_line("load resource: " + remapped_path);
 
 	String extension = remapped_path.extension();
 	bool found = false;
@@ -295,18 +289,12 @@ Ref<ResourceInteractiveLoader> ResourceLoader::load_interactive(const String &p_
 
 	if (!p_no_cache && ResourceCache::has(local_path)) {
 
-		if (OS::get_singleton()->is_stdout_verbose())
-			print_line("load resource: " + local_path + " (cached)");
-
 		Ref<Resource> res_cached = ResourceCache::get(local_path);
 		Ref<ResourceInteractiveLoaderDefault> ril = Ref<ResourceInteractiveLoaderDefault>(memnew(ResourceInteractiveLoaderDefault));
 
 		ril->resource = res_cached;
 		return ril;
 	}
-
-	if (OS::get_singleton()->is_stdout_verbose())
-		print_line("load resource: ");
 
 	String remapped_path = PathRemap::get_singleton()->get_remap(local_path);
 
