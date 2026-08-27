@@ -2183,7 +2183,7 @@ void PropertyEditor::_check_reload_status(const String &p_name, TreeItem *item) 
 	if (!has_reload && !obj->get_script().is_null()) {
 		Ref<Script> scr = obj->get_script();
 		Variant orig_value;
-		if (scr->get_property_default_value(p_name, orig_value)) {
+		if (!scr.is_null() && scr->get_property_default_value(p_name, orig_value)) {
 			if (orig_value != obj->get(p_name)) {
 				has_reload = true;
 			}
