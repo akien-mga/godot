@@ -37,15 +37,26 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#if defined(UNIX_ENABLED)
+#include <unistd.h>
+#endif
+
 #ifndef ANDROID_ENABLED
 #include <sys/statvfs.h>
 #endif
 
 #ifdef MSVC
 #define S_ISREG(m) ((m)&_S_IFREG)
+#include <io.h>
 #endif
 #ifndef S_ISREG
 #define S_ISREG(m) ((m)&S_IFREG)
+#endif
+
+#ifndef NO_FCNTL
+#include <fcntl.h>
+#else
+#include <sys/ioctl.h>
 #endif
 
 void FileAccessUnix::check_errors() const {
@@ -86,11 +97,16 @@ Error FileAccessUnix::_open(const String &p_path, int p_mode_flags) {
 
 	//printf("opening %s as %s\n", p_path.utf8().get_data(), path.utf8().get_data());
 	struct stat st;
-	if (stat(path.utf8().get_data(), &st) == 0) {
-
-		if (!S_ISREG(st.st_mode))
-			return ERR_FILE_CANT_OPEN;
-	};
+	int err = stat(path.utf8().get_data(), &st);
+	if (!err) {
+		switch (st.st_mode & S_IFMT) {
+			case S_IFLNK:
+			case S_IFREG:
+				break;
+			default:
+				return ERR_FILE_CANT_OPEN;
+		}
+	}
 
 	if (is_backup_save_enabled() && p_mode_flags & WRITE && !(p_mode_flags & READ)) {
 		save_path = path;
@@ -104,6 +120,19 @@ Error FileAccessUnix::_open(const String &p_path, int p_mode_flags) {
 		last_error = ERR_FILE_CANT_OPEN;
 		return ERR_FILE_CANT_OPEN;
 	} else {
+		// Set close on exec to avoid leaking it to subprocesses.
+		int fd = fileno(f);
+
+		if (fd != -1) {
+#if defined(NO_FCNTL)
+			unsigned long par = 0;
+			ioctl(fd, FIOCLEX, &par);
+#else
+			int opts = fcntl(fd, F_GETFD);
+			fcntl(fd, F_SETFD, opts | FD_CLOEXEC);
+#endif
+		}
+
 		last_error = OK;
 		flags = p_mode_flags;
 		return OK;
@@ -213,17 +242,29 @@ void FileAccessUnix::store_buffer(const uint8_t *p_src, int p_length) {
 
 bool FileAccessUnix::file_exists(const String &p_path) {
 
-	FILE *g;
-	//printf("opening file %s\n", p_fname.c_str());
+	struct stat st;
 	String filename = fix_path(p_path);
-	g = fopen(filename.utf8().get_data(), "rb");
-	if (g == NULL) {
 
+	int err = stat(filename.utf8().get_data(), &st);
+	if (err)
 		return false;
-	} else {
 
-		fclose(g);
-		return true;
+#ifdef UNIX_ENABLED
+	// See if we have access to the file
+	if (access(filename.utf8().get_data(), F_OK))
+		return false;
+#else
+	if (_access(filename.utf8().get_data(), 4) == -1)
+		return false;
+#endif
+
+	// See if this is a regular file
+	switch (st.st_mode & S_IFMT) {
+		case S_IFLNK:
+		case S_IFREG:
+			return true;
+		default:
+			return false;
 	}
 }
 
