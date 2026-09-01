@@ -678,20 +678,28 @@ bool TextServerFallback::_ensure_glyph(FontFallback *p_font_data, const Vector2i
 		FT_Int32 flags = FT_LOAD_DEFAULT;
 
 		bool outline = p_size.y > 0;
-		switch (p_font_data->hinting) {
-			case TextServer::HINTING_NONE:
-				flags |= FT_LOAD_NO_HINTING;
-				break;
-			case TextServer::HINTING_LIGHT:
-				flags |= FT_LOAD_TARGET_LIGHT;
-				break;
-			default:
-				flags |= FT_LOAD_TARGET_NORMAL;
-				break;
+		if (p_font_data->msdf) {
+			// MSDF is resolution independent: the outline is rasterized once at `msdf_source_size` and then
+			// scaled to arbitrary sizes. Hinting grid-fits the outline to the *source* pixel grid, which bakes
+			// a per-glyph vertical offset into the atlas and makes baselines disagree between glyphs.
+			flags |= FT_LOAD_NO_HINTING;
+		} else {
+			switch (p_font_data->hinting) {
+				case TextServer::HINTING_NONE:
+					flags |= FT_LOAD_NO_HINTING;
+					break;
+				case TextServer::HINTING_LIGHT:
+					flags |= FT_LOAD_TARGET_LIGHT;
+					break;
+				default:
+					flags |= FT_LOAD_TARGET_NORMAL;
+					break;
+			}
+			if (p_font_data->force_autohinter) {
+				flags |= FT_LOAD_FORCE_AUTOHINT;
+			}
 		}
-		if (p_font_data->force_autohinter) {
-			flags |= FT_LOAD_FORCE_AUTOHINT;
-		}
+
 		if (outline || (p_font_data->disable_embedded_bitmaps && !FT_HAS_COLOR(p_font_data->face))) {
 			flags |= FT_LOAD_NO_BITMAP;
 		} else if (FT_HAS_COLOR(p_font_data->face)) {
