@@ -1018,6 +1018,16 @@ _FORCE_INLINE_ TextServerAdvanced::FontGlyph TextServerAdvanced::rasterize_msdf(
 
 	msdfgen::Shape::Bounds bounds = shape.getBounds(p_pixel_range);
 
+	// Snap the bounds to the pixel grid before they are used. The rasterized bitmap is a whole number
+	// of pixels and the shape is projected relative to `bounds.l` / `bounds.b`, while the glyph rect is
+	// anchored on `bounds.l` / `bounds.t`. With fractional bounds `bounds.b + height != bounds.t`, so the
+	// quad ends up shifted from the rasterized content by `frac(bounds.t - bounds.b)` source pixels, which
+	// differs per glyph and per `msdf_source_size`.
+	bounds.l = Math::floor(bounds.l);
+	bounds.b = Math::floor(bounds.b);
+	bounds.r = Math::ceil(bounds.r);
+	bounds.t = Math::ceil(bounds.t);
+
 	FontGlyph chr;
 	chr.found = true;
 	chr.advance = p_advance;
