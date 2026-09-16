@@ -32,6 +32,7 @@
 
 TEST_FORCE_LINK(test_dictionary)
 
+#include "core/io/resource.h"
 #include "core/object/ref_counted.h"
 #include "core/variant/typed_dictionary.h"
 
@@ -645,6 +646,81 @@ TEST_CASE("[Dictionary] assign()") {
 	typed.assign(untyped);
 	ERR_PRINT_ON;
 	CHECK(typed.size() == 2);
+}
+
+TEST_CASE("[Dictionary] assign() rejects unrelated object types") {
+	// Target Dictionary[String, Node] with one pre-existing entry, so a rejected assign is observable.
+	Dictionary target;
+	target.set_typed(Variant::STRING, StringName(), Variant(), Variant::OBJECT, "Node", Variant());
+	target["existing"] = Variant();
+	REQUIRE(target.size() == 1);
+
+	SUBCASE("Empty source") {
+		Dictionary source;
+		source.set_typed(Variant::STRING, StringName(), Variant(), Variant::OBJECT, "Resource", Variant());
+		ERR_PRINT_OFF;
+		target.assign(source);
+		ERR_PRINT_ON;
+		CHECK_MESSAGE(target.size() == 1, "Dictionary[String, Resource] must not be assignable to Dictionary[String, Node].");
+	}
+
+	SUBCASE("Source with only null values") {
+		Dictionary source;
+		source.set_typed(Variant::STRING, StringName(), Variant(), Variant::OBJECT, "Resource", Variant());
+		source["a"] = Variant();
+		ERR_PRINT_OFF;
+		target.assign(source);
+		ERR_PRINT_ON;
+		CHECK_MESSAGE(target.size() == 1, "Dictionary[String, Resource] must not be assignable to Dictionary[String, Node].");
+		CHECK(target.has("existing"));
+	}
+
+	SUBCASE("Source with a non-null value (control)") {
+		Dictionary source;
+		source.set_typed(Variant::STRING, StringName(), Variant(), Variant::OBJECT, "Resource", Variant());
+		Ref<Resource> res;
+		res.instantiate();
+		source["a"] = res;
+		ERR_PRINT_OFF;
+		target.assign(source);
+		ERR_PRINT_ON;
+		CHECK(target.size() == 1);
+	}
+
+	SUBCASE("Array equivalent (control)") {
+		Array array_target;
+		array_target.set_typed(Variant::OBJECT, "Node", Variant());
+		array_target.push_back(Variant());
+		Array array_source;
+		array_source.set_typed(Variant::OBJECT, "Resource", Variant());
+		ERR_PRINT_OFF;
+		array_target.assign(array_source);
+		ERR_PRINT_ON;
+		CHECK(array_target.size() == 1);
+	}
+}
+
+TEST_CASE("[Dictionary] assign() with keys colliding after conversion") {
+	// 1.2 and 1.7 are distinct float keys, but both convert to int 1.
+	Dictionary source;
+	source[1.2] = "a";
+	source[1.7] = "b";
+	REQUIRE(source.size() == 2);
+
+	Dictionary target;
+	target.set_typed(Variant::INT, StringName(), Variant(), Variant::STRING, StringName(), Variant());
+	target[99] = "existing";
+	REQUIRE(target.size() == 1);
+
+	ERR_PRINT_OFF;
+	target.assign(source);
+	ERR_PRINT_ON;
+
+	// Pre-existing behavior: the assign succeeds and the last converted key wins.
+	CHECK_MESSAGE(!target.has(99), "assign() should replace the previous contents.");
+	CHECK(target.size() == 1);
+	CHECK(target.has(1));
+	CHECK(target.get(1, Variant()) == Variant("b"));
 }
 
 TEST_CASE("[Dictionary] Typed copying") {
