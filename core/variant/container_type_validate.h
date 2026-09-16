@@ -64,7 +64,7 @@ private:
 				Variant::construct(variant_type, converted_to, &converted_from, 1, call_error);
 
 				if (call_error.error == Callable::CallError::CALL_OK) {
-					r_inout_variant = converted_to;
+					r_inout_variant = std::move(converted_to);
 					return true;
 				}
 			}

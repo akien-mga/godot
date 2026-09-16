@@ -419,6 +419,20 @@ Array Dictionary::values() const {
 	return varr;
 }
 
+// Whether elements of type `p_source` may be assignable to `p_target`.
+// Individual elements still need to be validated.
+static bool _can_assign_container_type(const ContainerTypeValidate &p_target, const ContainerTypeValidate &p_source) {
+	if (p_source.variant_type == Variant::NIL) {
+		return true;
+	}
+	if (p_target.variant_type == Variant::OBJECT && p_source.variant_type == Variant::OBJECT) {
+		// From subclasses to base classes or,
+		// from base classes to subclasses.
+		return p_target.can_reference(p_source) || p_source.can_reference(p_target);
+	}
+	return Variant::can_convert_strict(p_source.variant_type, p_target.variant_type);
+}
+
 void Dictionary::assign(const Dictionary &p_dictionary) {
 	const ContainerTypeValidate &typed_key = _p->typed_key;
 	const ContainerTypeValidate &typed_key_source = p_dictionary._p->typed_key;
@@ -440,38 +454,33 @@ void Dictionary::assign(const Dictionary &p_dictionary) {
 		return;
 	}
 
-	const uint32_t size = p_dictionary._p->variant_map.size();
-	HashMap<Variant, Variant, HashMapHasherDefault, StringLikeVariantComparator> variant_map(size);
+	ERR_FAIL_COND_MSG(!_can_assign_container_type(typed_key, typed_key_source) || !_can_assign_container_type(typed_value, typed_value_source),
+			vformat(R"(Cannot assign contents of "Dictionary[%s, %s]" to "Dictionary[%s, %s]".)", Variant::get_type_name(typed_key_source.variant_type), Variant::get_type_name(typed_value_source.variant_type), Variant::get_type_name(typed_key.variant_type), Variant::get_type_name(typed_value.variant_type)));
 
-	if ((typed_key_source.variant_type == Variant::NIL || Variant::can_convert_strict(typed_key_source.variant_type, typed_key.variant_type)) && (typed_value_source.variant_type == Variant::NIL || Variant::can_convert_strict(typed_value_source.variant_type, typed_value.variant_type))) {
-		uint32_t inserted = 0;
-		for (const KeyValue<Variant, Variant> &kv : p_dictionary._p->variant_map) {
-			const Variant *key = &kv.key;
-			Variant tkey;
-			if (convert_key) {
-				tkey = kv.key;
-				ERR_FAIL_COND_MSG(!typed_key.validate(tkey, "", false), vformat("Unable to convert dictionary key from '%s' to '%s'.", Variant::get_type_name(kv.key.get_type()), Variant::get_type_name(typed_key.variant_type)));
-				key = &tkey;
-			}
+	HashMap<Variant, Variant, HashMapHasherDefault, StringLikeVariantComparator> variant_map(p_dictionary._p->variant_map.size());
 
-			const Variant *value = &kv.value;
-			Variant tvalue;
-			if (convert_value) {
-				tvalue = kv.value;
-				ERR_FAIL_COND_MSG(!typed_value.validate(tvalue, "", false), vformat("Unable to convert dictionary value for key '%s' from '%s' to '%s'.", kv.key, Variant::get_type_name(kv.value.get_type()), Variant::get_type_name(typed_value.variant_type)));
-				value = &tvalue;
-			}
-
-			variant_map.insert(*key, *value);
-			if (variant_map.size() != ++inserted) {
-				ERR_FAIL_MSG(vformat("Key '%s' collides with an existing key after conversion.", *key));
-			}
+	for (const KeyValue<Variant, Variant> &kv : p_dictionary._p->variant_map) {
+		const Variant *key = &kv.key;
+		Variant tkey;
+		if (convert_key) {
+			tkey = kv.key;
+			ERR_FAIL_COND_MSG(!typed_key.validate(tkey, "assign", false), vformat("Unable to convert dictionary key from '%s' to '%s'.", Variant::get_type_name(kv.key.get_type()), Variant::get_type_name(typed_key.variant_type)));
+			key = &tkey;
 		}
-	} else {
-		ERR_FAIL_MSG(vformat(R"(Cannot assign contents of "Dictionary[%s, %s]" to "Dictionary[%s, %s]".)", Variant::get_type_name(typed_key_source.variant_type), Variant::get_type_name(typed_value_source.variant_type), Variant::get_type_name(typed_key.variant_type), Variant::get_type_name(typed_value.variant_type)));
+
+		const Variant *value = &kv.value;
+		Variant tvalue;
+		if (convert_value) {
+			tvalue = kv.value;
+			ERR_FAIL_COND_MSG(!typed_value.validate(tvalue, "assign", false), vformat("Unable to convert dictionary value for key '%s' from '%s' to '%s'.", kv.key, Variant::get_type_name(kv.value.get_type()), Variant::get_type_name(typed_value.variant_type)));
+			value = &tvalue;
+		}
+
+		// Keys that collide after conversion overwrite each other, the last one wins.
+		variant_map.insert(*key, *value);
 	}
 
-	_p->variant_map = variant_map;
+	_p->variant_map = std::move(variant_map);
 }
 
 const Variant *Dictionary::next(const Variant *p_key) const {
