@@ -276,7 +276,7 @@ public:
 
 private:
 	static PropertyInfo _gen_return_type_info_impl() {
-		return GetTypeInfo<R>::get_class_info();
+		return get_type_class_info<std::decay_t<R>>();
 	}
 };
 

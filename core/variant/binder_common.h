@@ -435,66 +435,46 @@ void call_with_validated_object_instance_args_static_retc(T *p_base, R (*p_metho
 // it's not clever enough to treat other P values as making this branch valid.
 GODOT_GCC_WARNING_PUSH_AND_IGNORE("-Wunused-but-set-parameter")
 
-template <typename Q>
-void call_get_argument_type_helper(int p_arg, int &r_index, Variant::Type &r_type) {
-	if (p_arg == r_index) {
-		r_type = GetTypeInfo<Q>::VARIANT_TYPE;
-	}
-	r_index++;
-}
+// The functions below index tables built from the argument types, rather than testing each argument in turn.
 
 template <typename... P>
 Variant::Type call_get_argument_type(int p_arg) {
-	Variant::Type type = Variant::NIL;
-	int index = 0;
-	// I think rocket science is simpler than modern C++.
-	using expand_type = int[];
-	expand_type a{ 0, (call_get_argument_type_helper<P>(p_arg, index, type), 0)... };
-	(void)a; // Suppress (valid, but unavoidable) -Wunused-variable warning.
-	(void)index; // Suppress GCC warning.
-	return type;
+	if constexpr (sizeof...(P) == 0) {
+		return Variant::NIL;
+	} else {
+		static constexpr Variant::Type types[] = { GetTypeInfo<P>::VARIANT_TYPE... };
+		return (p_arg >= 0 && p_arg < (int)sizeof...(P)) ? types[p_arg] : Variant::NIL;
+	}
 }
 
-template <typename Q>
-void call_get_argument_type_info_helper(int p_arg, int &r_index, PropertyInfo &r_info) {
-	if (p_arg == r_index) {
-		r_info = GetTypeInfo<Q>::get_class_info();
+template <typename... P>
+PropertyInfo call_get_argument_type_info(int p_arg) {
+	if constexpr (sizeof...(P) > 0) {
+		static constexpr PropertyInfo (*const infos[])() = { &get_type_class_info<std::decay_t<P>>... };
+		if (p_arg >= 0 && p_arg < (int)sizeof...(P)) {
+			return infos[p_arg]();
+		}
 	}
-	r_index++;
+	return PropertyInfo();
 }
 
 template <typename... P>
 void call_get_argument_type_info(int p_arg, PropertyInfo &r_info) {
-	int index = 0;
-	// I think rocket science is simpler than modern C++.
-	using expand_type = int[];
-	expand_type a{ 0, (call_get_argument_type_info_helper<P>(p_arg, index, r_info), 0)... };
-	(void)a; // Suppress (valid, but unavoidable) -Wunused-variable warning.
-	(void)index; // Suppress GCC warning.
+	if (p_arg >= 0 && p_arg < (int)sizeof...(P)) {
+		r_info = call_get_argument_type_info<P...>(p_arg);
+	}
 }
 
 #ifdef DEBUG_ENABLED
-template <typename Q>
-void call_get_argument_metadata_helper(int p_arg, int &r_index, GodotTypeInfo::Metadata &r_metadata) {
-	if (p_arg == r_index) {
-		r_metadata = GetTypeInfo<Q>::METADATA;
-	}
-	r_index++;
-}
-
 template <typename... P>
 GodotTypeInfo::Metadata call_get_argument_metadata(int p_arg) {
-	GodotTypeInfo::Metadata md = GodotTypeInfo::METADATA_NONE;
-
-	int index = 0;
-	// I think rocket science is simpler than modern C++.
-	using expand_type = int[];
-	expand_type a{ 0, (call_get_argument_metadata_helper<P>(p_arg, index, md), 0)... };
-	(void)a; // Suppress (valid, but unavoidable) -Wunused-variable warning.
-	(void)index;
-	return md;
+	if constexpr (sizeof...(P) == 0) {
+		return GodotTypeInfo::METADATA_NONE;
+	} else {
+		static constexpr GodotTypeInfo::Metadata metadata[] = { GetTypeInfo<P>::METADATA... };
+		return (p_arg >= 0 && p_arg < (int)sizeof...(P)) ? metadata[p_arg] : GodotTypeInfo::METADATA_NONE;
+	}
 }
-
 #endif // DEBUG_ENABLED
 
 //////////////////////

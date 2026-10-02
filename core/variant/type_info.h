@@ -343,3 +343,9 @@ struct GetTypeInfo<TypedDictionary<K, V>> {
 				vformat("%s;%s", GodotTypeInfo::Internal::get_variant_type_identifier<K>(), GodotTypeInfo::Internal::get_variant_type_identifier<V>()));
 	}
 };
+
+// Not inlined, so the code generating each type's info exists once, rather than in every method signature using it.
+template <typename T>
+_NO_INLINE_ PropertyInfo get_type_class_info() {
+	return GetTypeInfo<T>::get_class_info();
+}
