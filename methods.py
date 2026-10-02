@@ -1581,6 +1581,21 @@ def get_buffer(path: str) -> bytes:
         return file.read()
 
 
+def compress_buffer_zstd(buffer: bytes, env):
+    level = 20 if env["production"] else 3
+    if sys.version_info >= (3, 14):
+        import compression.zstd
+
+        return compression.zstd.compress(buffer, level)
+    else:
+        try:
+            import zstandard
+        except ImportError:
+            print_error("Python versions earlier than 3.14 require the `zstandard` module")
+            sys.exit(255)
+        return zstandard.compress(buffer, level)
+
+
 def compress_buffer(buffer: bytes) -> bytes:
     # Use maximum zlib compression level to further reduce file size
     # (at the cost of initial build times).
