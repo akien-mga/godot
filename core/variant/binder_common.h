@@ -50,6 +50,10 @@ struct PtrToArg<char32_t> {
 	}
 };
 
+// Fills `r_args` with the passed arguments followed by default values for the missing ones, and returns it.
+// Only called when arguments are missing. Not inlined, so this isn't repeated in every method signature's `call()`.
+_NO_INLINE_ const Variant **call_get_args_with_defaults(const Variant **p_args, int p_argcount, int p_expected, const Vector<Variant> &p_default_values, const Variant **r_args);
+
 template <typename T, typename... P, size_t... Is>
 void call_with_variant_args_helper(T *p_instance, void (T::*p_method)(P...), const Variant **p_args, Callable::CallError &r_error, IndexSequence<Is...>) {
 	r_error.error = Callable::CallError::CALL_OK;
@@ -180,12 +184,9 @@ void call_with_variant_args_dv(T *p_instance, void (T::*p_method)(P...), const V
 		r_error.expected = sizeof...(P);
 		return;
 	}
-#endif // DEBUG_ENABLED
 
 	int32_t missing = (int32_t)sizeof...(P) - (int32_t)p_argcount;
-
 	int32_t dvs = p_default_values.size();
-#ifdef DEBUG_ENABLED
 	if (missing > dvs) {
 		r_error.error = Callable::CallError::CALL_ERROR_TOO_FEW_ARGUMENTS;
 		r_error.expected = sizeof...(P);
@@ -193,14 +194,8 @@ void call_with_variant_args_dv(T *p_instance, void (T::*p_method)(P...), const V
 	}
 #endif // DEBUG_ENABLED
 
-	const Variant *args[sizeof...(P) == 0 ? 1 : sizeof...(P)]; //avoid zero sized array
-	for (int32_t i = 0; i < (int32_t)sizeof...(P); i++) {
-		if (i < p_argcount) {
-			args[i] = p_args[i];
-		} else {
-			args[i] = &p_default_values[i - p_argcount + (dvs - missing)];
-		}
-	}
+	const Variant *args_with_defaults[sizeof...(P) == 0 ? 1 : sizeof...(P)]; //avoid zero sized array
+	const Variant **args = p_argcount >= (int)sizeof...(P) ? p_args : call_get_args_with_defaults(p_args, p_argcount, sizeof...(P), p_default_values, args_with_defaults);
 
 	call_with_variant_args_helper(p_instance, p_method, args, r_error, BuildIndexSequence<sizeof...(P)>{});
 }
@@ -231,12 +226,9 @@ void call_with_variant_argsc_dv(T *p_instance, void (T::*p_method)(P...) const, 
 		r_error.expected = sizeof...(P);
 		return;
 	}
-#endif // DEBUG_ENABLED
 
 	int32_t missing = (int32_t)sizeof...(P) - (int32_t)p_argcount;
-
 	int32_t dvs = p_default_values.size();
-#ifdef DEBUG_ENABLED
 	if (missing > dvs) {
 		r_error.error = Callable::CallError::CALL_ERROR_TOO_FEW_ARGUMENTS;
 		r_error.expected = sizeof...(P);
@@ -244,14 +236,8 @@ void call_with_variant_argsc_dv(T *p_instance, void (T::*p_method)(P...) const, 
 	}
 #endif // DEBUG_ENABLED
 
-	const Variant *args[sizeof...(P) == 0 ? 1 : sizeof...(P)]; //avoid zero sized array
-	for (int32_t i = 0; i < (int32_t)sizeof...(P); i++) {
-		if (i < p_argcount) {
-			args[i] = p_args[i];
-		} else {
-			args[i] = &p_default_values[i - p_argcount + (dvs - missing)];
-		}
-	}
+	const Variant *args_with_defaults[sizeof...(P) == 0 ? 1 : sizeof...(P)]; //avoid zero sized array
+	const Variant **args = p_argcount >= (int)sizeof...(P) ? p_args : call_get_args_with_defaults(p_args, p_argcount, sizeof...(P), p_default_values, args_with_defaults);
 
 	call_with_variant_argsc_helper(p_instance, p_method, args, r_error, BuildIndexSequence<sizeof...(P)>{});
 }
@@ -264,12 +250,9 @@ void call_with_variant_args_ret_dv(T *p_instance, R (T::*p_method)(P...), const 
 		r_error.expected = sizeof...(P);
 		return;
 	}
-#endif // DEBUG_ENABLED
 
 	int32_t missing = (int32_t)sizeof...(P) - (int32_t)p_argcount;
-
 	int32_t dvs = p_default_values.size();
-#ifdef DEBUG_ENABLED
 	if (missing > dvs) {
 		r_error.error = Callable::CallError::CALL_ERROR_TOO_FEW_ARGUMENTS;
 		r_error.expected = sizeof...(P);
@@ -277,14 +260,8 @@ void call_with_variant_args_ret_dv(T *p_instance, R (T::*p_method)(P...), const 
 	}
 #endif // DEBUG_ENABLED
 
-	const Variant *args[sizeof...(P) == 0 ? 1 : sizeof...(P)]; //avoid zero sized array
-	for (int32_t i = 0; i < (int32_t)sizeof...(P); i++) {
-		if (i < p_argcount) {
-			args[i] = p_args[i];
-		} else {
-			args[i] = &p_default_values[i - p_argcount + (dvs - missing)];
-		}
-	}
+	const Variant *args_with_defaults[sizeof...(P) == 0 ? 1 : sizeof...(P)]; //avoid zero sized array
+	const Variant **args = p_argcount >= (int)sizeof...(P) ? p_args : call_get_args_with_defaults(p_args, p_argcount, sizeof...(P), p_default_values, args_with_defaults);
 
 	call_with_variant_args_ret_helper(p_instance, p_method, args, r_ret, r_error, BuildIndexSequence<sizeof...(P)>{});
 }
@@ -297,12 +274,9 @@ void call_with_variant_args_retc_dv(T *p_instance, R (T::*p_method)(P...) const,
 		r_error.expected = sizeof...(P);
 		return;
 	}
-#endif // DEBUG_ENABLED
 
 	int32_t missing = (int32_t)sizeof...(P) - (int32_t)p_argcount;
-
 	int32_t dvs = p_default_values.size();
-#ifdef DEBUG_ENABLED
 	if (missing > dvs) {
 		r_error.error = Callable::CallError::CALL_ERROR_TOO_FEW_ARGUMENTS;
 		r_error.expected = sizeof...(P);
@@ -310,14 +284,8 @@ void call_with_variant_args_retc_dv(T *p_instance, R (T::*p_method)(P...) const,
 	}
 #endif // DEBUG_ENABLED
 
-	const Variant *args[sizeof...(P) == 0 ? 1 : sizeof...(P)]; //avoid zero sized array
-	for (int32_t i = 0; i < (int32_t)sizeof...(P); i++) {
-		if (i < p_argcount) {
-			args[i] = p_args[i];
-		} else {
-			args[i] = &p_default_values[i - p_argcount + (dvs - missing)];
-		}
-	}
+	const Variant *args_with_defaults[sizeof...(P) == 0 ? 1 : sizeof...(P)]; //avoid zero sized array
+	const Variant **args = p_argcount >= (int)sizeof...(P) ? p_args : call_get_args_with_defaults(p_args, p_argcount, sizeof...(P), p_default_values, args_with_defaults);
 
 	call_with_variant_args_retc_helper(p_instance, p_method, args, r_ret, r_error, BuildIndexSequence<sizeof...(P)>{});
 }
@@ -617,12 +585,9 @@ void call_with_variant_args_retc_static_helper_dv(T *p_instance, R (*p_method)(T
 		r_error.expected = sizeof...(P);
 		return;
 	}
-#endif // DEBUG_ENABLED
 
 	int32_t missing = (int32_t)sizeof...(P) - (int32_t)p_argcount;
-
 	int32_t dvs = p_default_values.size();
-#ifdef DEBUG_ENABLED
 	if (missing > dvs) {
 		r_error.error = Callable::CallError::CALL_ERROR_TOO_FEW_ARGUMENTS;
 		r_error.expected = sizeof...(P);
@@ -630,14 +595,8 @@ void call_with_variant_args_retc_static_helper_dv(T *p_instance, R (*p_method)(T
 	}
 #endif // DEBUG_ENABLED
 
-	const Variant *args[sizeof...(P) == 0 ? 1 : sizeof...(P)]; //avoid zero sized array
-	for (int32_t i = 0; i < (int32_t)sizeof...(P); i++) {
-		if (i < p_argcount) {
-			args[i] = p_args[i];
-		} else {
-			args[i] = &p_default_values[i - p_argcount + (dvs - missing)];
-		}
-	}
+	const Variant *args_with_defaults[sizeof...(P) == 0 ? 1 : sizeof...(P)]; //avoid zero sized array
+	const Variant **args = p_argcount >= (int)sizeof...(P) ? p_args : call_get_args_with_defaults(p_args, p_argcount, sizeof...(P), p_default_values, args_with_defaults);
 
 	call_with_variant_args_retc_static_helper(p_instance, p_method, args, r_ret, r_error, BuildIndexSequence<sizeof...(P)>{});
 }
@@ -663,12 +622,9 @@ void call_with_variant_args_static_helper_dv(T *p_instance, void (*p_method)(T *
 		r_error.expected = sizeof...(P);
 		return;
 	}
-#endif // DEBUG_ENABLED
 
 	int32_t missing = (int32_t)sizeof...(P) - (int32_t)p_argcount;
-
 	int32_t dvs = p_default_values.size();
-#ifdef DEBUG_ENABLED
 	if (missing > dvs) {
 		r_error.error = Callable::CallError::CALL_ERROR_TOO_FEW_ARGUMENTS;
 		r_error.expected = sizeof...(P);
@@ -676,14 +632,8 @@ void call_with_variant_args_static_helper_dv(T *p_instance, void (*p_method)(T *
 	}
 #endif // DEBUG_ENABLED
 
-	const Variant *args[sizeof...(P) == 0 ? 1 : sizeof...(P)]; //avoid zero sized array
-	for (int32_t i = 0; i < (int32_t)sizeof...(P); i++) {
-		if (i < p_argcount) {
-			args[i] = p_args[i];
-		} else {
-			args[i] = &p_default_values[i - p_argcount + (dvs - missing)];
-		}
-	}
+	const Variant *args_with_defaults[sizeof...(P) == 0 ? 1 : sizeof...(P)]; //avoid zero sized array
+	const Variant **args = p_argcount >= (int)sizeof...(P) ? p_args : call_get_args_with_defaults(p_args, p_argcount, sizeof...(P), p_default_values, args_with_defaults);
 
 	call_with_variant_args_static_helper(p_instance, p_method, args, r_error, BuildIndexSequence<sizeof...(P)>{});
 }
@@ -696,12 +646,9 @@ void call_with_variant_args_static_ret_dv(R (*p_method)(P...), const Variant **p
 		r_error.expected = sizeof...(P);
 		return;
 	}
-#endif // DEBUG_ENABLED
 
 	int32_t missing = (int32_t)sizeof...(P) - (int32_t)p_argcount;
-
 	int32_t dvs = p_default_values.size();
-#ifdef DEBUG_ENABLED
 	if (missing > dvs) {
 		r_error.error = Callable::CallError::CALL_ERROR_TOO_FEW_ARGUMENTS;
 		r_error.expected = sizeof...(P);
@@ -709,14 +656,8 @@ void call_with_variant_args_static_ret_dv(R (*p_method)(P...), const Variant **p
 	}
 #endif // DEBUG_ENABLED
 
-	const Variant *args[sizeof...(P) == 0 ? 1 : sizeof...(P)]; //avoid zero sized array
-	for (int32_t i = 0; i < (int32_t)sizeof...(P); i++) {
-		if (i < p_argcount) {
-			args[i] = p_args[i];
-		} else {
-			args[i] = &p_default_values[i - p_argcount + (dvs - missing)];
-		}
-	}
+	const Variant *args_with_defaults[sizeof...(P) == 0 ? 1 : sizeof...(P)]; //avoid zero sized array
+	const Variant **args = p_argcount >= (int)sizeof...(P) ? p_args : call_get_args_with_defaults(p_args, p_argcount, sizeof...(P), p_default_values, args_with_defaults);
 
 	call_with_variant_args_static_ret(p_method, args, r_ret, r_error, BuildIndexSequence<sizeof...(P)>{});
 }
@@ -729,12 +670,9 @@ void call_with_variant_args_static_dv(void (*p_method)(P...), const Variant **p_
 		r_error.expected = sizeof...(P);
 		return;
 	}
-#endif // DEBUG_ENABLED
 
 	int32_t missing = (int32_t)sizeof...(P) - (int32_t)p_argcount;
-
 	int32_t dvs = p_default_values.size();
-#ifdef DEBUG_ENABLED
 	if (missing > dvs) {
 		r_error.error = Callable::CallError::CALL_ERROR_TOO_FEW_ARGUMENTS;
 		r_error.expected = sizeof...(P);
@@ -742,14 +680,8 @@ void call_with_variant_args_static_dv(void (*p_method)(P...), const Variant **p_
 	}
 #endif // DEBUG_ENABLED
 
-	const Variant *args[sizeof...(P) == 0 ? 1 : sizeof...(P)]; //avoid zero sized array
-	for (int32_t i = 0; i < (int32_t)sizeof...(P); i++) {
-		if (i < p_argcount) {
-			args[i] = p_args[i];
-		} else {
-			args[i] = &p_default_values[i - p_argcount + (dvs - missing)];
-		}
-	}
+	const Variant *args_with_defaults[sizeof...(P) == 0 ? 1 : sizeof...(P)]; //avoid zero sized array
+	const Variant **args = p_argcount >= (int)sizeof...(P) ? p_args : call_get_args_with_defaults(p_args, p_argcount, sizeof...(P), p_default_values, args_with_defaults);
 
 	call_with_variant_args_static(p_method, args, r_error, BuildIndexSequence<sizeof...(P)>{});
 }
