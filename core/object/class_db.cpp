@@ -1297,6 +1297,14 @@ bool ClassDB::get_signal(const StringName &p_class, const StringName &p_signal, 
 	return true;
 }
 
+void ClassDB::add_property_group(const StringName &p_class, const char *p_name, const char *p_prefix, int p_indent_depth) {
+	add_property_group(p_class, String(p_name), String(p_prefix), p_indent_depth);
+}
+
+void ClassDB::add_property_subgroup(const StringName &p_class, const char *p_name, const char *p_prefix, int p_indent_depth) {
+	add_property_subgroup(p_class, String(p_name), String(p_prefix), p_indent_depth);
+}
+
 void ClassDB::add_property_group(const StringName &p_class, const String &p_name, const String &p_prefix, int p_indent_depth) {
 	Locker::Lock lock(Locker::STATE_READ); // Doesn't modify ClassDB stuff.
 	ClassInfo *type = classes.getptr(p_class);

@@ -34,6 +34,14 @@
 #include "core/variant/dictionary.h"
 #include "core/variant/typed_array.h" // IWYU pragma: keep. `convert_property_list` return type.
 
+void MethodInfo::_init(const char *p_name, const PropertyInfo *const *p_args, int p_arg_count) {
+	name = p_name;
+	arguments.resize(p_arg_count);
+	for (int i = 0; i < p_arg_count; i++) {
+		arguments.write[i] = *p_args[i];
+	}
+}
+
 MethodInfo::operator Dictionary() const {
 	Dictionary d;
 	d["name"] = name;

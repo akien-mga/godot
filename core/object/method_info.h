@@ -96,6 +96,18 @@ struct MethodInfo {
 		arguments = Vector<PropertyInfo>{ p_params... };
 	}
 
+	// Same as above, for the common case of a string literal name (such as in `ADD_SIGNAL()`). The arguments are
+	// set by a function that is not inlined, so call sites don't each build the `String` and argument `Vector`.
+	template <typename... VarArgs>
+	MethodInfo(const char *p_name, const VarArgs &...p_params) {
+		if constexpr (sizeof...(p_params) == 0) {
+			_init(p_name, nullptr, 0);
+		} else {
+			const PropertyInfo *args[] = { &p_params... };
+			_init(p_name, args, sizeof...(p_params));
+		}
+	}
+
 	MethodInfo(Variant::Type p_ret) { return_val.type = p_ret; }
 	MethodInfo(Variant::Type p_ret, const String &p_name) {
 		return_val.type = p_ret;
@@ -120,6 +132,8 @@ struct MethodInfo {
 		name = p_name;
 		arguments = Vector<PropertyInfo>{ p_params... };
 	}
+
+	_NO_INLINE_ void _init(const char *p_name, const PropertyInfo *const *p_args, int p_arg_count);
 
 	// Need to be declared because ~MethodInfo is specified.
 	MethodInfo(const MethodInfo &) = default;
