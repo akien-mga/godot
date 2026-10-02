@@ -97,7 +97,7 @@ private:
 	void _texture_changed();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 	void _notification(int p_what);
 #ifdef TOOLS_ENABLED
@@ -108,7 +108,7 @@ protected:
 #ifndef DISABLE_DEPRECATED
 	void _restart_bind_compat_92089();
 	void _request_particles_process_bind_compat_109142(real_t p_time);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

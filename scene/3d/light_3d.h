@@ -95,7 +95,7 @@ private:
 protected:
 	RID light;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 	void _validate_property(PropertyInfo &p_property) const;
 
@@ -185,7 +185,7 @@ private:
 	SkyMode sky_mode = SKY_MODE_LIGHT_AND_SKY;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 
 public:
@@ -218,7 +218,7 @@ private:
 	ShadowMode shadow_mode;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_shadow_mode(ShadowMode p_mode);
@@ -235,7 +235,7 @@ class SpotLight3D : public Light3D {
 	GDCLASS(SpotLight3D, Light3D);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	PackedStringArray get_configuration_warnings() const override;
@@ -252,7 +252,7 @@ private:
 	bool area_normalize_energy = true;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_area_size(const Vector2 &p_size);

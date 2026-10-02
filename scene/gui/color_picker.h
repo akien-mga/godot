@@ -67,7 +67,7 @@ class ColorPresetButton : public BaseButton {
 
 protected:
 	void _notification(int);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_preset_color(const Color &p_color);
@@ -423,7 +423,7 @@ protected:
 	virtual void _update_theme_item_cache() override;
 
 	void _notification(int);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 #ifdef TOOLS_ENABLED
@@ -542,7 +542,7 @@ class ColorPickerButton : public Button {
 
 protected:
 	void _notification(int);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void gui_input(const Ref<InputEvent> &p_event) override;
 
 public:

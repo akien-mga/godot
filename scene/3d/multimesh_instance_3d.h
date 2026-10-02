@@ -47,7 +47,7 @@ class MultiMeshInstance3D : public GeometryInstance3D {
 
 protected:
 	virtual void _physics_interpolated_changed() override;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 public:

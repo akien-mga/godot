@@ -85,7 +85,7 @@ protected:
 	bool active; // only when active do we actually update the camera texture each frame
 	RID texture[CameraServer::FEED_IMAGES]; // texture images needed for this
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	int get_id() const;

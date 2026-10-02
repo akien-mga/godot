@@ -56,7 +56,7 @@ class FBXState : public GLTFState {
 	HashSet<String> unique_mesh_names; // Not in GLTFState because GLTFState prefixes mesh names with the scene name (or _)
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	bool get_allow_geometry_helper_nodes();

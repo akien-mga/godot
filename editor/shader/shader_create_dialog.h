@@ -100,7 +100,7 @@ class ShaderCreateDialog : public ConfirmationDialog {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void config(const String &p_base_path, bool p_built_in_enabled = true, bool p_load_enabled = true, const String &p_preferred_type = "", int p_preferred_mode = -1);

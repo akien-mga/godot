@@ -438,7 +438,7 @@ protected:
 
 	virtual void reset_state() override;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	static bool inform_variant_array(int &r_min, int &r_max); // Returns true if max and min are swapped.
 
@@ -449,7 +449,7 @@ protected:
 	float _blend_shape_track_interpolate_bind_compat_86629(int p_track, double p_time) const;
 	Variant _value_track_interpolate_bind_compat_86629(int p_track, double p_time) const;
 	int _track_find_key_bind_compat_92861(int p_track, double p_time, FindMode p_find_mode = FIND_MODE_NEAREST) const;
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif // DISABLE_DEPRECATED
 
 public:

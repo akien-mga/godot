@@ -50,7 +50,7 @@ protected:
 	virtual Error connect(const StringName &p_signal, const Callable &p_callable, uint32_t p_flags = 0) override;
 #endif
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_original_class(const String &p_class);

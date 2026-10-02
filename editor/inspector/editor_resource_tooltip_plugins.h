@@ -44,7 +44,7 @@ class EditorResourceTooltipPlugin : public RefCounted {
 	void _thumbnail_ready(const String &p_path, const Ref<Texture2D> &p_preview, const Ref<Texture2D> &p_small_preview, ObjectID p_trect_id);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL1RC(bool, _handles, String)
 	GDVIRTUAL3RC(Control *, _make_tooltip_for_path, String, Dictionary, Control *)

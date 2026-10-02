@@ -131,7 +131,7 @@ protected:
 	void _replace();
 	void _replace_all();
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	String get_search_text() const;
@@ -228,7 +228,7 @@ protected:
 	void _text_changed();
 	void _line_col_changed();
 	void _notification(int);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	bool is_warnings_panel_opened = false;
 	bool is_errors_panel_opened = false;

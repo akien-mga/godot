@@ -39,7 +39,7 @@ private:
 	Ref<RefCounted> edited_resource;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL0RC(String, _get_name)
 	GDVIRTUAL0RC(PackedStringArray, _get_supported_languages)

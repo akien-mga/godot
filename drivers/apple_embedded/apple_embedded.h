@@ -37,7 +37,7 @@
 class AppleEmbedded : public Object {
 	GDCLASS(AppleEmbedded, Object);
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	CHHapticEngine *haptic_engine API_AVAILABLE(ios(13)) = nullptr;

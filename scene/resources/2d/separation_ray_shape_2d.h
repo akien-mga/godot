@@ -41,7 +41,7 @@ class SeparationRayShape2D : public Shape2D {
 	void _update_shape();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_length(real_t p_length);

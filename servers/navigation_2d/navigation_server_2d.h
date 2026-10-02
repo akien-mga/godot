@@ -56,7 +56,7 @@ class NavigationServer2D : public Object {
 	static NavigationServer2D *singleton;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static NavigationServer2D *get_singleton();
@@ -313,7 +313,7 @@ protected:
 #ifndef DISABLE_DEPRECATED
 	Vector<Vector2> _map_get_path_bind_compat_100129(RID p_map, Vector2 p_origin, Vector2 p_destination, bool p_optimize, uint32_t p_navigation_layers = 1) const;
 	void _query_path_bind_compat_100129(const Ref<NavigationPathQueryParameters2D> &p_query_parameters, Ref<NavigationPathQueryResult2D> p_query_result) const;
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 private:

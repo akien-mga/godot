@@ -42,7 +42,7 @@ class KinematicCollision3D : public RefCounted {
 	PS3DT::MotionResult result;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Vector3 get_travel() const;

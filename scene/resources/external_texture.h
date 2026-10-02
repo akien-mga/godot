@@ -45,7 +45,7 @@ private:
 	void _ensure_created() const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	uint64_t get_external_texture_id() const;

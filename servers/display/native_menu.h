@@ -43,7 +43,7 @@ class NativeMenu : public Object {
 	static NativeMenu *singleton;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	_FORCE_INLINE_ static NativeMenu *get_singleton() {

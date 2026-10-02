@@ -37,7 +37,7 @@ class UDSServer : public SocketServer {
 	GDCLASS(UDSServer, SocketServer);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Error listen(const String &p_path);

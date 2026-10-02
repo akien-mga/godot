@@ -55,10 +55,10 @@ protected:
 #ifndef DISABLE_DEPRECATED
 	void _draw_bind_compat_104872(RID p_canvas, const Vector2 &p_pos, const Color &p_color = Color(1, 1, 1)) const;
 	void _draw_outline_bind_compat_104872(RID p_canvas, const Vector2 &p_pos, int p_outline_size = 1, const Color &p_color = Color(1, 1, 1)) const;
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	void _shape() const;
 

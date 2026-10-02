@@ -56,7 +56,7 @@ protected:
 	OpType op_type = OP_TYPE_VECTOR_3D;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override = 0;
@@ -109,7 +109,7 @@ class VisualShaderNodeFloatConstant : public VisualShaderNodeConstant {
 	float constant = 0.0f;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -137,7 +137,7 @@ class VisualShaderNodeIntConstant : public VisualShaderNodeConstant {
 	int constant = 0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -165,7 +165,7 @@ class VisualShaderNodeUIntConstant : public VisualShaderNodeConstant {
 	int constant = 0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -193,7 +193,7 @@ class VisualShaderNodeBooleanConstant : public VisualShaderNodeConstant {
 	bool constant = false;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -221,7 +221,7 @@ class VisualShaderNodeColorConstant : public VisualShaderNodeConstant {
 	Color constant = Color(1, 1, 1, 1);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -249,7 +249,7 @@ class VisualShaderNodeVec2Constant : public VisualShaderNodeConstant {
 	Vector2 constant;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -277,7 +277,7 @@ class VisualShaderNodeVec3Constant : public VisualShaderNodeConstant {
 	Vector3 constant;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -305,7 +305,7 @@ class VisualShaderNodeVec4Constant : public VisualShaderNodeConstant {
 	Quaternion constant;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -336,7 +336,7 @@ class VisualShaderNodeTransformConstant : public VisualShaderNodeConstant {
 	Transform3D constant;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -390,7 +390,7 @@ private:
 	TextureType texture_type = TYPE_DATA;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -435,7 +435,7 @@ class VisualShaderNodeCurveTexture : public VisualShaderNodeResizableBase {
 	Ref<CurveTexture> texture;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -470,7 +470,7 @@ class VisualShaderNodeCurveXYZTexture : public VisualShaderNodeResizableBase {
 	Ref<CurveXYZTexture> texture;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -513,7 +513,7 @@ public:
 protected:
 	Source source = SOURCE_TEXTURE;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual int get_input_port_count() const override;
@@ -547,10 +547,10 @@ protected:
 #ifndef DISABLE_DEPRECATED
 	void _set_texture_array_bind_compat_95126(Ref<Texture2DArray> p_texture_array);
 	Ref<Texture2DArray> _get_texture_array_bind_compat_95126() const;
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif // DISABLE_DEPRECATED
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -571,7 +571,7 @@ class VisualShaderNodeTexture3D : public VisualShaderNodeSample3D {
 	Ref<Texture3D> texture;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -613,10 +613,10 @@ protected:
 #ifndef DISABLE_DEPRECATED
 	void _set_cube_map_bind_compat_95126(Ref<Cubemap> p_cube_map);
 	Ref<Cubemap> _get_cube_map_bind_compat_95126() const;
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif // DISABLE_DEPRECATED
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -756,7 +756,7 @@ public:
 protected:
 	Operator op = OP_ADD;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -806,7 +806,7 @@ public:
 protected:
 	Operator op = OP_ADD;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -856,7 +856,7 @@ public:
 protected:
 	Operator op = OP_ADD;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -906,7 +906,7 @@ public:
 protected:
 	Operator op = OP_ADD;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -954,7 +954,7 @@ public:
 protected:
 	Operator op = OP_SCREEN;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -1005,7 +1005,7 @@ public:
 protected:
 	Operator op = OP_AxB;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -1051,7 +1051,7 @@ public:
 protected:
 	Operator op = OP_AxB;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -1125,7 +1125,7 @@ public:
 protected:
 	Function func = FUNC_SIGN;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -1171,7 +1171,7 @@ public:
 protected:
 	Function func = FUNC_SIGN;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -1215,7 +1215,7 @@ public:
 protected:
 	Function func = FUNC_NEGATE;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -1292,7 +1292,7 @@ public:
 protected:
 	Function func = FUNC_NORMALIZE;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -1338,7 +1338,7 @@ public:
 protected:
 	Function func = FUNC_GRAYSCALE;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -1382,7 +1382,7 @@ public:
 protected:
 	Function func = FUNC_INVERSE;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -1426,7 +1426,7 @@ public:
 protected:
 	Function func = FUNC_PANNING;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -1575,7 +1575,7 @@ public:
 
 protected:
 	OpType op_type = OP_TYPE_FLOAT;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -1644,7 +1644,7 @@ protected:
 	Precision precision = PRECISION_NONE;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -1748,7 +1748,7 @@ public:
 
 protected:
 	OpType op_type = OP_TYPE_SCALAR;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -1803,7 +1803,7 @@ public:
 
 protected:
 	OpType op_type = OP_TYPE_SCALAR;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -1904,7 +1904,7 @@ public:
 
 protected:
 	OpType op_type = OP_TYPE_SCALAR;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -2053,7 +2053,7 @@ private:
 	float default_value = 0.0f;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -2120,7 +2120,7 @@ private:
 	int default_value = 0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -2178,7 +2178,7 @@ private:
 	int default_value = 0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -2219,7 +2219,7 @@ private:
 	bool default_value = false;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -2260,7 +2260,7 @@ private:
 	Color default_value = Color(1.0, 1.0, 1.0, 1.0);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -2300,7 +2300,7 @@ private:
 	Vector2 default_value;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -2341,7 +2341,7 @@ private:
 	Vector3 default_value;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -2382,7 +2382,7 @@ private:
 	Vector4 default_value;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -2423,7 +2423,7 @@ private:
 	Transform3D default_value = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -2509,7 +2509,7 @@ protected:
 	TextureSource texture_source = SOURCE_NONE;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual int get_input_port_count() const override;
@@ -2674,7 +2674,7 @@ public:
 protected:
 	OpType op_type = OP_TYPE_FLOAT;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -2746,7 +2746,7 @@ protected:
 	Function func = FUNC_IS_INF;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -2815,7 +2815,7 @@ protected:
 	Condition condition = COND_ALL;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -2867,7 +2867,7 @@ protected:
 	OpType op_type = OP_TYPE_SCALAR;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -2917,7 +2917,7 @@ protected:
 	bool keep_scale = false;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -3044,7 +3044,7 @@ public:
 
 protected:
 	OpType op_type = OP_TYPE_SCALAR;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -3105,7 +3105,7 @@ class VisualShaderNodeReroute : public VisualShaderNode {
 	PortType input_port_type = PORT_TYPE_SCALAR;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;

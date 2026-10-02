@@ -174,7 +174,7 @@ protected:
 	virtual void add_child_notify(Node *p_child) override;
 	virtual void move_child_notify(Node *p_child) override;
 	virtual void remove_child_notify(Node *p_child) override;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static TabContainer *get_tab_bar_container(TabBar *p_tab_bar);

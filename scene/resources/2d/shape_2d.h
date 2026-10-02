@@ -40,7 +40,7 @@ class Shape2D : public Resource {
 	real_t custom_bias = 0.0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	Shape2D(const RID &p_rid);
 
 public:

@@ -51,11 +51,11 @@ class TranslationServer : public Object {
 
 	static inline TranslationServer *singleton = nullptr;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	String _standardize_locale_bind_compat_98972(const String &p_locale) const;
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 	struct LocaleScriptInfo {

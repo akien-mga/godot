@@ -46,7 +46,7 @@
 
 class Time : public Object {
 	GDCLASS(Time, Object);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	static Time *singleton;
 
 public:

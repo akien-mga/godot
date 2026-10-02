@@ -42,7 +42,7 @@ class OpenXRSpatialCapabilityConfigurationBaseHeader : public RefCounted {
 	GDCLASS(OpenXRSpatialCapabilityConfigurationBaseHeader, RefCounted);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual bool has_valid_configuration() const;
@@ -81,7 +81,7 @@ public:
 	Ref<OpenXRStructureBase> get_next() const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	RID spatial_context;
@@ -100,7 +100,7 @@ class OpenXRSpatialComponentData : public RefCounted {
 	GDCLASS(OpenXRSpatialComponentData, RefCounted);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void set_capacity(uint32_t p_capacity);
@@ -120,7 +120,7 @@ class OpenXRSpatialComponentBounded2DList : public OpenXRSpatialComponentData {
 	GDCLASS(OpenXRSpatialComponentBounded2DList, OpenXRSpatialComponentData);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void set_capacity(uint32_t p_capacity) override;
@@ -140,7 +140,7 @@ class OpenXRSpatialComponentBounded3DList : public OpenXRSpatialComponentData {
 	GDCLASS(OpenXRSpatialComponentBounded3DList, OpenXRSpatialComponentData);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void set_capacity(uint32_t p_capacity) override;
@@ -160,7 +160,7 @@ class OpenXRSpatialComponentParentList : public OpenXRSpatialComponentData {
 	GDCLASS(OpenXRSpatialComponentParentList, OpenXRSpatialComponentData);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void set_capacity(uint32_t p_capacity) override;
@@ -179,7 +179,7 @@ class OpenXRSpatialComponentMesh2DList : public OpenXRSpatialComponentData {
 	GDCLASS(OpenXRSpatialComponentMesh2DList, OpenXRSpatialComponentData);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void set_capacity(uint32_t p_capacity) override;
@@ -202,7 +202,7 @@ class OpenXRSpatialComponentMesh3DList : public OpenXRSpatialComponentData {
 	GDCLASS(OpenXRSpatialComponentMesh3DList, OpenXRSpatialComponentData);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void set_capacity(uint32_t p_capacity) override;
@@ -222,7 +222,7 @@ class OpenXRSpatialQueryResultData : public OpenXRSpatialComponentData {
 	GDCLASS(OpenXRSpatialQueryResultData, OpenXRSpatialComponentData);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void set_capacity(uint32_t p_capacity) override;

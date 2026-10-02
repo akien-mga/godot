@@ -42,7 +42,7 @@ private:
 	CameraServer::FeedImage which_feed = CameraServer::FEED_RGBA_IMAGE;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _on_format_changed();
 
 public:

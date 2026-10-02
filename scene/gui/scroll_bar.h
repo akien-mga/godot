@@ -118,7 +118,7 @@ protected:
 	} theme_cache;
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static inline const int PAGE_DIVISOR = 8;
@@ -145,7 +145,7 @@ class HScrollBar : public ScrollBar {
 	GDCLASS(HScrollBar, ScrollBar);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	HScrollBar() :
@@ -156,7 +156,7 @@ class VScrollBar : public ScrollBar {
 	GDCLASS(VScrollBar, ScrollBar);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	VScrollBar() :

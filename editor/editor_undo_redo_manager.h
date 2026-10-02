@@ -74,11 +74,11 @@ private:
 	History *_get_newest_undo();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	void _create_action_bind_compat_106121(const String &p_name = "", UndoRedo::MergeMode p_mode = UndoRedo::MERGE_DISABLE, Object *p_custom_context = nullptr, bool p_backward_undo_ops = false);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

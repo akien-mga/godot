@@ -161,7 +161,7 @@ private: // Internal routines.
 	Point *_forced_successor(int32_t p_x, int32_t p_y, int32_t p_dx, int32_t p_dy, bool p_inclusive = false);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual real_t _estimate_cost(const Vector2i &p_from_id, const Vector2i &p_end_id);
 	virtual real_t _compute_cost(const Vector2i &p_from_id, const Vector2i &p_to_id);
@@ -172,7 +172,7 @@ protected:
 #ifndef DISABLE_DEPRECATED
 	TypedArray<Vector2i> _get_id_path_bind_compat_88047(const Vector2i &p_from, const Vector2i &p_to);
 	Vector<Vector2> _get_point_path_bind_compat_88047(const Vector2i &p_from, const Vector2i &p_to);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

@@ -68,7 +68,7 @@ private:
 	void _finish_non_thread_safe_setup();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 
 public:

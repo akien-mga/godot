@@ -44,11 +44,11 @@ class ZIPPacker : public RefCounted {
 	HashSet<String> directories;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	Error _start_file_bind_compat_115946(const String &p_path);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

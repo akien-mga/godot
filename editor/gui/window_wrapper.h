@@ -61,7 +61,7 @@ class WindowWrapper : public MarginContainer {
 	void _window_close_request();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 	virtual void shortcut_input(const Ref<InputEvent> &p_event) override;
@@ -109,7 +109,7 @@ class ScreenSelect : public Button {
 
 protected:
 	virtual void pressed() override;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	void _notification(int p_what);
 

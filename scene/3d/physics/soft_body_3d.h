@@ -122,11 +122,11 @@ protected:
 	bool _get_property_pinned_points(int p_item, const String &p_what, Variant &r_ret) const;
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	void _pin_point_bind_compat_94684(int p_point_index, bool pin, const NodePath &p_spatial_attachment_path = NodePath());
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 	PackedStringArray get_configuration_warnings() const override;

@@ -38,7 +38,7 @@ class UPNP : public RefCounted {
 	GDCLASS(UPNP, RefCounted);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	static UPNP *(*_create)(bool p_notify_postinitialize);
 

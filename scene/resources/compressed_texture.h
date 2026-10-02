@@ -75,7 +75,7 @@ private:
 	static void _requested_normal(void *p_ud);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static Ref<Image> load_image_from_file(Ref<FileAccess> p_file);
@@ -144,7 +144,7 @@ private:
 	virtual void reload_from_file() override;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Image::Format get_format() const override;
@@ -221,7 +221,7 @@ private:
 	virtual void reload_from_file() override;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Image::Format get_format() const override;

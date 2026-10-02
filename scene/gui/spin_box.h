@@ -174,7 +174,7 @@ protected:
 	void _validate_property(PropertyInfo &p_property) const;
 	void _notification(int p_what);
 	Size2 _fit_icon_size(const Size2 &p_size) const;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	LineEdit *get_line_edit();

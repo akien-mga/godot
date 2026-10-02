@@ -136,7 +136,7 @@ class AudioStreamOggVorbis : public AudioStream {
 	Dictionary tags;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static Ref<AudioStreamOggVorbis> load_from_file(const String &p_path);

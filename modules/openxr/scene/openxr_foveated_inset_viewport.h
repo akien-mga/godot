@@ -44,7 +44,7 @@ public:
 	XRCamera3D *get_xr_camera3d() const { return xr_camera; }
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 	void _notification(int p_what);
 

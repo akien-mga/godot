@@ -49,7 +49,7 @@ class ImageTexture : public Texture2D {
 
 protected:
 	virtual void reload_from_file() override;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_image(const Ref<Image> &p_image);
@@ -101,7 +101,7 @@ class ImageTextureLayered : public TextureLayered {
 	void _set_images(const TypedArray<Image> &p_images);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual Image::Format get_format() const override;
@@ -138,7 +138,7 @@ class ImageTexture3D : public Texture3D {
 	void _set_images(const TypedArray<Image> &p_images);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	Error _create(Image::Format p_format, int p_width, int p_height, int p_depth, bool p_mipmaps, const TypedArray<Image> &p_data);
 	void _update(const TypedArray<Image> &p_data);
@@ -165,7 +165,7 @@ class Texture2DArray : public ImageTextureLayered {
 	GDCLASS(Texture2DArray, ImageTextureLayered)
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Texture2DArray() :
@@ -178,7 +178,7 @@ class Cubemap : public ImageTextureLayered {
 	GDCLASS(Cubemap, ImageTextureLayered);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Cubemap() :
@@ -191,7 +191,7 @@ class CubemapArray : public ImageTextureLayered {
 	GDCLASS(CubemapArray, ImageTextureLayered);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	CubemapArray() :

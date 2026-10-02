@@ -60,7 +60,7 @@ class PhysicsDirectSpaceState2D : public Object {
 	bool _get_rest_info_into(RequiredParam<PhysicsShapeQueryParameters2D> p_shape_query, RequiredParam<PhysicsGetRestInfoResult2D> p_result);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual bool intersect_ray(const PS2DT::RayParameters &p_parameters, PS2DT::RayResult &r_result) = 0;

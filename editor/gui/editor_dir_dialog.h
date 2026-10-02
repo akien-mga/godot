@@ -65,7 +65,7 @@ class EditorDirDialog : public ConfirmationDialog {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void config(const Vector<String> &p_paths);

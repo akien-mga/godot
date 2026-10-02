@@ -86,7 +86,7 @@ public:
 	void set_use_fps(bool p_enable);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _fix_node_path(Variant &value);
 	void _update_obj(const Ref<Animation> &p_anim);
 	void _key_ofs_changed(const Ref<Animation> &p_anim, float from, float to);
@@ -124,7 +124,7 @@ public:
 	void set_use_fps(bool p_enable);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _fix_node_path(Variant &value, NodePath &base);
 	void _update_obj(const Ref<Animation> &p_anim);
 	void _key_ofs_changed(const Ref<Animation> &p_anim, float from, float to);
@@ -154,7 +154,7 @@ public:
 	float get_time() const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _set_marker_name(const StringName &p_name);
 	bool _set(const StringName &p_name, const Variant &p_value);
 	bool _get(const StringName &p_name, Variant &r_ret) const;
@@ -179,7 +179,7 @@ public:
 	bool _is_read_only() { return animation_read_only; }
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	bool _set(const StringName &p_name, const Variant &p_value);
 	bool _get(const StringName &p_name, Variant &r_ret) const;
 	void _get_property_list(List<PropertyInfo> *p_list) const;
@@ -254,7 +254,7 @@ class AnimationTimelineEdit : public Range {
 	void _scroll_to_start();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 public:
@@ -379,7 +379,7 @@ class AnimationMarkerEdit : public Control {
 	AnimationMultiMarkerKeyEdit *multi_key_edit = nullptr;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 	virtual void gui_input(const Ref<InputEvent> &p_event) override;
@@ -512,7 +512,7 @@ class AnimationTrackEdit : public Control {
 	AnimationTrackEditor *editor = nullptr;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 	virtual void gui_input(const Ref<InputEvent> &p_event) override;
@@ -914,7 +914,7 @@ class AnimationTrackEditor : public VBoxContainer {
 	void _update_snap_unit();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 public:

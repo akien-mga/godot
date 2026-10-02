@@ -158,7 +158,7 @@ protected:
 	void _add_builtin_input_map();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static const int CONFIG_VERSION = 5;

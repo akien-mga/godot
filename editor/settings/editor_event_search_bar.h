@@ -50,7 +50,7 @@ class EditorEventSearchBar : public HBoxContainer {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	LineEdit *get_name_search_box() const { return search_by_name; }

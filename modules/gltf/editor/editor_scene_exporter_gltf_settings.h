@@ -42,7 +42,7 @@ class EditorSceneExporterGLTFSettings : public RefCounted {
 	double _bake_fps = 30.0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	bool _set(const StringName &p_name, const Variant &p_value);
 	bool _get(const StringName &p_name, Variant &r_ret) const;
 	void _get_property_list(List<PropertyInfo> *p_list) const;

@@ -85,7 +85,7 @@ public:
 	void remove_shareable_format(RD::DataFormat p_format) { base.shareable_formats.erase(p_format); }
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		RD_BIND(Variant::INT, RDTextureFormat, format);
 		RD_BIND(Variant::INT, RDTextureFormat, width);
 		RD_BIND(Variant::INT, RDTextureFormat, height);
@@ -118,7 +118,7 @@ public:
 	RD_SETGET(RD::TextureSwizzle, swizzle_b)
 	RD_SETGET(RD::TextureSwizzle, swizzle_a)
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		RD_BIND(Variant::INT, RDTextureView, format_override);
 		RD_BIND(Variant::INT, RDTextureView, swizzle_r);
 		RD_BIND(Variant::INT, RDTextureView, swizzle_g);
@@ -138,7 +138,7 @@ public:
 	RD_SETGET(RD::TextureSamples, samples)
 	RD_SETGET(uint32_t, usage_flags)
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		RD_BIND(Variant::INT, RDAttachmentFormat, format);
 		RD_BIND(Variant::INT, RDAttachmentFormat, samples);
 		RD_BIND(Variant::INT, RDAttachmentFormat, usage_flags);
@@ -163,7 +163,7 @@ protected:
 		ATTACHMENT_UNUSED = -1
 	};
 
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		RD_BIND(Variant::PACKED_INT32_ARRAY, RDFramebufferPass, color_attachments);
 		RD_BIND(Variant::PACKED_INT32_ARRAY, RDFramebufferPass, input_attachments);
 		RD_BIND(Variant::PACKED_INT32_ARRAY, RDFramebufferPass, resolve_attachments);
@@ -198,7 +198,7 @@ public:
 	RD_SETGET(bool, unnormalized_uvw)
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		RD_BIND(Variant::INT, RDSamplerState, mag_filter);
 		RD_BIND(Variant::INT, RDSamplerState, min_filter);
 		RD_BIND(Variant::INT, RDSamplerState, mip_filter);
@@ -231,7 +231,7 @@ public:
 	RD_SETGET(RD::VertexFrequency, frequency)
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		RD_BIND(Variant::INT, RDVertexAttribute, binding);
 		RD_BIND(Variant::INT, RDVertexAttribute, location);
 		RD_BIND(Variant::INT, RDVertexAttribute, offset);
@@ -265,7 +265,7 @@ public:
 	}
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		ClassDB::bind_method(D_METHOD("set_stage_source", "stage", "source"), &RDShaderSource::set_stage_source);
 		ClassDB::bind_method(D_METHOD("get_stage_source", "stage"), &RDShaderSource::get_stage_source);
 
@@ -329,7 +329,7 @@ public:
 	}
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		ClassDB::bind_method(D_METHOD("set_stage_bytecode", "stage", "bytecode"), &RDShaderSPIRV::set_stage_bytecode);
 		ClassDB::bind_method(D_METHOD("get_stage_bytecode", "stage"), &RDShaderSPIRV::get_stage_bytecode);
 
@@ -454,7 +454,7 @@ protected:
 		emit_changed();
 	}
 
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		ClassDB::bind_method(D_METHOD("set_bytecode", "bytecode", "version"), &RDShaderFile::set_bytecode, DEFVAL(StringName()));
 		ClassDB::bind_method(D_METHOD("get_spirv", "version"), &RDShaderFile::get_spirv, DEFVAL(StringName()));
 		ClassDB::bind_method(D_METHOD("get_version_list"), &RDShaderFile::get_version_list);
@@ -499,7 +499,7 @@ protected:
 			base.append_id(id);
 		}
 	}
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		RD_BIND(Variant::INT, RDUniform, uniform_type);
 		RD_BIND(Variant::INT, RDUniform, binding);
 		ClassDB::bind_method(D_METHOD("add_id", "id"), &RDUniform::add_id);
@@ -532,7 +532,7 @@ public:
 	}
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		ClassDB::bind_method(D_METHOD("set_value", "value"), &RDPipelineSpecializationConstant::set_value);
 		ClassDB::bind_method(D_METHOD("get_value"), &RDPipelineSpecializationConstant::get_value);
 
@@ -564,7 +564,7 @@ public:
 	RD_SETGET(uint32_t, patch_control_points)
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		RD_BIND(Variant::BOOL, RDPipelineRasterizationState, enable_depth_clamp);
 		RD_BIND(Variant::BOOL, RDPipelineRasterizationState, discard_primitives);
 		RD_BIND(Variant::BOOL, RDPipelineRasterizationState, wireframe);
@@ -597,7 +597,7 @@ public:
 	TypedArray<int64_t> get_sample_masks() const { return sample_masks; }
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		RD_BIND(Variant::INT, RDPipelineMultisampleState, sample_count);
 		RD_BIND(Variant::BOOL, RDPipelineMultisampleState, enable_sample_shading);
 		RD_BIND(Variant::FLOAT, RDPipelineMultisampleState, min_sample_shading);
@@ -642,7 +642,7 @@ public:
 	RD_SETGET_SUB(uint32_t, back_op, reference)
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		RD_BIND(Variant::BOOL, RDPipelineDepthStencilState, enable_depth_test);
 		RD_BIND(Variant::BOOL, RDPipelineDepthStencilState, enable_depth_write);
 		RD_BIND(Variant::INT, RDPipelineDepthStencilState, depth_compare_operator);
@@ -697,7 +697,7 @@ public:
 	}
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		ClassDB::bind_method(D_METHOD("set_as_mix"), &RDPipelineColorBlendStateAttachment::set_as_mix);
 
 		RD_BIND(Variant::BOOL, RDPipelineColorBlendStateAttachment, enable_blend);
@@ -735,7 +735,7 @@ public:
 	}
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		RD_BIND(Variant::BOOL, RDPipelineColorBlendState, enable_logic_op);
 		RD_BIND(Variant::INT, RDPipelineColorBlendState, logic_op);
 		RD_BIND(Variant::COLOR, RDPipelineColorBlendState, blend_constant);
@@ -763,7 +763,7 @@ public:
 	RD_SETGET(uint32_t, index_count)
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		RD_BIND(Variant::INT, RDAccelerationStructureGeometry, flags);
 		RD_BIND(Variant::RID, RDAccelerationStructureGeometry, vertex_buffer);
 		RD_BIND(Variant::INT, RDAccelerationStructureGeometry, vertex_offset);
@@ -790,7 +790,7 @@ public:
 	RD_SETGET(RID, blas)
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		RD_BIND(Variant::TRANSFORM3D, RDAccelerationStructureInstance, transform);
 		RD_BIND(Variant::INT, RDAccelerationStructureInstance, id);
 		RD_BIND(Variant::INT, RDAccelerationStructureInstance, mask);
@@ -819,7 +819,7 @@ public:
 	}
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		RD_BIND(Variant::RID, RDPipelineShader, shader);
 
 		ClassDB::bind_method(D_METHOD("set_specialization_constants", "specialization_constants"), &RDPipelineShader::set_specialization_constants);
@@ -862,7 +862,7 @@ public:
 	}
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		RD_BIND(Variant::OBJECT, RDHitGroup, closest_hit_shader);
 		RD_BIND(Variant::OBJECT, RDHitGroup, any_hit_shader);
 		RD_BIND(Variant::OBJECT, RDHitGroup, intersection_shader);

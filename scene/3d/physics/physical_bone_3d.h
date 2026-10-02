@@ -201,7 +201,7 @@ protected:
 	static void _body_state_changed_callback(void *p_instance, PhysicsDirectBodyState3D *p_state);
 	void _body_state_changed(PhysicsDirectBodyState3D *p_state);
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	void _sync_body_state(PhysicsDirectBodyState3D *p_state);

@@ -131,7 +131,7 @@ class EditorSettingsDialog : public AcceptDialog {
 	void _editor_restart_close();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void popup_edit_settings();

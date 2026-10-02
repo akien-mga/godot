@@ -37,7 +37,7 @@ class CharFXTransform : public RefCounted {
 	GDCLASS(CharFXTransform, RefCounted);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Transform2D transform;
@@ -102,7 +102,7 @@ class RichTextEffect : public Resource {
 	OBJ_SAVE_TYPE(RichTextEffect);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL1RC(bool, _process_custom_fx, Ref<CharFXTransform>)
 

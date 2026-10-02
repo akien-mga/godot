@@ -82,7 +82,7 @@ private:
 	bool _msg_open_scene(const Array &p_args);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual bool capture(const String &p_message, const Array &p_data, int p_session) override;

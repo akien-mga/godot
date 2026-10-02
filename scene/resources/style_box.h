@@ -43,7 +43,7 @@ class StyleBox : public Resource {
 	float content_margin[4];
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual float get_style_margin(Side p_side) const { return 0; }
 
 	GDVIRTUAL2C_REQUIRED(_draw, RID, Rect2)

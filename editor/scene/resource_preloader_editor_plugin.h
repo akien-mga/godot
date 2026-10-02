@@ -78,7 +78,7 @@ class ResourcePreloaderEditor : public EditorDock {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void update_layout(EditorDock::DockLayout p_layout, int p_slot) override;
 

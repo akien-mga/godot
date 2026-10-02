@@ -71,7 +71,7 @@ protected:
 	VisualShaderEditor *vseditor = nullptr;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL2RC(Object *, _create_editor, Ref<Resource>, Ref<VisualShaderNode>)
 
@@ -148,7 +148,7 @@ private:
 	Ref<Theme> vs_msdf_fonts_theme;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static Vector<Color> get_connection_type_colors();
@@ -201,7 +201,7 @@ private:
 	Variant edited_property;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_edited_property(const Variant &p_variant);
@@ -774,7 +774,7 @@ class VisualShaderEditor : public ScriptEditorBase {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_doc_url_path() override { return "/tutorials/shaders/visual_shaders.html"; }

@@ -37,7 +37,7 @@ class PhysicsDirectBodyState3D : public Object {
 	GDCLASS(PhysicsDirectBodyState3D, Object);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual Vector3 get_total_gravity() const = 0;

@@ -32,5 +32,5 @@
 
 #include "modules/register_module_types.h"
 
-void initialize_bmp_module(ModuleInitializationLevel p_level);
-void uninitialize_bmp_module(ModuleInitializationLevel p_level);
+_COLD_ void initialize_bmp_module(ModuleInitializationLevel p_level);
+_COLD_ void uninitialize_bmp_module(ModuleInitializationLevel p_level);

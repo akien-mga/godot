@@ -45,7 +45,7 @@ class Trail3D : public Line3D {
 protected:
 	void _notification(int p_what);
 	void _validate_property(PropertyInfo &p_property) const;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static void init_shaders();

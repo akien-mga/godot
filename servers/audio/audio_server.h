@@ -205,7 +205,7 @@ private:
 	LocalVector<Ref<AudioSamplePlayback>> sample_playback_list;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	_FORCE_INLINE_ int get_channel_count() const {

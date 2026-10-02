@@ -52,7 +52,7 @@ private:
 protected:
 	bool _set(const StringName &p_name, const Variant &p_value);
 	bool _get(const StringName &p_name, Variant &r_ret) const;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	void _add_vertex(const Vector3 &p_vec3);

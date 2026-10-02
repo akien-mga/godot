@@ -62,7 +62,7 @@ private:
 	void _set_animations(const Array &p_animations);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void add_animation(const StringName &p_anim);

@@ -124,7 +124,7 @@ private:
 	bool _initialized = false;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	Variant initialize(const Dictionary &p_params);
 	void initialized(const Variant &p_params);

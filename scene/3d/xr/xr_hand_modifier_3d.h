@@ -59,7 +59,7 @@ public:
 	void _notification(int p_what);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _skeleton_changed(Skeleton3D *p_old, Skeleton3D *p_new) override;
 	virtual void _process_modification(double p_delta) override;

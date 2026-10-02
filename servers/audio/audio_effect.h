@@ -41,7 +41,7 @@ class AudioEffectInstance : public RefCounted {
 protected:
 	GDVIRTUAL3_REQUIRED(_process, GDExtensionPtr<const AudioFrame>, GDExtensionPtr<AudioFrame>, int)
 	GDVIRTUAL0RC(bool, _process_silence)
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void process(const AudioFrame *p_src_frames, AudioFrame *p_dst_frames, int p_frame_count);
@@ -53,7 +53,7 @@ class AudioEffect : public Resource {
 
 protected:
 	GDVIRTUAL0R_REQUIRED(Ref<AudioEffectInstance>, _instantiate)
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual Ref<AudioEffectInstance> instantiate();

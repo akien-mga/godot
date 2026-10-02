@@ -78,7 +78,7 @@ class AudioStreamPlayback : public RefCounted {
 	GDCLASS(AudioStreamPlayback, RefCounted);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	PackedVector2Array _mix_audio_bind(float p_rate_scale, int p_frames);
 	GDVIRTUAL1_REQUIRED(_start, double)
 	GDVIRTUAL0_REQUIRED(_stop)
@@ -146,7 +146,7 @@ protected:
 	GDVIRTUAL2R_REQUIRED(int, _mix_resampled, GDExtensionPtr<AudioFrame>, int)
 	GDVIRTUAL0RC_REQUIRED(float, _get_stream_sampling_rate)
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual int mix(AudioFrame *p_buffer, float p_rate_scale, int p_frames) override;
@@ -167,7 +167,7 @@ class AudioStream : public Resource {
 	float tagged_offsets[MAX_TAGGED_OFFSETS];
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL0RC_REQUIRED(Ref<AudioStreamPlayback>, _instantiate_playback)
 #ifndef DISABLE_DEPRECATED

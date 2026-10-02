@@ -49,7 +49,7 @@ class MultiNodeEdit : public RefCounted {
 	void _notify_property_list_changed();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	bool _set(const StringName &p_name, const Variant &p_value);
 	bool _get(const StringName &p_name, Variant &r_ret) const;

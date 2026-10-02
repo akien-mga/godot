@@ -93,7 +93,7 @@ public:
 	bool filter = false;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Ref<AudioEffectInstance> instantiate() override;

@@ -148,7 +148,7 @@ protected:
 	void _get_property_list(List<PropertyInfo> *p_list) const;
 	void _validate_dynamic_prop(PropertyInfo &p_property) const;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _init_joints(Skeleton3D *p_skeleton, int p_index) override;
 	virtual void _make_simulation_dirty(int p_index) override;

@@ -116,7 +116,7 @@ class AStar3D : public RefCounted {
 	bool _solve(Point *p_begin_point, Point *p_end_point, bool p_allow_partial_path);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual real_t _estimate_cost(int64_t p_from_id, int64_t p_end_id);
 	virtual real_t _compute_cost(int64_t p_from_id, int64_t p_to_id);
@@ -128,7 +128,7 @@ protected:
 #ifndef DISABLE_DEPRECATED
 	Vector<int64_t> _get_id_path_bind_compat_88047(int64_t p_from_id, int64_t p_to_id);
 	Vector<Vector3> _get_point_path_bind_compat_88047(int64_t p_from_id, int64_t p_to_id);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:
@@ -175,7 +175,7 @@ class AStar2D : public RefCounted {
 	bool _solve(AStar3D::Point *p_begin_point, AStar3D::Point *p_end_point, bool p_allow_partial_path);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual real_t _estimate_cost(int64_t p_from_id, int64_t p_end_id);
 	virtual real_t _compute_cost(int64_t p_from_id, int64_t p_to_id);
@@ -187,7 +187,7 @@ protected:
 #ifndef DISABLE_DEPRECATED
 	Vector<int64_t> _get_id_path_bind_compat_88047(int64_t p_from_id, int64_t p_to_id);
 	Vector<Vector2> _get_point_path_bind_compat_88047(int64_t p_from_id, int64_t p_to_id);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

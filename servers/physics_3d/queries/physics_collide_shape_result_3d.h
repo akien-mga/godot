@@ -41,7 +41,7 @@ class PhysicsCollideShapeResult3D : public RefCounted {
 	int collision_count = 0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	PhysicsCollideShapeResult3D(int p_max_collisions = 32);

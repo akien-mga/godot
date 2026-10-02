@@ -44,7 +44,7 @@ private:
 	Array interaction_profiles;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_action_sets(const Array &p_action_sets); // Set our actions sets by providing an array with action sets (for loading from resource)

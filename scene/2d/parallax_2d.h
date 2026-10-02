@@ -60,7 +60,7 @@ protected:
 	void _validate_property(PropertyInfo &p_property) const;
 	void _camera_moved(const Transform2D &p_transform, const Point2 &p_screen_offset, const Point2 &p_adj_screen_offset);
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_scroll_scale(const Size2 &p_scale);

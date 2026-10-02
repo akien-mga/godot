@@ -70,7 +70,7 @@ class FindInFilesSearch : public Node {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void copy_from(const FindInFilesSearch *p_other);
@@ -174,7 +174,7 @@ class FindInFilesSearchPanel : public ScrollContainer {
 protected:
 	void _notification(int p_what);
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_finder(FindInFilesSearch *p_finder, bool p_init);
@@ -265,7 +265,7 @@ class FindInFilesResultsPanel : public MarginContainer {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	FindInFilesSearch *get_finder() const { return finder; }
@@ -330,7 +330,7 @@ class FindInFilesContainer : public EditorDock {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void update_layout(EditorDock::DockLayout p_layout, int p_slot) override;

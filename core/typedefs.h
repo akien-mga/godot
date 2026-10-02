@@ -116,6 +116,17 @@ static_assert(__cplusplus >= 201703L, "Minimum of C++17 required.");
 #endif
 #endif
 
+// Marks code only run at initialization or teardown (class and module registration, etc.).
+// Compilers optimize cold functions for size and keep them out of hot code. GCC also treats
+// functions only called from cold functions as cold, so this covers what they call too.
+#ifndef _COLD_
+#if defined(__GNUC__)
+#define _COLD_ __attribute__((cold))
+#else
+#define _COLD_
+#endif
+#endif
+
 // Should never inline.
 #ifndef _NO_INLINE_
 #if defined(__GNUC__)

@@ -37,7 +37,7 @@ class PhysicsDirectBodyState2D : public Object {
 	GDCLASS(PhysicsDirectBodyState2D, Object);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual Vector2 get_total_gravity() const = 0; // get gravity vector working on this body space/area

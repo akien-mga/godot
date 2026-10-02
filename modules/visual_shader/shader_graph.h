@@ -104,7 +104,7 @@ private:
 	bool _depends_on_instance_parameter(int p_node, HashSet<int> &r_visited) const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	bool _set(const StringName &p_name, const Variant &p_value);
 	bool _get(const StringName &p_name, Variant &r_ret) const;

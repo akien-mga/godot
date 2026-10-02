@@ -46,11 +46,11 @@ class Performance : public Object {
 	GDCLASS(Performance, Object);
 
 	static Performance *singleton;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	void _add_custom_monitor_bind_compat_110433(const StringName &p_id, const Callable &p_callable, const Vector<Variant> &p_args);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 	int _get_node_count() const;

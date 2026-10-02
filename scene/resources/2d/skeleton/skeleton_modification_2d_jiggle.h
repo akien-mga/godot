@@ -82,7 +82,7 @@ private:
 	void _update_jiggle_joint_data();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	bool _set(const StringName &p_path, const Variant &p_value);
 	bool _get(const StringName &p_path, Variant &r_ret) const;
 	void _get_property_list(List<PropertyInfo> *p_list) const;

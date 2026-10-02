@@ -38,7 +38,7 @@ class OpenXRValveAnalogThresholdExtension : public OpenXRExtensionWrapper {
 	GDCLASS(OpenXRValveAnalogThresholdExtension, OpenXRExtensionWrapper);
 
 protected:
-	static void _bind_methods() {}
+	_COLD_ static void _bind_methods() {}
 
 public:
 	static OpenXRValveAnalogThresholdExtension *get_singleton();
@@ -66,7 +66,7 @@ private:
 	Ref<OpenXRHapticBase> off_haptic;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	OpenXRAnalogThresholdModifier();

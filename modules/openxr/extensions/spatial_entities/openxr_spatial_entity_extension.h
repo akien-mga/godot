@@ -134,9 +134,9 @@ public:
 	static String get_spatial_feature_name(XrSpatialCapabilityFeatureEXT p_feature);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 #ifndef DISABLE_DEPRECATED
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 	Ref<OpenXRFutureResult> _create_spatial_context_bind_compat_121123(const TypedArray<OpenXRSpatialCapabilityConfigurationBaseHeader> &p_capability_configurations, Ref<OpenXRStructureBase> p_next, const Callable &p_user_callback);
 #endif
 

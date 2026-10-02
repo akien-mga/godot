@@ -52,7 +52,7 @@ class Node2D : public CanvasItem {
 
 protected:
 	void _notification(int p_notification);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static constexpr AncestralClass static_ancestral_class = AncestralClass::NODE_2D;

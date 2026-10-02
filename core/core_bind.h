@@ -49,7 +49,7 @@ class ResourceLoader : public Object {
 	GDCLASS(ResourceLoader, Object);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	static inline ResourceLoader *singleton = nullptr;
 
 public:
@@ -95,7 +95,7 @@ class ResourceSaver : public Object {
 	GDCLASS(ResourceSaver, Object);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	static inline ResourceSaver *singleton = nullptr;
 
 public:
@@ -137,7 +137,7 @@ public:
 protected:
 	GDVIRTUAL2(_log_message, String, bool);
 	GDVIRTUAL8(_log_error, String, String, int, String, String, bool, int, TypedArray<ScriptBacktrace>);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void log_error(const char *p_function, const char *p_file, int p_line, const char *p_code, const char *p_rationale, bool p_editor_notify = false, ErrorType p_type = ERROR_TYPE_ERROR, const TypedArray<ScriptBacktrace> &p_script_backtraces = {});
@@ -162,14 +162,14 @@ class OS : public Object {
 	LoggerBind *logger_bind = nullptr;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	static inline OS *singleton = nullptr;
 
 #ifndef DISABLE_DEPRECATED
 	Dictionary _execute_with_pipe_bind_compat_94434(const String &p_path, const Vector<String> &p_arguments);
 
 	String _read_string_from_stdin_bind_compat_91201();
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:
@@ -331,7 +331,7 @@ class Geometry2D : public Object {
 	static inline Geometry2D *singleton = nullptr;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static Geometry2D *get_singleton();
@@ -397,7 +397,7 @@ class Geometry3D : public Object {
 	static inline Geometry3D *singleton = nullptr;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static Geometry3D *get_singleton();
@@ -428,7 +428,7 @@ class Marshalls : public Object {
 	static inline Marshalls *singleton = nullptr;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static Marshalls *get_singleton();
@@ -450,7 +450,7 @@ class Mutex : public RefCounted {
 	GDCLASS(Mutex, RefCounted);
 	::Mutex mutex;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void lock();
@@ -463,10 +463,10 @@ class Semaphore : public RefCounted {
 	::Semaphore semaphore;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 #ifndef DISABLE_DEPRECATED
 	void _post_bind_compat_93605();
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif // DISABLE_DEPRECATED
 
 public:
@@ -483,7 +483,7 @@ protected:
 	SafeFlag running;
 	Callable target_callable;
 	::Thread thread;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	static void _start_func(void *p_ud);
 
 public:
@@ -510,7 +510,7 @@ class ClassDB : public Object {
 	GDCLASS(ClassDB, Object);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	enum APIType {
@@ -574,7 +574,7 @@ class Engine : public Object {
 	GDCLASS(Engine, Object);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	static inline Engine *singleton = nullptr;
 
 public:
@@ -654,7 +654,7 @@ class EngineDebugger : public Object {
 	HashMap<StringName, Ref<EngineProfiler>> profilers;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	static inline EngineDebugger *singleton = nullptr;
 
 public:
@@ -703,7 +703,7 @@ class WeakRef : public RefCounted {
 	ObjectID ref;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Variant get_ref() const;

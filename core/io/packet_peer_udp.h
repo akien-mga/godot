@@ -59,7 +59,7 @@ protected:
 	UDPServer *udp_server = nullptr;
 	Ref<NetSocket> _sock;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	String _get_packet_ip() const;
 

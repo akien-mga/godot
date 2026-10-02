@@ -51,7 +51,7 @@ protected:
 		GDVIRTUAL_CALL(_placeholder_erased, p_placeholder);
 	}
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	EXBIND0RC(bool, can_instantiate)
@@ -277,7 +277,7 @@ protected:
 		LOOKUP_RESULT_MAX,
 	};
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	EXBIND0RC(String, get_name)

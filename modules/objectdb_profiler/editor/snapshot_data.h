@@ -75,7 +75,7 @@ public:
 protected:
 	// Snapshots are inherently read-only. Can't edit the past.
 	bool _is_read_only() { return true; }
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 };
 
 class GameStateSnapshot : public RefCounted {

@@ -51,7 +51,7 @@ private:
 	CryptoCore::AESContext ctx;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Error start(Mode p_mode, const PackedByteArray &p_key, const PackedByteArray &p_iv = PackedByteArray());

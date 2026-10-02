@@ -43,7 +43,7 @@ protected:
 	void *mix_udata = nullptr;
 	mutable int _channel_count = 0; // Used only to assist with bounds checking in mix_audio.
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	GDVIRTUAL0(_stop);
 	GDVIRTUAL0(_play);
 	GDVIRTUAL0RC(bool, _is_playing);
@@ -92,7 +92,7 @@ class VideoStream : public Resource {
 	OBJ_SAVE_TYPE(VideoStream);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL0R_REQUIRED(Ref<VideoStreamPlayback>, _instantiate_playback);
 

@@ -37,7 +37,7 @@ class PhysicsBody2D : public CollisionObject2D {
 	GDCLASS(PhysicsBody2D, CollisionObject2D);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	PhysicsBody2D(PS2DE::BodyMode p_mode);
 
 	Ref<KinematicCollision2D> motion_cache;

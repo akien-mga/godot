@@ -56,7 +56,7 @@ class EventListenerLineEdit : public LineEdit {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static String get_event_text(const Ref<InputEvent> &p_event, bool p_include_device);

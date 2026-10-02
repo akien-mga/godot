@@ -77,7 +77,7 @@ private:
 	void _on_rename_action(Object *p_action_editor);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 	// used for undo/redo

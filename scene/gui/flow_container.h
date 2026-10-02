@@ -71,7 +71,7 @@ protected:
 
 	void _notification(int p_what);
 	void _validate_property(PropertyInfo &p_property) const;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	int get_line_count() const;

@@ -43,7 +43,7 @@ protected:
 	Orientation orientation = Orientation::HORIZONTAL;
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual Size2 get_minimum_size() const override;

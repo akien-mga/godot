@@ -127,7 +127,7 @@ protected:
 	virtual void _export_end();
 	virtual void _end_generate_apple_embedded_project(const String &p_path, bool p_will_build_archive);
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL3(_export_file, String, String, Vector<String>)
 	GDVIRTUAL4(_export_begin, Vector<String>, bool, String, uint32_t)

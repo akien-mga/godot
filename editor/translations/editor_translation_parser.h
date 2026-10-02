@@ -38,7 +38,7 @@ class EditorTranslationParserPlugin : public RefCounted {
 	GDCLASS(EditorTranslationParserPlugin, RefCounted);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL1R(TypedArray<PackedStringArray>, _parse_file, String)
 	GDVIRTUAL0RC(Vector<String>, _get_recognized_extensions)

@@ -45,7 +45,7 @@ class StatusIndicator : public Node {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	void _callback(MouseButton p_index, const Point2i &p_pos);
 

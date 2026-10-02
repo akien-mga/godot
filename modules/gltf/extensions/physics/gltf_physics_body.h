@@ -56,7 +56,7 @@ public:
 	};
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	PhysicsBodyType body_type = PhysicsBodyType::RIGID;

@@ -155,7 +155,7 @@ class EditorAudioBus : public PanelContainer {
 	EditorAudioBuses *buses = nullptr;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 public:
@@ -174,7 +174,7 @@ class EditorAudioBusDrop : public Control {
 	mutable bool hovering_drop = false;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 };
 
@@ -235,7 +235,7 @@ class EditorAudioBuses : public EditorDock {
 	void _file_dialog_callback(const String &p_string);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 	virtual void update_layout(EditorDock::DockLayout p_layout, int p_slot) override;
@@ -297,7 +297,7 @@ public:
 private:
 	virtual void _update_theme_item_cache() override;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 	void _draw_audio_notches();
 };

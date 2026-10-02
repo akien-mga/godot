@@ -118,10 +118,10 @@ private:
 protected:
 	static XRServer *singleton;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 	void _add_tracker_bind_compat_90645(const Ref<XRPositionalTracker> &p_tracker);
 	void _remove_tracker_bind_compat_90645(const Ref<XRPositionalTracker> &p_tracker);
 	Ref<XRPositionalTracker> _get_tracker_bind_compat_90645(const StringName &p_name) const;

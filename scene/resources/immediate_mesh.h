@@ -77,7 +77,7 @@ class ImmediateMesh : public Mesh {
 	const Vector3 SMALL_VEC3 = Vector3(CMP_EPSILON, CMP_EPSILON, CMP_EPSILON);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void surface_begin(PrimitiveType p_primitive, const Ref<Material> &p_material = Ref<Material>());

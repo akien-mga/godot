@@ -42,7 +42,7 @@ class VisualShaderNodeParticleEmitter : public VisualShaderNode {
 
 protected:
 	bool mode_2d = false;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual int get_output_port_count() const override;
@@ -130,7 +130,7 @@ class VisualShaderNodeParticleMeshEmitter : public VisualShaderNodeParticleEmitt
 	void _update_textures();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -167,7 +167,7 @@ class VisualShaderNodeParticleMultiplyByAxisAngle : public VisualShaderNode {
 	bool degrees_mode = true;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -233,7 +233,7 @@ private:
 	OpType op_type = OP_TYPE_SCALAR;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Vector<StringName> get_editable_properties() const override;
@@ -280,7 +280,7 @@ private:
 	Mode mode = MODE_LINEAR;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Vector<StringName> get_editable_properties() const override;
@@ -338,7 +338,7 @@ public:
 
 protected:
 	int flags = EMIT_FLAG_POSITION | EMIT_FLAG_ROT_SCALE | EMIT_FLAG_VELOCITY | EMIT_FLAG_COLOR | EMIT_FLAG_CUSTOM;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Vector<StringName> get_editable_properties() const override;

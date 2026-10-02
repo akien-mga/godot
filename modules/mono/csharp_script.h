@@ -280,7 +280,7 @@ private:
 			const Variant **p_args, int p_argcount, Callable::CallError &r_error, Variant &r_ret);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	bool _get(const StringName &p_name, Variant &r_ret) const;
 	bool _set(const StringName &p_name, const Variant &p_value);

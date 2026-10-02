@@ -80,7 +80,7 @@ class AudioEffectRecord : public AudioEffect {
 	void ensure_thread_stopped();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Ref<AudioEffectInstance> instantiate() override;

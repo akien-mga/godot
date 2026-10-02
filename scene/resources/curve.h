@@ -150,7 +150,7 @@ protected:
 	bool _property_can_revert(const StringName &p_name) const { return property_helper.property_can_revert(p_name); }
 	bool _property_get_revert(const StringName &p_name, Variant &r_property) const { return property_helper.property_get_revert(p_name, r_property); }
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	bool _filter_property(const String &p_name, int p_index) const;
@@ -235,7 +235,7 @@ protected:
 	bool _property_can_revert(const StringName &p_name) const { return property_helper.property_can_revert(p_name); }
 	bool _property_get_revert(const StringName &p_name, Variant &r_property) const { return property_helper.property_get_revert(p_name, r_property); }
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	int get_point_count() const;
@@ -335,7 +335,7 @@ protected:
 	bool _property_can_revert(const StringName &p_name) const { return property_helper.property_can_revert(p_name); }
 	bool _property_get_revert(const StringName &p_name, Variant &r_property) const { return property_helper.property_get_revert(p_name, r_property); }
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 #ifdef TOOLS_ENABLED

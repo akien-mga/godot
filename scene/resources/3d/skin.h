@@ -52,7 +52,7 @@ protected:
 	void _get_property_list(List<PropertyInfo> *p_list) const;
 
 	virtual void reset_state() override;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_bind_count(int p_size);

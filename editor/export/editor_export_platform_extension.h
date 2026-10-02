@@ -44,7 +44,7 @@ class EditorExportPlatformExtension : public EditorExportPlatform {
 	mutable bool config_missing_templates = false;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void get_preset_features(const Ref<EditorExportPreset> &p_preset, List<String> *r_features) const override;

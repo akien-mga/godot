@@ -400,12 +400,12 @@ protected:
 	bool _property_can_revert(const StringName &p_name) const { return property_helper.property_can_revert(p_name); }
 	bool _property_get_revert(const StringName &p_name, Variant &r_property) const { return property_helper.property_get_revert(p_name, r_property); }
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	void _add_filter_bind_compat_111439(const String &p_filter, const String &p_description = "");
 
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

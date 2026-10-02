@@ -62,7 +62,7 @@ public:
 		return _inner_scene;
 	}
 
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		ClassDB::bind_method(D_METHOD("set_inner_scene", "p_scene"), &_TestNodeForTestingNestedScenes::set_inner_scene);
 		ClassDB::bind_method(D_METHOD("get_inner_scene"), &_TestNodeForTestingNestedScenes::get_inner_scene);
 

@@ -210,7 +210,7 @@ private:
 	void _refresh_interpolation_state();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 #ifdef TOOLS_ENABLED
 	void _draw_emission_gizmo();
@@ -220,7 +220,7 @@ protected:
 #ifndef DISABLE_DEPRECATED
 	void _restart_bind_compat_92089();
 	void _request_particles_process_bind_compat_109142(real_t p_time);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

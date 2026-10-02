@@ -47,7 +47,7 @@ protected:
 	ObjectID text_edit_instance_id; // For validity check
 	TextEdit *text_edit = nullptr;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL1RC(Dictionary, _get_line_syntax_highlighting, int)
 	GDVIRTUAL0(_clear_highlighting_cache)
@@ -95,7 +95,7 @@ private:
 	bool uint_suffix_enabled = false;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual Dictionary _get_line_syntax_highlighting_impl(int p_line) override;

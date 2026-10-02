@@ -61,7 +61,7 @@ protected:
 
 	void _notification(int p_what);
 	void _validate_property(PropertyInfo &p_property) const;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _parent_focused();
 
@@ -94,7 +94,7 @@ protected:
 	void _update_child_rects() const;
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual Size2 _get_contents_minimum_size() const override;
 

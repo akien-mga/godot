@@ -94,7 +94,7 @@ protected:
 	LocalVector<double> cached_lengths;
 	bool lengths_dirty = true;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _tree_changed() override;
 	virtual void _animation_node_renamed(const ObjectID &p_oid, const String &p_old_name, const String &p_new_name) override;
@@ -105,7 +105,7 @@ protected:
 
 #ifndef DISABLE_DEPRECATED
 	void _add_blend_point_bind_compat_110369(const Ref<AnimationRootNode> &p_node, float p_position, int p_at_index = -1);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

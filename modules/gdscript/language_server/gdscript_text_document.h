@@ -40,7 +40,7 @@ class GDScript;
 class GDScriptTextDocument : public RefCounted {
 	GDCLASS(GDScriptTextDocument, RefCounted)
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	Ref<FileAccess> file_checker;
 

@@ -60,7 +60,7 @@ class OpenXRFoveatedInsetExtension : public OpenXRExtensionWrapper {
 	GDCLASS(OpenXRFoveatedInsetExtension, OpenXRExtensionWrapper);
 
 protected:
-	static void _bind_methods() {}
+	_COLD_ static void _bind_methods() {}
 
 public:
 	static OpenXRFoveatedInsetExtension *get_singleton();

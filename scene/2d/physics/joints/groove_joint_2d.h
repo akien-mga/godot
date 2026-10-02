@@ -43,7 +43,7 @@ class GrooveJoint2D : public Joint2D {
 protected:
 	void _notification(int p_what);
 	virtual void _configure_joint(RID p_joint, PhysicsBody2D *body_a, PhysicsBody2D *body_b) override;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_length(real_t p_length);

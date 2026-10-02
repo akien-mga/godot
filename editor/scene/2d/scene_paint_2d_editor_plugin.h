@@ -169,7 +169,7 @@ class ScenePaint2DEditor : public Control {
 	void _grid_step_changed();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 public:

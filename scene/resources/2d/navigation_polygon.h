@@ -55,7 +55,7 @@ class NavigationPolygon : public Resource {
 	Vector2 baking_rect_offset;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 
 	void _set_polygons(const TypedArray<Vector<int32_t>> &p_array);

@@ -71,7 +71,7 @@ class VideoStreamPlayer : public Control {
 	static void _mix_audios(void *p_self);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_notification);
 
 public:

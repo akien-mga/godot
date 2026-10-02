@@ -157,7 +157,7 @@ protected:
 
 	static HTTPClient *(*_create)(bool p_notify_postinitialize);
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static HTTPClient *create(bool p_notify_postinitialize = true);

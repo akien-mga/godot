@@ -41,7 +41,7 @@ class PacketPeer : public RefCounted {
 
 	Variant _bnd_get_var(bool p_allow_objects = false);
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	Error _put_packet(const Vector<uint8_t> &p_buffer);
 	Vector<uint8_t> _get_packet();
@@ -75,7 +75,7 @@ class PacketPeerExtension : public PacketPeer {
 	GDCLASS(PacketPeerExtension, PacketPeer);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual Error get_packet(const uint8_t **r_buffer, int &r_buffer_size) override; ///< buffer is GONE after next get_packet
@@ -101,7 +101,7 @@ class PacketPeerStream : public PacketPeer {
 	Error _poll_buffer() const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual int get_available_packet_count() const override;

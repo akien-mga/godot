@@ -46,7 +46,7 @@ class ConfigFile : public RefCounted {
 	Error _parse(const String &p_path, VariantParser::Stream *p_stream);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_value(const String &p_section, const String &p_key, const Variant &p_value);

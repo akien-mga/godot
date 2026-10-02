@@ -58,7 +58,7 @@ class AudioEffectCapture : public AudioEffect {
 	bool buffer_initialized = false;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual Ref<AudioEffectInstance> instantiate() override;

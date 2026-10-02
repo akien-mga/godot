@@ -39,7 +39,7 @@ class RenderSceneBuffersExtension : public RenderSceneBuffers {
 	GDCLASS(RenderSceneBuffersExtension, RenderSceneBuffers);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL1(_configure, const RenderSceneBuffersConfiguration *)
 	GDVIRTUAL1(_set_fsr_sharpness, float)
@@ -62,7 +62,7 @@ class RenderSceneDataExtension : public RenderSceneData {
 	GDCLASS(RenderSceneDataExtension, RenderSceneData);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual Transform3D get_cam_transform() const override;
@@ -88,7 +88,7 @@ class RenderDataExtension : public RenderData {
 	GDCLASS(RenderDataExtension, RenderData);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual Ref<RenderSceneBuffers> get_render_scene_buffers() const override;
 	virtual RenderSceneData *get_render_scene_data() const override;

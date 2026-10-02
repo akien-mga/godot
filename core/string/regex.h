@@ -53,7 +53,7 @@ class RegExMatch : public RefCounted {
 	friend class RegEx;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	int _find(const Variant &p_name) const;
 
@@ -80,12 +80,12 @@ class RegEx : public RefCounted {
 	int _sub(const String &p_subject, const String &p_replacement, int p_offset, int p_end, uint32_t p_flags, String &r_output) const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	static Ref<RegEx> _create_from_string_bind_compat_95212(const String &p_pattern);
 	Error _compile_bind_compat_95212(const String &p_pattern);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

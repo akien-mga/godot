@@ -81,7 +81,7 @@ class JSON : public Resource {
 	static Variant _to_native(const Variant &p_json, bool p_allow_objects, int p_depth);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Error parse(const String &p_json_string, bool p_keep_text = false);

@@ -73,7 +73,7 @@ protected:
 	bool _set(const StringName &p_path, const Variant &p_value);
 	void _validate_property(PropertyInfo &p_property) const;
 	void _get_property_list(List<PropertyInfo> *p_list) const;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	StringName get_root_bone();

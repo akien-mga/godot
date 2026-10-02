@@ -40,7 +40,7 @@ class SeparationRayShape3D : public Shape3D {
 	bool slide_on_slope = false;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _update_shape() override;
 
 public:

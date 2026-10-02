@@ -39,7 +39,7 @@ class PhysicsPointQueryParameters2D : public RefCounted {
 	PS2DT::PointParameters parameters;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	const PS2DT::PointParameters &get_parameters() const { return parameters; }

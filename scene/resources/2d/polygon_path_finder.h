@@ -77,7 +77,7 @@ class PolygonPathFinder : public Resource {
 	Dictionary _get_data() const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void setup(const Vector<Vector2> &p_points, const Vector<int> &p_connections);

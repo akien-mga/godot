@@ -72,7 +72,7 @@ public:
 	FilterDB db;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_cutoff(float p_freq);

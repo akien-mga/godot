@@ -9405,7 +9405,7 @@ public:
 		node->connect_changed(callable_mp(this, &VisualShaderNodePluginDefaultEditor::_node_changed));
 	}
 
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		ClassDB::bind_method("_open_inspector", &VisualShaderNodePluginDefaultEditor::_open_inspector); // Used by UndoRedo.
 		ClassDB::bind_method("_show_prop_names", &VisualShaderNodePluginDefaultEditor::_show_prop_names); // Used with call_deferred.
 	}

@@ -102,7 +102,7 @@ protected:
 	GDVIRTUAL0(_validate_bone_names);
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _set_active(bool p_active);
 

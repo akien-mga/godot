@@ -68,7 +68,7 @@ private:
 
 protected:
 	static inline IP *singleton = nullptr;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	PackedStringArray _get_local_addresses() const;
 	TypedArray<Dictionary> _get_local_interfaces() const;

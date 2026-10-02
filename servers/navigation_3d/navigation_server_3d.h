@@ -52,7 +52,7 @@ class NavigationServer3D : public Object {
 	static NavigationServer3D *singleton;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static NavigationServer3D *get_singleton();
@@ -345,7 +345,7 @@ protected:
 #ifndef DISABLE_DEPRECATED
 	Vector<Vector3> _map_get_path_bind_compat_100129(RID p_map, Vector3 p_origin, Vector3 p_destination, bool p_optimize, uint32_t p_navigation_layers = 1) const;
 	void _query_path_bind_compat_100129(const Ref<NavigationPathQueryParameters3D> &p_query_parameters, Ref<NavigationPathQueryResult3D> p_query_result) const;
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 private:

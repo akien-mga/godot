@@ -57,7 +57,7 @@ public:
 	static constexpr CacheMode CACHE_MODE_REPLACE_DEEP = ResourceLoaderConstants::CACHE_MODE_REPLACE_DEEP;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL0RC(Vector<String>, _get_recognized_extensions)
 	GDVIRTUAL2RC(bool, _recognize_path, String, StringName)

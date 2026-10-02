@@ -87,7 +87,7 @@ protected:
 	void add_preview_overlay(Control *p_overlay);
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_preview_theme(const Ref<Theme> &p_theme);
@@ -118,7 +118,7 @@ class SceneThemeEditorPreview : public ThemeEditorPreview {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	bool set_preview_scene(const String &p_path);

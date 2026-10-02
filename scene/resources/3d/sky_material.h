@@ -62,7 +62,7 @@ private:
 	RID get_shader_cache() const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &property) const;
 
 public:
@@ -136,7 +136,7 @@ private:
 	bool filter = true;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_panorama(const Ref<Texture2D> &p_panorama);
@@ -185,7 +185,7 @@ private:
 	mutable bool shader_set = false;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &property) const;
 
 public:

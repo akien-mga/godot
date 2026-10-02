@@ -56,7 +56,7 @@ class SectionedInspector : public HSplitContainer {
 
 	bool restrict_to_basic = false;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _section_selected();
 
 	void _search_changed(const String &p_what);

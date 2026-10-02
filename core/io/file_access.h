@@ -105,7 +105,7 @@ public:
 	virtual PackedStringArray _get_extended_attributes_list(const String &p_file) { return PackedStringArray(); }
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	friend class Main;
 	AccessType get_access_type() const;
@@ -138,7 +138,7 @@ protected:
 	void store_pascal_string_bind_compat_78289(const String &p_string);
 	String get_as_text_bind_compat_110867(bool p_skip_cr) const;
 
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 private:

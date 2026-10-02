@@ -129,7 +129,7 @@ private:
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Error request(const String &p_url, const Vector<String> &p_custom_headers = Vector<String>(), HTTPClient::Method p_method = HTTPClient::METHOD_GET, const String &p_request_data = ""); //connects to a full url and perform request

@@ -30,6 +30,8 @@
 
 #pragma once
 
-void register_scene_types();
-void unregister_scene_types();
-void register_scene_singletons();
+#include "core/typedefs.h"
+
+_COLD_ void register_scene_types();
+_COLD_ void unregister_scene_types();
+_COLD_ void register_scene_singletons();

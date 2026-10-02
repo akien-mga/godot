@@ -48,7 +48,7 @@ class OccluderInstance3DEditorPlugin : public EditorPlugin {
 	void _bake();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_plugin_name() const override { return "OccluderInstance3D"; }

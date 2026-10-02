@@ -56,7 +56,7 @@ class VoxelGIData : public Resource {
 	bool use_two_bounces = true;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void allocate(const Transform3D &p_to_cell_xform, const AABB &p_aabb, const Vector3 &p_octree_size, const Vector<uint8_t> &p_octree_cells, const Vector<uint8_t> &p_data_cells, const Vector<uint8_t> &p_distance_field, const Vector<int> &p_level_counts);
@@ -134,7 +134,7 @@ private:
 	float _get_camera_exposure_normalization();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 #ifndef DISABLE_DEPRECATED
 	bool _set(const StringName &p_name, const Variant &p_value);
 	bool _get(const StringName &p_name, Variant &r_property) const;

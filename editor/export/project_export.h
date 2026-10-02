@@ -63,7 +63,7 @@ class ProjectExportTextureFormatError : public HBoxContainer {
 	void _on_fix_texture_format_pressed();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 public:
@@ -238,7 +238,7 @@ class ProjectExportDialog : public ConfirmationDialog {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void shortcut_input(const Ref<InputEvent> &p_event) override;
 
 public:

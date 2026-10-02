@@ -84,7 +84,7 @@ public:
 	XrResult locate_spatial_container_views(XrView *p_views, bool &r_view_pose_valid);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	// OpenXR API call wrappers

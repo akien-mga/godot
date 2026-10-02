@@ -53,7 +53,7 @@ protected:
 	TileData *_get_tile_data(TileMapCell p_cell);
 	virtual void _tile_set_changed() {}
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_tile_set(Ref<TileSet> p_tile_set);
@@ -170,7 +170,7 @@ private:
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_use_undo_redo(bool p_use_undo_redo);

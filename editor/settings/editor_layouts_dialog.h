@@ -52,7 +52,7 @@ class EditorLayoutsDialog : public ConfirmationDialog {
 	void _item_activated();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void ok_pressed() override;
 	virtual void _post_popup() override;
 

@@ -39,7 +39,7 @@ class ConvexPolygonShape2D : public Shape2D {
 	void _update_shape();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual bool _edit_is_selected_on_click(const Point2 &p_point, double p_tolerance) const override;

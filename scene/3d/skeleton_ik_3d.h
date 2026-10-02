@@ -139,7 +139,7 @@ class SkeletonIK3D : public SkeletonModifier3D {
 protected:
 	void _validate_property(PropertyInfo &p_property) const;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _notification(int p_what);
 
 	virtual void _process_modification(double p_delta) override;

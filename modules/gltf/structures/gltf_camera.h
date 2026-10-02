@@ -51,7 +51,7 @@ private:
 	real_t depth_near = 0.05;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static void set_fov_conversion_expressions(Ref<GLTFObjectModelProperty> &r_obj_model_prop);

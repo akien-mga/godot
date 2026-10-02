@@ -50,7 +50,7 @@ private:
 	float buffer_len = 0.5;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	float _get_target_rate() const;
@@ -84,7 +84,7 @@ protected:
 	virtual int _mix_internal(AudioFrame *p_buffer, int p_frames) override;
 	virtual float get_stream_sampling_rate() override;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void start(double p_from_pos = 0.0) override;

@@ -45,7 +45,7 @@ class GDExtensionManager : public Object {
 	bool startup_callback_called = false;
 	bool shutdown_callback_called = false;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	static inline GDExtensionManager *singleton = nullptr;
 

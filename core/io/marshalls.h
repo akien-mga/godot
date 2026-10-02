@@ -212,7 +212,7 @@ class EncodedObjectAsID : public RefCounted {
 	ObjectID id;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_object_id(ObjectID p_id);

@@ -125,7 +125,7 @@ class StreamedTexture2D : public Texture2D {
 	static void _requested_normal(void *p_ud);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void reload_from_file() override;
 
 public:

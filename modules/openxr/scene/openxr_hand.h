@@ -90,7 +90,7 @@ private:
 	void _update_skeleton();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	OpenXRHand();

@@ -40,7 +40,7 @@ class PhysicsDirectBodyState2DExtension : public PhysicsDirectBodyState2D {
 	GDCLASS(PhysicsDirectBodyState2DExtension, PhysicsDirectBodyState2D);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	// The warning is valid, but unavoidable. If the function is not overridden it will error anyway.
@@ -128,7 +128,7 @@ class PhysicsDirectSpaceState2DExtension : public PhysicsDirectSpaceState2D {
 	thread_local static const HashSet<RID> *exclude;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	bool is_body_excluded_from_query(const RID &p_body) const;
 
 	GDVIRTUAL7R_REQUIRED(bool, _intersect_ray, const Vector2 &, const Vector2 &, uint32_t, bool, bool, bool, GDExtensionPtr<PhysicsServer2DExtensionRayResult>)
@@ -193,7 +193,7 @@ class PhysicsServer2DExtension : public PhysicsServer2D {
 	GDCLASS(PhysicsServer2DExtension, PhysicsServer2D);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL9R_REQUIRED(bool, _shape_collide, RID, const Transform2D &, const Vector2 &, RID, const Transform2D &, const Vector2 &, GDExtensionPtr<Vector2>, int, GDExtensionPtr<int>)
 

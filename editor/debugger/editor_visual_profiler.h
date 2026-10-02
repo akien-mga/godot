@@ -138,7 +138,7 @@ private:
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_hardware_info(const String &p_cpu_name, const String &p_gpu_name);

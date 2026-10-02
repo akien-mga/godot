@@ -67,7 +67,7 @@ class PropertySelector : public ConfirmationDialog {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void select_method_from_base_type(const String &p_base, const String &p_current = "", bool p_virtuals_only = false);

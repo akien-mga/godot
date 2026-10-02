@@ -41,7 +41,7 @@ class PhysicsGetRestInfoResult3D : public RefCounted {
 	PS3DT::ShapeRestInfo result;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Vector3 get_point() const;

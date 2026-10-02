@@ -76,7 +76,7 @@ private:
 	void _font_changed();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	bool _set(const StringName &p_name, const Variant &p_value) {
 		return stacked_outline_property_helper.property_set_value(p_name, p_value) || stacked_shadow_property_helper.property_set_value(p_name, p_value);
 	}

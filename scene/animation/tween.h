@@ -48,7 +48,7 @@ public:
 	virtual bool step(double &r_delta) = 0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	Ref<Tween> _get_tween();
 	void _finish();
@@ -141,7 +141,7 @@ private:
 	void _stop_internal(bool p_reset);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual String _to_string() override;
 
 public:
@@ -223,7 +223,7 @@ public:
 	PropertyTweener();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	ObjectID target;
@@ -271,7 +271,7 @@ public:
 	CallbackTweener();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	Callable callback;
@@ -295,7 +295,7 @@ public:
 	MethodTweener();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	double duration = 0;
@@ -325,7 +325,7 @@ public:
 	SubtweenTweener();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	double delay = 0;
@@ -344,7 +344,7 @@ public:
 	AwaitTweener();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	Signal signal;

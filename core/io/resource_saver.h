@@ -37,7 +37,7 @@ class ResourceFormatSaver : public RefCounted {
 	GDCLASS(ResourceFormatSaver, RefCounted);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL3R(Error, _save, Ref<Resource>, String, uint32_t)
 	GDVIRTUAL2R(Error, _set_uid, String, ResourceUID::ID)

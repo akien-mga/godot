@@ -208,14 +208,14 @@ private:
 	void _set_redraw(bool p_redraw);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 	void _validate_property(PropertyInfo &p_property) const;
 
 #ifndef DISABLE_DEPRECATED
 	void _restart_bind_compat_92089();
 	void _request_particles_process_bind_compat_109142(real_t p_time);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

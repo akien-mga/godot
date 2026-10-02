@@ -51,7 +51,7 @@ private:
 	Vector<Vector2> eye_foci;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	~XRVRS();

@@ -386,7 +386,7 @@ protected:
 
 	void _propagate_replace_owner(Node *p_owner, Node *p_by_owner);
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	static String _get_name_num_separator();
 
 	friend class SceneState;
@@ -448,7 +448,7 @@ protected:
 #ifndef DISABLE_DEPRECATED
 	void _set_name_bind_compat_76560(const String &p_name);
 	Variant _get_rpc_config_bind_compat_106848() const;
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

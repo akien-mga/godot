@@ -52,7 +52,7 @@ class ImporterMeshInstance3D : public Node3D {
 	GeometryInstance3D::VisibilityRangeFadeMode visibility_range_fade_mode = GeometryInstance3D::VISIBILITY_RANGE_FADE_DISABLED;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_mesh(const Ref<ImporterMesh> &p_mesh);

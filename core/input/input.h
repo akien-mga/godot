@@ -349,11 +349,11 @@ private:
 
 #ifndef DISABLE_DEPRECATED
 	void _vibrate_handheld_bind_compat_91143(int p_duration_ms = 500);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif // DISABLE_DEPRECATED
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_mouse_mode(MouseMode p_mode);

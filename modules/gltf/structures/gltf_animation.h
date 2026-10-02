@@ -36,7 +36,7 @@ class GLTFAnimation : public Resource {
 	GDCLASS(GLTFAnimation, Resource);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	enum Interpolation {

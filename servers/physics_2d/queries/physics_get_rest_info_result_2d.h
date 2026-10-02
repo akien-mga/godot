@@ -41,7 +41,7 @@ class PhysicsGetRestInfoResult2D : public RefCounted {
 	PS2DT::ShapeRestInfo result;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Vector2 get_point() const;

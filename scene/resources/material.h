@@ -55,7 +55,7 @@ class Material : public Resource {
 protected:
 	_FORCE_INLINE_ void _set_material(RID p_material) const { material = p_material; }
 	_FORCE_INLINE_ RID _get_material() const { return material; }
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual bool _can_do_next_pass() const;
 	virtual bool _can_use_render_priority() const;
 
@@ -107,7 +107,7 @@ protected:
 	bool _property_can_revert(const StringName &p_name) const;
 	bool _property_get_revert(const StringName &p_name, Variant &r_property) const;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifdef TOOLS_ENABLED
 	void get_argument_options(const StringName &p_function, int p_idx, List<String> *r_options) const override;
@@ -637,7 +637,7 @@ private:
 	static HashMap<uint64_t, Ref<StandardMaterial3D>> materials_for_2d; //used by Sprite3D, Label3D and other stuff
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 	virtual bool _can_do_next_pass() const override { return true; }
 	virtual bool _can_use_render_priority() const override { return true; }

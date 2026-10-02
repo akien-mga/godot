@@ -42,7 +42,7 @@ class OpenXRBindingModifier : public Resource {
 	GDCLASS(OpenXRBindingModifier, Resource);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL0RC_REQUIRED(String, _get_description)
 	GDVIRTUAL0R_REQUIRED(PackedByteArray, _get_ip_modification)

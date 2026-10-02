@@ -52,7 +52,7 @@ class EditorSceneFormatImporter : public RefCounted {
 	List<ResourceImporter::ImportOption> *current_option_list = nullptr;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	Node *import_scene_wrapper(const String &p_path, uint32_t p_flags, const Dictionary &p_options);
 	Ref<Animation> import_animation_wrapper(const String &p_path, uint32_t p_flags, const Dictionary &p_options);
@@ -90,7 +90,7 @@ class EditorScenePostImport : public RefCounted {
 	String source_file;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL1R(Object *, _post_import, Node *)
 
@@ -130,7 +130,7 @@ protected:
 	GDVIRTUAL1(_pre_process, Node *)
 	GDVIRTUAL1(_post_process, Node *)
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Variant get_option_value(const StringName &p_name) const;

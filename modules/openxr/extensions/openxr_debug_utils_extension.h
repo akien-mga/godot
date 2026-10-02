@@ -37,7 +37,7 @@ class OpenXRDebugUtilsExtension : public OpenXRExtensionWrapper {
 	GDCLASS(OpenXRDebugUtilsExtension, OpenXRExtensionWrapper);
 
 protected:
-	static void _bind_methods() {}
+	_COLD_ static void _bind_methods() {}
 
 public:
 	static OpenXRDebugUtilsExtension *get_singleton();

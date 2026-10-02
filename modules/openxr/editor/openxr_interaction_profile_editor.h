@@ -59,7 +59,7 @@ protected:
 
 	bool is_dirty = false;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 	const OpenXRInteractionProfileMetadata::InteractionProfile *profile_def = nullptr;

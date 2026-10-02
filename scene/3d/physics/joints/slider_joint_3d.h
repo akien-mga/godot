@@ -67,7 +67,7 @@ public:
 protected:
 	real_t params[PARAM_MAX];
 	virtual void _configure_joint(RID p_joint, PhysicsBody3D *body_a, PhysicsBody3D *body_b) override;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_param(Param p_param, real_t p_value);

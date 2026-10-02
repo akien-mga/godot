@@ -57,7 +57,7 @@ class ScriptBacktrace : public RefCounted {
 	static void _store_variables(const List<String> &p_names, const List<Variant> &p_values, LocalVector<StackVariable> &r_variables);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	ScriptBacktrace() = default;

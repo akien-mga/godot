@@ -120,7 +120,7 @@ class NavigationAgent3D : public Node {
 #endif // DEBUG_ENABLED
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 	void _validate_property(PropertyInfo &p_property) const;
 

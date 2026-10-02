@@ -77,7 +77,7 @@ class FileSystemList : public ItemList {
 	void _text_editor_popup_modal_close();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	bool edit_selected();
@@ -410,7 +410,7 @@ public:
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void update_layout(EditorDock::DockLayout p_layout, int p_slot) override;
 	virtual void save_layout_to_config(Ref<ConfigFile> &p_layout, const String &p_section) const override;

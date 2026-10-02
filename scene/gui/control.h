@@ -457,7 +457,7 @@ protected:
 	// Base object overrides.
 
 	void _notification(int p_notification);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	void _accessibility_action_foucs(const Variant &p_data);
 	void _accessibility_action_blur(const Variant &p_data);
@@ -468,7 +468,7 @@ protected:
 #ifndef DISABLE_DEPRECATED
 	bool _has_focus_bind_compat_110250() const;
 	void _grab_focus_bind_compat_110250();
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif //DISABLE_DEPRECATED
 
 	// Focus.

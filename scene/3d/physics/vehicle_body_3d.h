@@ -132,7 +132,7 @@ class VehicleWheel3D : public Node3D {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_radius(real_t p_radius);
@@ -236,7 +236,7 @@ class VehicleBody3D : public RigidBody3D {
 	friend class VehicleWheel3D;
 	Vector<VehicleWheel3D *> wheels;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	static void _body_state_changed_callback(void *p_instance, PhysicsDirectBodyState3D *p_state);
 	virtual void _body_state_changed(PhysicsDirectBodyState3D *p_state) override;
