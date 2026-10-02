@@ -42,10 +42,13 @@ class __UnexistingClass;
 #define MB_T __UnexistingClass
 
 // Only depends on the method signature, so it's shared by all classes binding methods with the same signature.
-// Not inlined into each `ClassDB::bind_method()` call to save binary size.
+// Not inlined into each `ClassDB::bind_method()` call to save binary size, which is also why the class name
+// is looked up here rather than at the call site.
 template <typename MB, typename M>
-_NO_INLINE_ MethodBind *_create_method_bind_untyped(M p_method) {
-	return memnew(MB(p_method));
+_NO_INLINE_ MethodBind *_create_method_bind_untyped(M p_method, const StringName &(*p_get_class)()) {
+	MethodBind *a = memnew(MB(p_method));
+	a->set_instance_class(p_get_class());
+	return a;
 }
 #else
 #define MB_T T
@@ -127,11 +130,11 @@ template <typename T, typename... P>
 MethodBind *create_method_bind(void (T::*p_method)(P...)) {
 #ifdef TYPED_METHOD_BIND
 	MethodBind *a = memnew((MethodBindT<T, P...>)(p_method));
-#else
-	MethodBind *a = _create_method_bind_untyped<MethodBindT<P...>>(reinterpret_cast<void (MB_T::*)(P...)>(p_method));
-#endif
 	a->set_instance_class(T::get_class_static());
 	return a;
+#else
+	return _create_method_bind_untyped<MethodBindT<P...>>(reinterpret_cast<void (MB_T::*)(P...)>(p_method), &T::get_class_static);
+#endif
 }
 
 // no return, const
@@ -212,11 +215,11 @@ template <typename T, typename... P>
 MethodBind *create_method_bind(void (T::*p_method)(P...) const) {
 #ifdef TYPED_METHOD_BIND
 	MethodBind *a = memnew((MethodBindTC<T, P...>)(p_method));
-#else
-	MethodBind *a = _create_method_bind_untyped<MethodBindTC<P...>>(reinterpret_cast<void (MB_T::*)(P...) const>(p_method));
-#endif
 	a->set_instance_class(T::get_class_static());
 	return a;
+#else
+	return _create_method_bind_untyped<MethodBindTC<P...>>(reinterpret_cast<void (MB_T::*)(P...) const>(p_method), &T::get_class_static);
+#endif
 }
 
 // return, not const
@@ -306,12 +309,11 @@ template <typename T, typename R, typename... P>
 MethodBind *create_method_bind(R (T::*p_method)(P...)) {
 #ifdef TYPED_METHOD_BIND
 	MethodBind *a = memnew((MethodBindTR<T, R, P...>)(p_method));
-#else
-	MethodBind *a = _create_method_bind_untyped<MethodBindTR<R, P...>>(reinterpret_cast<R (MB_T::*)(P...)>(p_method));
-#endif
-
 	a->set_instance_class(T::get_class_static());
 	return a;
+#else
+	return _create_method_bind_untyped<MethodBindTR<R, P...>>(reinterpret_cast<R (MB_T::*)(P...)>(p_method), &T::get_class_static);
+#endif
 }
 
 // return, const
@@ -402,11 +404,11 @@ template <typename T, typename R, typename... P>
 MethodBind *create_method_bind(R (T::*p_method)(P...) const) {
 #ifdef TYPED_METHOD_BIND
 	MethodBind *a = memnew((MethodBindTRC<T, R, P...>)(p_method));
-#else
-	MethodBind *a = _create_method_bind_untyped<MethodBindTRC<R, P...>>(reinterpret_cast<R (MB_T::*)(P...) const>(p_method));
-#endif
 	a->set_instance_class(T::get_class_static());
 	return a;
+#else
+	return _create_method_bind_untyped<MethodBindTRC<R, P...>>(reinterpret_cast<R (MB_T::*)(P...) const>(p_method), &T::get_class_static);
+#endif
 }
 
 /* STATIC BINDS */
