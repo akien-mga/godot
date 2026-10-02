@@ -1962,6 +1962,29 @@ Variant ClassDB::class_get_default_property_value(const StringName &p_class, con
 	return var;
 }
 
+void ClassDB::_register_class(ClassRegistration p_registration, void (*p_initialize_class)(), const StringName &(*p_get_class_static)(), void *p_class_ptr, Object *(*p_creation_func)(bool), void (*p_register_custom_data_to_otdb)()) {
+	Locker::Lock lock(Locker::STATE_WRITE);
+	p_initialize_class();
+	ClassInfo *t = classes.getptr(p_get_class_static());
+	ERR_FAIL_NULL(t);
+	if (p_registration == CLASS_REGISTRATION_RUNTIME) {
+		ERR_FAIL_COND_MSG(t->inherits_ptr && !t->inherits_ptr->creation_func, vformat("Cannot register runtime class '%s' that descends from an abstract parent class.", p_get_class_static()));
+		t->is_runtime = true;
+	}
+	if (p_creation_func) {
+		t->creation_func = p_creation_func;
+	}
+	t->exposed = p_registration != CLASS_REGISTRATION_INTERNAL;
+	if (p_registration == CLASS_REGISTRATION_DEFAULT || p_registration == CLASS_REGISTRATION_VIRTUAL || p_registration == CLASS_REGISTRATION_RUNTIME) {
+		t->is_virtual = p_registration == CLASS_REGISTRATION_VIRTUAL;
+	}
+	t->class_ptr = p_class_ptr;
+	t->api = current_api;
+	if (p_register_custom_data_to_otdb) {
+		p_register_custom_data_to_otdb();
+	}
+}
+
 void ClassDB::register_extension_class(ObjectGDExtension *p_extension) {
 	GLOBAL_LOCK_FUNCTION;
 

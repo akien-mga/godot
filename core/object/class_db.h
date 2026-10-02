@@ -231,62 +231,41 @@ private:
 	static bool _can_instantiate(ClassInfo *p_class_info, bool p_exposed_only = true);
 
 public:
+	enum ClassRegistration {
+		CLASS_REGISTRATION_DEFAULT,
+		CLASS_REGISTRATION_VIRTUAL,
+		CLASS_REGISTRATION_ABSTRACT,
+		CLASS_REGISTRATION_INTERNAL,
+		CLASS_REGISTRATION_RUNTIME,
+		CLASS_REGISTRATION_CUSTOM_INSTANCE,
+	};
+
+	// Shared by the `register_*class<T>()` templates, which only pass the class-specific parts.
+	// Not inlined, so each registered class only adds a small call.
+	_NO_INLINE_ static void _register_class(ClassRegistration p_registration, void (*p_initialize_class)(), const StringName &(*p_get_class_static)(), void *p_class_ptr, Object *(*p_creation_func)(bool), void (*p_register_custom_data_to_otdb)());
+
 	template <typename T>
 	static void register_class(bool p_virtual = false) {
-		Locker::Lock lock(Locker::STATE_WRITE);
 		static_assert(std::is_same_v<typename T::self_type, T>, "Class not declared properly, please use GDCLASS.");
-		T::initialize_class();
-		ClassInfo *t = classes.getptr(T::get_class_static());
-		ERR_FAIL_NULL(t);
-		t->creation_func = &creator<T>;
-		t->exposed = true;
-		t->is_virtual = p_virtual;
-		t->class_ptr = T::get_class_ptr_static();
-		t->api = current_api;
-		T::register_custom_data_to_otdb();
+		_register_class(p_virtual ? CLASS_REGISTRATION_VIRTUAL : CLASS_REGISTRATION_DEFAULT, &T::initialize_class, &T::get_class_static, T::get_class_ptr_static(), &creator<T>, &T::register_custom_data_to_otdb);
 	}
 
 	template <typename T>
 	static void register_abstract_class() {
-		Locker::Lock lock(Locker::STATE_WRITE);
 		static_assert(std::is_same_v<typename T::self_type, T>, "Class not declared properly, please use GDCLASS.");
-		T::initialize_class();
-		ClassInfo *t = classes.getptr(T::get_class_static());
-		ERR_FAIL_NULL(t);
-		t->exposed = true;
-		t->class_ptr = T::get_class_ptr_static();
-		t->api = current_api;
-		//nothing
+		_register_class(CLASS_REGISTRATION_ABSTRACT, &T::initialize_class, &T::get_class_static, T::get_class_ptr_static(), nullptr, nullptr);
 	}
 
 	template <typename T>
 	static void register_internal_class() {
-		Locker::Lock lock(Locker::STATE_WRITE);
 		static_assert(std::is_same_v<typename T::self_type, T>, "Class not declared properly, please use GDCLASS.");
-		T::initialize_class();
-		ClassInfo *t = classes.getptr(T::get_class_static());
-		ERR_FAIL_NULL(t);
-		t->exposed = false;
-		t->class_ptr = T::get_class_ptr_static();
-		t->api = current_api;
-		T::register_custom_data_to_otdb();
+		_register_class(CLASS_REGISTRATION_INTERNAL, &T::initialize_class, &T::get_class_static, T::get_class_ptr_static(), nullptr, &T::register_custom_data_to_otdb);
 	}
 
 	template <typename T>
 	static void register_runtime_class() {
-		Locker::Lock lock(Locker::STATE_WRITE);
 		static_assert(std::is_same_v<typename T::self_type, T>, "Class not declared properly, please use GDCLASS.");
-		T::initialize_class();
-		ClassInfo *t = classes.getptr(T::get_class_static());
-		ERR_FAIL_NULL(t);
-		ERR_FAIL_COND_MSG(t->inherits_ptr && !t->inherits_ptr->creation_func, vformat("Cannot register runtime class '%s' that descends from an abstract parent class.", T::get_class_static()));
-		t->creation_func = &creator<T>;
-		t->exposed = true;
-		t->is_virtual = false;
-		t->is_runtime = true;
-		t->class_ptr = T::get_class_ptr_static();
-		t->api = current_api;
-		T::register_custom_data_to_otdb();
+		_register_class(CLASS_REGISTRATION_RUNTIME, &T::initialize_class, &T::get_class_static, T::get_class_ptr_static(), &creator<T>, &T::register_custom_data_to_otdb);
 	}
 
 	static void register_extension_class(ObjectGDExtension *p_extension);
@@ -299,16 +278,8 @@ public:
 
 	template <typename T>
 	static void register_custom_instance_class() {
-		Locker::Lock lock(Locker::STATE_WRITE);
 		static_assert(std::is_same_v<typename T::self_type, T>, "Class not declared properly, please use GDCLASS.");
-		T::initialize_class();
-		ClassInfo *t = classes.getptr(T::get_class_static());
-		ERR_FAIL_NULL(t);
-		t->creation_func = &_create_ptr_func<T>;
-		t->exposed = true;
-		t->class_ptr = T::get_class_ptr_static();
-		t->api = current_api;
-		T::register_custom_data_to_otdb();
+		_register_class(CLASS_REGISTRATION_CUSTOM_INSTANCE, &T::initialize_class, &T::get_class_static, T::get_class_ptr_static(), &_create_ptr_func<T>, &T::register_custom_data_to_otdb);
 	}
 
 	static void get_class_list(LocalVector<StringName> &p_classes);
