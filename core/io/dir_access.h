@@ -68,7 +68,7 @@ private:
 	static Ref<DirAccess> _create_temp(const String &p_prefix = "", bool p_keep = false);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	String _get_root_path() const;
 	virtual String _get_root_string() const;

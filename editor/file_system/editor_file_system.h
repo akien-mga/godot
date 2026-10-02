@@ -79,7 +79,7 @@ class EditorFileSystemDirectory : public Object {
 
 	Vector<FileInfo *> files;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	friend class EditorFileSystem;
 
@@ -122,7 +122,7 @@ protected:
 	GDVIRTUAL0RC_REQUIRED(bool, _is_active)
 	GDVIRTUAL0RC_REQUIRED(Vector<String>, _get_file_extensions)
 	GDVIRTUAL0RC_REQUIRED(bool, _query)
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual bool is_active() const {
@@ -375,7 +375,7 @@ class EditorFileSystem : public Node {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	// The name is the version, to keep compatibility with different versions of Godot.

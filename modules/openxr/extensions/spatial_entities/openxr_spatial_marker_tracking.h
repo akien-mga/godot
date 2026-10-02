@@ -46,7 +46,7 @@ public:
 	Vector<XrSpatialComponentTypeEXT> get_enabled_components() const { return enabled_components; }
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	Vector<XrSpatialComponentTypeEXT> enabled_components;
@@ -66,7 +66,7 @@ public:
 	Vector<XrSpatialComponentTypeEXT> get_enabled_components() const { return enabled_components; }
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	Vector<XrSpatialComponentTypeEXT> enabled_components;
@@ -111,7 +111,7 @@ public:
 	Vector<XrSpatialComponentTypeEXT> get_enabled_components() const { return enabled_components; }
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	Vector<XrSpatialComponentTypeEXT> enabled_components;
@@ -149,7 +149,7 @@ public:
 	Vector<XrSpatialComponentTypeEXT> get_enabled_components() const { return enabled_components; }
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	Vector<XrSpatialComponentTypeEXT> enabled_components;
@@ -187,7 +187,7 @@ public:
 	Variant get_marker_data(RID p_snapshot, int64_t p_index) const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	Vector<XrSpatialMarkerDataEXT> marker_data;
@@ -218,7 +218,7 @@ public:
 	Variant get_marker_data() const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	Vector2 bounds_size;
@@ -234,7 +234,7 @@ class OpenXRSpatialMarkerTrackingCapability : public OpenXRExtensionWrapper {
 	GDCLASS(OpenXRSpatialMarkerTrackingCapability, OpenXRExtensionWrapper);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	enum MarkerTypeFlags {

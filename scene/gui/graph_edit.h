@@ -99,7 +99,7 @@ class GraphEditMinimap : public Control {
 	void _adjust_graph_scroll(const Vector2 &p_offset);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual CursorShape get_cursor_shape(const Point2 &p_pos = Point2i()) const override;
@@ -386,9 +386,9 @@ protected:
 	virtual void remove_child_notify(Node *p_child) override;
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 #ifndef DISABLE_DEPRECATED
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 	virtual bool is_in_input_hotzone(GraphNode *p_graph_node, int p_port_idx, const Vector2 &p_mouse_pos, const Vector2i &p_port_size);

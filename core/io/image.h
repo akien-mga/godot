@@ -278,7 +278,7 @@ public:
 protected:
 	virtual Ref<Resource> _duplicate(const DuplicateParams &p_params) const override;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	Error _compress_bind_compat_115003(CompressMode p_mode, CompressSource p_source, ASTCFormat p_format);
@@ -287,7 +287,7 @@ protected:
 	Error _save_exr_bind_compat_117800(const String &p_path, bool p_grayscale = false) const;
 	Error _generate_mipmaps_bind_compat_104289(bool p_renormalize);
 
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 private:

@@ -169,7 +169,7 @@ private:
 protected:
 	virtual void _post_popup() override;
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static StringName generate_method_callback_name(Object *p_source, const String &p_signal_name, Object *p_target);
@@ -279,7 +279,7 @@ class ConnectionsDock : public VBoxContainer {
 protected:
 	void _connect_pressed();
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_object(Object *p_object);

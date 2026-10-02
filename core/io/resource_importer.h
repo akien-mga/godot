@@ -113,7 +113,7 @@ class ResourceImporter : public RefCounted {
 protected:
 	GDVIRTUAL1RC(Vector<String>, _get_build_dependencies, String)
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static inline ResourceFormatImporterLoadOnStartup load_on_startup = nullptr;

@@ -55,7 +55,7 @@ class AudioEffectLimiter : public AudioEffect {
 	float soft_clip_ratio;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_threshold_db(float p_threshold);

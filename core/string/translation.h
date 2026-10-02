@@ -70,7 +70,7 @@ private:
 	virtual void _set_messages(const Dictionary &p_messages);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	PluralRules *_get_plural_rules() const;
 

@@ -82,7 +82,7 @@ protected:
 	void _notification(int p_what);
 	void _update_shapecast_state();
 	void _shape_changed();
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_collide_with_areas(bool p_clip);

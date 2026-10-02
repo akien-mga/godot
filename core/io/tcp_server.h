@@ -38,7 +38,7 @@ class TCPServer : public SocketServer {
 	GDCLASS(TCPServer, SocketServer);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Error listen(uint16_t p_port, const IPAddress &p_bind_address = IPAddress("*"));

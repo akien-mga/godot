@@ -40,7 +40,7 @@ private:
 	RID camera_attributes;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 
 	float exposure_multiplier = 1.0;
@@ -93,7 +93,7 @@ private:
 	virtual void _update_auto_exposure() override;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 
 public:
@@ -144,7 +144,7 @@ private:
 	virtual void _update_auto_exposure() override;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &property) const;
 
 public:

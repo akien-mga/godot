@@ -67,7 +67,7 @@ class DPITexture : public Texture2D {
 	void _clear();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static Ref<DPITexture> create_from_string(const String &p_source, float p_scale = 1.0, float p_saturation = 1.0, const Dictionary &p_color_map = Dictionary());

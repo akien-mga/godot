@@ -157,7 +157,7 @@ class VideoStreamTheora : public VideoStream {
 	GDCLASS(VideoStreamTheora, VideoStream);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Ref<VideoStreamPlayback> instantiate_playback() override {

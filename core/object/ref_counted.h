@@ -40,7 +40,7 @@ class RefCounted : public Object {
 	SafeNumeric<uint32_t> dereference_count;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static constexpr AncestralClass static_ancestral_class = AncestralClass::REF_COUNTED;

@@ -112,7 +112,7 @@ class ShaderGlobalsEditorInterface : public Object {
 	}
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		ClassDB::bind_method("_var_changed", &ShaderGlobalsEditorInterface::_var_changed);
 		ADD_SIGNAL(MethodInfo("var_changed"));
 	}

@@ -182,7 +182,7 @@ private:
 	void update_samplers();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	RenderSceneBuffersRD();
@@ -453,7 +453,7 @@ private:
 
 	RID _create_texture_bind_compat_98670(const StringName &p_context, const StringName &p_texture_name, const RD::DataFormat p_data_format, const uint32_t p_usage_bits, const RD::TextureSamples p_texture_samples, const Size2i p_size, const uint32_t p_layers, const uint32_t p_mipmaps, bool p_unique);
 
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 
 #endif // DISABLE_DEPRECATED
 

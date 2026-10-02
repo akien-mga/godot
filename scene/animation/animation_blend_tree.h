@@ -99,7 +99,7 @@ public:
 
 protected:
 	void _validate_property(PropertyInfo &p_property) const;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	PlayMode play_mode = PLAY_MODE_FORWARD;
@@ -115,7 +115,7 @@ class AnimationNodeSync : public AnimationNode {
 protected:
 	bool sync = false;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_use_sync(bool p_sync);
@@ -128,7 +128,7 @@ class AnimationNodeObserverOneShot : public AnimationNodeObserver {
 	GDCLASS(AnimationNodeObserverOneShot, AnimationNodeObserver);
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		ADD_SIGNAL(MethodInfo("started"));
 		ADD_SIGNAL(MethodInfo("fade_in_finished"));
 		ADD_SIGNAL(MethodInfo("fade_out_started"));
@@ -175,7 +175,7 @@ private:
 	void _check_and_notify_state_changes(AnimationNodeInstance &p_instance, bool p_prev_active, bool p_prev_internal_active, double p_prev_fade_in_remaining);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void get_parameter_list(LocalVector<PropertyInfo> *r_list) const override;
@@ -327,7 +327,7 @@ class AnimationNodeTimeSeek : public AnimationNode {
 	bool explicit_elapse = true;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void get_parameter_list(LocalVector<PropertyInfo> *r_list) const override;
@@ -347,7 +347,7 @@ class AnimationNodeObserverTransition : public AnimationNodeObserver {
 	GDCLASS(AnimationNodeObserverTransition, AnimationNodeObserver);
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		ADD_SIGNAL(MethodInfo(SceneStringName(state_started), PropertyInfo(Variant::STRING, "state")));
 		ADD_SIGNAL(MethodInfo(SceneStringName(state_finished), PropertyInfo(Variant::STRING, "state")));
 	}
@@ -380,7 +380,7 @@ class AnimationNodeTransition : public AnimationNodeSync {
 protected:
 	bool _get(const StringName &p_path, Variant &r_ret) const;
 	bool _set(const StringName &p_path, const Variant &p_value);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _get_property_list(List<PropertyInfo> *p_list) const;
 
 public:
@@ -448,7 +448,7 @@ class AnimationNodeBlendTree : public AnimationRootNode {
 	void _initialize_node_tree();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	bool _set(const StringName &p_name, const Variant &p_value);
 	bool _get(const StringName &p_name, Variant &r_ret) const;
 	void _get_property_list(List<PropertyInfo> *p_list) const;

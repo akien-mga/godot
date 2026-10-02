@@ -143,7 +143,7 @@ protected:
 	void _reposition_children();
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	bool _updating_scrollbars = false;
 	void _update_scrollbar_position();

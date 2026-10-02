@@ -147,7 +147,7 @@ protected:
 	void _get_property_list(List<PropertyInfo> *p_list) const;
 	void _notification(int p_what);
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	// Make animation instances.
 	virtual bool _blend_pre_process(double p_delta, int p_track_count, const AHashMap<NodePath, int> &p_track_map) override;
@@ -177,7 +177,7 @@ protected:
 	String _get_autoplay_bind_compat_110767() const;
 	void _set_autoplay_bind_compat_110767(const String &p_name);
 
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif // DISABLE_DEPRECATED
 
 public:

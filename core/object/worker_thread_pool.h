@@ -230,7 +230,7 @@ private:
 	void _unlock_unlockable_mutexes();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	template <typename C, typename M, typename U>

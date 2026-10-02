@@ -51,7 +51,7 @@ class SkinReference : public RefCounted {
 	uint32_t *skin_bone_indices_ptrs = nullptr;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	// Public for use as signal callback.
@@ -215,7 +215,7 @@ private:
 	void _reset_bone_pose_compat_120609(int p_bone);
 	void _reset_bone_poses_compat_120609();
 
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif // DISABLE_DEPRECATED
 
 protected:
@@ -226,7 +226,7 @@ protected:
 	bool _property_get_revert(const StringName &p_name, Variant &r_property) const;
 	void _notification(int p_what);
 	TypedArray<StringName> _get_bone_meta_list_bind(int p_bone) const;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void add_child_notify(Node *p_child) override;
 	virtual void move_child_notify(Node *p_child) override;

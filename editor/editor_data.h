@@ -299,7 +299,7 @@ class EditorSelection : public Object {
 	void _emit_change();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void add_node(Node *p_node);

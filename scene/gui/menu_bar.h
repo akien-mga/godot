@@ -145,7 +145,7 @@ protected:
 	virtual void add_child_notify(Node *p_child) override;
 	virtual void move_child_notify(Node *p_child) override;
 	virtual void remove_child_notify(Node *p_child) override;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void gui_input(const Ref<InputEvent> &p_event) override;

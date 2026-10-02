@@ -66,7 +66,7 @@ private:
 	Ref<Expression> expression;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_switch_mode(SwitchMode p_mode);
@@ -148,7 +148,7 @@ private:
 	bool _can_connect(const StringName &p_name);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	bool _set(const StringName &p_name, const Variant &p_value);
 	bool _get(const StringName &p_name, Variant &r_ret) const;
@@ -327,7 +327,7 @@ class AnimationNodeStateMachinePlayback : public Resource {
 	TypedArray<StringName> _get_travel_path() const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void travel(const StringName &p_state, bool p_reset_on_teleport = true);

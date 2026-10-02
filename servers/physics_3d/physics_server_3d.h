@@ -60,7 +60,7 @@ class PhysicsServer3D : public Object {
 #endif
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static PhysicsServer3D *get_singleton();

@@ -43,7 +43,7 @@ protected:
 	GDVIRTUAL2_REQUIRED(_set_normal, int, const Vector3 &)
 	GDVIRTUAL1_REQUIRED(_set_aabb, const AABB &)
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void set_vertex(int p_vertex_id, const Vector3 &p_vertex);

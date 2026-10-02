@@ -42,7 +42,7 @@ class EditorResourcePreviewGenerator : public RefCounted {
 	GDCLASS(EditorResourcePreviewGenerator, RefCounted);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL1RC_REQUIRED(bool, _handles, String)
 	GDVIRTUAL3RC_REQUIRED(Ref<Texture2D>, _generate, Ref<Resource>, Vector2i, Dictionary)
@@ -125,7 +125,7 @@ class EditorResourcePreview : public Node {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static EditorResourcePreview *get_singleton();

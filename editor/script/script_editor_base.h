@@ -44,7 +44,7 @@ class ScriptEditorBase : public VBoxContainer {
 protected:
 	Ref<Resource> edited_res;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	class EditMenusBase : public HBoxContainer {

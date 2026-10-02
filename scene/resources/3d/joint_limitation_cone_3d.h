@@ -41,7 +41,7 @@ protected:
 #ifndef DISABLE_DEPRECATED
 	bool _set(const StringName &p_name, const Variant &p_value);
 #endif // DISABLE_DEPRECATED
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual Vector3 _solve(const Vector3 &p_direction) const override;
 

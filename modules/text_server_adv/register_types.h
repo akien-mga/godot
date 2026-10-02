@@ -32,5 +32,5 @@
 
 #include "modules/register_module_types.h"
 
-void initialize_text_server_adv_module(ModuleInitializationLevel p_level);
-void uninitialize_text_server_adv_module(ModuleInitializationLevel p_level);
+_COLD_ void initialize_text_server_adv_module(ModuleInitializationLevel p_level);
+_COLD_ void uninitialize_text_server_adv_module(ModuleInitializationLevel p_level);

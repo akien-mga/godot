@@ -43,7 +43,7 @@ class Texture2D : public Texture {
 	OBJ_SAVE_TYPE(Texture2D); // Saves derived classes with common type so they can be interchanged.
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL0RC(Image::Format, _get_format)
 	GDVIRTUAL0RC(Ref<Image>, _get_image)
@@ -87,7 +87,7 @@ class TextureLayered : public Texture {
 	GDCLASS(TextureLayered, Texture);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL0RC_REQUIRED(Image::Format, _get_format)
 	GDVIRTUAL0RC_REQUIRED(uint32_t, _get_layered_type)
@@ -118,7 +118,7 @@ class Texture3D : public Texture {
 	GDCLASS(Texture3D, Texture);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	TypedArray<Image> _get_datai() const;
 

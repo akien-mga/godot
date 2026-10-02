@@ -73,7 +73,7 @@ public:
 		bool _set(const StringName &p_name, const Variant &p_value);
 		bool _get(const StringName &p_name, Variant &r_ret) const;
 		void _get_property_list(List<PropertyInfo> *p_list) const;
-		static void _bind_methods();
+		_COLD_ static void _bind_methods();
 
 	public:
 		void set_id(int p_id);
@@ -98,7 +98,7 @@ public:
 		bool _get(const StringName &p_name, Variant &r_ret) const;
 		void _get_property_list(List<PropertyInfo> *p_list) const;
 
-		static void _bind_methods();
+		_COLD_ static void _bind_methods();
 
 	public:
 		Ref<TileSetAtlasSource> get_edited_tile_set_atlas_source() const { return tile_set_atlas_source; }
@@ -295,7 +295,7 @@ private:
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	// -- input events --
 	virtual void shortcut_input(const Ref<InputEvent> &p_event) override;

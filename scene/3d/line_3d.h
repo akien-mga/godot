@@ -36,7 +36,7 @@ class Line3D : public GeometryInstance3D {
 	GDCLASS(Line3D, GeometryInstance3D);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	enum MeshAlignment {

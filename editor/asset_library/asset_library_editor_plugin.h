@@ -92,7 +92,7 @@ class EditorAssetLibraryItem : public MarginContainer {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void configure(const String &p_title, const String &p_asset_id, const String &p_author, const String &p_author_id, bool p_verified, const String &p_license_type, const String &p_license_url, int p_rating);
@@ -193,7 +193,7 @@ private:
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void configure(const String &p_title, const String &p_asset_id, const String &p_author, const String &p_author_id, bool p_verified, const String &p_license_type, const String &p_license_url, int p_rating, const String &p_description, const HashMap<String, String> &p_tags, const String &p_store_url, const String &p_source_url);
@@ -241,7 +241,7 @@ class EditorAssetLibraryItemDownload : public MarginContainer {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_external_install(bool p_enable) { external_install = p_enable; }
@@ -403,7 +403,7 @@ class EditorAssetLibrary : public EditorDock {
 	friend class EditorAssetLibraryItem;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 	virtual void shortcut_input(const Ref<InputEvent> &p_event) override;
 	virtual void update_layout(EditorDock::DockLayout p_layout, int p_slot) override;

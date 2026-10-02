@@ -38,7 +38,7 @@ class PacketPeerDTLS : public PacketPeer {
 
 protected:
 	static inline PacketPeerDTLS *(*_create)(bool p_notify_postinitialize) = nullptr;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	static inline bool available = false;
 

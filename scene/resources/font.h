@@ -93,7 +93,7 @@ protected:
 	static constexpr int MAX_FALLBACK_DEPTH = 64;
 	TypedArray<Font> fallbacks;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _update_rids_fb(const Font *p_f, int p_depth) const;
 	virtual void _update_rids() const;
@@ -109,7 +109,7 @@ protected:
 	RID _find_variation_bind_compat_80954(const Dictionary &p_variation_coordinates, int p_face_index = 0, float p_strength = 0.0, Transform2D p_transform = Transform2D()) const;
 	RID _find_variation_bind_compat_87668(const Dictionary &p_variation_coordinates, int p_face_index = 0, float p_strength = 0.0, Transform2D p_transform = Transform2D(), int p_spacing_top = 0, int p_spacing_bottom = 0, int p_spacing_space = 0, int p_spacing_glyph = 0) const;
 	RID _find_variation_bind_compat_117149(const Dictionary &p_variation_coordinates, int p_face_index = 0, float p_strength = 0.0, Transform2D p_transform = Transform2D(), int p_spacing_top = 0, int p_spacing_bottom = 0, int p_spacing_space = 0, int p_spacing_glyph = 0, float p_baseline_offset = 0.0) const;
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:
@@ -232,7 +232,7 @@ class FontFile : public Font {
 	void _convert_mono_4bit(Ref<Image> &p_source, int p_page, int p_ch, int p_sz, int p_ol);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 
 	bool _set(const StringName &p_name, const Variant &p_value);
@@ -436,7 +436,7 @@ class FontVariation : public Font {
 	Vector<Color> custom_colors;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 
 	virtual void _update_rids() const override;
@@ -518,7 +518,7 @@ class SystemFont : public Font {
 	int msdf_size = 48;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _update_base_font();
 	virtual void _update_rids() const override;

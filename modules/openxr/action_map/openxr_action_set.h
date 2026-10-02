@@ -45,7 +45,7 @@ private:
 	void clear_actions();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static Ref<OpenXRActionSet> new_action_set(const char *p_name, const char *p_localized_name, const int p_priority = 0); // Helper function for adding and setting up an action set

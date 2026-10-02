@@ -43,7 +43,7 @@ class NavigationMesh : public Resource {
 	Ref<ArrayMesh> debug_mesh;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 
 #ifndef DISABLE_DEPRECATED

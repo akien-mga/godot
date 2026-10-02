@@ -39,7 +39,7 @@ class StreamPeer : public RefCounted {
 	GDCLASS(StreamPeer, RefCounted);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	//bind helpers
 	Error _put_data(const Vector<uint8_t> &p_data);
@@ -98,7 +98,7 @@ class StreamPeerExtension : public StreamPeer {
 	GDCLASS(StreamPeerExtension, StreamPeer);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual Error put_data(const uint8_t *p_data, int p_bytes) override;
@@ -123,7 +123,7 @@ class StreamPeerBuffer : public StreamPeer {
 	int pointer = 0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Error put_data(const uint8_t *p_data, int p_bytes) override;

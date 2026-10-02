@@ -71,7 +71,7 @@ public:
 	virtual bool is_meta_stream() const override { return true; }
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &r_property) const;
 };
 

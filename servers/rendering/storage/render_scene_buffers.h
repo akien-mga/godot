@@ -54,7 +54,7 @@ private:
 	bool use_debanding = false;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	RID get_render_target() const { return render_target; }
@@ -101,7 +101,7 @@ class RenderSceneBuffers : public RefCounted {
 	GDCLASS(RenderSceneBuffers, RefCounted);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	RenderSceneBuffers() {}

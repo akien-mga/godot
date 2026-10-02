@@ -185,7 +185,7 @@ class ThemeItemImportTree : public VBoxContainer {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_edited_theme(const Ref<Theme> &p_theme);
@@ -291,7 +291,7 @@ class ThemeItemEditorDialog : public AcceptDialog {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_edited_theme(const Ref<Theme> &p_theme);
@@ -326,7 +326,7 @@ class ThemeTypeDialog : public ConfirmationDialog {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_edited_theme(const Ref<Theme> &p_theme);
@@ -436,7 +436,7 @@ class ThemeTypeEditor : public MarginContainer {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_edited_theme(const Ref<Theme> &p_theme);

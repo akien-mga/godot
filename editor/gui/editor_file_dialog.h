@@ -48,7 +48,7 @@ protected:
 	virtual Color _get_folder_color(const String &p_path) const override;
 	virtual Vector2i _get_list_mode_icon_size() const override;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 	void _notification(int p_what);
 

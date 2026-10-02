@@ -153,7 +153,7 @@ private:
 
 protected:
 	virtual void _update_shader() const override;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	bool _set(const StringName &p_name, const Variant &p_value);
 	bool _get(const StringName &p_name, Variant &r_ret) const;
@@ -296,7 +296,7 @@ protected:
 	bool disabled = false;
 	bool deletable = true;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static String get_port_type_shader_string(PortType p_type);
@@ -457,7 +457,7 @@ protected:
 	virtual String generate_global_per_node(Shader::Mode p_mode, int p_id) const override;
 	virtual String generate_global_per_func(Shader::Mode p_mode, VisualShader::Type p_type, int p_id) const override;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	VisualShaderNodeCustom();
@@ -513,7 +513,7 @@ public:
 	void set_shader_mode(Shader::Mode p_shader_mode);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 
 public:
@@ -605,7 +605,7 @@ private:
 	int instance_index = 0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	String _get_qual_str() const;
 
 #ifndef DISABLE_DEPRECATED
@@ -666,7 +666,7 @@ private:
 	ParameterType param_type = ParameterType::PARAMETER_TYPE_FLOAT;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static void add_parameter(RID p_shader_rid, const String &p_name, ParameterType p_type);
@@ -716,7 +716,7 @@ protected:
 	bool allow_v_resize = true;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_size(const Size2 &p_size);
@@ -739,7 +739,7 @@ protected:
 	HashSet<int> attached_nodes;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -782,7 +782,7 @@ class VisualShaderNodeComment : public VisualShaderNodeFrame {
 	String description;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override { return "Comment(Deprecated)"; }
@@ -815,7 +815,7 @@ protected:
 	HashMap<int, Control *> controls;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_inputs(const String &p_inputs);
@@ -874,7 +874,7 @@ private:
 protected:
 	String expression = "";
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;
@@ -931,7 +931,7 @@ public: // internal
 	PortType get_port_type_by_index(int p_idx) const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 protected:
 	String get_type_str() const;

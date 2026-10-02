@@ -95,7 +95,7 @@ class TemplateDownloader : public HTTPRequest {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Error download_template(const String &p_file_name, const String &p_source);

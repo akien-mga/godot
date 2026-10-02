@@ -47,7 +47,7 @@ class JNISingleton : public Object {
 	Ref<JavaObject> wrapped_object;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	bool _get(const StringName &p_name, Variant &r_property) const;
 
 public:

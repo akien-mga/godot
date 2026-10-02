@@ -50,7 +50,7 @@ protected:
 	virtual PackedStringArray get_configuration_warnings() const override;
 	void _get_property_list(List<PropertyInfo> *p_list) const;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _process_constraint_by_bone(int p_index, Skeleton3D *p_skeleton, int p_apply_bone, int p_reference_bone, float p_amount) override;
 	virtual void _process_constraint_by_node(int p_index, Skeleton3D *p_skeleton, int p_apply_bone, const NodePath &p_reference_node, float p_amount) override;

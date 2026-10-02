@@ -39,7 +39,7 @@ class PhysicsRayQueryParameters3D : public RefCounted {
 	PS3DT::RayParameters parameters;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static Ref<PhysicsRayQueryParameters3D> create(Vector3 p_from, Vector3 p_to, uint32_t p_mask, const TypedArray<RID> &p_exclude);

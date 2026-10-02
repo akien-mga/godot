@@ -42,7 +42,7 @@ class ResourcePreloader : public Node {
 	Vector<String> _get_resource_list() const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void add_resource(const StringName &p_name, const Ref<Resource> &p_resource);

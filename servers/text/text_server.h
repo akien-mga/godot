@@ -235,7 +235,7 @@ protected:
 	void _diacritics_map_add(const String &p_from, char32_t p_to);
 	void _init_diacritics_map();
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	void _font_draw_glyph_bind_compat_104872(const RID &p_font, const RID &p_canvas, int64_t p_size, const Vector2 &p_pos, int64_t p_index, const Color &p_color = Color(1, 1, 1)) const;
@@ -243,7 +243,7 @@ protected:
 	void _shaped_text_draw_bind_compat_104872(const RID &p_shaped, const RID &p_canvas, const Vector2 &p_pos, double p_clip_l = -1.0, double p_clip_r = -1.0, const Color &p_color = Color(1, 1, 1)) const;
 	void _shaped_text_draw_outline_bind_compat_104872(const RID &p_shaped, const RID &p_canvas, const Vector2 &p_pos, double p_clip_l = -1.0, double p_clip_r = -1.0, int64_t p_outline_size = 1, const Color &p_color = Color(1, 1, 1)) const;
 	PackedInt32Array _shaped_text_get_word_breaks_bind_compat_90732(const RID &p_shaped, BitField<TextServer::GraphemeFlag> p_grapheme_flags = GRAPHEME_IS_SPACE | GRAPHEME_IS_PUNCTUATION) const;
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:
@@ -670,7 +670,7 @@ class TextServerManager : public Object {
 	GDCLASS(TextServerManager, Object);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	static TextServerManager *singleton;

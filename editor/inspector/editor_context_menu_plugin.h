@@ -88,7 +88,7 @@ private:
 #endif
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL1(_get_menu_options, const OptionsData &);
 #ifndef DISABLE_DEPRECATED

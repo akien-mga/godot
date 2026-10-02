@@ -46,7 +46,7 @@ class _TestDerivedObject : public Object {
 	int property_value;
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		ClassDB::bind_method(D_METHOD("set_property", "property"), &_TestDerivedObject::set_property);
 		ClassDB::bind_method(D_METHOD("get_property"), &_TestDerivedObject::get_property);
 		ADD_PROPERTY(PropertyInfo(Variant::INT, "property"), "set_property", "get_property");

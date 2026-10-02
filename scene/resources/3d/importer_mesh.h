@@ -85,7 +85,7 @@ protected:
 
 	void _generate_lods_bind(float p_normal_merge_angle, float p_normal_split_angle, Array p_skin_pose_transform_array);
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static Ref<ImporterMesh> merge_importer_meshes(const TypedArray<ImporterMesh> &p_importer_meshes, const TypedArray<Transform3D> &p_relative_transforms, bool p_deduplicate_surfaces = true);

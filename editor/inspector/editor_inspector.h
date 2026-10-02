@@ -223,7 +223,7 @@ protected:
 	bool bottom_editor_separation = false;
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _set_read_only(bool p_read_only);
 
 	virtual void gui_input(const Ref<InputEvent> &p_event) override;
@@ -362,7 +362,7 @@ public:
 	List<AddedEditor> added_editors;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL1RC(bool, _can_handle, Object *)
 	GDVIRTUAL1(_parse_begin, Object *)
@@ -373,7 +373,7 @@ protected:
 
 #ifndef DISABLE_DEPRECATED
 	void _add_property_editor_bind_compat_92322(const String &p_for_property, Control *p_prop, bool p_add_to_end);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif // DISABLE_DEPRECATED
 public:
 	void add_custom_control(Control *control);
@@ -440,7 +440,7 @@ class EditorInspectorCategory : public Control {
 	void _theme_changed();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	void _notification(int p_what);
 	virtual void gui_input(const Ref<InputEvent> &p_event) override;
@@ -561,7 +561,7 @@ protected:
 	VBoxContainer *vbox = nullptr;
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void gui_input(const Ref<InputEvent> &p_event) override;
 
 	void _accessibility_action_collapse(const Variant &p_data);
@@ -711,7 +711,7 @@ class EditorInspectorArray : public EditorInspectorSection {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void setup_with_move_element_function(Object *p_object, const String &p_category, const String &p_label, const StringName &p_array_element_prefix, int p_page, const Color &p_bg_color, bool p_foldable, bool p_movable = true, bool p_is_const = false, bool p_numbered = false, int p_page_length = 5, const String &p_add_item_text = "");
@@ -743,7 +743,7 @@ class EditorPaginator : public HBoxContainer {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void update(int p_page, int p_max_page);
@@ -914,7 +914,7 @@ private:
 	static EditorInspector *_get_control_parent_inspector(Control *p_control);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 public:

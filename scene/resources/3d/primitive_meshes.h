@@ -70,7 +70,7 @@ protected:
 	// Copy of our texel_size project setting.
 	float texel_size = 0.2;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _create_mesh_array(Array &p_arr) const {}
 	GDVIRTUAL0RC(Array, _create_mesh_array)
@@ -134,7 +134,7 @@ private:
 	int rings = 8;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _create_mesh_array(Array &p_arr) const override;
 
 	virtual void _update_lightmap_size() override;
@@ -168,7 +168,7 @@ private:
 	int subdivide_d = 0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _create_mesh_array(Array &p_arr) const override;
 
 	virtual void _update_lightmap_size() override;
@@ -206,7 +206,7 @@ private:
 	bool cap_bottom = true;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _create_mesh_array(Array &p_arr) const override;
 
 	virtual void _update_lightmap_size() override;
@@ -257,7 +257,7 @@ private:
 	Orientation orientation = FACE_Y;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _create_mesh_array(Array &p_arr) const override;
 
 	virtual void _update_lightmap_size() override;
@@ -308,7 +308,7 @@ private:
 	int subdivide_d = 0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _create_mesh_array(Array &p_arr) const override;
 
 	virtual void _update_lightmap_size() override;
@@ -344,7 +344,7 @@ private:
 	bool is_hemisphere = false;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _create_mesh_array(Array &p_arr) const override;
 
 	virtual void _update_lightmap_size() override;
@@ -381,7 +381,7 @@ private:
 	int ring_segments = 32;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _create_mesh_array(Array &p_arr) const override;
 
 	virtual void _update_lightmap_size() override;
@@ -431,7 +431,7 @@ private:
 	void _curve_changed();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _create_mesh_array(Array &p_arr) const override;
 
 public:
@@ -487,7 +487,7 @@ private:
 	void _curve_changed();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _create_mesh_array(Array &p_arr) const override;
 
 public:
@@ -609,7 +609,7 @@ private:
 	void _font_changed();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 	virtual void _create_mesh_array(Array &p_arr) const override;

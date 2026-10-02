@@ -50,7 +50,7 @@ protected:
 
 	OpenXRActionMap *action_map = nullptr;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static Ref<OpenXRIPBinding> new_binding(const Ref<OpenXRAction> &p_action, const String &p_binding_path); // Helper function for adding a new binding.
@@ -100,7 +100,7 @@ protected:
 
 	OpenXRActionMap *action_map = nullptr;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static Ref<OpenXRInteractionProfile> new_profile(const char *p_input_profile_path); // Helper function to create a new interaction profile

@@ -42,7 +42,7 @@ class PhysicsRayQueryParameters2D : public RefCounted {
 	PS2DT::RayParameters parameters;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static Ref<PhysicsRayQueryParameters2D> create(Vector2 p_from, Vector2 p_to, uint32_t p_mask, const TypedArray<RID> &p_exclude);

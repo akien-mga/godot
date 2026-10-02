@@ -84,7 +84,7 @@ private:
 	VisibilityMode _visibility_mode = VisibilityMode::VISIBILITY_MODE_INCLUDE_REQUIRED;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	String _gen_unique_name(Ref<GLTFState> p_state, const String &p_name);
 	static Vector<Ref<GLTFDocumentExtension>> all_document_extensions;
 	static Mutex all_document_extensions_mutex;

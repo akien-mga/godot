@@ -42,7 +42,7 @@ class TestClass : public Object {
 	GDCLASS(TestClass, Object);
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		ClassDB::bind_method(D_METHOD("test_func_1", "foo", "bar"), &TestClass::test_func_1);
 		ClassDB::bind_method(D_METHOD("test_func_2", "foo", "bar", "baz"), &TestClass::test_func_2);
 		ClassDB::bind_static_method("TestClass", D_METHOD("test_func_5", "foo", "bar"), &TestClass::test_func_5);
@@ -140,7 +140,7 @@ class TestBoundUnboundArgumentCount : public Object {
 	GDCLASS(TestBoundUnboundArgumentCount, Object);
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		ClassDB::bind_vararg_method(METHOD_FLAGS_DEFAULT, "test_func", &TestBoundUnboundArgumentCount::test_func, MethodInfo("test_func"));
 	}
 

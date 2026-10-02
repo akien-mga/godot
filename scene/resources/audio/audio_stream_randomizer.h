@@ -69,7 +69,7 @@ private:
 	PlaybackMode playback_mode = PLAYBACK_RANDOM_NO_REPEATS;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	bool _set(const StringName &p_name, const Variant &p_value) { return property_helper.property_set_value(p_name, p_value); }
 	bool _get(const StringName &p_name, Variant &r_ret) const { return property_helper.property_get_value(p_name, r_ret); }

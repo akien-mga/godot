@@ -63,7 +63,7 @@ public:
 	static constexpr uint8_t MAX_LOD_OVERRIDE = MAX_LOD_LEVEL + 1;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	// Single-producer, single-consumer command queue used by the feedback and I/O threads.

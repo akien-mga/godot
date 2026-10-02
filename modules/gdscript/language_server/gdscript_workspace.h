@@ -54,7 +54,7 @@ private:
 #endif // DISABLE_DEPRECATED
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	bool initialized = false;
 	HashMap<StringName, LSP::DocumentSymbol> native_symbols;
 

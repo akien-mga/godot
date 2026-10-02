@@ -46,7 +46,7 @@ protected:
 	StringName name = "Unknown"; // (unique) name of the tracker
 	String description; // description of the tracker
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void set_tracker_type(XRServer::TrackerType p_type);

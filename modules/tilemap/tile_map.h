@@ -100,7 +100,7 @@ protected:
 	bool _property_get_revert(const StringName &p_name, Variant &r_property) const { return property_helper.property_get_revert(p_name, r_property); }
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	Rect2i _get_used_rect_bind_compat_78328();
@@ -111,7 +111,7 @@ protected:
 	VisibilityMode _get_navigation_visibility_mode_bind_compat_87115();
 #endif // NAVIGATION_2D_DISABLED
 
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif // DISABLE_DEPRECATED
 
 public:

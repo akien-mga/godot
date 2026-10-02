@@ -52,7 +52,7 @@ class EditorExportPlatform : public RefCounted {
 	GDCLASS(EditorExportPlatform, RefCounted);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	struct SaveFileInfo {
@@ -232,7 +232,7 @@ protected:
 #ifndef DISABLE_DEPRECATED
 	Error _export_project_bind_compat_118787(const Ref<EditorExportPreset> &p_preset, bool p_debug, const String &p_path, BitField<EditorExportPlatform::DebugFlags> p_flags = 0);
 	static Vector<String> _get_forced_export_files_bind_compat_71542();
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

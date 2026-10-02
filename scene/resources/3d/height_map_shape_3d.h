@@ -45,7 +45,7 @@ class HeightMapShape3D : public Shape3D {
 	real_t max_height = 0.0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _update_shape() override;
 
 public:

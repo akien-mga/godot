@@ -78,7 +78,7 @@ private:
 protected:
 	_FORCE_INLINE_ RID _get_light() const { return canvas_light; }
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 
 public:
@@ -149,7 +149,7 @@ protected:
 #ifndef DISABLE_DEPRECATED
 	bool _set(const StringName &p_name, const Variant &p_value);
 #endif // DISABLE_DEPRECATED
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 #ifdef DEBUG_ENABLED
@@ -186,7 +186,7 @@ class DirectionalLight2D : public Light2D {
 	real_t max_distance = 10000.0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_max_distance(real_t p_distance);

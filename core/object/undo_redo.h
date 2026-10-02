@@ -101,7 +101,7 @@ private:
 	int committing = 0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void create_action(const String &p_name = "", MergeMode p_mode = MERGE_DISABLE, bool p_backward_undo_ops = false);

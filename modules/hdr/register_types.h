@@ -32,5 +32,5 @@
 
 #include "modules/register_module_types.h"
 
-void initialize_hdr_module(ModuleInitializationLevel p_level);
-void uninitialize_hdr_module(ModuleInitializationLevel p_level);
+_COLD_ void initialize_hdr_module(ModuleInitializationLevel p_level);
+_COLD_ void uninitialize_hdr_module(ModuleInitializationLevel p_level);

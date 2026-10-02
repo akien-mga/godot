@@ -66,7 +66,7 @@ class NavigationServer3DManager : public Object {
 	void on_servers_changed();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static const String setting_property_name;

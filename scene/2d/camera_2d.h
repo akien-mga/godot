@@ -122,7 +122,7 @@ protected:
 	virtual Transform2D get_camera_transform();
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_limit_rect(const Rect2i &p_limit_rect);

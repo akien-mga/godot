@@ -58,7 +58,7 @@ private:
 	bool vertex_attributes = false; // True for TARGET_ARRAY_BUFFER.
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	// Non-const versions for compatibility.
@@ -67,7 +67,7 @@ protected:
 	int _get_byte_length_bind_compat_86907();
 	int _get_byte_stride_bind_compat_86907();
 	bool _get_indices_bind_compat_86907();
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif // DISABLE_DEPRECATED
 
 public:

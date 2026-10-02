@@ -37,7 +37,7 @@ class DTLSServer : public RefCounted {
 
 protected:
 	static inline DTLSServer *(*_create)(bool p_notify_postinitialize) = nullptr;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	static inline bool available = false;
 

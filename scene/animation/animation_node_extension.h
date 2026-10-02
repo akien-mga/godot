@@ -42,7 +42,7 @@ public:
 	static double get_remaining_time(const PackedFloat32Array &p_node_info, bool p_break_loop = false);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL2R_REQUIRED(PackedFloat32Array, _process_animation_node, PackedFloat64Array, bool);
 

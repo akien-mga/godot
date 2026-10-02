@@ -40,7 +40,7 @@ class SpringBoneCollisionCapsule3D : public SpringBoneCollision3D {
 	bool inside = false;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual Vector3 _collide(const Transform3D &p_center, float p_bone_radius, float p_bone_length, const Vector3 &p_current) const override;
 

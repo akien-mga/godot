@@ -39,7 +39,7 @@ class OpenXRDPadBindingExtension : public OpenXRExtensionWrapper {
 	GDCLASS(OpenXRDPadBindingExtension, OpenXRExtensionWrapper);
 
 protected:
-	static void _bind_methods() {}
+	_COLD_ static void _bind_methods() {}
 
 public:
 	static OpenXRDPadBindingExtension *get_singleton();
@@ -70,7 +70,7 @@ private:
 	Ref<OpenXRHapticBase> off_haptic;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	OpenXRDpadBindingModifier();

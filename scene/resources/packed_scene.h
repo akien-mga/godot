@@ -118,7 +118,7 @@ private:
 #endif
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	enum {
@@ -256,7 +256,7 @@ class PackedScene : public Resource {
 
 protected:
 	virtual bool editor_can_reload_from_file() override { return false; } // this is handled by editor better
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void reset_state() override;
 
 public:

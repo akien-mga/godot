@@ -69,7 +69,7 @@ protected:
 	LocalVector<IKModifier3DSetting *> settings;
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _set_active(bool p_active) override;
 	virtual void _skeleton_changed(Skeleton3D *p_old, Skeleton3D *p_new) override;

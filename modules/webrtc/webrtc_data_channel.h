@@ -51,7 +51,7 @@ public:
 protected:
 	unsigned int _in_buffer_shift;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void set_write_mode(WriteMode mode) = 0;

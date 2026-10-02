@@ -125,7 +125,7 @@ private:
 	void _sort_theme_items();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void initialize_theme();
@@ -203,7 +203,7 @@ class ThemeContext : public Object {
 	void _emit_changed();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_themes(Vector<Ref<Theme>> &p_themes);

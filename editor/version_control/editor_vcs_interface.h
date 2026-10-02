@@ -94,7 +94,7 @@ public:
 protected:
 	static EditorVCSInterface *singleton;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	DiffLine _convert_diff_line(const Dictionary &p_diff_line);
 	DiffHunk _convert_diff_hunk(const Dictionary &p_diff_hunk);

@@ -41,7 +41,7 @@ class AudioStreamPolyphonic : public AudioStream {
 
 	AuSE::PlaybackType playback_type;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual Ref<AudioStreamPlayback> instantiate_playback() override;
@@ -91,7 +91,7 @@ class AudioStreamPlaybackPolyphonic : public AudioStreamPlayback {
 	friend class AudioStreamPolyphonic;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	typedef int64_t ID;
@@ -126,7 +126,7 @@ public:
 private:
 #ifndef DISABLE_DEPRECATED
 	ID _play_stream_bind_compat_91382(const Ref<AudioStream> &p_stream, float p_from_offset = 0, float p_volume_db = 0, float p_pitch_scale = 1.0);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif // DISABLE_DEPRECATED
 
 public:

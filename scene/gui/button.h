@@ -118,7 +118,7 @@ protected:
 	Ref<StyleBox> _get_current_stylebox() const;
 	Size2 _get_largest_stylebox_size() const;
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual String _get_accessibility_name() const override;
 

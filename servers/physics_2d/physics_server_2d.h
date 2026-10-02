@@ -47,11 +47,11 @@ class PhysicsServer2D : public Object {
 	virtual bool _body_test_motion(RID p_body, RequiredParam<PhysicsTestMotionParameters2D> p_parameters, const Ref<PhysicsTestMotionResult2D> &p_result = Ref<PhysicsTestMotionResult2D>());
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	void _body_set_shape_as_one_way_collision_bind_compat_104736(RID p_body, int p_shape_idx, bool p_enable, real_t p_margin);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 #ifdef DEBUG_ENABLED

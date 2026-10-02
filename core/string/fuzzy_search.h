@@ -82,7 +82,7 @@ class FuzzySearchMatch : public RefCounted {
 	void _maybe_apply_token_order_score_bonus();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_target(const String &p_target) { target = p_target; }
@@ -120,7 +120,7 @@ class FuzzySearch : public RefCounted {
 	TypedArray<FuzzySearchMatch> _search_all_bind(const String &p_query, const PackedStringArray &p_targets) const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_start_offset(int p_offset) {

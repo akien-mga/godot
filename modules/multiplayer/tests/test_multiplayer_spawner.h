@@ -62,7 +62,7 @@ class SpawnWasps : public Object {
 	GDCLASS(SpawnWasps, Object);
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		ClassDB::bind_method(D_METHOD("wasp", "size"), &SpawnWasps::create_wasps);
 		{
 			MethodInfo mi;

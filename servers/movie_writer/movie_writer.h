@@ -78,7 +78,7 @@ protected:
 	GDVIRTUAL2R_REQUIRED(Error, _write_frame, const Ref<Image> &, GDExtensionPtr<const int32_t>)
 	GDVIRTUAL0_REQUIRED(_write_end)
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual bool handles_file(const String &p_path) const;

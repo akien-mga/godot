@@ -41,7 +41,7 @@ class PhysicsIntersectRayResult3D : public RefCounted {
 	PS3DT::RayResult result;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Vector3 get_position() const;

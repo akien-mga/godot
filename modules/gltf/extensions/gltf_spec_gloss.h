@@ -51,7 +51,7 @@ private:
 	Ref<Image> spec_gloss_img = nullptr;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Ref<Image> get_diffuse_img();

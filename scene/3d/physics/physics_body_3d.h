@@ -38,7 +38,7 @@ class PhysicsBody3D : public CollisionObject3D {
 	GDCLASS(PhysicsBody3D, CollisionObject3D);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	PhysicsBody3D(PS3DE::BodyMode p_mode);
 
 	Ref<KinematicCollision3D> motion_cache;

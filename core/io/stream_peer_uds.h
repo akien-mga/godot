@@ -37,7 +37,7 @@ class StreamPeerUDS : public StreamPeerSocket {
 
 protected:
 	String peer_path;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void accept_socket(Ref<NetSocket> p_sock, const NetSocket::Address &p_addr) override;

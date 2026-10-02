@@ -117,7 +117,7 @@ protected:
 	void _make_dirty(bool p_parent_removing = false);
 	PackedStringArray get_configuration_warnings() const override;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	friend class CSGCombiner3D;
 	CSGBrush *_get_brush();
@@ -212,7 +212,7 @@ class CSGPrimitive3D : public CSGShape3D {
 protected:
 	bool flip_faces;
 	CSGBrush *_create_brush_from_arrays(const Vector<Vector3> &p_vertices, const Vector<Vector2> &p_uv, const Vector<bool> &p_smooth, const Vector<Ref<Material>> &p_materials);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_flip_faces(bool p_invert);
@@ -232,7 +232,7 @@ class CSGMesh3D : public CSGPrimitive3D {
 	void _mesh_changed();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_mesh(const Ref<Mesh> &p_mesh);
@@ -253,7 +253,7 @@ class CSGSphere3D : public CSGPrimitive3D {
 	int rings;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_radius(const float p_radius);
@@ -282,7 +282,7 @@ class CSGBox3D : public CSGPrimitive3D {
 	Vector3 size = Vector3(1, 1, 1);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 #ifndef DISABLE_DEPRECATED
 	// Kept for compatibility from 3.x to 4.0.
 	bool _set(const StringName &p_name, const Variant &p_value);
@@ -310,7 +310,7 @@ class CSGCylinder3D : public CSGPrimitive3D {
 	bool smooth_faces;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_radius(const float p_radius);
@@ -346,7 +346,7 @@ class CSGTorus3D : public CSGPrimitive3D {
 	bool smooth_faces;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_inner_radius(const float p_inner_radius);
@@ -426,7 +426,7 @@ private:
 	void _path_exited();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 	void _notification(int p_what);
 

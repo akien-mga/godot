@@ -94,7 +94,7 @@ protected:
 	void _notification(int p_what);
 	void _validate_property(PropertyInfo &p_property) const;
 	Size2 _fit_icon_size(const Size2 &p_size, int p_max_size) const;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual Size2 get_minimum_size() const override;

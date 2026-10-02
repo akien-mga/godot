@@ -39,7 +39,7 @@ class PhysicsTestMotionResult3D : public RefCounted {
 	PS3DT::MotionResult result;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	PS3DT::MotionResult *get_result_ptr() { return &result; }

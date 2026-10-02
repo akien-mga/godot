@@ -54,7 +54,7 @@ private:
 	void create_button(unsigned int p_channel_index, const String &p_text, Control *p_parent);
 	void on_toggled(bool p_pressed);
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	Button *channel_buttons[CHANNEL_COUNT] = {};
 	PanelContainer *panel = nullptr;

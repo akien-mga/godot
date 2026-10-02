@@ -316,7 +316,7 @@ public:
 		} \
 \
 	protected: \
-		static void _bind_methods() { \
+		_COLD_ static void _bind_methods() { \
 			ClassDB::bind_method(D_METHOD("set_obj", "obj"), &m_class_name::set_obj); \
 			ClassDB::bind_method(D_METHOD("get_obj"), &m_class_name::get_obj); \
 \

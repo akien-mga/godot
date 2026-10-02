@@ -44,7 +44,7 @@ class OpenXRCompositionLayerEquirect : public OpenXRCompositionLayer {
 	uint32_t fallback_segments = 10;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual Ref<Mesh> _create_fallback_mesh() override;
 	virtual XrStructureType _get_openxr_type() const override {

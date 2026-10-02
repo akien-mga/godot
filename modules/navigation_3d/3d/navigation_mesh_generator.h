@@ -40,7 +40,7 @@ class NavigationMeshGenerator : public Object {
 	static NavigationMeshGenerator *singleton;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static NavigationMeshGenerator *get_singleton();

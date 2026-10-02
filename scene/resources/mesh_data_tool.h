@@ -71,11 +71,11 @@ class MeshDataTool : public RefCounted {
 	Ref<Material> material;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	Error commit_to_surface_bind_compat_81138(const Ref<ArrayMesh> &p_mesh);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

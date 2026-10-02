@@ -58,7 +58,7 @@ class AnimationNodeObserverBlendSpace : public AnimationNodeObserver {
 	GDCLASS(AnimationNodeObserverBlendSpace, AnimationNodeObserver);
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		ADD_SIGNAL(MethodInfo("closest_point_changed", PropertyInfo(Variant::STRING_NAME, "closest_point_name")));
 	}
 };
@@ -185,7 +185,7 @@ protected:
 	void add_validation_error(const AnimationTree *p_tree, const StringName &p_path, const String &p_error, int p_input_index = -1) const;
 	void make_invalid(ProcessState &p_process_state, AnimationNodeInstance &p_instance, const String &p_reason);
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	void _validate_property(PropertyInfo &p_property) const;
 
@@ -509,7 +509,7 @@ private:
 	virtual void _validate_property(PropertyInfo &p_property) const override;
 	void _notification(int p_what);
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _set_active(bool p_active) override;
 
@@ -522,7 +522,7 @@ private:
 	void _set_tree_root_bind_compat_80813(const Ref<AnimationNode> &p_root);
 	Ref<AnimationNode> _get_tree_root_bind_compat_80813() const;
 
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif // DISABLE_DEPRECATED
 
 public:

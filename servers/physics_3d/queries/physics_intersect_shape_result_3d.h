@@ -42,7 +42,7 @@ class PhysicsIntersectShapeResult3D : public RefCounted {
 	int intersection_count = 0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	PhysicsIntersectShapeResult3D(int p_max_intersections = 32);

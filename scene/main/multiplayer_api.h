@@ -40,7 +40,7 @@ private:
 	static StringName default_interface;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	Error _rpc_bind(int p_peer, Object *p_obj, const StringName &p_method, Array args = Array());
 
 public:
@@ -83,7 +83,7 @@ class MultiplayerAPIExtension : public MultiplayerAPI {
 	GDCLASS(MultiplayerAPIExtension, MultiplayerAPI);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual Error poll() override;

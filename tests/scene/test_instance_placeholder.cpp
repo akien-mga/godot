@@ -48,7 +48,7 @@ class _TestInstancePlaceholderNode : public Node {
 	GDCLASS(_TestInstancePlaceholderNode, Node);
 
 protected:
-	static void _bind_methods() {
+	_COLD_ static void _bind_methods() {
 		ClassDB::bind_method(D_METHOD("set_int_property", "int_property"), &_TestInstancePlaceholderNode::set_int_property);
 		ClassDB::bind_method(D_METHOD("get_int_property"), &_TestInstancePlaceholderNode::get_int_property);
 

@@ -89,7 +89,7 @@ class BoneMapperItem : public VBoxContainer {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _value_changed(const String &p_property, const Variant &p_value, const String &p_name, bool p_changing);
 	virtual void create_editor();
 
@@ -173,7 +173,7 @@ class BoneMapper : public VBoxContainer {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _value_changed(const String &p_property, const Variant &p_value, const String &p_name, bool p_changing);
 	virtual void _profile_changed(const String &p_property, const Variant &p_value, const String &p_name, bool p_changing);
 

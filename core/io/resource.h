@@ -105,7 +105,7 @@ private:
 
 protected:
 	virtual void _resource_path_changed();
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	void _block_emit_changed();
 	void _unblock_emit_changed();

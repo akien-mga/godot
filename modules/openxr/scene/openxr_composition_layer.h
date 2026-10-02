@@ -132,7 +132,7 @@ protected:
 	OpenXRAPI *openxr_api = nullptr;
 	OpenXRCompositionLayerExtension *composition_layer_extension = nullptr;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	void _notification(int p_what);
 	void _get_property_list(List<PropertyInfo> *p_property_list) const;

@@ -112,7 +112,7 @@ protected:
 	HashMap<StringName, StringName> variation_map;
 	HashMap<StringName, List<StringName>> variation_base_map;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	void _freeze_change_propagation();
 	void _unfreeze_and_propagate_changes();

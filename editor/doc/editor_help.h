@@ -220,7 +220,7 @@ protected:
 	virtual void _update_theme_item_cache() override;
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static void generate_doc(bool p_use_cache = true, bool p_use_script_cache = true);
@@ -346,7 +346,7 @@ class EditorHelpBit : public VBoxContainer {
 	void _meta_clicked(const String &p_select);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 public:

@@ -46,7 +46,7 @@ public:
 	};
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	int transfer_channel = 0;
@@ -100,7 +100,7 @@ class MultiplayerPeerExtension : public MultiplayerPeer {
 	GDCLASS(MultiplayerPeerExtension, MultiplayerPeer);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	PackedByteArray script_buffer;
 

@@ -293,11 +293,11 @@ protected:
 
 	void _notification(int p_what);
 	void _validate_property(PropertyInfo &p_property) const;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	void _edit_bind_compat_111117();
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 	virtual void unhandled_key_input(const Ref<InputEvent> &p_event) override;

@@ -41,7 +41,7 @@ class PhysicsCastMotionResult2D : public RefCounted {
 	real_t unsafe_fraction = 1.0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	real_t get_safe_fraction() const;

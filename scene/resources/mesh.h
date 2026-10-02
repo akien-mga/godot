@@ -68,7 +68,7 @@ public:
 	};
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL0RC_REQUIRED(int, _get_surface_count)
 	GDVIRTUAL1RC_REQUIRED(int, _surface_get_array_len, int)
@@ -253,7 +253,7 @@ private:
 	bool project_hull_vertices = true;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_max_concavity(real_t p_max_concavity);
@@ -341,7 +341,7 @@ protected:
 
 	virtual void reset_state() override;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void add_surface_from_arrays(PrimitiveType p_primitive, const Array &p_arrays, const TypedArray<Array> &p_blend_shapes = TypedArray<Array>(), const Dictionary &p_lods = Dictionary(), BitField<ArrayFormat> p_flags = 0);
@@ -418,7 +418,7 @@ class PlaceholderMesh : public Mesh {
 	AABB aabb;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual int get_surface_count() const override { return 0; }

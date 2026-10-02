@@ -47,7 +47,7 @@ private:
 	Label *all_selected = nullptr;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 public:

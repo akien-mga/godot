@@ -62,7 +62,7 @@ protected:
 	bool _get(const StringName &p_name, Variant &r_ret) const;
 	void _get_property_list(List<PropertyInfo> *p_list) const;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Ref<AudioEffectInstance> instantiate() override;

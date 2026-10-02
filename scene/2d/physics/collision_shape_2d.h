@@ -63,7 +63,7 @@ protected:
 	void _validate_property(PropertyInfo &p_property) const;
 #endif // DEBUG_ENABLED
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 #ifdef DEBUG_ENABLED

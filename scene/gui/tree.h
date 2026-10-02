@@ -226,12 +226,12 @@ private:
 	bool _is_any_collapsed(bool p_only_visible);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	void _select_bind_compat_119367(int p_column);
 	void _add_button_bind_compat_76829(int p_column, const Ref<Texture2D> &p_button, int p_id, bool p_disabled, const String &p_tooltip);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 	// Bind helpers.
@@ -839,7 +839,7 @@ protected:
 	virtual void _update_theme_item_cache() override;
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	void _accessibility_action_scroll_down(const Variant &p_data);
 	void _accessibility_action_scroll_left(const Variant &p_data);

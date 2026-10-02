@@ -182,7 +182,7 @@ class AnchorPresetPicker : public ControlEditorPresetPicker {
 
 protected:
 	void _notification(int p_notification);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_selected_preset(int p_preset);
@@ -204,7 +204,7 @@ class SizeFlagPresetPicker : public ControlEditorPresetPicker {
 
 protected:
 	void _notification(int p_notification);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_allowed_flags(Vector<SizeFlags> &p_flags);
@@ -247,7 +247,7 @@ class ControlEditorToolbar : public HBoxContainer {
 protected:
 	void _notification(int p_notification);
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	static ControlEditorToolbar *singleton;
 

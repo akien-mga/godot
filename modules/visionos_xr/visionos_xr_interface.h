@@ -210,7 +210,7 @@ private:
 		RID get_vrs_texture();
 	} rt;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	static const String name;
 	static StringName get_signal_name(SignalEnum p_signal);
 

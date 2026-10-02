@@ -209,7 +209,7 @@ class JavaClass : public RefCounted {
 #endif
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	bool _get(const StringName &p_name, Variant &r_ret) const;
 	bool _set(const StringName &p_name, const Variant &p_property);
 
@@ -240,7 +240,7 @@ class JavaObject : public RefCounted {
 #endif
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	bool _get(const StringName &p_name, Variant &r_ret) const;
 	bool _set(const StringName &p_name, const Variant &p_property);
 
@@ -312,7 +312,7 @@ class JavaClassWrapper : public Object {
 	static JavaClassWrapper *singleton;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static JavaClassWrapper *get_singleton() { return singleton; }

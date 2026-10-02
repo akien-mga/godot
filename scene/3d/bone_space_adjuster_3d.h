@@ -55,7 +55,7 @@ protected:
 	void _validate_property(PropertyInfo &p_property) const;
 	void _validate_dynamic_prop(PropertyInfo &p_property) const;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _process_modification(double p_delta) override;
 

@@ -120,7 +120,7 @@ class GraphNode : public GraphElement {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _resort() override;
 

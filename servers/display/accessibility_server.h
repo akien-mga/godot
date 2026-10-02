@@ -45,7 +45,7 @@ protected:
 	static inline AccessibilityServer *singleton = nullptr;
 	static inline AccessibilityServerEnums::AccessibilityMode accessibility_mode = AccessibilityServerEnums::AccessibilityMode::ACCESSIBILITY_AUTO;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	enum {
 		MAX_SERVERS = 64

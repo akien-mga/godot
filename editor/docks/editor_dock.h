@@ -106,7 +106,7 @@ protected:
 	void _validate_property(PropertyInfo &p_property) const;
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL2(_update_layout_and_slot, int, int)
 	GDVIRTUAL2C(_save_layout_to_config, Ref<ConfigFile>, const String &)

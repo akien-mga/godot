@@ -52,7 +52,7 @@ protected:
 	void _set_data(const Dictionary &p_d);
 	Dictionary _get_data() const;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void create(const Size2i &p_size);

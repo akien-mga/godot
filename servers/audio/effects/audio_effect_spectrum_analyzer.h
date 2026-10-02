@@ -56,7 +56,7 @@ private:
 	float mix_rate;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void process(const AudioFrame *p_src_frames, AudioFrame *p_dst_frames, int p_frame_count) override;
@@ -84,12 +84,12 @@ public:
 	FFTSize fft_size;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	void _set_tap_back_pos_bind_compat_114355(float p_seconds);
 	float _get_tap_back_pos_bind_compat_114355() const;
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

@@ -56,7 +56,7 @@ private:
 	Dictionary additional_data;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	String get_original_name();

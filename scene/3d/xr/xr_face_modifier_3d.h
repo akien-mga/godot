@@ -58,7 +58,7 @@ private:
 	void _update_face_blends() const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_face_tracker(const StringName &p_tracker_name);

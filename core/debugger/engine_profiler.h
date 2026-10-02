@@ -40,7 +40,7 @@ private:
 	String registration;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void toggle(bool p_enable, const Array &p_opts);

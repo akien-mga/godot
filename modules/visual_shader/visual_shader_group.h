@@ -69,7 +69,7 @@ private:
 			HashSet<StringName> &r_classes) const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	void _queue_update();
 	void _emit_pending_change();
@@ -161,7 +161,7 @@ class VisualShaderNodeGroup : public VisualShaderNode {
 	bool _has_incompatible_nodes(Shader::Mode p_mode, VisualShader::Type p_type) const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_caption() const override;

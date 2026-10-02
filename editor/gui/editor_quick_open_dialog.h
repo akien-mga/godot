@@ -180,7 +180,7 @@ private:
 
 	String _get_cache_file_path() const;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 };
 
 class QuickOpenResultGridItem : public MarginContainer {

@@ -38,7 +38,7 @@ class RenderData : public Object {
 	GDCLASS(RenderData, Object);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual Ref<RenderSceneBuffers> get_render_scene_buffers() const = 0;

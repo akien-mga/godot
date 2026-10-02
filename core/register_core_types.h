@@ -30,10 +30,12 @@
 
 #pragma once
 
-void register_core_types();
-void register_core_settings();
-void register_core_extensions();
-void register_early_core_singletons();
-void register_core_singletons();
-void unregister_core_types();
-void unregister_core_extensions();
+#include "core/typedefs.h"
+
+_COLD_ void register_core_types();
+_COLD_ void register_core_settings();
+_COLD_ void register_core_extensions();
+_COLD_ void register_early_core_singletons();
+_COLD_ void register_core_singletons();
+_COLD_ void unregister_core_types();
+_COLD_ void unregister_core_extensions();

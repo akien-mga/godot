@@ -55,7 +55,7 @@ class World2D : public Resource {
 	HashSet<Viewport *> viewports;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	friend class Viewport;
 
 public:

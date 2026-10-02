@@ -169,7 +169,7 @@ protected:
 	virtual void _validate_bone_names() override;
 	virtual void _skeleton_changed(Skeleton3D *p_old, Skeleton3D *p_new) override;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _set_active(bool p_active) override;
 	virtual void _process_modification(double p_delta) override;
@@ -206,7 +206,7 @@ protected:
 	compat::SpringBoneSimulator3D::RotationAxis _get_joint_rotation_axis_bind_compat_110120(int p_index, int p_joint) const;
 	void _set_joint_rotation_axis_bind_compat_110120(int p_index, int p_joint, compat::SpringBoneSimulator3D::RotationAxis p_axis);
 
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif // DISABLE_DEPRECATED
 
 public:

@@ -53,7 +53,7 @@ public:
 	};
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual Error load_image(Ref<Image> p_image, Ref<FileAccess> p_fileaccess, BitField<ImageFormatLoader::LoaderFlags> p_flags = FLAG_NONE, float p_scale = 1.0) = 0;
 	virtual void get_recognized_extensions(List<String> *p_extensions) const = 0;
@@ -69,7 +69,7 @@ class ImageFormatLoaderExtension : public ImageFormatLoader {
 	GDCLASS(ImageFormatLoaderExtension, ImageFormatLoader);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual Error load_image(Ref<Image> p_image, Ref<FileAccess> p_fileaccess, BitField<ImageFormatLoader::LoaderFlags> p_flags = FLAG_NONE, float p_scale = 1.0) override;

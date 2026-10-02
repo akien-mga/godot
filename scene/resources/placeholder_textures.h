@@ -39,7 +39,7 @@ class PlaceholderTexture2D : public Texture2D {
 	Size2 size = Size2(1, 1);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_size(Size2 p_size);
@@ -62,7 +62,7 @@ class PlaceholderTexture3D : public Texture3D {
 	Vector3i size = Vector3i(1, 1, 1);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_size(const Vector3i &p_size);
@@ -88,7 +88,7 @@ class PlaceholderTextureLayered : public TextureLayered {
 	LayeredType layered_type = LAYERED_TYPE_2D_ARRAY;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_size(const Size2i &p_size);

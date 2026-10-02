@@ -259,7 +259,7 @@ private:
 	virtual void tile_set_changed() override;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual Vector<TabData> get_tabs() const override;

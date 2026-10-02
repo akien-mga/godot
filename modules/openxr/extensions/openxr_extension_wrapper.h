@@ -56,7 +56,7 @@ class OpenXRExtensionWrapper : public Object {
 	void _gdextension_register_extension_wrapper();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	Ref<OpenXRAPIExtension> openxr_api_extension;
 

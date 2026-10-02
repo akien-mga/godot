@@ -67,7 +67,7 @@ public:
 	GDVIRTUAL1R(uint64_t, _get_header, uint64_t);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	Ref<OpenXRStructureBase> next;

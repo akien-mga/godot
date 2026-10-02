@@ -54,7 +54,7 @@ private:
 	BlendMode blend_mode = BLEND_MODE_MIX;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_blend_mode(BlendMode p_blend_mode);

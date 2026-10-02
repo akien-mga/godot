@@ -40,7 +40,7 @@ class EditorScript : public RefCounted {
 	GDCLASS(EditorScript, RefCounted);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL0_REQUIRED(_run)
 

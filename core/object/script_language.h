@@ -124,7 +124,7 @@ protected:
 	// through EditorFileSystem::_update_script_documentation when updated directly on disk.
 	virtual bool editor_can_reload_from_file() override { return false; }
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	friend class PlaceHolderScriptInstance;
 	virtual void _placeholder_erased(PlaceHolderScriptInstance *p_placeholder) {}
@@ -213,7 +213,7 @@ class ScriptLanguage : public Object {
 	GDCLASS(ScriptLanguage, Object)
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual String get_name() const = 0;

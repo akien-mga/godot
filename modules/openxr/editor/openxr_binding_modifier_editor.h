@@ -96,7 +96,7 @@ protected:
 	Ref<OpenXRBindingModifier> binding_modifier;
 	Ref<OpenXRActionMap> action_map;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 	void _on_remove_binding_modifier();

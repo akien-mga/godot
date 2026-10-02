@@ -40,7 +40,7 @@ class CapsuleShape3D : public Shape3D {
 	float height = 2.0;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _update_shape() override;
 

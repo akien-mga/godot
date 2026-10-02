@@ -89,7 +89,7 @@ private:
 	IPAddress bind_ip;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void set_target_peer(int p_peer) override;

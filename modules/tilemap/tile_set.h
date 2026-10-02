@@ -126,7 +126,7 @@ protected:
 	bool _get(const StringName &p_name, Variant &r_ret) const;
 	void _get_property_list(List<PropertyInfo> *p_list) const;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_cell(const Vector2i &p_coords, int p_source_id, const Vector2i p_atlas_coords, int p_alternative_tile = 0);
@@ -407,7 +407,7 @@ private:
 	Vector<Point2> _get_half_offset_side_terrain_peering_bit_polygon(Vector2i p_size, float p_overlap, TileSet::TileOffsetAxis p_offset_axis, TileSet::CellNeighbor p_bit);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	// --- Accessors for TileSet data ---
@@ -577,7 +577,7 @@ class TileSetSource : public Resource {
 protected:
 	const TileSet *tile_set = nullptr;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	static const Vector2i INVALID_ATLAS_COORDS; // Vector2i(-1, -1);
@@ -687,7 +687,7 @@ protected:
 	void _get_property_list(List<PropertyInfo> *p_list) const;
 
 	void _notification(int p_notification);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	// Not exposed.
@@ -816,7 +816,7 @@ protected:
 	void _get_property_list(List<PropertyInfo> *p_list) const;
 
 	void _notification(int p_notification);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	// Tiles.
@@ -911,7 +911,7 @@ protected:
 	bool _set(const StringName &p_name, const Variant &p_value);
 	bool _get(const StringName &p_name, Variant &r_ret) const;
 	void _get_property_list(List<PropertyInfo> *p_list) const;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 #ifndef NAVIGATION_2D_DISABLED
@@ -919,7 +919,7 @@ protected:
 #endif // NAVIGATION_2D_DISABLED
 	Ref<OccluderPolygon2D> _get_occluder_bind_compat_84660(int p_layer_id) const;
 
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

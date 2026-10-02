@@ -292,7 +292,7 @@ protected:
 	void _get_property_list(List<PropertyInfo> *p_list) const { property_helper.get_property_list(p_list); }
 	bool _property_can_revert(const StringName &p_name) const { return property_helper.property_can_revert(p_name); }
 	bool _property_get_revert(const StringName &p_name, Variant &r_property) const { return property_helper.property_get_revert(p_name, r_property); }
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual String _get_accessibility_name() const override;
 
@@ -304,7 +304,7 @@ protected:
 	void _set_system_menu_root_bind_compat_87452(const String &p_special);
 	String _get_system_menu_root_bind_compat_87452() const;
 
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

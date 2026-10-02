@@ -47,7 +47,7 @@ protected:
 	bool _set(const StringName &p_name, const Variant &p_value);
 	bool _get(const StringName &p_name, Variant &r_ret) const;
 	void _get_property_list(List<PropertyInfo> *p_list) const;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	TypedArray<uint64_t> remote_object_ids;
@@ -83,7 +83,7 @@ private:
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	EditorDebuggerInspector();

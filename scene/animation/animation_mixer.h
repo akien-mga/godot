@@ -349,7 +349,7 @@ protected:
 	virtual void get_argument_options(const StringName &p_function, int p_idx, List<String> *r_options) const override;
 #endif
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _node_removed(Node *p_node);
 
 	// Helper for extended class.
@@ -396,7 +396,7 @@ protected:
 
 #ifndef DISABLE_DEPRECATED
 	virtual Variant _post_process_key_value_bind_compat_86687(const Ref<Animation> &p_anim, int p_track, Variant p_value, Object *p_object, int p_object_idx = -1);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif // DISABLE_DEPRECATED
 
 public:

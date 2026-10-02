@@ -124,7 +124,7 @@ class GDExtension : public Resource {
 	static inline HashMap<StringName, GDExtensionInterfaceFunctionPtr> gdextension_interface_functions;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	HashMap<String, String> class_icon_paths;
@@ -151,7 +151,7 @@ protected:
 	Error _open_library_bind_compat_88418(const String &p_path, const String &p_entry_symbol);
 	void _close_library_bind_compat_88418();
 	void _initialize_library_bind_compat_88418(InitializationLevel p_level);
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:

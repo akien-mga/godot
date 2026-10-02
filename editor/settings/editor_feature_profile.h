@@ -75,7 +75,7 @@ private:
 	String _get_feature_name(Feature p_feature) { return get_feature_name(p_feature); }
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_disable_class(const StringName &p_class, bool p_disabled);
@@ -176,7 +176,7 @@ class EditorFeatureProfileManager : public AcceptDialog {
 	static EditorFeatureProfileManager *singleton;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 public:

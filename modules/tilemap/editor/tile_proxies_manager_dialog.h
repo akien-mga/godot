@@ -78,7 +78,7 @@ protected:
 	bool _get(const StringName &p_name, Variant &r_ret) const;
 	void _unhandled_key_input(Ref<InputEvent> p_event);
 	virtual void cancel_pressed() override;
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void update_tile_set(Ref<TileSet> p_tile_set);

@@ -45,7 +45,7 @@ protected:
 	StringName pose_name = SceneStringName(default_);
 	Ref<XRPositionalTracker> tracker;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 	void _notification(int p_what);
 
@@ -93,7 +93,7 @@ private:
 protected:
 	Ref<XRPositionalTracker> tracker;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _bind_tracker();
 	virtual void _unbind_tracker();
@@ -142,7 +142,7 @@ class XRController3D : public XRNode3D {
 
 private:
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void _bind_tracker() override;
 	virtual void _unbind_tracker() override;
@@ -174,7 +174,7 @@ private:
 	Vector3 size;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Vector3 get_size() const;
@@ -201,7 +201,7 @@ private:
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _physics_interpolated_changed() override;
 
 public:

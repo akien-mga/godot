@@ -37,7 +37,7 @@ class EditorImportPlugin : public ResourceImporter {
 	GDCLASS(EditorImportPlugin, ResourceImporter);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	GDVIRTUAL0RC_REQUIRED(String, _get_importer_name)
 	GDVIRTUAL0RC_REQUIRED(String, _get_visible_name)

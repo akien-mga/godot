@@ -518,7 +518,7 @@ class GDScriptFunctionState : public RefCounted {
 	Variant resume(const Variant &p_arg);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	bool cleared = false;

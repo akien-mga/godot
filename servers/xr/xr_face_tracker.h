@@ -205,7 +205,7 @@ public:
 	XRFaceTracker();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	float blend_shape_values[FT_MAX] = {};

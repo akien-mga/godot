@@ -105,7 +105,7 @@ private:
 	void _store_sparse_indices_into_state(const Ref<GLTFState> &p_gltf_state, const PackedInt64Array &p_sparse_indices, const bool p_deduplicate = true);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 #ifndef DISABLE_DEPRECATED
 	// 32-bit and non-const versions for compatibility.
@@ -126,7 +126,7 @@ protected:
 	void _set_sparse_indices_component_type_bind_compat_106220(int p_sparse_indices_component_type);
 	int _get_sparse_values_buffer_view_bind_compat_106220();
 	int _get_sparse_values_byte_offset_bind_compat_106220();
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif // DISABLE_DEPRECATED
 
 public:

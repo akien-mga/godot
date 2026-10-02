@@ -292,7 +292,7 @@ class GridMapEditor : public EditorDock {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void update_layout(EditorDock::DockLayout p_layout, int p_slot) override;
 
@@ -313,7 +313,7 @@ class GridMapEditorPlugin : public EditorPlugin {
 
 protected:
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void forward_3d_draw_over_viewport(Control *p_overlay) override;

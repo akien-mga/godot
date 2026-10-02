@@ -39,7 +39,7 @@ class PhysicsTestMotionParameters3D : public RefCounted {
 	PS3DT::MotionParameters parameters;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	const PS3DT::MotionParameters &get_parameters() const { return parameters; }

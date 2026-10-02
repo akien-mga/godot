@@ -80,7 +80,7 @@ class EditorNode3DGizmo : public Node3DGizmo {
 	void _update_bvh();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	EditorNode3DGizmoPlugin *gizmo_plugin = nullptr;
 
@@ -164,7 +164,7 @@ protected:
 	HashSet<EditorNode3DGizmo *> current_gizmos;
 	HashMap<String, Vector<Ref<StandardMaterial3D>>> materials;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual bool has_gizmo(Node3D *p_spatial);
 	virtual Ref<EditorNode3DGizmo> create_gizmo(Node3D *p_spatial);
 

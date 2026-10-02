@@ -39,7 +39,7 @@ class WorldBoundaryShape3D : public Shape3D {
 	Plane plane;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void _update_shape() override;
 
 public:

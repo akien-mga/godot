@@ -46,7 +46,7 @@ public:
 	virtual XrSpatialCapabilityConfigurationBaseHeaderEXT *get_configuration() override;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	Vector<XrSpatialComponentTypeEXT> anchor_enabled_components;
@@ -60,7 +60,7 @@ class OpenXRSpatialComponentAnchorList : public OpenXRSpatialComponentData {
 	GDCLASS(OpenXRSpatialComponentAnchorList, OpenXRSpatialComponentData);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void set_capacity(uint32_t p_capacity) override;
@@ -89,7 +89,7 @@ public:
 	Array get_persistence_contexts() const;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 private:
 	Vector<RID> persistence_contexts;
@@ -103,7 +103,7 @@ class OpenXRSpatialComponentPersistenceList : public OpenXRSpatialComponentData 
 	GDCLASS(OpenXRSpatialComponentPersistenceList, OpenXRSpatialComponentData);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void set_capacity(uint32_t p_capacity) override;
@@ -129,7 +129,7 @@ class OpenXRAnchorTracker : public OpenXRSpatialEntityTracker {
 	GDCLASS(OpenXRAnchorTracker, OpenXRSpatialEntityTracker);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	bool has_uuid() const;
@@ -191,9 +191,9 @@ public:
 	static String get_spatial_persistence_context_result_name(XrSpatialPersistenceContextResultEXT p_result);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 #ifndef DISABLE_DEPRECATED
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 	Ref<OpenXRAnchorTracker> _create_new_anchor_bind_compat_118128(const Transform3D &p_transform, RID p_spatial_context);
 #endif
 

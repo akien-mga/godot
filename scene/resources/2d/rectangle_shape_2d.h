@@ -39,7 +39,7 @@ class RectangleShape2D : public Shape2D {
 	void _update_shape();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 #ifndef DISABLE_DEPRECATED
 	bool _set(const StringName &p_name, const Variant &p_value);
 	bool _get(const StringName &p_name, Variant &r_property) const;

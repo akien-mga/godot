@@ -94,7 +94,7 @@ private:
 	void _on_tab_button_pressed(int p_tab);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _notification(int p_what);
 
 	virtual void update_layout(EditorDock::DockLayout p_layout, int p_slot) override;

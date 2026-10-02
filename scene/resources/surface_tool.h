@@ -183,7 +183,7 @@ private:
 	void _generate_tangents_bind();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_skin_weight_count(SkinWeightCount p_weights);

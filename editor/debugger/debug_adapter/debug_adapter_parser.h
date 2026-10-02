@@ -54,7 +54,7 @@ private:
 	}
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	Dictionary prepare_base_event() const;
 	Dictionary prepare_success_response(const Dictionary &p_params) const;

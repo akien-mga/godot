@@ -108,7 +108,7 @@ public:
 class Skeleton3DEditor : public VBoxContainer {
 	GDCLASS(Skeleton3DEditor, VBoxContainer);
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	friend class Skeleton3DEditorPlugin;
 

@@ -90,7 +90,7 @@ private:
 protected:
 	virtual void pressed();
 	virtual void toggled(bool p_pressed);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	virtual void gui_input(const Ref<InputEvent> &p_event) override;
 	virtual void shortcut_input(const Ref<InputEvent> &p_event) override;
 	void _notification(int p_what);
@@ -167,7 +167,7 @@ class ButtonGroup : public Resource {
 	bool allow_unpress = false;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	BaseButton *get_pressed_button();

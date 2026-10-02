@@ -61,7 +61,7 @@ private:
 	bool _get_rest_info_into(RequiredParam<PhysicsShapeQueryParameters3D> p_shape_query, RequiredParam<PhysicsGetRestInfoResult3D> p_result);
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual bool intersect_ray(const PS3DT::RayParameters &p_parameters, PS3DT::RayResult &r_result) = 0;

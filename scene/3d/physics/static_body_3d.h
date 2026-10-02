@@ -49,7 +49,7 @@ private:
 	Ref<PhysicsMaterial> physics_material_override;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_physics_material_override(const Ref<PhysicsMaterial> &p_physics_material_override);

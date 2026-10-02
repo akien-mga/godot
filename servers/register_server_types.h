@@ -30,7 +30,9 @@
 
 #pragma once
 
-void register_server_types();
-void unregister_server_types();
+#include "core/typedefs.h"
 
-void register_server_singletons();
+_COLD_ void register_server_types();
+_COLD_ void unregister_server_types();
+
+_COLD_ void register_server_singletons();

@@ -62,7 +62,7 @@ protected:
 	HashMap<StringName, Ref<XRPose>> poses;
 	HashMap<StringName, Variant> inputs;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_tracker_profile(const String &p_profile);

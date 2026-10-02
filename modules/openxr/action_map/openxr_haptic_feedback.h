@@ -39,7 +39,7 @@ class OpenXRHapticBase : public Resource {
 
 private:
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual const XrHapticBaseHeader *get_xr_structure() = 0;
@@ -52,7 +52,7 @@ private:
 	XrHapticVibration haptic_vibration;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	void set_duration(int64_t p_duration);

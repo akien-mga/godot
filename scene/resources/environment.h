@@ -225,7 +225,7 @@ private:
 	void _update_adjustment();
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 #ifndef DISABLE_DEPRECATED
 	// Kept for compatibility from 3.x to 4.0.

@@ -188,7 +188,7 @@ public:
 protected:
 	virtual void get_parameter_list(List<Parameter> *r_parameters) override;
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &r_property) const;
 };
 
@@ -244,7 +244,7 @@ private:
 	int switch_request = -1;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	virtual void start(double p_from_pos = 0.0) override;

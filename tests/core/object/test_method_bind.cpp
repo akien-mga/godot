@@ -123,7 +123,7 @@ public:
 		test_valid[TEST_METHOD_OBJECT_CAST] = p_object->value == 1;
 	}
 
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 	virtual void run_tests() {
 		for (int i = 0; i < TEST_MAX; i++) {

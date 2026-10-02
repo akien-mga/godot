@@ -78,7 +78,7 @@ protected:
 	virtual void _post_popup() override;
 
 	void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 	void _validate_property(PropertyInfo &p_property) const;
 
 	virtual void ok_pressed() {}
@@ -96,7 +96,7 @@ protected:
 	void _register_text_enter_bind_compat_89419(Control *p_line_edit);
 	void _remove_button_bind_compat_89419(Control *p_button);
 
-	static void _bind_compatibility_methods();
+	_COLD_ static void _bind_compatibility_methods();
 #endif
 
 public:
@@ -134,7 +134,7 @@ class ConfirmationDialog : public AcceptDialog {
 	Button *cancel = nullptr;
 
 protected:
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Button *get_cancel_button();

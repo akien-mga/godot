@@ -164,7 +164,7 @@ class Path3DEditorPlugin : public EditorPlugin {
 
 protected:
 	virtual void _notification(int p_what);
-	static void _bind_methods();
+	_COLD_ static void _bind_methods();
 
 public:
 	Path3D *get_edited_path() { return path; }
