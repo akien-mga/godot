@@ -32,5 +32,5 @@
 
 #include "modules/register_module_types.h"
 
-void initialize_dds_module(ModuleInitializationLevel p_level);
-void uninitialize_dds_module(ModuleInitializationLevel p_level);
+_COLD_ void initialize_dds_module(ModuleInitializationLevel p_level);
+_COLD_ void uninitialize_dds_module(ModuleInitializationLevel p_level);

@@ -278,35 +278,41 @@ public: \
 	} \
 \
 protected: \
-	_FORCE_INLINE_ static void (*_get_bind_methods())() { \
+	static constexpr void (*_get_bind_methods())() { \
 		return &m_class::_bind_methods; \
 	} \
-	_FORCE_INLINE_ static void (*_get_bind_compatibility_methods())() { \
+	static constexpr void (*_get_bind_compatibility_methods())() { \
 		return &m_class::_bind_compatibility_methods; \
 	} \
 \
-public: \
-	static void initialize_class() { \
-		static bool initialized = false; \
-		if (likely(initialized)) { \
-			return; \
-		} \
+	static inline bool _class_initialized = false; \
 \
+	/* Only runs once per class, so it's cold. With GCC, this makes `_bind_methods()` and what it calls cold too, */ \
+	/* as it's only called from here (the checks below are done at compile time). */ \
+	_COLD_ static void _initialize_class_cold() { \
 		static BinaryMutex __init_mutex; \
 		MutexLock lock(__init_mutex); \
-		if (initialized) { \
+		if (_class_initialized) { \
 			return; \
 		} \
 		m_inherits::initialize_class(); \
 		_add_class_to_classdb(get_gdtype_static_mutable(), &super_type::get_gdtype_static()); \
 		get_gdtype_static_mutable().initialize(); \
-		if (m_class::_get_bind_methods() != m_inherits::_get_bind_methods()) { \
+		if constexpr (m_class::_get_bind_methods() != m_inherits::_get_bind_methods()) { \
 			_bind_methods(); \
 		} \
-		if (m_class::_get_bind_compatibility_methods() != m_inherits::_get_bind_compatibility_methods()) { \
+		if constexpr (m_class::_get_bind_compatibility_methods() != m_inherits::_get_bind_compatibility_methods()) { \
 			_bind_compatibility_methods(); \
 		} \
-		initialized = true; \
+		_class_initialized = true; \
+	} \
+\
+public: \
+	static void initialize_class() { \
+		if (likely(_class_initialized)) { \
+			return; \
+		} \
+		_initialize_class_cold(); \
 	} \
 \
 protected: \
@@ -551,10 +557,10 @@ protected:
 	// Out-lined helper function to save on binary space.
 	_NO_INLINE_ void _get_property_list_inner(List<PropertyInfo> *p_list, const StringName &p_class_name) const;
 
-	_FORCE_INLINE_ static void (*_get_bind_methods())() {
+	static constexpr void (*_get_bind_methods())() {
 		return &Object::_bind_methods;
 	}
-	_FORCE_INLINE_ static void (*_get_bind_compatibility_methods())() {
+	static constexpr void (*_get_bind_compatibility_methods())() {
 		return &Object::_bind_compatibility_methods;
 	}
 	_FORCE_INLINE_ bool (Object::*_get_get() const)(const StringName &p_name, Variant &r_ret) const {

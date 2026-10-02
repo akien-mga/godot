@@ -32,5 +32,5 @@
 
 #include "modules/register_module_types.h"
 
-void initialize_mp3_module(ModuleInitializationLevel p_level);
-void uninitialize_mp3_module(ModuleInitializationLevel p_level);
+_COLD_ void initialize_mp3_module(ModuleInitializationLevel p_level);
+_COLD_ void uninitialize_mp3_module(ModuleInitializationLevel p_level);
