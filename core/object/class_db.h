@@ -537,19 +537,19 @@ public:
 };
 
 #define BIND_ENUM_CONSTANT(m_constant) \
-	get_gdtype_static_mutable().bind_integer_constant_raw(GetTypeInfo<decltype(m_constant)>::enum_qualified_name, #m_constant, static_cast<int64_t>(m_constant), false);
+	_get_gdtype_static_mutable_noinline().bind_integer_constant_raw(GetTypeInfo<decltype(m_constant)>::enum_qualified_name, #m_constant, static_cast<int64_t>(m_constant), false);
 #define BIND_ENUM_CONSTANT_EXT(m_constant, m_bound_name) \
-	get_gdtype_static_mutable().bind_integer_constant_raw(GetTypeInfo<decltype(m_constant)>::enum_qualified_name, #m_bound_name, static_cast<int64_t>(m_constant));
+	_get_gdtype_static_mutable_noinline().bind_integer_constant_raw(GetTypeInfo<decltype(m_constant)>::enum_qualified_name, #m_bound_name, static_cast<int64_t>(m_constant));
 
 #define BIND_BITFIELD_FLAG(m_constant) \
-	get_gdtype_static_mutable().bind_integer_constant_raw(GetTypeInfo<BitField<decltype(m_constant)>>::enum_qualified_name, #m_constant, static_cast<int64_t>(m_constant), true);
+	_get_gdtype_static_mutable_noinline().bind_integer_constant_raw(GetTypeInfo<BitField<decltype(m_constant)>>::enum_qualified_name, #m_constant, static_cast<int64_t>(m_constant), true);
 #define BIND_BITFIELD_FLAG_EXT(m_constant, m_bound_name) \
-	get_gdtype_static_mutable().bind_integer_constant_raw(GetTypeInfo<BitField<decltype(m_constant)>>::enum_qualified_name, #m_bound_name, static_cast<int64_t>(m_constant), true);
+	_get_gdtype_static_mutable_noinline().bind_integer_constant_raw(GetTypeInfo<BitField<decltype(m_constant)>>::enum_qualified_name, #m_bound_name, static_cast<int64_t>(m_constant), true);
 
 #define BIND_CONSTANT(m_constant) \
-	get_gdtype_static_mutable().bind_integer_constant_raw("", #m_constant, static_cast<int64_t>(m_constant));
+	_get_gdtype_static_mutable_noinline().bind_integer_constant_raw("", #m_constant, static_cast<int64_t>(m_constant));
 #define BIND_CONSTANT_EXT(m_constant, m_bound_name) \
-	get_gdtype_static_mutable().bind_integer_constant_raw("", #m_bound_name, static_cast<int64_t>(m_constant));
+	_get_gdtype_static_mutable_noinline().bind_integer_constant_raw("", #m_bound_name, static_cast<int64_t>(m_constant));
 
 #ifdef DEBUG_ENABLED
 
