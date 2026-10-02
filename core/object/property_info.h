@@ -160,6 +160,10 @@ struct PropertyInfo {
 		}
 	}
 
+	// Same as above, for the common case of string literals. Not inlined, so call sites (such as the many
+	// `ADD_PROPERTY()` in `_bind_methods()`) don't each construct and destruct the `String` and `StringName` temporaries.
+	_NO_INLINE_ PropertyInfo(const Variant::Type p_type, const char *p_name, const PropertyHint p_hint = PROPERTY_HINT_NONE, const char *p_hint_string = "", const uint32_t p_usage = PROPERTY_USAGE_DEFAULT, const char *p_class_name = nullptr);
+
 	PropertyInfo(const StringName &p_class_name) :
 			type(Variant::OBJECT),
 			class_name(p_class_name) {}

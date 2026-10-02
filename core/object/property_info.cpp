@@ -33,6 +33,9 @@
 #include "core/variant/dictionary.h"
 #include "core/variant/typed_array.h"
 
+PropertyInfo::PropertyInfo(const Variant::Type p_type, const char *p_name, const PropertyHint p_hint, const char *p_hint_string, const uint32_t p_usage, const char *p_class_name) :
+		PropertyInfo(p_type, String(p_name), p_hint, String(p_hint_string), p_usage, p_class_name ? StringName(p_class_name) : StringName()) {}
+
 PropertyInfo::operator Dictionary() const {
 	Dictionary d;
 	d["name"] = name;
