@@ -1,14 +1,25 @@
-static const char compute_shader_glsl[] = {
-R"<!>(#[compute]
+#include "core/io/compression.h"
+#include "core/string/ustring.h"
 
-#version 450
-
-#VERSION_DEFINES
-
-#define M_PI 3.14159265359
-
-void main() {
-	vec3 static_light = vec3(0, 1, 0);
+#ifndef RAW_SHADER_DECOMPRESS
+#define RAW_SHADER_DECOMPRESS
+inline String _decompress_raw_shader(const uint8_t *p_compressed, int p_compressed_size, int p_size) {
+	CharString code;
+	code.resize_uninitialized(p_size);
+	const int64_t ret = Compression::decompress((uint8_t *)code.ptrw(), p_size, p_compressed, p_compressed_size, Compression::MODE_ZSTD);
+	ERR_FAIL_COND_V_MSG(ret != p_size, String(), "Embedded shader code is corrupt.");
+	return String::utf8(code.get_data());
 }
-)<!>"
-};
+#endif // RAW_SHADER_DECOMPRESS
+
+inline String compute_shader_glsl() {
+	static const uint8_t _code_compressed[] = {
+		40, 181, 47, 253, 32, 125, 233, 3, 0, 35, 91, 99, 111, 109, 112, 117, 116, 101, 93, 10, 10, 35, 118, 101, 114,
+		115, 105, 111, 110, 32, 52, 53, 48, 10, 10, 35, 86, 69, 82, 83, 73, 79, 78, 95, 68, 69, 70, 73, 78, 69, 83,
+		10, 10, 35, 100, 101, 102, 105, 110, 101, 32, 77, 95, 80, 73, 32, 51, 46, 49, 52, 49, 53, 57, 50, 54, 53, 51,
+		53, 57, 10, 10, 118, 111, 105, 100, 32, 109, 97, 105, 110, 40, 41, 32, 123, 10, 9, 118, 101, 99, 51, 32, 115,
+		116, 97, 116, 105, 99, 95, 108, 105, 103, 104, 116, 32, 61, 32, 118, 101, 99, 51, 40, 48, 44, 32, 49, 44, 32,
+		48, 41, 59, 10, 125, 10, 0
+	};
+	return _decompress_raw_shader(_code_compressed, 134, 125);
+}

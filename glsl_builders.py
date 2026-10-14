@@ -2,7 +2,7 @@
 
 import os.path
 
-from methods import compress_buffer_zstd, format_buffer, generated_wrapper, print_error, to_raw_cstring
+from methods import compress_buffer_zstd, format_buffer, generated_wrapper, print_error
 
 
 class RDHeaderStruct:
@@ -261,12 +261,31 @@ def include_file_in_raw_header(filename: str, header_data: RAWHeaderStruct, dept
 
 def build_raw_header(filename: str, shader: str, env) -> None:
     include_file_in_raw_header(shader, header_data := RAWHeaderStruct(), 0)
+    buffer = header_data.code.encode() + b"\0"
+    compressed = compress_buffer_zstd(buffer, env)
 
     with generated_wrapper(filename) as file:
         file.write(f"""\
-static const char {os.path.basename(shader).replace(".glsl", "_shader_glsl")}[] = {{
-{to_raw_cstring(header_data.code)}
-}};
+#include "core/io/compression.h"
+#include "core/string/ustring.h"
+
+#ifndef RAW_SHADER_DECOMPRESS
+#define RAW_SHADER_DECOMPRESS
+inline String _decompress_raw_shader(const uint8_t *p_compressed, int p_compressed_size, int p_size) {{
+	CharString code;
+	code.resize_uninitialized(p_size);
+	const int64_t ret = Compression::decompress((uint8_t *)code.ptrw(), p_size, p_compressed, p_compressed_size, Compression::MODE_ZSTD);
+	ERR_FAIL_COND_V_MSG(ret != p_size, String(), "Embedded shader code is corrupt.");
+	return String::utf8(code.get_data());
+}}
+#endif // RAW_SHADER_DECOMPRESS
+
+inline String {os.path.basename(shader).replace(".glsl", "_shader_glsl")}() {{
+	static const uint8_t _code_compressed[] = {{
+		{format_buffer(compressed, 2)}
+	}};
+	return _decompress_raw_shader(_code_compressed, {len(compressed)}, {len(buffer)});
+}}
 """)
 
 

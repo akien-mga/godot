@@ -148,7 +148,7 @@ void BetsyCompressor::_init() {
 	{
 		Ref<RDShaderFile> bc1_shader;
 		bc1_shader.instantiate();
-		Error err = bc1_shader->parse_versions_from_text(bc1_shader_glsl);
+		Error err = bc1_shader->parse_versions_from_text(bc1_shader_glsl());
 
 		if (err != OK) {
 			bc1_shader->print_errors("Betsy BC1 compress shader");
@@ -172,7 +172,7 @@ void BetsyCompressor::_init() {
 	{
 		Ref<RDShaderFile> bc4_shader;
 		bc4_shader.instantiate();
-		Error err = bc4_shader->parse_versions_from_text(bc4_shader_glsl);
+		Error err = bc4_shader->parse_versions_from_text(bc4_shader_glsl());
 
 		if (err != OK) {
 			bc4_shader->print_errors("Betsy BC4 compress shader");
@@ -196,7 +196,7 @@ void BetsyCompressor::_init() {
 	{
 		Ref<RDShaderFile> bc6h_shader;
 		bc6h_shader.instantiate();
-		Error err = bc6h_shader->parse_versions_from_text(bc6h_shader_glsl);
+		Error err = bc6h_shader->parse_versions_from_text(bc6h_shader_glsl());
 
 		if (err != OK) {
 			bc6h_shader->print_errors("Betsy BC6 compress shader");
@@ -220,7 +220,7 @@ void BetsyCompressor::_init() {
 	{
 		Ref<RDShaderFile> alpha_stitch_shader;
 		alpha_stitch_shader.instantiate();
-		Error err = alpha_stitch_shader->parse_versions_from_text(alpha_stitch_shader_glsl);
+		Error err = alpha_stitch_shader->parse_versions_from_text(alpha_stitch_shader_glsl());
 
 		if (err != OK) {
 			alpha_stitch_shader->print_errors("Betsy alpha stitch shader");
@@ -235,7 +235,7 @@ void BetsyCompressor::_init() {
 	{
 		Ref<RDShaderFile> rgb_to_rgba_shader;
 		rgb_to_rgba_shader.instantiate();
-		Error err = rgb_to_rgba_shader->parse_versions_from_text(rgb_to_rgba_shader_glsl);
+		Error err = rgb_to_rgba_shader->parse_versions_from_text(rgb_to_rgba_shader_glsl());
 
 		if (err != OK) {
 			rgb_to_rgba_shader->print_errors("Betsy RGB to RGBA shader");

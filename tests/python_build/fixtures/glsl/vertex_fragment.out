@@ -1,34 +1,29 @@
-static const char vertex_fragment_shader_glsl[] = {
-R"<!>(#[versions]
+#include "core/io/compression.h"
+#include "core/string/ustring.h"
 
-lines = "#define MODE_LINES";
-
-#[vertex]
-
-#version 450
-
-#VERSION_DEFINES
-
-layout(location = 0) out vec3 uv_interp;
-
-void main() {
-#ifdef MODE_LINES
-	uv_interp = vec3(0, 0, 1);
-#endif
+#ifndef RAW_SHADER_DECOMPRESS
+#define RAW_SHADER_DECOMPRESS
+inline String _decompress_raw_shader(const uint8_t *p_compressed, int p_compressed_size, int p_size) {
+	CharString code;
+	code.resize_uninitialized(p_size);
+	const int64_t ret = Compression::decompress((uint8_t *)code.ptrw(), p_size, p_compressed, p_compressed_size, Compression::MODE_ZSTD);
+	ERR_FAIL_COND_V_MSG(ret != p_size, String(), "Embedded shader code is corrupt.");
+	return String::utf8(code.get_data());
 }
+#endif // RAW_SHADER_DECOMPRESS
 
-#[fragment]
-
-#version 450
-
-#VERSION_DEFINES
-
-#define M_PI 3.14159265359
-
-layout(location = 0) out vec4 dst_color;
-
-void main() {
-	dst_color = vec4(1, 1, 0, 0);
+inline String vertex_fragment_shader_glsl() {
+	static const uint8_t _code_compressed[] = {
+		40, 181, 47, 253, 96, 106, 0, 213, 6, 0, 162, 140, 43, 36, 48, 107, 157, 3, 131, 251, 223, 159, 239, 156, 245,
+		149, 196, 102, 137, 241, 218, 234, 81, 254, 102, 73, 51, 52, 186, 198, 121, 85, 48, 215, 61, 48, 160, 78, 198,
+		44, 0, 143, 252, 81, 220, 219, 229, 37, 13, 194, 162, 21, 165, 96, 189, 226, 54, 10, 135, 113, 6, 4, 20, 206,
+		107, 94, 0, 179, 210, 1, 172, 147, 33, 11, 147, 37, 35, 151, 29, 39, 183, 63, 202, 219, 197, 237, 226, 18, 104,
+		17, 151, 28, 101, 183, 63, 172, 146, 204, 158, 32, 27, 155, 102, 255, 195, 96, 113, 157, 13, 51, 108, 25, 138,
+		179, 173, 24, 93, 197, 45, 84, 39, 138, 86, 73, 197, 168, 195, 84, 253, 4, 209, 2, 50, 26, 146, 3, 33, 74, 104,
+		191, 115, 154, 109, 255, 163, 129, 235, 255, 36, 28, 17, 67, 42, 128, 209, 162, 97, 176, 60, 91, 114, 108, 137,
+		133, 246, 226, 217, 213, 255, 184, 38, 237, 203, 226, 76, 161, 5, 15, 0, 45, 19, 165, 50, 3, 124, 22, 23, 102,
+		159, 103, 98, 195, 166, 1, 32, 35, 222, 99, 43, 4, 65, 52, 168, 165, 121, 15, 166, 43, 21, 10, 84, 33, 100,
+		149, 155, 175, 85, 101
+	};
+	return _decompress_raw_shader(_code_compressed, 228, 362);
 }
-)<!>"
-};

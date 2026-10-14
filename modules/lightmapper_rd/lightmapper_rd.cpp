@@ -1444,7 +1444,7 @@ LightmapperRD::BakeError LightmapperRD::bake(BakeQuality p_quality, bool p_use_d
 	//shaders
 	Ref<RDShaderFile> raster_shader;
 	raster_shader.instantiate();
-	err = raster_shader->parse_versions_from_text(lm_raster_shader_glsl);
+	err = raster_shader->parse_versions_from_text(lm_raster_shader_glsl());
 	if (err != OK) {
 		raster_shader->print_errors("raster_shader");
 
@@ -1644,7 +1644,7 @@ LightmapperRD::BakeError LightmapperRD::bake(BakeQuality p_quality, bool p_use_d
 	}
 
 	compute_shader.instantiate();
-	err = compute_shader->parse_versions_from_text(lm_compute_shader_glsl, defines);
+	err = compute_shader->parse_versions_from_text(lm_compute_shader_glsl(), defines);
 	if (err != OK) {
 		FREE_TEXTURES
 		FREE_BUFFERS
@@ -2244,7 +2244,7 @@ LightmapperRD::BakeError LightmapperRD::bake(BakeQuality p_quality, bool p_use_d
 	//shaders
 	Ref<RDShaderFile> blendseams_shader;
 	blendseams_shader.instantiate();
-	err = blendseams_shader->parse_versions_from_text(lm_blendseams_shader_glsl);
+	err = blendseams_shader->parse_versions_from_text(lm_blendseams_shader_glsl());
 	if (err != OK) {
 		FREE_TEXTURES
 		FREE_BUFFERS
