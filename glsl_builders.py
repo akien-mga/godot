@@ -2,7 +2,7 @@
 
 import os.path
 
-from methods import compress_buffer, format_buffer, generated_wrapper, print_error, to_raw_cstring
+from methods import compress_buffer_zstd, format_buffer, generated_wrapper, print_error, to_raw_cstring
 
 
 class RDHeaderStruct:
@@ -176,7 +176,7 @@ def include_file_in_rd_header(filename: str, header_data: RDHeaderStruct, depth:
     return header_data
 
 
-def build_rd_header(filename: str, shader: str) -> None:
+def build_rd_header(filename: str, shader: str, env) -> None:
     include_file_in_rd_header(shader, header_data := RDHeaderStruct(), 0)
     class_name = os.path.basename(shader).replace(".glsl", "").title().replace("_", "").replace(".", "") + "ShaderRD"
 
@@ -211,7 +211,7 @@ def build_rd_header(filename: str, shader: str) -> None:
         else:
             setup_args.append(f"_code.get_data() + {len(buffer)}")
             buffer += "\n".join(lines).encode() + b"\n\0"
-    compressed = compress_buffer(buffer)
+    compressed = compress_buffer_zstd(buffer, env)
 
     with generated_wrapper(filename) as file:
         file.write(f"""\
@@ -234,7 +234,7 @@ public:
 def build_rd_headers(target, source, env):
     env.NoCache(target)
     for src in source:
-        build_rd_header(f"{src}.gen.h", str(src))
+        build_rd_header(f"{src}.gen.h", str(src), env)
 
 
 class RAWHeaderStruct:
@@ -259,7 +259,7 @@ def include_file_in_raw_header(filename: str, header_data: RAWHeaderStruct, dept
             line = fs.readline()
 
 
-def build_raw_header(filename: str, shader: str) -> None:
+def build_raw_header(filename: str, shader: str, env) -> None:
     include_file_in_raw_header(shader, header_data := RAWHeaderStruct(), 0)
 
     with generated_wrapper(filename) as file:
@@ -273,4 +273,4 @@ static const char {os.path.basename(shader).replace(".glsl", "_shader_glsl")}[] 
 def build_raw_headers(target, source, env):
     env.NoCache(target)
     for src in source:
-        build_raw_header(f"{src}.gen.h", str(src))
+        build_raw_header(f"{src}.gen.h", str(src), env)

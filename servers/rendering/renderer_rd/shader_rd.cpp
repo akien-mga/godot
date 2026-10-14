@@ -152,7 +152,7 @@ void ShaderRD::_add_stage(const char *p_code, StageType p_stage_type) {
 CharString ShaderRD::_decompress_code(const uint8_t *p_compressed, int p_compressed_size, int p_size) {
 	CharString code;
 	code.resize_uninitialized(p_size);
-	const int64_t ret = Compression::decompress((uint8_t *)code.ptrw(), p_size, p_compressed, p_compressed_size, Compression::MODE_DEFLATE);
+	const int64_t ret = Compression::decompress((uint8_t *)code.ptrw(), p_size, p_compressed, p_compressed_size, Compression::MODE_ZSTD);
 	ERR_FAIL_COND_V_MSG(ret != p_size, CharString(), "Embedded shader code is corrupt.");
 	return code;
 }

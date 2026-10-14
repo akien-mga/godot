@@ -44,18 +44,26 @@ FUNC_PATH_KWARGS: list[tuple[Callable[..., None], str, dict[str, Any]]] = [
 
 
 def main() -> int:
+    class Environment:
+        dev_build = False
+        production = False
+
+        def __getitem__(self, key):
+            return getattr(self, key)
+
+    env = Environment()
     ret = 0
 
     for func, path, kwargs in FUNC_PATH_KWARGS:
         if os.path.exists(out_path := os.path.abspath(path)):
             with open(out_path, "rb") as file:
                 raw = file.read()
-            func(path, **kwargs)
+            func(path, **kwargs, env=env)
             with open(out_path, "rb") as file:
                 if raw != file.read():
                     ret += 1
         else:
-            func(path, **kwargs)
+            func(path, **kwargs, env=env)
             ret += 1
 
     return ret

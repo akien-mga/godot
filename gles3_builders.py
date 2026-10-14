@@ -2,7 +2,7 @@
 
 import os.path
 
-from methods import compress_buffer, format_buffer, generated_wrapper, print_error
+from methods import compress_buffer_zstd, format_buffer, generated_wrapper, print_error
 
 
 class GLES3HeaderStruct:
@@ -243,7 +243,7 @@ def include_file_in_gles3_header(filename: str, header_data: GLES3HeaderStruct, 
     return header_data
 
 
-def build_gles3_header(filename: str, shader: str) -> None:
+def build_gles3_header(filename: str, shader: str, env) -> None:
     include_file_in_gles3_header(shader, header_data := GLES3HeaderStruct(), 0)
     out_file_class = (
         os.path.basename(shader).replace(".glsl", "").title().replace("_", "").replace(".", "") + "ShaderGLES3"
@@ -555,7 +555,7 @@ protected:
         vertex_code = "\n".join(header_data.vertex_lines).encode() + b"\n\0"
         fragment_code = "\n".join(header_data.fragment_lines).encode() + b"\n\0"
         buffer = vertex_code + fragment_code
-        compressed = compress_buffer(buffer)
+        compressed = compress_buffer_zstd(buffer, env)
 
         file.write(f"""\
 		static const uint8_t _code_compressed[] = {{
@@ -575,4 +575,4 @@ protected:
 def build_gles3_headers(target, source, env):
     env.NoCache(target)
     for src in source:
-        build_gles3_header(f"{src}.gen.h", str(src))
+        build_gles3_header(f"{src}.gen.h", str(src), env)
