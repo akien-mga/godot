@@ -47,9 +47,6 @@ transcoder_sources = [thirdparty_dir + "transcoder/basisu_transcoder.cpp"]
 
 env_basisu.Prepend(CPPPATH=[thirdparty_dir])
 
-if basisu_encoder:
-    env_basisu.Prepend(CPPPATH=["#thirdparty/tinyexr"])
-
 if env["builtin_zstd"]:
     env_basisu.Prepend(CPPPATH=["#thirdparty/zstd"])
 

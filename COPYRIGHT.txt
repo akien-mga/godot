@@ -555,6 +555,17 @@ Comment: OffsetAllocator
 Copyright: 2023, Sebastian Aaltonen
 License: Expat
 
+Files: thirdparty/openexr/*
+Comment: OpenEXR Core
+Copyright: Contributors to the OpenEXR Project
+License: BSD-3-clause
+
+Files: thirdparty/openexr/external/deflate/*
+Comment: libdeflate
+Copyright: 2016, Eric Biggers
+  2024, Google LLC
+License: Expat
+
 Files: thirdparty/openxr/*
 Comment: OpenXR Loader
 Copyright: 2020-2025, The Khronos Group Inc.
@@ -610,12 +621,6 @@ Files: thirdparty/thorvg/*
 Comment: ThorVG
 Copyright: 2020-2026, The ThorVG Project
 License: Expat
-
-Files: thirdparty/tinyexr/*
-Comment: TinyEXR
-Copyright: 2014-2021, Syoyo Fujita
-  2002, Industrial Light & Magic, a division of Lucas Digital Ltd. LLC
-License: BSD-3-clause
 
 Files: thirdparty/ufbx/*
 Comment: ufbx

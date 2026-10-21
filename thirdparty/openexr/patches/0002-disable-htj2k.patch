@@ -1,0 +1,21 @@
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/compression.c
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/compression.c
+@@ -384,7 +384,7 @@
+         case EXR_COMPRESSION_DWAB: rv = internal_exr_apply_dwab (encode); break;
+         case EXR_COMPRESSION_HTJ2K32:
+         case EXR_COMPRESSION_HTJ2K256:
+-            rv = internal_exr_apply_ht (encode); break;
++            rv = EXR_ERR_FEATURE_NOT_IMPLEMENTED; break;
+         case EXR_COMPRESSION_LAST_TYPE:
+         default:
+             return ctxt->print_error (
+@@ -463,8 +463,7 @@
+             break;
+         case EXR_COMPRESSION_HTJ2K256:
+         case EXR_COMPRESSION_HTJ2K32:
+-            rv = internal_exr_undo_ht (
+-                decode, packbufptr, packsz, unpackbufptr, unpacksz);
++            rv = EXR_ERR_FEATURE_NOT_IMPLEMENTED;
+             break;
+         case EXR_COMPRESSION_LAST_TYPE:
+         default:

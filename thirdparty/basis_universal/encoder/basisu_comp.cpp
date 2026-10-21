@@ -1882,9 +1882,7 @@ namespace basisu
 
 				if (m_params.m_debug_images)
 				{
-					if (m_params.m_hdr)
-						write_exr(string_format("basis_debug_source_image_%u_slice_%u.exr", source_file_index, slice_index).c_str(), *pSlice_image_hdr, 3, 0);
-					else
+					if (!m_params.m_hdr)
 						save_png(string_format("basis_debug_source_image_%u_slice_%u.png", source_file_index, slice_index).c_str(), *pSlice_image);
 				}
 
@@ -2966,26 +2964,6 @@ namespace basisu
 							std::string filename2(out_basename + "_astc.ktx");
 							write_compressed_texture_file(filename2.c_str(), astc_tex, true);
 							printf("Wrote .KTX file %s\n", filename2.c_str());
-						}
-
-						// Write unpacked ASTC image to .EXR
-						{
-							imagef astc_img(m_decoded_output_textures_astc_hdr_unpacked[slice_index]);
-							astc_img.resize(slice_desc.m_orig_width, slice_desc.m_orig_height);
-							
-							std::string filename(out_basename + "_unpacked_astc.exr");
-							write_exr(filename.c_str(), astc_img, 3, 0);
-							printf("Wrote .EXR file %s\n", filename.c_str());
-						}
-
-						// Write unpacked BC6H image to .EXR
-						{
-							imagef bc6h_img(m_decoded_output_textures_bc6h_hdr_unpacked[slice_index]);
-							bc6h_img.resize(slice_desc.m_orig_width, slice_desc.m_orig_height);
-
-							std::string filename(out_basename + "_unpacked_bc6h.exr");
-							write_exr(filename.c_str(), bc6h_img, 3, 0);
-							printf("Wrote .EXR file %s\n", filename.c_str());
 						}
 
 						// Write tonemapped/srgb images

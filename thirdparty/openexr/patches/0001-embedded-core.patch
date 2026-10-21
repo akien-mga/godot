@@ -1,0 +1,20 @@
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/openexr_config.h
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/openexr_config.h
+@@ -7,9 +7,14 @@
+ #define OPENEXR_CONF_H
+ #pragma once
+ 
+-#include "OpenEXRConfig.h"
+-#include <IlmThreadConfig.h>
+-#include <ImathConfig.h>
++// Embedded C-only build: use Core's built-in half conversion routines.
++#if defined(__GNUC__) || defined(__clang__)
++#    define OPENEXR_EXPORT __attribute__((visibility("hidden")))
++#    define OPENEXR_HIDDEN __attribute__((visibility("hidden")))
++#else
++#    define OPENEXR_EXPORT
++#    define OPENEXR_HIDDEN
++#endif
+ 
+ /// \addtogroup ExportMacros
+ /// @{

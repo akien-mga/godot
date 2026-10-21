@@ -80,9 +80,9 @@ TEST_CASE("[Image] Instantiation") {
 TEST_CASE("[Image] Saving and loading") {
 	Ref<Image> image = memnew(Image(4, 4, false, Image::FORMAT_RGBA8));
 	const String save_path_png = TestUtils::get_temp_path("image.png");
-#ifdef MODULE_TINYEXR_ENABLED
+#ifdef MODULE_OPENEXR_ENABLED
 	const String save_path_exr = TestUtils::get_temp_path("image.exr");
-#endif // MODULE_TINYEXR_ENABLED
+#endif // MODULE_OPENEXR_ENABLED
 
 	// Save PNG
 	Error err;
@@ -92,13 +92,13 @@ TEST_CASE("[Image] Saving and loading") {
 			"The image should be saved successfully as a .png file.");
 
 	// Only available on editor builds.
-#ifdef MODULE_TINYEXR_ENABLED
+#ifdef MODULE_OPENEXR_ENABLED
 	// Save EXR
 	err = image->save_exr(save_path_exr, false);
 	CHECK_MESSAGE(
 			err == OK,
 			"The image should be saved successfully as an .exr file.");
-#endif // MODULE_TINYEXR_ENABLED
+#endif // MODULE_OPENEXR_ENABLED
 
 	// Load using load()
 	Ref<Image> image_load = memnew(Image());
@@ -123,7 +123,7 @@ TEST_CASE("[Image] Saving and loading") {
 			"The BMP image should load successfully.");
 #endif // MODULE_BMP_ENABLED
 
-#ifdef MODULE_TINYEXR_ENABLED
+#ifdef MODULE_OPENEXR_ENABLED
 	// Load EXR
 	Ref<Image> image_exr;
 	image_exr.instantiate();
@@ -135,7 +135,7 @@ TEST_CASE("[Image] Saving and loading") {
 	CHECK_MESSAGE(
 			image_exr->load_exr_from_buffer(data_exr) == OK,
 			"The EXR image should load successfully.");
-#endif // MODULE_TINYEXR_ENABLED
+#endif // MODULE_OPENEXR_ENABLED
 
 #ifdef MODULE_JPG_ENABLED
 	// Load JPG

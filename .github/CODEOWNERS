@@ -207,15 +207,15 @@
 /modules/ktx/                                 @godotengine/asset-pipeline
 /modules/ktx/**/*.py                          @godotengine/asset-pipeline @godotengine/buildsystem
 /modules/ktx/**/SCsub                         @godotengine/asset-pipeline @godotengine/buildsystem
+/modules/openexr/                             @godotengine/asset-pipeline
+/modules/openexr/**/*.py                      @godotengine/asset-pipeline @godotengine/buildsystem
+/modules/openexr/**/SCsub                     @godotengine/asset-pipeline @godotengine/buildsystem
 /modules/svg/                                 @godotengine/asset-pipeline
 /modules/svg/**/*.py                          @godotengine/asset-pipeline @godotengine/buildsystem
 /modules/svg/**/SCsub                         @godotengine/asset-pipeline @godotengine/buildsystem
 /modules/tga/                                 @godotengine/asset-pipeline
 /modules/tga/**/*.py                          @godotengine/asset-pipeline @godotengine/buildsystem
 /modules/tga/**/SCsub                         @godotengine/asset-pipeline @godotengine/buildsystem
-/modules/tinyexr/                             @godotengine/asset-pipeline
-/modules/tinyexr/**/*.py                      @godotengine/asset-pipeline @godotengine/buildsystem
-/modules/tinyexr/**/SCsub                     @godotengine/asset-pipeline @godotengine/buildsystem
 /modules/webp/                                @godotengine/asset-pipeline
 /modules/webp/**/*.py                         @godotengine/asset-pipeline @godotengine/buildsystem
 /modules/webp/**/SCsub                        @godotengine/asset-pipeline @godotengine/buildsystem

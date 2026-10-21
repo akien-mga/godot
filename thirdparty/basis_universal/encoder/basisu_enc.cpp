@@ -26,11 +26,6 @@
 
 #include <vector>
 
-#ifndef TINYEXR_USE_ZFP
-#define TINYEXR_USE_ZFP (1)
-#endif
-#include <tinyexr.h>
-
 #ifndef MINIZ_HEADER_FILE_ONLY
 #define MINIZ_HEADER_FILE_ONLY
 #endif
@@ -673,13 +668,6 @@ namespace basisu
 			convert_ldr_to_hdr_image(img, ldr_img, ldr_srgb_to_linear, linear_nit_multiplier, ldr_black_bias);
 			break;
 		}
-		case hdr_image_type::cHITEXRImage:
-		{
-			if (!read_exr(pMem, mem_size, img))
-				return false;
-
-			break;
-		}
 		case hdr_image_type::cHITHDRImage:
 		{
 			uint8_vec buf(mem_size);
@@ -708,7 +696,7 @@ namespace basisu
 
 		const char* pExt = ext.c_str();
 
-		return ((strcasecmp(pExt, "hdr") == 0) || (strcasecmp(pExt, "exr") == 0));
+		return strcasecmp(pExt, "hdr") == 0;
 	}
 	
 	// TODO: move parameters to struct, add a HDR clean flag to eliminate NaN's/Inf's
@@ -729,14 +717,6 @@ namespace basisu
 			return true;
 		}
 					
-		if (strcasecmp(pExt, "exr") == 0)
-		{
-			int n_chans = 0;
-			if (!read_exr(pFilename, img, n_chans))
-				return false;
-			return true;
-		}
-
 		// Try loading image as LDR, then optionally convert to linear light.
 		{
 			image ldr_img;
@@ -3413,198 +3393,6 @@ namespace basisu
 		return write_vec_to_file(pFilename, file_data);
 	}
 		
-	bool read_exr(const char* pFilename, imagef& img, int& n_chans)
-	{
-		n_chans = 0;
-
-		int width = 0, height = 0;
-		float* out_rgba = nullptr;
-		const char* err = nullptr;
-		
-		int status = LoadEXRWithLayer(&out_rgba, &width, &height, pFilename, nullptr, &err);
-		n_chans = 4;
-		if (status != 0)
-		{
-			error_printf("Failed loading .EXR image \"%s\"! (TinyEXR error: %s)\n", pFilename, err ? err : "?");
-			FreeEXRErrorMessage(err);
-			free(out_rgba);
-			return false;
-		}
-
-		const uint32_t MAX_SUPPORTED_DIM = 65536;
-		if ((width < 1) || (height < 1) || (width > (int)MAX_SUPPORTED_DIM) || (height > (int)MAX_SUPPORTED_DIM))
-		{
-			error_printf("Invalid dimensions of .EXR image \"%s\"!\n", pFilename);
-			free(out_rgba);
-			return false;
-		}
-
-		img.resize(width, height);
-		
-		if (n_chans == 1)
-		{
-			const float* pSrc = out_rgba;
-			vec4F* pDst = img.get_ptr();
-
-			for (int y = 0; y < height; y++)
-			{
-				for (int x = 0; x < width; x++)
-				{
-					(*pDst)[0] = pSrc[0];
-					(*pDst)[1] = pSrc[1];
-					(*pDst)[2] = pSrc[2];
-					(*pDst)[3] = 1.0f;
-
-					pSrc += 4;
-					++pDst;
-				}
-			}
-		}
-		else
-		{
-			memcpy((void *)img.get_ptr(), out_rgba, static_cast<size_t>(sizeof(float) * 4 * img.get_total_pixels()));
-		}
-
-		free(out_rgba);
-		return true;
-	}
-
-	bool read_exr(const void* pMem, size_t mem_size, imagef& img)
-	{
-		float* out_rgba = nullptr;
-		int width = 0, height = 0;
-		const char* pErr = nullptr;
-		int res = LoadEXRFromMemory(&out_rgba, &width, &height, (const uint8_t*)pMem, mem_size, &pErr);
-		if (res < 0)
-		{
-			error_printf("Failed loading .EXR image from memory! (TinyEXR error: %s)\n", pErr ? pErr : "?");
-			FreeEXRErrorMessage(pErr);
-			free(out_rgba);
-			return false;
-		}
-
-		img.resize(width, height);
-		memcpy((void *)img.get_ptr(), out_rgba, width * height * sizeof(float) * 4);
-		free(out_rgba);
-
-		return true;
-	}
-
-	bool write_exr(const char* pFilename, const imagef& img, uint32_t n_chans, uint32_t flags)
-	{
-		assert((n_chans == 1) || (n_chans == 3) || (n_chans == 4));
-
-		const bool linear_hint = (flags & WRITE_EXR_LINEAR_HINT) != 0, 
-			store_float = (flags & WRITE_EXR_STORE_FLOATS) != 0,
-			no_compression = (flags & WRITE_EXR_NO_COMPRESSION) != 0;
-								
-		const uint32_t width = img.get_width(), height = img.get_height();
-		assert(width && height);
-		
-		if (!width || !height)
-			return false;
-		
-		float_vec layers[4];
-		float* image_ptrs[4];
-		for (uint32_t c = 0; c < n_chans; c++)
-		{
-			layers[c].resize(width * height);
-			image_ptrs[c] = layers[c].get_ptr();
-		}
-
-		// ABGR
-		int chan_order[4] = { 3, 2, 1, 0 };
-
-		if (n_chans == 1)
-		{
-			// Y
-			chan_order[0] = 0;
-		}
-		else if (n_chans == 3)
-		{
-			// BGR
-			chan_order[0] = 2;
-			chan_order[1] = 1;
-			chan_order[2] = 0;
-		}
-		else if (n_chans != 4)
-		{
-			assert(0);
-			return false;
-		}
-		
-		for (uint32_t y = 0; y < height; y++)
-		{
-			for (uint32_t x = 0; x < width; x++)
-			{
-				const vec4F& p = img(x, y);
-
-				for (uint32_t c = 0; c < n_chans; c++)
-					layers[c][x + y * width] = p[chan_order[c]];
-			} // x
-		} // y
-
-		EXRHeader header;
-		InitEXRHeader(&header);
-
-		EXRImage image;
-		InitEXRImage(&image);
-
-		image.num_channels = n_chans;
-		image.images = (unsigned char**)image_ptrs;
-		image.width = width;
-		image.height = height;
-
-		header.num_channels = n_chans;
-		
-		header.channels = (EXRChannelInfo*)calloc(header.num_channels, sizeof(EXRChannelInfo));
-
-		// Must be (A)BGR order, since most of EXR viewers expect this channel order.
-		for (uint32_t i = 0; i < n_chans; i++)
-		{
-			char c = 'Y';
-			if (n_chans == 3)
-				c = "BGR"[i];
-			else if (n_chans == 4)
-				c = "ABGR"[i];
-						
-			header.channels[i].name[0] = c;
-			header.channels[i].name[1] = '\0';
-
-			header.channels[i].p_linear = linear_hint;
-		}
-		
-		header.pixel_types = (int*)calloc(header.num_channels, sizeof(int));
-		header.requested_pixel_types = (int*)calloc(header.num_channels, sizeof(int));
-		
-		if (!no_compression)
-			header.compression_type = TINYEXR_COMPRESSIONTYPE_ZIP;
-
-		for (int i = 0; i < header.num_channels; i++) 
-		{
-			// pixel type of input image
-			header.pixel_types[i] = TINYEXR_PIXELTYPE_FLOAT; 
-
-			// pixel type of output image to be stored in .EXR
-			header.requested_pixel_types[i] = store_float ? TINYEXR_PIXELTYPE_FLOAT : TINYEXR_PIXELTYPE_HALF; 
-		}
-
-		const char* pErr_msg = nullptr;
-
-		int ret = SaveEXRImageToFile(&image, &header, pFilename, &pErr_msg);
-		if (ret != TINYEXR_SUCCESS) 
-		{
-			error_printf("Save EXR err: %s\n", pErr_msg);
-			FreeEXRErrorMessage(pErr_msg);
-		}
-				
-		free(header.channels);
-		free(header.pixel_types);
-		free(header.requested_pixel_types);
-
-		return (ret == TINYEXR_SUCCESS);
-	}
-
 	void image::debug_text(uint32_t x_ofs, uint32_t y_ofs, uint32_t scale_x, uint32_t scale_y, const color_rgba& fg, const color_rgba* pBG, bool alpha_only, const char* pFmt, ...)
 	{
 		char buf[2048];

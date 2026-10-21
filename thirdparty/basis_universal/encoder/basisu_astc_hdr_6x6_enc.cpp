@@ -6581,10 +6581,6 @@ bool compress_photo(const basisu::imagef &orig_src_img, const astc_hdr_6x6_globa
 		} // x
 	} // y
 	
-	if (global_cfg.m_debug_images)
-	{
-		write_exr((global_cfg.m_debug_image_prefix + "orig.exr").c_str(), enc_state.src_img, 3, 0);
-	}
 			
 	image src_img_compressed;
 	tonemap_image_compressive2(src_img_compressed, enc_state.src_img);
@@ -6614,11 +6610,6 @@ bool compress_photo(const basisu::imagef &orig_src_img, const astc_hdr_6x6_globa
 	enc_state.src_img_filtered2.resize(width, height);
 	image_resample(enc_state.src_img, enc_state.src_img_filtered2, "gaussian", global_cfg.m_gaussian2_strength); //1.83f);
 		
-	if (global_cfg.m_debug_images)
-	{
-		write_exr((global_cfg.m_debug_image_prefix + "blurred1.exr").c_str(), enc_state.src_img_filtered1, 3, 0);
-		write_exr((global_cfg.m_debug_image_prefix + "blurred2.exr").c_str(), enc_state.src_img_filtered2, 3, 0);
-	}
 
 	if (global_cfg.m_status_output)
 		fmt_printf("Transforming to ITP\n");
@@ -6725,7 +6716,6 @@ bool compress_photo(const basisu::imagef &orig_src_img, const astc_hdr_6x6_globa
 		save_png(global_cfg.m_debug_image_prefix + "mode_vis.png", debug_state.m_mode_vis);
 		save_png(global_cfg.m_debug_image_prefix + "mode_vis2.png", debug_state.m_mode_vis2);
 		save_png(global_cfg.m_debug_image_prefix + "enc_vis.png", debug_state.m_enc_vis);
-		write_exr((global_cfg.m_debug_image_prefix + "stat_vis.exr").c_str(), debug_state.m_stat_vis, 3, 0);
 	}
 
 	for (uint32_t i = 0; i < total_strips; i++)
@@ -6735,10 +6725,6 @@ bool compress_photo(const basisu::imagef &orig_src_img, const astc_hdr_6x6_globa
 
 	coded_bits.flush();
 
-	if (global_cfg.m_output_images)
-	{
-		write_exr((global_cfg.m_output_image_prefix + "comp.exr").c_str(), enc_state.packed_img, 3, 0);
-	}
 	
 	if (global_cfg.m_debug_output)
 		fmt_printf("\nTotal intermediate output bits/pixel: {3.4}\n", (float)coded_bits.get_total_bits() / (float)(width * height));
@@ -6885,20 +6871,11 @@ bool compress_photo(const basisu::imagef &orig_src_img, const astc_hdr_6x6_globa
 
 		unpacked_bc6h_img.crop(width, height);
 		
-		if (global_cfg.m_output_images)
-		{
-			write_exr((global_cfg.m_output_image_prefix + "unpacked_bc6h.exr").c_str(), unpacked_bc6h_img, 3, 0);
-		}
 	}
 
 	unpacked_astc_img.crop(width, height);
 	unpacked_astc_google_img.crop(width, height);
 	
-	if (global_cfg.m_output_images)
-	{
-		write_exr((global_cfg.m_output_image_prefix + "unpacked_astc.exr").c_str(), unpacked_astc_img, 3, 0);
-		write_exr((global_cfg.m_output_image_prefix + "unpacked_google_astc.exr").c_str(), unpacked_astc_google_img, 3, 0);
-	}
 
 	// ASTC metrics
 	if (global_cfg.m_image_stats)

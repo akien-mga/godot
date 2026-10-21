@@ -86,7 +86,7 @@ Files extracted from upstream source:
 Patches:
 
 - `0001-external-zstd-pr344.patch` ([GH-73441](https://github.com/godotengine/godot/pull/73441))
-- `0002-external-tinyexr.patch` ([GH-97582](https://github.com/godotengine/godot/pull/97582))
+- `0002-disable-exr-io.patch`: Remove EXR file loading and debug output; Godot supplies decoded images.
 - `0003-remove-tinydds-qoi.patch` ([GH-97582](https://github.com/godotengine/godot/pull/97582))
 - `0004-clang-warning-exclude.patch` ([GH-111346](https://github.com/godotengine/godot/pull/111346))
 - `0005-unused-typedef.patch` ([GH-111445](https://github.com/godotengine/godot/pull/111445))
@@ -908,6 +908,29 @@ Files extracted from upstream source:
 - `LICENSE`
 
 
+## openexr
+
+- Upstream: https://github.com/AcademySoftwareFoundation/openexr
+- Version: 3.4.15 (e71cdd5d30a146dcb56c5e4c576d9e9d3c45f4fb, 2026)
+- License: BSD-3-Clause; bundled libdeflate: MIT
+
+Files extracted from upstream source:
+
+- `src/lib/OpenEXRCore/*.{c,h}`, excluding `internal_ht*` (HTJ2K/OpenJPH).
+- `external/deflate/`, excluding unused gzip and CRC-32 sources/headers.
+- `LICENSE.md`.
+
+`OpenEXRConfigInternal.h` configures the embedded C-only build. Core's built-in
+half conversion is used, so Imath and the C++ OpenEXR/IlmThread libraries aren't
+needed. libdeflate is included by `compression.c`. Godot's saver uses PIZ.
+Decoding retains all compression methods except HTJ2K, including DWAA and DWAB.
+
+Patches:
+
+- `0001-embedded-core.patch`: Remove generated configuration and Imath dependencies.
+- `0002-disable-htj2k.patch`: Report HTJ2K as unsupported without linking OpenJPH.
+
+
 ## openxr
 
 - Upstream: https://github.com/KhronosGroup/OpenXR-SDK
@@ -1120,25 +1143,6 @@ Files extracted from upstream source:
 Patches:
 
 - `0001-let-delete-be-delete.patch` ([GH-116024](https://github.com/godotengine/godot/pull/116024))
-
-
-## tinyexr
-
-- Upstream: https://github.com/syoyo/tinyexr
-- Version: 3.2.0 (6f470c9ab24bf3992bc512ce07e8ecb00d9bf105, 2026)
-- License: BSD-3-Clause
-
-Files extracted from upstream source:
-
-- `exr_reader.hh`
-- `streamreader.hh`
-- `tinyexr.{cc,h}`
-- `LICENSE`
-
-Patches:
-
-- `0001-external-zlib.patch` ([GH-55115](https://github.com/godotengine/godot/pull/55115))
-- `0002-fix-multipart-header-stale-size.patch` ([GH-124638](https://github.com/godotengine/godot/pull/124638))
 
 
 ## ufbx

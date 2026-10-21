@@ -3777,7 +3777,7 @@ namespace basisu
 
 	bool is_image_filename_hdr(const char* pFilename);
 
-	// Supports .HDR and most (but not all) .EXR's (see TinyEXR).
+	// Supports .HDR images. Godot supplies decoded EXR images directly.
 	bool load_image_hdr(const char* pFilename, imagef& img, bool ldr_srgb_to_linear = true, float linear_nit_multiplier = 1.0f, float ldr_black_bias = 0.0f);
 	
 	inline bool load_image_hdr(const std::string& filename, imagef& img, bool ldr_srgb_to_linear = true, float linear_nit_multiplier = 1.0f, float ldr_black_bias = 0.0f)
@@ -3790,7 +3790,6 @@ namespace basisu
 		cHITRGBAHalfFloat = 0,
 		cHITRGBAFloat = 1,
 		cHITPNGImage = 2,
-		cHITEXRImage = 3,
 		cHITHDRImage = 4,
 		cHITJPGImage = 5
 	};
@@ -3827,19 +3826,6 @@ namespace basisu
 	bool write_rgbe(uint8_vec& file_data, imagef& img, rgbe_header_info& hdr_info);
 	bool write_rgbe(const char* pFilename, imagef& img, rgbe_header_info& hdr_info);
 
-	bool read_exr(const char* pFilename, imagef& img, int& n_chans);
-	bool read_exr(const void* pMem, size_t mem_size, imagef& img);
-	
-	enum
-	{
-		WRITE_EXR_LINEAR_HINT = 1, // hint for lossy comp. methods: exr_perceptual_treatment_t, logarithmic or linear, defaults to logarithmic
-		WRITE_EXR_STORE_FLOATS = 2, // use 32-bit floats, otherwise it uses half floats
-		WRITE_EXR_NO_COMPRESSION = 4 // no compression, otherwise it uses ZIP compression (16 scanlines per block)
-	};
-
-	// Supports 1 (Y), 3 (RGB), or 4 (RGBA) channel images.
-	bool write_exr(const char* pFilename, const imagef& img, uint32_t n_chans, uint32_t flags);
-			
 	enum
 	{
 		cImageSaveGrayscale = 1,
