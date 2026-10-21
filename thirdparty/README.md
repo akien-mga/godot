@@ -916,19 +916,32 @@ Files extracted from upstream source:
 
 Files extracted from upstream source:
 
-- `src/lib/OpenEXRCore/*.{c,h}`, excluding `internal_ht*` (HTJ2K/OpenJPH).
-- `external/deflate/`, excluding unused gzip and CRC-32 sources/headers.
+- `src/lib/OpenEXRCore/*.{c,h}`, excluding `internal_ht*` (HTJ2K/OpenJPH),
+  `debug.c`, `std_attr.c`, `openexr_debug.h`, `openexr_std_attr.h`, and
+  `internal_dwa_encoder.h`.
+- `external/deflate/`, excluding unused gzip and CRC-32 sources/headers,
+  `NEWS.md`, `README.md`, and these compressor-only files under `lib/`:
+  `deflate_compress.c`, `deflate_compress.h`, `zlib_compress.c`,
+  `bt_matchfinder.h`, `hc_matchfinder.h`, `ht_matchfinder.h`,
+  `matchfinder_common.h`, and `{arm,x86,riscv}/matchfinder_impl.h`.
 - `LICENSE.md`.
 
 `OpenEXRConfigInternal.h` configures the embedded C-only build. Core's built-in
 half conversion is used, so Imath and the C++ OpenEXR/IlmThread libraries aren't
-needed. libdeflate is included by `compression.c`. Godot's saver uses PIZ.
-Decoding retains all compression methods except HTJ2K, including DWAA and DWAB.
+needed. libdeflate's decompressor is included by `compression.c`.
+Encoding is restricted to flat PIZ images, matching Godot's saver. Decoding
+retains all compression methods except HTJ2K, including DWAA and DWAB.
+The unused context printer and empty standard-attribute header are omitted;
+metadata parsing remains available. Native file backends are retained.
 
 Patches:
 
 - `0001-embedded-core.patch`: Remove generated configuration and Imath dependencies.
 - `0002-disable-htj2k.patch`: Report HTJ2K as unsupported without linking OpenJPH.
+- `0003-piz-only-encoding.patch`: Remove unused encoders and their lookup tables,
+  preserve the shared buffer-size bound without libdeflate's compressor, and
+  remove includes for the omitted public headers. Apply after the first two
+  patches to the extracted subset above; omitted files need not be extracted.
 
 
 ## openxr

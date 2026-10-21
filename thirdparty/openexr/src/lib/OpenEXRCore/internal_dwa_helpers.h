@@ -7,7 +7,6 @@
 #define IMF_INTERNAL_DWA_HELPERS_H_HAS_BEEN_INCLUDED
 
 extern uint16_t* exrcore_dwaToLinearTable;
-extern uint16_t* exrcore_dwaToNonLinearTable;
 extern void      exrcore_ensure_dwa_tables ();
 
 /**************************************/
@@ -63,7 +62,6 @@ std_max (size_t a, size_t b)
 #include "internal_dwa_channeldata.h"
 #include "internal_dwa_classifier.h"
 #include "internal_dwa_decoder.h"
-#include "internal_dwa_encoder.h"
 #include "internal_dwa_compressor.h"
 
 #endif /* IMF_INTERNAL_DWA_HELPERS_H_HAS_BEEN_INCLUDED */

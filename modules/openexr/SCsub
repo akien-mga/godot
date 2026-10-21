@@ -14,7 +14,7 @@ env_openexr.Append(CPPDEFINES=[("ILMTHREAD_THREADING_ENABLED", int(env["threads"
 env_thirdparty = env_openexr.Clone()
 env_thirdparty.disable_warnings()
 # Core is C-only. HTJ2K and its OpenJPH dependency are omitted; libdeflate is
-# included by compression.c. Godot's saver uses PIZ.
+# included by compression.c (decode only). Encoding is restricted to PIZ.
 # Imath's library and the C++ OpenEXR API aren't used.
 thirdparty_obj = []
 env_thirdparty.add_source_files(thirdparty_obj, core_dir + "*.c")

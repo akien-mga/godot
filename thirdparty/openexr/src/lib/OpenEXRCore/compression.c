@@ -21,12 +21,9 @@
 #    include "../../../external/deflate/lib/arm/cpu_features.c"
 #    include "../../../external/deflate/lib/x86/cpu_features.c"
 #    include "../../../external/deflate/lib/utils.c"
-#    include "../../../external/deflate/lib/deflate_compress.c"
-#    undef BITBUF_NBITS
 #    include "../../../external/deflate/lib/deflate_decompress.c"
 #    undef BITBUF_NBITS
 #    include "../../../external/deflate/lib/adler32.c"
-#    include "../../../external/deflate/lib/zlib_compress.c"
 #    include "../../../external/deflate/lib/zlib_decompress.c"
 #else
 #    include <libdeflate.h>
@@ -39,9 +36,6 @@
 #    define EXR_USE_CONFIG_DEFLATE_STRUCT 1
 #endif
 
-/* value Aras found to be better trade off of speed vs size */
-#define EXR_DEFAULT_ZLIB_COMPRESS_LEVEL 4
-
 /**************************************/
 
 size_t
@@ -49,7 +43,16 @@ exr_compress_max_buffer_size (size_t in_bytes)
 {
     size_t r, extra;
 
-    r = libdeflate_zlib_compress_bound (NULL, in_bytes);
+    /* Godot writes PIZ only. Preserve libdeflate's zlib bound for shared
+     * scratch-buffer sizing, without retaining its unused compressor.
+     * libdeflate uses blocks of at least 5000 bytes (except the last),
+     * five bytes per stored block, and six bytes for the zlib wrapper. */
+    size_t blocks = in_bytes / 5000 + (in_bytes % 5000 != 0);
+    if (blocks == 0) blocks = 1;
+    if (blocks > (SIZE_MAX - 6) / 5) return SIZE_MAX;
+    extra = blocks * 5 + 6;
+    if (in_bytes > SIZE_MAX - extra) return SIZE_MAX;
+    r = in_bytes + extra;
     /*
      * lib deflate has a message about needing a 9 byte boundary
      * but is unclear if it actually adds that or not
@@ -61,8 +64,8 @@ exr_compress_max_buffer_size (size_t in_bytes)
     /*
      * old library had uiAdd( uiAdd( in, ceil(in * 0.01) ), 100 )
      */
+    if (r > SIZE_MAX / 130) return SIZE_MAX;
     extra = (r * (size_t) 130);
-    if (extra < r) return (size_t) (SIZE_MAX);
     extra /= (size_t) 128;
 
     if (extra > (SIZE_MAX - 100)) return (size_t) (SIZE_MAX);
@@ -71,10 +74,14 @@ exr_compress_max_buffer_size (size_t in_bytes)
     /*
      * in case huf is larger than zlib
      */
-    extra = in_bytes + internal_exr_huf_compress_spare_bytes ();
+    extra = internal_exr_huf_compress_spare_bytes ();
+    if (in_bytes > SIZE_MAX - extra) return SIZE_MAX;
+    extra += in_bytes;
     if (r < extra) r = extra;
 
-    extra = in_bytes + internal_exr_huf_decompress_spare_bytes ();
+    extra = internal_exr_huf_decompress_spare_bytes ();
+    if (in_bytes > SIZE_MAX - extra) return SIZE_MAX;
+    extra += in_bytes;
     if (r < extra) r = extra;
 
     /* make sure there is some small 2 pages worth of buffer */
@@ -95,48 +102,7 @@ exr_compress_buffer (
     size_t              out_bytes_avail,
     size_t*             actual_out)
 {
-    struct libdeflate_compressor* comp;
-
-#ifdef EXR_USE_CONFIG_DEFLATE_STRUCT
-    struct libdeflate_options opt = {
-        .sizeof_options = sizeof (struct libdeflate_options),
-        .malloc_func    = ctxt ? ctxt->alloc_fn : internal_exr_alloc,
-        .free_func      = ctxt ? ctxt->free_fn : internal_exr_free};
-
-#else
-    libdeflate_set_memory_allocator (
-        ctxt ? ctxt->alloc_fn : internal_exr_alloc,
-        ctxt ? ctxt->free_fn : internal_exr_free);
-#endif
-
-    if (level < 0)
-    {
-        exr_get_default_zip_compression_level (&level);
-        /* truly unset anywhere */
-        if (level < 0) level = EXR_DEFAULT_ZLIB_COMPRESS_LEVEL;
-    }
-
-#ifdef EXR_USE_CONFIG_DEFLATE_STRUCT
-    comp = libdeflate_alloc_compressor_ex (level, &opt);
-#else
-    comp = libdeflate_alloc_compressor (level);
-#endif
-    if (comp)
-    {
-        size_t outsz;
-        outsz =
-            libdeflate_zlib_compress (comp, in, in_bytes, out, out_bytes_avail);
-
-        libdeflate_free_compressor (comp);
-
-        if (outsz != 0)
-        {
-            if (actual_out) *actual_out = outsz;
-            return EXR_ERR_SUCCESS;
-        }
-        return EXR_ERR_OUT_OF_MEMORY;
-    }
-    return EXR_ERR_OUT_OF_MEMORY;
+    return EXR_ERR_FEATURE_NOT_IMPLEMENTED;
 }
 
 /**************************************/
@@ -281,6 +247,10 @@ exr_compress_chunk (exr_encode_pipeline_t* encode)
 
     part = ctxt->parts[encode->part_index];
 
+    /* Godot's saver only emits flat PIZ images. */
+    if (part->comp_type != EXR_COMPRESSION_PIZ || encode->sample_count_table)
+        return EXR_ERR_FEATURE_NOT_IMPLEMENTED;
+
     maxbytes = encode->chunk.unpacked_size;
     if (encode->packed_bytes > maxbytes)
         maxbytes = encode->packed_bytes;
@@ -297,103 +267,8 @@ exr_compress_chunk (exr_encode_pipeline_t* encode)
             rv,
             "error allocating buffer %zu",
             exr_compress_max_buffer_size (maxbytes));
-    //return rv;
 
-    if (encode->sample_count_table)
-    {
-        uint64_t sampsize =
-            (((uint64_t) encode->chunk.width) *
-             ((uint64_t) encode->chunk.height));
-
-        sampsize *= sizeof (int32_t);
-
-        if (part->comp_type == EXR_COMPRESSION_NONE)
-        {
-            internal_encode_free_buffer (
-                encode,
-                EXR_TRANSCODE_BUFFER_PACKED_SAMPLES,
-                &(encode->packed_sample_count_table),
-                &(encode->packed_sample_count_alloc_size));
-
-            encode->packed_sample_count_table      = encode->sample_count_table;
-            encode->packed_sample_count_alloc_size = 0;
-            encode->packed_sample_count_bytes = sampsize;
-        }
-        else
-        {
-            void *pb;
-            size_t pbb, pas;
-
-            pb = encode->packed_buffer;
-            pbb = encode->packed_bytes;
-            pas = encode->packed_alloc_size;
-
-            rv = internal_encode_alloc_buffer (
-                encode,
-                EXR_TRANSCODE_BUFFER_PACKED_SAMPLES,
-                &(encode->packed_sample_count_table),
-                &(encode->packed_sample_count_alloc_size),
-                exr_compress_max_buffer_size (sampsize));
-            if (rv != EXR_ERR_SUCCESS)
-                return rv;
-
-            encode->packed_buffer = encode->packed_sample_count_table;
-            encode->packed_bytes = sampsize;
-            encode->packed_alloc_size = encode->packed_sample_count_alloc_size;
-            switch (part->comp_type)
-            {
-                case EXR_COMPRESSION_NONE: rv = EXR_ERR_INVALID_ARGUMENT; break;
-                case EXR_COMPRESSION_RLE: rv = internal_exr_apply_rle (encode); break;
-                case EXR_COMPRESSION_ZIP:
-                case EXR_COMPRESSION_ZIPS: rv = internal_exr_apply_zip (encode); break;
-
-                default:
-                    rv = EXR_ERR_INVALID_ARGUMENT;
-                    break;
-            }
-            encode->packed_buffer = pb;
-            encode->packed_bytes = pbb;
-            encode->packed_alloc_size = pas;
-
-            if (rv != EXR_ERR_SUCCESS)
-                return ctxt->print_error (
-                    ctxt,
-                    rv,
-                    "Unable to compress sample table");
-        }
-    }
-
-    switch (part->comp_type)
-    {
-        case EXR_COMPRESSION_NONE:
-            return ctxt->report_error (
-                ctxt,
-                EXR_ERR_INVALID_ARGUMENT,
-                "no compression set but still trying to compress");
-
-        case EXR_COMPRESSION_RLE: rv = internal_exr_apply_rle (encode); break;
-        case EXR_COMPRESSION_ZIP:
-        case EXR_COMPRESSION_ZIPS: rv = internal_exr_apply_zip (encode); break;
-        case EXR_COMPRESSION_PIZ: rv = internal_exr_apply_piz (encode); break;
-        case EXR_COMPRESSION_PXR24:
-            rv = internal_exr_apply_pxr24 (encode);
-            break;
-        case EXR_COMPRESSION_B44: rv = internal_exr_apply_b44 (encode); break;
-        case EXR_COMPRESSION_B44A: rv = internal_exr_apply_b44a (encode); break;
-        case EXR_COMPRESSION_DWAA: rv = internal_exr_apply_dwaa (encode); break;
-        case EXR_COMPRESSION_DWAB: rv = internal_exr_apply_dwab (encode); break;
-        case EXR_COMPRESSION_HTJ2K32:
-        case EXR_COMPRESSION_HTJ2K256:
-            rv = EXR_ERR_FEATURE_NOT_IMPLEMENTED; break;
-        case EXR_COMPRESSION_LAST_TYPE:
-        default:
-            return ctxt->print_error (
-                ctxt,
-                EXR_ERR_INVALID_ARGUMENT,
-                "Compression technique 0x%02X invalid",
-                (int) part->comp_type);
-    }
-    return rv;
+    return internal_exr_apply_piz (encode);
 }
 
 /**************************************/

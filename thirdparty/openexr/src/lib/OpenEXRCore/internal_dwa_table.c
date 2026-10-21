@@ -6,10 +6,7 @@
 #include <stdint.h>
 
 extern uint16_t* exrcore_dwaToLinearTable;
-extern uint16_t* exrcore_dwaToNonLinearTable;
 
 static uint16_t exrcore_dwaToLinearTable_data[65536];
 uint16_t* exrcore_dwaToLinearTable = exrcore_dwaToLinearTable_data;
 
-static uint16_t exrcore_dwaToNonLinearTable_data[65536];
-uint16_t* exrcore_dwaToNonLinearTable = exrcore_dwaToNonLinearTable_data;

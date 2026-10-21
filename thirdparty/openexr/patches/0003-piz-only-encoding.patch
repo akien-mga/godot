@@ -1,0 +1,2440 @@
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/compression.c
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/compression.c
+@@ -21,12 +21,9 @@
+ #    include "../../../external/deflate/lib/arm/cpu_features.c"
+ #    include "../../../external/deflate/lib/x86/cpu_features.c"
+ #    include "../../../external/deflate/lib/utils.c"
+-#    include "../../../external/deflate/lib/deflate_compress.c"
+-#    undef BITBUF_NBITS
+ #    include "../../../external/deflate/lib/deflate_decompress.c"
+ #    undef BITBUF_NBITS
+ #    include "../../../external/deflate/lib/adler32.c"
+-#    include "../../../external/deflate/lib/zlib_compress.c"
+ #    include "../../../external/deflate/lib/zlib_decompress.c"
+ #else
+ #    include <libdeflate.h>
+@@ -39,9 +36,6 @@
+ #    define EXR_USE_CONFIG_DEFLATE_STRUCT 1
+ #endif
+ 
+-/* value Aras found to be better trade off of speed vs size */
+-#define EXR_DEFAULT_ZLIB_COMPRESS_LEVEL 4
+-
+ /**************************************/
+ 
+ size_t
+@@ -49,7 +43,16 @@
+ {
+     size_t r, extra;
+ 
+-    r = libdeflate_zlib_compress_bound (NULL, in_bytes);
++    /* Godot writes PIZ only. Preserve libdeflate's zlib bound for shared
++     * scratch-buffer sizing, without retaining its unused compressor.
++     * libdeflate uses blocks of at least 5000 bytes (except the last),
++     * five bytes per stored block, and six bytes for the zlib wrapper. */
++    size_t blocks = in_bytes / 5000 + (in_bytes % 5000 != 0);
++    if (blocks == 0) blocks = 1;
++    if (blocks > (SIZE_MAX - 6) / 5) return SIZE_MAX;
++    extra = blocks * 5 + 6;
++    if (in_bytes > SIZE_MAX - extra) return SIZE_MAX;
++    r = in_bytes + extra;
+     /*
+      * lib deflate has a message about needing a 9 byte boundary
+      * but is unclear if it actually adds that or not
+@@ -61,8 +64,8 @@
+     /*
+      * old library had uiAdd( uiAdd( in, ceil(in * 0.01) ), 100 )
+      */
++    if (r > SIZE_MAX / 130) return SIZE_MAX;
+     extra = (r * (size_t) 130);
+-    if (extra < r) return (size_t) (SIZE_MAX);
+     extra /= (size_t) 128;
+ 
+     if (extra > (SIZE_MAX - 100)) return (size_t) (SIZE_MAX);
+@@ -71,10 +74,14 @@
+     /*
+      * in case huf is larger than zlib
+      */
+-    extra = in_bytes + internal_exr_huf_compress_spare_bytes ();
++    extra = internal_exr_huf_compress_spare_bytes ();
++    if (in_bytes > SIZE_MAX - extra) return SIZE_MAX;
++    extra += in_bytes;
+     if (r < extra) r = extra;
+ 
+-    extra = in_bytes + internal_exr_huf_decompress_spare_bytes ();
++    extra = internal_exr_huf_decompress_spare_bytes ();
++    if (in_bytes > SIZE_MAX - extra) return SIZE_MAX;
++    extra += in_bytes;
+     if (r < extra) r = extra;
+ 
+     /* make sure there is some small 2 pages worth of buffer */
+@@ -95,48 +102,7 @@
+     size_t              out_bytes_avail,
+     size_t*             actual_out)
+ {
+-    struct libdeflate_compressor* comp;
+-
+-#ifdef EXR_USE_CONFIG_DEFLATE_STRUCT
+-    struct libdeflate_options opt = {
+-        .sizeof_options = sizeof (struct libdeflate_options),
+-        .malloc_func    = ctxt ? ctxt->alloc_fn : internal_exr_alloc,
+-        .free_func      = ctxt ? ctxt->free_fn : internal_exr_free};
+-
+-#else
+-    libdeflate_set_memory_allocator (
+-        ctxt ? ctxt->alloc_fn : internal_exr_alloc,
+-        ctxt ? ctxt->free_fn : internal_exr_free);
+-#endif
+-
+-    if (level < 0)
+-    {
+-        exr_get_default_zip_compression_level (&level);
+-        /* truly unset anywhere */
+-        if (level < 0) level = EXR_DEFAULT_ZLIB_COMPRESS_LEVEL;
+-    }
+-
+-#ifdef EXR_USE_CONFIG_DEFLATE_STRUCT
+-    comp = libdeflate_alloc_compressor_ex (level, &opt);
+-#else
+-    comp = libdeflate_alloc_compressor (level);
+-#endif
+-    if (comp)
+-    {
+-        size_t outsz;
+-        outsz =
+-            libdeflate_zlib_compress (comp, in, in_bytes, out, out_bytes_avail);
+-
+-        libdeflate_free_compressor (comp);
+-
+-        if (outsz != 0)
+-        {
+-            if (actual_out) *actual_out = outsz;
+-            return EXR_ERR_SUCCESS;
+-        }
+-        return EXR_ERR_OUT_OF_MEMORY;
+-    }
+-    return EXR_ERR_OUT_OF_MEMORY;
++    return EXR_ERR_FEATURE_NOT_IMPLEMENTED;
+ }
+ 
+ /**************************************/
+@@ -281,6 +247,10 @@
+ 
+     part = ctxt->parts[encode->part_index];
+ 
++    /* Godot's saver only emits flat PIZ images. */
++    if (part->comp_type != EXR_COMPRESSION_PIZ || encode->sample_count_table)
++        return EXR_ERR_FEATURE_NOT_IMPLEMENTED;
++
+     maxbytes = encode->chunk.unpacked_size;
+     if (encode->packed_bytes > maxbytes)
+         maxbytes = encode->packed_bytes;
+@@ -297,103 +267,8 @@
+             rv,
+             "error allocating buffer %zu",
+             exr_compress_max_buffer_size (maxbytes));
+-    //return rv;
+-
+-    if (encode->sample_count_table)
+-    {
+-        uint64_t sampsize =
+-            (((uint64_t) encode->chunk.width) *
+-             ((uint64_t) encode->chunk.height));
+-
+-        sampsize *= sizeof (int32_t);
+-
+-        if (part->comp_type == EXR_COMPRESSION_NONE)
+-        {
+-            internal_encode_free_buffer (
+-                encode,
+-                EXR_TRANSCODE_BUFFER_PACKED_SAMPLES,
+-                &(encode->packed_sample_count_table),
+-                &(encode->packed_sample_count_alloc_size));
+-
+-            encode->packed_sample_count_table      = encode->sample_count_table;
+-            encode->packed_sample_count_alloc_size = 0;
+-            encode->packed_sample_count_bytes = sampsize;
+-        }
+-        else
+-        {
+-            void *pb;
+-            size_t pbb, pas;
+-
+-            pb = encode->packed_buffer;
+-            pbb = encode->packed_bytes;
+-            pas = encode->packed_alloc_size;
+-
+-            rv = internal_encode_alloc_buffer (
+-                encode,
+-                EXR_TRANSCODE_BUFFER_PACKED_SAMPLES,
+-                &(encode->packed_sample_count_table),
+-                &(encode->packed_sample_count_alloc_size),
+-                exr_compress_max_buffer_size (sampsize));
+-            if (rv != EXR_ERR_SUCCESS)
+-                return rv;
+-
+-            encode->packed_buffer = encode->packed_sample_count_table;
+-            encode->packed_bytes = sampsize;
+-            encode->packed_alloc_size = encode->packed_sample_count_alloc_size;
+-            switch (part->comp_type)
+-            {
+-                case EXR_COMPRESSION_NONE: rv = EXR_ERR_INVALID_ARGUMENT; break;
+-                case EXR_COMPRESSION_RLE: rv = internal_exr_apply_rle (encode); break;
+-                case EXR_COMPRESSION_ZIP:
+-                case EXR_COMPRESSION_ZIPS: rv = internal_exr_apply_zip (encode); break;
+-
+-                default:
+-                    rv = EXR_ERR_INVALID_ARGUMENT;
+-                    break;
+-            }
+-            encode->packed_buffer = pb;
+-            encode->packed_bytes = pbb;
+-            encode->packed_alloc_size = pas;
+-
+-            if (rv != EXR_ERR_SUCCESS)
+-                return ctxt->print_error (
+-                    ctxt,
+-                    rv,
+-                    "Unable to compress sample table");
+-        }
+-    }
+-
+-    switch (part->comp_type)
+-    {
+-        case EXR_COMPRESSION_NONE:
+-            return ctxt->report_error (
+-                ctxt,
+-                EXR_ERR_INVALID_ARGUMENT,
+-                "no compression set but still trying to compress");
+-
+-        case EXR_COMPRESSION_RLE: rv = internal_exr_apply_rle (encode); break;
+-        case EXR_COMPRESSION_ZIP:
+-        case EXR_COMPRESSION_ZIPS: rv = internal_exr_apply_zip (encode); break;
+-        case EXR_COMPRESSION_PIZ: rv = internal_exr_apply_piz (encode); break;
+-        case EXR_COMPRESSION_PXR24:
+-            rv = internal_exr_apply_pxr24 (encode);
+-            break;
+-        case EXR_COMPRESSION_B44: rv = internal_exr_apply_b44 (encode); break;
+-        case EXR_COMPRESSION_B44A: rv = internal_exr_apply_b44a (encode); break;
+-        case EXR_COMPRESSION_DWAA: rv = internal_exr_apply_dwaa (encode); break;
+-        case EXR_COMPRESSION_DWAB: rv = internal_exr_apply_dwab (encode); break;
+-        case EXR_COMPRESSION_HTJ2K32:
+-        case EXR_COMPRESSION_HTJ2K256:
+-            rv = EXR_ERR_FEATURE_NOT_IMPLEMENTED; break;
+-        case EXR_COMPRESSION_LAST_TYPE:
+-        default:
+-            return ctxt->print_error (
+-                ctxt,
+-                EXR_ERR_INVALID_ARGUMENT,
+-                "Compression technique 0x%02X invalid",
+-                (int) part->comp_type);
+-    }
+-    return rv;
++
++    return internal_exr_apply_piz (encode);
+ }
+ 
+ /**************************************/
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/internal_b44.c
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/internal_b44.c
+@@ -13,222 +13,14 @@
+ 
+ /**************************************/
+ 
+-extern uint16_t* exrcore_expTable;
+ extern uint16_t* exrcore_logTable;
+ extern void      exrcore_ensure_b44_tables ();
+ 
+ static inline void
+-convertFromLinear (uint16_t s[16])
+-{
+-    for (int i = 0; i < 16; ++i)
+-        s[i] = exrcore_expTable[s[i]];
+-}
+-
+-static inline void
+ convertToLinear (uint16_t s[16])
+ {
+     for (int i = 0; i < 16; ++i)
+         s[i] = exrcore_logTable[s[i]];
+-}
+-
+-/**************************************/
+-
+-static inline int
+-shiftAndRound (int x, int shift)
+-{
+-    int a, b;
+-    //
+-    // Compute
+-    //
+-    //     y = x * pow (2, -shift),
+-    //
+-    // then round y to the nearest integer.
+-    // In case of a tie, where y is exactly
+-    // halfway between two integers, round
+-    // to the even one.
+-    //
+-
+-    x <<= 1;
+-    a = (1 << shift) - 1;
+-    shift += 1;
+-    b = (x >> shift) & 1;
+-    return (x + a + b) >> shift;
+-}
+-
+-/*
+- * Pack a block of 4 by 4 16-bit pixels (32 bytes) into
+- * either 14 or 3 bytes.
+- *
+- *
+- * Integers s[0] ... s[15] represent floating-point numbers
+- * in what is essentially a sign-magnitude format.  Convert
+- * s[0] .. s[15] into a new set of integers, t[0] ... t[15],
+- * such that if t[i] is greater than t[j], the floating-point
+- * number that corresponds to s[i] is always greater than
+- * the floating-point number that corresponds to s[j].
+- *
+- * Also, replace any bit patterns that represent NaNs or
+- * infinities with bit patterns that represent floating-point
+- * zeroes.
+- *
+- *	bit pattern	floating-point		bit pattern
+- *	in s[i]		value			in t[i]
+- *
+- *  0x7fff		NAN			0x8000
+- *  0x7ffe		NAN			0x8000
+- *	  ...					  ...
+- *  0x7c01		NAN			0x8000
+- *  0x7c00		+infinity		0x8000
+- *  0x7bff		+HALF_MAX		0xfbff
+- *  0x7bfe					0xfbfe
+- *  0x7bfd					0xfbfd
+- *	  ...					  ...
+- *  0x0002		+2 * HALF_MIN		0x8002
+- *  0x0001		+HALF_MIN		0x8001
+- *  0x0000		+0.0			0x8000
+- *  0x8000		-0.0			0x7fff
+- *  0x8001		-HALF_MIN		0x7ffe
+- *  0x8002		-2 * HALF_MIN		0x7ffd
+- *	  ...					  ...
+- *  0xfbfd					0x0f02
+- *  0xfbfe					0x0401
+- *  0xfbff		-HALF_MAX		0x0400
+- *  0xfc00		-infinity		0x8000
+- *  0xfc01		NAN			0x8000
+- *	  ...					  ...
+- *  0xfffe		NAN			0x8000
+- *  0xffff		NAN			0x8000
+- */
+-static int
+-pack (const uint16_t s[16], uint8_t b[14], int flatfields, int exactmax)
+-{
+-    int      d[16];
+-    int      r[15];
+-    int      rMin;
+-    int      rMax;
+-    uint16_t t[16];
+-    uint16_t tMax;
+-    int      shift = -1;
+-
+-    const int bias = 0x20;
+-
+-    for (int i = 0; i < 16; ++i)
+-    {
+-        if ((s[i] & 0x7c00) == 0x7c00)
+-            t[i] = 0x8000;
+-        else if (s[i] & 0x8000)
+-            t[i] = ~s[i];
+-        else
+-            t[i] = s[i] | 0x8000;
+-    }
+-
+-    // find max
+-    tMax = 0;
+-    for (int i = 0; i < 16; ++i)
+-        if (tMax < t[i]) tMax = t[i];
+-
+-    //
+-    // Compute a set of running differences, r[0] ... r[14]:
+-    // Find a shift value such that after rounding off the
+-    // rightmost bits and shifting all differences are between
+-    // -32 and +31.  Then bias the differences so that they
+-    // end up between 0 and 63.
+-    //
+-
+-    do
+-    {
+-        shift += 1;
+-
+-        //
+-        // Compute absolute differences, d[0] ... d[15],
+-        // between tMax and t[0] ... t[15].
+-        //
+-        // Shift and round the absolute differences.
+-        //
+-
+-        for (int i = 0; i < 16; ++i)
+-            d[i] = shiftAndRound (tMax - t[i], shift);
+-
+-        //
+-        // Convert d[0] .. d[15] into running differences
+-        //
+-
+-        r[0] = d[0] - d[4] + bias;
+-        r[1] = d[4] - d[8] + bias;
+-        r[2] = d[8] - d[12] + bias;
+-
+-        r[3] = d[0] - d[1] + bias;
+-        r[4] = d[4] - d[5] + bias;
+-        r[5] = d[8] - d[9] + bias;
+-        r[6] = d[12] - d[13] + bias;
+-
+-        r[7]  = d[1] - d[2] + bias;
+-        r[8]  = d[5] - d[6] + bias;
+-        r[9]  = d[9] - d[10] + bias;
+-        r[10] = d[13] - d[14] + bias;
+-
+-        r[11] = d[2] - d[3] + bias;
+-        r[12] = d[6] - d[7] + bias;
+-        r[13] = d[10] - d[11] + bias;
+-        r[14] = d[14] - d[15] + bias;
+-
+-        rMin = r[0];
+-        rMax = r[0];
+-
+-        for (int i = 1; i < 15; ++i)
+-        {
+-            if (rMin > r[i]) rMin = r[i];
+-
+-            if (rMax < r[i]) rMax = r[i];
+-        }
+-    } while (rMin < 0 || rMax > 0x3f);
+-
+-    if (rMin == bias && rMax == bias && flatfields)
+-    {
+-        //
+-        // Special case - all pixels have the same value.
+-        // We encode this in 3 instead of 14 bytes by
+-        // storing the value 0xfc in the third output byte,
+-        // which cannot occur in the 14-byte encoding.
+-        //
+-
+-        b[0] = (uint8_t) (t[0] >> 8);
+-        b[1] = (uint8_t) t[0];
+-        b[2] = 0xfc;
+-
+-        return 3;
+-    }
+-
+-    if (exactmax)
+-    {
+-        //
+-        // Adjust t[0] so that the pixel whose value is equal
+-        // to tMax gets represented as accurately as possible.
+-        //
+-
+-        t[0] = tMax - (uint16_t) (d[0] << shift);
+-    }
+-
+-    //
+-    // Pack t[0], shift and r[0] ... r[14] into 14 bytes:
+-    //
+-
+-    b[0]  = (uint8_t) (t[0] >> 8);
+-    b[1]  = (uint8_t) t[0];
+-    b[2]  = (uint8_t) ((shift << 2) | (r[0] >> 4));
+-    b[3]  = (uint8_t) ((r[0] << 4) | (r[1] >> 2));
+-    b[4]  = (uint8_t) ((r[1] << 6) | r[2]);
+-    b[5]  = (uint8_t) ((r[3] << 2) | (r[4] >> 4));
+-    b[6]  = (uint8_t) ((r[4] << 4) | (r[5] >> 2));
+-    b[7]  = (uint8_t) ((r[5] << 6) | r[6]);
+-    b[8]  = (uint8_t) ((r[7] << 2) | (r[8] >> 4));
+-    b[9]  = (uint8_t) ((r[8] << 4) | (r[9] >> 2));
+-    b[10] = (uint8_t) ((r[9] << 6) | r[10]);
+-    b[11] = (uint8_t) ((r[11] << 2) | (r[12] >> 4));
+-    b[12] = (uint8_t) ((r[12] << 4) | (r[13] >> 2));
+-    b[13] = (uint8_t) ((r[13] << 6) | r[14]);
+-
+-    return 14;
+ }
+ 
+ /**************************************/
+@@ -331,189 +123,6 @@
+ 
+     for (int i = 1; i < 16; ++i)
+         s[i] = s[0];
+-}
+-
+-/**************************************/
+-
+-static exr_result_t
+-compress_b44_impl (exr_encode_pipeline_t* encode, int flat_field)
+-{
+-    uint8_t*       out  = encode->compressed_buffer;
+-    uint64_t       nOut = 0;
+-    uint8_t *      scratch, *tmp;
+-    const uint8_t* packed;
+-    int            nx, ny, wcount;
+-    uint64_t       bpl, nBytes;
+-    exr_result_t   rv;
+-
+-    rv = internal_encode_alloc_buffer (
+-        encode,
+-        EXR_TRANSCODE_BUFFER_SCRATCH1,
+-        &(encode->scratch_buffer_1),
+-        &(encode->scratch_alloc_size_1),
+-        encode->packed_bytes);
+-    if (rv != EXR_ERR_SUCCESS) return rv;
+-
+-    exrcore_ensure_b44_tables ();
+-
+-    nOut   = 0;
+-    packed = encode->packed_buffer;
+-    for (int y = 0; y < encode->chunk.height; ++y)
+-    {
+-        int cury = y + encode->chunk.start_y;
+-
+-        scratch = encode->scratch_buffer_1;
+-        for (int c = 0; c < encode->channel_count; ++c)
+-        {
+-            const exr_coding_channel_info_t* curc = encode->channels + c;
+-
+-            nx     = curc->width;
+-            ny     = curc->height;
+-            bpl    = ((uint64_t) (nx)) * (uint64_t) (curc->bytes_per_element);
+-            nBytes = ((uint64_t) (ny)) * bpl;
+-
+-            if (nBytes == 0) continue;
+-
+-            tmp = scratch;
+-            if (curc->y_samples > 1)
+-            {
+-                if ((cury % curc->y_samples) != 0)
+-                {
+-                    scratch += nBytes;
+-                    continue;
+-                }
+-                tmp += ((uint64_t) (y / curc->y_samples)) * bpl;
+-            }
+-            else { tmp += ((uint64_t) y) * bpl; }
+-
+-            memcpy (tmp, packed, bpl);
+-            if (curc->data_type == EXR_PIXEL_HALF) priv_to_native16 (tmp, nx);
+-            packed += bpl;
+-            scratch += nBytes;
+-        }
+-    }
+-
+-    nOut    = 0;
+-    scratch = encode->scratch_buffer_1;
+-    for (int c = 0; c < encode->channel_count; ++c)
+-    {
+-        const exr_coding_channel_info_t* curc = encode->channels + c;
+-
+-        nx     = curc->width;
+-        ny     = curc->height;
+-        bpl    = (uint64_t) (nx) * (uint64_t) (curc->bytes_per_element);
+-        nBytes = ((uint64_t) (ny)) * bpl;
+-
+-        if (nBytes == 0) continue;
+-
+-        if (curc->data_type != EXR_PIXEL_HALF)
+-        {
+-            if (nOut + nBytes > encode->compressed_alloc_size)
+-                return EXR_ERR_OUT_OF_MEMORY;
+-            memcpy (out, scratch, nBytes);
+-            out += nBytes;
+-            scratch += nBytes;
+-            nOut += nBytes;
+-            continue;
+-        }
+-
+-        for (int y = 0; y < ny; y += 4)
+-        {
+-            //
+-            // Copy the next 4x4 pixel block into array s.
+-            // If the width, cd.nx, or the height, cd.ny, of
+-            // the pixel data in _tmpBuffer is not divisible
+-            // by 4, then pad the data by repeating the
+-            // rightmost column and the bottom row.
+-            //
+-            uint16_t *row0, *row1, *row2, *row3;
+-            /* row offset in elements: use uint64_t so y*nx cannot overflow int */
+-            uint64_t row_off = (uint64_t) (y) * (uint64_t) (nx);
+-
+-            row0 = (uint16_t*) scratch + row_off;
+-            row1 = row0 + (uint64_t) nx;
+-            row2 = row1 + (uint64_t) nx;
+-            row3 = row2 + (uint64_t) nx;
+-
+-            if (y + 3 >= ny)
+-            {
+-                if (y + 1 >= ny) row1 = row0;
+-                if (y + 2 >= ny) row2 = row1;
+-
+-                row3 = row2;
+-            }
+-
+-            for (int x = 0; x < nx; x += 4)
+-            {
+-                uint16_t s[16];
+-
+-                if (x + 3 >= nx)
+-                {
+-                    int n = nx - x;
+-
+-                    for (int i = 0; i < 4; ++i)
+-                    {
+-                        int j = i;
+-                        if (j > n - 1) j = n - 1;
+-
+-                        s[i + 0]  = row0[j];
+-                        s[i + 4]  = row1[j];
+-                        s[i + 8]  = row2[j];
+-                        s[i + 12] = row3[j];
+-                    }
+-                }
+-                else
+-                {
+-                    memcpy (&s[0], row0, 4 * sizeof (uint16_t));
+-                    memcpy (&s[4], row1, 4 * sizeof (uint16_t));
+-                    memcpy (&s[8], row2, 4 * sizeof (uint16_t));
+-                    memcpy (&s[12], row3, 4 * sizeof (uint16_t));
+-                }
+-
+-                row0 += 4;
+-                row1 += 4;
+-                row2 += 4;
+-                row3 += 4;
+-
+-                //
+-                // Compress the contents of array s and append the
+-                // results to the output buffer.
+-                //
+-
+-                if (curc->p_linear) convertFromLinear (s);
+-
+-                wcount = pack (s, out, flat_field, !(curc->p_linear));
+-                out += wcount;
+-                nOut += (uint64_t) wcount;
+-                if (nOut + 14 > encode->compressed_alloc_size)
+-                    return EXR_ERR_OUT_OF_MEMORY;
+-            }
+-        }
+-        scratch += nBytes;
+-    }
+-
+-    if (nOut > encode->packed_bytes)
+-    {
+-        memcpy (
+-            encode->compressed_buffer,
+-            encode->packed_buffer,
+-            encode->packed_bytes);
+-        nOut = encode->packed_bytes;
+-    }
+-    encode->compressed_bytes = nOut;
+-    return rv;
+-}
+-
+-exr_result_t
+-internal_exr_apply_b44 (exr_encode_pipeline_t* encode)
+-{
+-    return compress_b44_impl (encode, 0);
+-}
+-
+-exr_result_t
+-internal_exr_apply_b44a (exr_encode_pipeline_t* encode)
+-{
+-    return compress_b44_impl (encode, 1);
+ }
+ 
+ /**************************************/
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/internal_b44_table.c
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/internal_b44_table.c
+@@ -5,11 +5,8 @@
+ 
+ #include <stdint.h>
+ 
+-extern uint16_t* exrcore_expTable;
+ extern uint16_t* exrcore_logTable;
+ 
+-static uint16_t exrcore_expTable_data[65536];
+-uint16_t* exrcore_expTable = exrcore_expTable_data;
+ 
+ static uint16_t exrcore_logTable_data[65536];
+ uint16_t* exrcore_logTable = exrcore_logTable_data;
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/internal_b44_table_init.c
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/internal_b44_table_init.c
+@@ -8,23 +8,9 @@
+ #include "internal_coding.h"
+ #include "internal_thread.h"
+ 
+-extern uint16_t* exrcore_expTable;
+ extern uint16_t* exrcore_logTable;
+ 
+ static once_flag b44_tables_once = ONCE_FLAG_INIT;
+-
+-static inline uint16_t
+-b44_convertFromLinear (uint16_t x)
+-{
+-    if ((x & 0x7c00) == 0x7c00) // infinity/nan?
+-        return 0;
+-    if (x >= 0x558c && x < 0x8000) // >= 8 * log (HALF_MAX)
+-        return 0x7bff;             // HALF_MAX
+-
+-    float f = half_to_float (x);
+-    f       = expf (f / 8);
+-    return float_to_half (f);
+-}
+ 
+ static inline uint16_t
+ b44_convertToLinear (uint16_t x)
+@@ -45,7 +31,6 @@
+ {
+     for (int i = 0; i < 65536; i++)
+     {
+-        exrcore_expTable[i] = b44_convertFromLinear (i);
+         exrcore_logTable[i] = b44_convertToLinear (i);
+     }
+ }
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/internal_compress.h
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/internal_compress.h
+@@ -11,34 +11,9 @@
+ uint64_t internal_rle_compress (
+     void* out, uint64_t outbytes, const void* src, uint64_t srcbytes);
+ 
+-void internal_zip_deconstruct_bytes (
+-    uint8_t* scratch, const uint8_t* source, uint64_t count);
+-
+ void internal_zip_reconstruct_bytes (
+     uint8_t* out, uint8_t* scratch_source, uint64_t count);
+ 
+-exr_result_t internal_exr_apply_rle (exr_encode_pipeline_t* encode);
+-
+-exr_result_t internal_exr_apply_zip (exr_encode_pipeline_t* encode);
+-
+ exr_result_t internal_exr_apply_piz (exr_encode_pipeline_t* encode);
+ 
+-exr_result_t internal_exr_apply_pxr24 (exr_encode_pipeline_t* encode);
+-
+-exr_result_t internal_exr_apply_b44 (exr_encode_pipeline_t* encode);
+-
+-exr_result_t internal_exr_apply_b44a (exr_encode_pipeline_t* encode);
+-
+-exr_result_t internal_exr_apply_dwaa (exr_encode_pipeline_t* encode);
+-
+-exr_result_t internal_exr_apply_dwab (exr_encode_pipeline_t* encode);
+-
+-#ifdef __cplusplus
+-extern "C" {
+-#endif
+-exr_result_t internal_exr_apply_ht (exr_encode_pipeline_t* encode);
+-#ifdef __cplusplus
+-}
+-#endif
+-
+ #endif /* OPENEXR_CORE_COMPRESS_H */
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/internal_dwa.c
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/internal_dwa.c
+@@ -123,58 +123,6 @@
+ /**************************************/
+ 
+ exr_result_t
+-internal_exr_apply_dwaa (exr_encode_pipeline_t* encode)
+-{
+-    exr_result_t  rv;
+-    DwaCompressor dwaa;
+-    rv = internal_encode_alloc_buffer (
+-        encode,
+-        EXR_TRANSCODE_BUFFER_SCRATCH1,
+-        &(encode->scratch_buffer_1),
+-        &(encode->scratch_alloc_size_1),
+-        internal_exr_huf_compress_spare_bytes ());
+-    if (rv == EXR_ERR_SUCCESS)
+-    {
+-        exr_storage_t st = (exr_storage_t)encode->chunk.type;
+-        AcCompression accomp = STATIC_HUFFMAN;
+-        /* C++ had this discrepancy between encoders for tiled vs scanline */
+-        if (st == EXR_STORAGE_TILED || st == EXR_STORAGE_DEEP_TILED)
+-            accomp = DEFLATE;
+-        rv = DwaCompressor_construct (&dwaa, accomp, encode, NULL);
+-        if (rv == EXR_ERR_SUCCESS) rv = DwaCompressor_compress (&dwaa);
+-
+-        DwaCompressor_destroy (&dwaa);
+-    }
+-
+-    return rv;
+-}
+-
+-/**************************************/
+-
+-exr_result_t
+-internal_exr_apply_dwab (exr_encode_pipeline_t* encode)
+-{
+-    exr_result_t  rv;
+-    DwaCompressor dwab;
+-
+-    rv = internal_encode_alloc_buffer (
+-        encode,
+-        EXR_TRANSCODE_BUFFER_SCRATCH1,
+-        &(encode->scratch_buffer_1),
+-        &(encode->scratch_alloc_size_1),
+-        internal_exr_huf_compress_spare_bytes ());
+-    if (rv == EXR_ERR_SUCCESS)
+-    {
+-        rv = DwaCompressor_construct (&dwab, STATIC_HUFFMAN, encode, NULL);
+-        if (rv == EXR_ERR_SUCCESS) rv = DwaCompressor_compress (&dwab);
+-
+-        DwaCompressor_destroy (&dwab);
+-    }
+-
+-    return rv;
+-}
+-
+-exr_result_t
+ internal_exr_undo_dwaa (
+     exr_decode_pipeline_t* decode,
+     const void*            compressed_data,
+@@ -197,7 +145,7 @@
+          * decompression doesn't pay attention to the acCompression flag
+          * but if it ever needs to, match above discrepancy scanline vs tile
+          */
+-        rv = DwaCompressor_construct (&dwaa, STATIC_HUFFMAN, NULL, decode);
++        rv = DwaCompressor_construct (&dwaa, STATIC_HUFFMAN, decode);
+         if (rv == EXR_ERR_SUCCESS)
+             rv = DwaCompressor_uncompress (
+                 &dwaa,
+@@ -232,7 +180,7 @@
+         internal_exr_huf_decompress_spare_bytes ());
+     if (rv == EXR_ERR_SUCCESS)
+     {
+-        rv = DwaCompressor_construct (&dwab, STATIC_HUFFMAN, NULL, decode);
++        rv = DwaCompressor_construct (&dwab, STATIC_HUFFMAN, decode);
+         if (rv == EXR_ERR_SUCCESS)
+             rv = DwaCompressor_uncompress (
+                 &dwab,
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/internal_dwa_compressor.h
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/internal_dwa_compressor.h
+@@ -11,7 +11,6 @@
+ 
+ typedef struct _DwaCompressor
+ {
+-    exr_encode_pipeline_t* _encode;
+     exr_decode_pipeline_t* _decode;
+ 
+     AcCompression _acCompression;
+@@ -39,20 +38,14 @@
+ 
+     exr_memory_allocation_func_t alloc_fn;
+     exr_memory_free_func_t       free_fn;
+-
+-    int   _zipLevel;
+-    float _dwaCompressionLevel;
+ } DwaCompressor;
+ 
+ static exr_result_t DwaCompressor_construct (
+     DwaCompressor*         me,
+     AcCompression          acCompression,
+-    exr_encode_pipeline_t* encode,
+     exr_decode_pipeline_t* decode);
+ 
+ static void DwaCompressor_destroy (DwaCompressor* me);
+-
+-static exr_result_t DwaCompressor_compress (DwaCompressor* me);
+ 
+ static exr_result_t DwaCompressor_uncompress (
+     DwaCompressor* me,
+@@ -64,8 +57,6 @@
+ static exr_result_t
+ DwaCompressor_initializeBuffers (DwaCompressor* me, size_t*);
+ 
+-static exr_result_t DwaCompressor_writeRelevantChannelRules (
+-    DwaCompressor* me, uint8_t** outPtr, uint64_t nAvail, uint64_t* nWritten);
+ static exr_result_t DwaCompressor_readChannelRules (
+     DwaCompressor*  me,
+     const uint8_t** inPtr,
+@@ -94,7 +85,6 @@
+ DwaCompressor_construct (
+     DwaCompressor*         me,
+     AcCompression          acCompression,
+-    exr_encode_pipeline_t* encode,
+     exr_decode_pipeline_t* decode)
+ {
+     exr_result_t rv = EXR_ERR_SUCCESS;
+@@ -106,54 +96,8 @@
+ 
+     me->_acCompression = acCompression;
+ 
+-    me->_encode = encode;
+     me->_decode = decode;
+ 
+-    if (encode)
+-    {
+-        exr_const_context_t pctxt = encode->context;
+-
+-        me->alloc_fn = pctxt ? pctxt->alloc_fn : internal_exr_alloc;
+-        me->free_fn  = pctxt ? pctxt->free_fn : internal_exr_free;
+-
+-        me->_channelData = internal_exr_alloc_aligned (
+-            me->alloc_fn,
+-            &(me->_channel_mem),
+-            sizeof (ChannelData) * (size_t) encode->channel_count,
+-            _SSE_ALIGNMENT);
+-        if (!me->_channelData) return EXR_ERR_OUT_OF_MEMORY;
+-
+-        memset (
+-            me->_channelData,
+-            0,
+-            sizeof (ChannelData) * (size_t) encode->channel_count);
+-
+-        me->_numChannels = encode->channel_count;
+-        for (int c = 0; c < encode->channel_count; ++c)
+-        {
+-            me->_channelData[c].chan        = encode->channels + c;
+-            me->_channelData[c].compression = UNKNOWN;
+-            DctCoderChannelData_construct (
+-                &(me->_channelData[c]._dctData),
+-                me->_channelData[c].chan->data_type);
+-        }
+-
+-        // DWAA should be 32, DWAB should be 256
+-        me->_numScanLines = encode->chunk.height;
+-
+-        me->_min[0] = encode->chunk.start_x;
+-        me->_min[1] = encode->chunk.start_y;
+-        me->_max[0] = me->_min[0] + encode->chunk.width - 1;
+-        me->_max[1] = me->_min[1] + encode->chunk.height - 1;
+-
+-        rv = exr_get_zip_compression_level (
+-            encode->context, encode->part_index, &(me->_zipLevel));
+-        if (rv != EXR_ERR_SUCCESS) return rv;
+-        rv = exr_get_dwa_compression_level (
+-            encode->context, encode->part_index, &(me->_dwaCompressionLevel));
+-        if (rv != EXR_ERR_SUCCESS) return rv;
+-    }
+-    else
+     {
+         exr_const_context_t pctxt = decode->context;
+ 
+@@ -220,470 +164,6 @@
+     {
+         if (me->_planarUncBuffer[i]) me->free_fn (me->_planarUncBuffer[i]);
+     }
+-}
+-
+-/**************************************/
+-
+-exr_result_t
+-DwaCompressor_compress (DwaCompressor* me)
+-{
+-    exr_result_t rv;
+-    uint8_t*     outPtr;
+-    uint64_t*    sizes;
+-    size_t       outBufferSize = 0;
+-    uint64_t     dataBytes, nWritten = 0;
+-    uint64_t     nAvail;
+-    uint64_t     fileVersion = 2;
+-    uint64_t*    version;
+-    uint64_t*    unknownUncompressedSize;
+-    uint64_t*    unknownCompressedSize;
+-    uint64_t*    acCompressedSize;
+-    uint64_t*    dcCompressedSize;
+-    uint64_t*    rleCompressedSize;
+-    uint64_t*    rleUncompressedSize;
+-    uint64_t*    rleRawSize;
+-
+-    uint64_t* totalAcUncompressedCount;
+-    uint64_t* totalDcUncompressedCount;
+-
+-    uint64_t* acCompression;
+-    uint8_t*  packedAcEnd;
+-    uint8_t*  packedDcEnd;
+-    uint8_t*  outDataPtr;
+-    uint8_t*  inDataPtr;
+-
+-    // Starting with DWA v2, we write the channel
+-    // classification rules into the file
+-    me->_channelRules     = sDefaultChannelRules;
+-    me->_channelRuleCount = sizeof (sDefaultChannelRules) / sizeof (Classifier);
+-
+-    rv = DwaCompressor_initializeBuffers (me, &outBufferSize);
+-
+-    nAvail = me->_encode->compressed_alloc_size;
+-    if (nAvail < (NUM_SIZES_SINGLE * sizeof (uint64_t)))
+-        return EXR_ERR_OUT_OF_MEMORY;
+-
+-    rv = internal_encode_alloc_buffer (
+-        me->_encode,
+-        EXR_TRANSCODE_BUFFER_SCRATCH1,
+-        &(me->_encode->compressed_buffer),
+-        &(me->_encode->compressed_alloc_size),
+-        outBufferSize);
+-    if (rv != EXR_ERR_SUCCESS) return rv;
+-
+-    nAvail = outBufferSize;
+-    sizes  = (uint64_t*) me->_encode->compressed_buffer;
+-
+-    //
+-    // Zero all the numbers in the chunk header
+-    //
+-    //    memset (sizes, 0, NUM_SIZES_SINGLE * sizeof (uint64_t));
+-    memset (sizes, 0, me->_encode->compressed_alloc_size);
+-
+-#define OBIDX(x) (uint64_t*) (sizes + x)
+-
+-    version                 = OBIDX (VERSION);
+-    unknownUncompressedSize = OBIDX (UNKNOWN_UNCOMPRESSED_SIZE);
+-    unknownCompressedSize   = OBIDX (UNKNOWN_COMPRESSED_SIZE);
+-    acCompressedSize        = OBIDX (AC_COMPRESSED_SIZE);
+-    dcCompressedSize        = OBIDX (DC_COMPRESSED_SIZE);
+-    rleCompressedSize       = OBIDX (RLE_COMPRESSED_SIZE);
+-    rleUncompressedSize     = OBIDX (RLE_UNCOMPRESSED_SIZE);
+-    rleRawSize              = OBIDX (RLE_RAW_SIZE);
+-
+-    totalAcUncompressedCount = OBIDX (AC_UNCOMPRESSED_COUNT);
+-    totalDcUncompressedCount = OBIDX (DC_UNCOMPRESSED_COUNT);
+-
+-    acCompression = OBIDX (AC_COMPRESSION);
+-    packedAcEnd   = NULL;
+-    packedDcEnd   = NULL;
+-
+-    // Now write in the channel rules...
+-    outPtr = (uint8_t*) (sizes + NUM_SIZES_SINGLE);
+-    if (rv == EXR_ERR_SUCCESS && fileVersion >= 2)
+-    {
+-        rv = DwaCompressor_writeRelevantChannelRules (
+-            me, &outPtr, nAvail, &nWritten);
+-    }
+-
+-    // post add this so we have a 0 value for the relevant channel
+-    // rules to fill up
+-    nWritten += NUM_SIZES_SINGLE * sizeof (uint64_t);
+-
+-    if (rv != EXR_ERR_SUCCESS || nWritten >= me->_encode->compressed_alloc_size)
+-        return EXR_ERR_OUT_OF_MEMORY;
+-
+-    outDataPtr = outPtr;
+-
+-    //
+-    // We might not be dealing with any color data, in which
+-    // case the AC buffer size will be 0, and dereferencing
+-    // a vector will not be a good thing to do.
+-    //
+-
+-    if (me->_packedAcBuffer) packedAcEnd = me->_packedAcBuffer;
+-    if (me->_packedDcBuffer) packedDcEnd = me->_packedDcBuffer;
+-
+-    //
+-    // Setup the AC compression strategy and the version in the data block,
+-    // then write the relevant channel classification rules if needed
+-    //
+-    *version       = fileVersion;
+-    *acCompression = me->_acCompression;
+-
+-    rv = DwaCompressor_setupChannelData (me);
+-    if (rv != EXR_ERR_SUCCESS) return rv;
+-
+-    //
+-    // Determine the start of each row in the input buffer
+-    // Channels are interleaved by scanline
+-    //
+-    for (int c = 0; c < me->_numChannels; ++c)
+-    {
+-        me->_channelData[c].processed = 0;
+-    }
+-
+-    inDataPtr = me->_encode->packed_buffer;
+-
+-    for (int y = me->_min[1]; y <= me->_max[1]; ++y)
+-    {
+-        for (int c = 0; c < me->_numChannels; ++c)
+-        {
+-            ChannelData*               cd   = &(me->_channelData[c]);
+-            exr_coding_channel_info_t* chan = cd->chan;
+-
+-            if ((y % chan->y_samples) != 0) continue;
+-
+-            rv = DctCoderChannelData_push_row (
+-                me->alloc_fn, me->free_fn, &(cd->_dctData), inDataPtr);
+-            if (rv != EXR_ERR_SUCCESS) return rv;
+-
+-            inDataPtr += chan->width * chan->bytes_per_element;
+-        }
+-    }
+-
+-    //
+-    // Make a pass over all our CSC sets and try to encode them first
+-    //
+-
+-    for (int csc = 0; csc < me->_numCscChannelSets; ++csc)
+-    {
+-        LossyDctEncoder enc;
+-        CscChannelSet*  cset = &(me->_cscChannelSets[csc]);
+-
+-        rv = LossyDctEncoderCsc_construct (
+-            &enc,
+-            me->_dwaCompressionLevel / 100000.f,
+-            &(me->_channelData[cset->idx[0]]._dctData),
+-            &(me->_channelData[cset->idx[1]]._dctData),
+-            &(me->_channelData[cset->idx[2]]._dctData),
+-            packedAcEnd,
+-            packedDcEnd,
+-            exrcore_dwaToNonLinearTable,
+-            me->_channelData[cset->idx[0]].chan->width,
+-            me->_channelData[cset->idx[0]].chan->height);
+-
+-        if (rv == EXR_ERR_SUCCESS)
+-            rv = LossyDctEncoder_execute (me->alloc_fn, me->free_fn, &enc);
+-
+-        *totalAcUncompressedCount = *totalAcUncompressedCount + enc._numAcComp;
+-        *totalDcUncompressedCount = *totalDcUncompressedCount + enc._numDcComp;
+-
+-        packedAcEnd += enc._numAcComp * sizeof (uint16_t);
+-        packedDcEnd += enc._numDcComp * sizeof (uint16_t);
+-
+-        me->_channelData[cset->idx[0]].processed = 1;
+-        me->_channelData[cset->idx[1]].processed = 1;
+-        me->_channelData[cset->idx[2]].processed = 1;
+-
+-        if (rv != EXR_ERR_SUCCESS) return rv;
+-    }
+-
+-    for (int chan = 0; chan < me->_numChannels; ++chan)
+-    {
+-        ChannelData*               cd    = &(me->_channelData[chan]);
+-        exr_coding_channel_info_t* pchan = cd->chan;
+-
+-        if (cd->processed) continue;
+-
+-        switch (cd->compression)
+-        {
+-            case LOSSY_DCT:
+-                //
+-                // For LOSSY_DCT, treat this just like the CSC'd case,
+-                // but only operate on one channel
+-                //
+-                {
+-                    LossyDctEncoder       enc;
+-                    const unsigned short* nonlinearLut = NULL;
+-
+-                    if (!pchan->p_linear)
+-                        nonlinearLut = exrcore_dwaToNonLinearTable;
+-
+-                    rv = LossyDctEncoder_construct (
+-                        &enc,
+-                        me->_dwaCompressionLevel / 100000.f,
+-                        &(cd->_dctData),
+-                        packedAcEnd,
+-                        packedDcEnd,
+-                        nonlinearLut,
+-                        pchan->width,
+-                        pchan->height);
+-
+-                    if (rv == EXR_ERR_SUCCESS)
+-                        rv = LossyDctEncoder_execute (
+-                            me->alloc_fn, me->free_fn, &enc);
+-
+-                    *totalAcUncompressedCount =
+-                        *totalAcUncompressedCount + enc._numAcComp;
+-                    *totalDcUncompressedCount =
+-                        *totalDcUncompressedCount + enc._numDcComp;
+-
+-                    packedAcEnd += enc._numAcComp * sizeof (uint16_t);
+-                    packedDcEnd += enc._numDcComp * sizeof (uint16_t);
+-
+-                    if (rv != EXR_ERR_SUCCESS) return rv;
+-                }
+-                break;
+-
+-            case RLE: {
+-                //
+-                // For RLE, bash the bytes up so that the first bytes of each
+-                // pixel are contiguous, as are the second bytes, and so on.
+-                //
+-                DctCoderChannelData* dcd = &(cd->_dctData);
+-                for (size_t y = 0; y < dcd->_size; ++y)
+-                {
+-                    const uint8_t* row = dcd->_rows[y];
+-
+-                    for (int x = 0; x < pchan->width; ++x)
+-                    {
+-                        for (int byte = 0; byte < pchan->bytes_per_element;
+-                             ++byte)
+-                        {
+-                            *cd->planarUncRleEnd[byte]++ = *row++;
+-                        }
+-                    }
+-
+-                    *rleRawSize += (uint64_t) pchan->width *
+-                                   (uint64_t) pchan->bytes_per_element;
+-                }
+-
+-                break;
+-            }
+-
+-            case UNKNOWN:
+-
+-                //
+-                // Otherwise, just copy data over verbatim
+-                //
+-
+-                {
+-                    size_t scanlineSize = (size_t) pchan->width *
+-                                          (size_t) pchan->bytes_per_element;
+-                    DctCoderChannelData* dcd = &(cd->_dctData);
+-                    for (size_t y = 0; y < dcd->_size; ++y)
+-                    {
+-                        memcpy (
+-                            cd->planarUncBufferEnd,
+-                            dcd->_rows[y],
+-                            scanlineSize);
+-
+-                        cd->planarUncBufferEnd += scanlineSize;
+-                    }
+-
+-                    *unknownUncompressedSize += cd->planarUncSize;
+-                }
+-
+-                break;
+-
+-            case NUM_COMPRESSOR_SCHEMES:
+-            default: return EXR_ERR_INVALID_ARGUMENT;
+-        }
+-
+-        cd->processed = DWA_CLASSIFIER_TRUE;
+-    }
+-
+-    //
+-    // Pack the Unknown data into the output buffer first. Instead of
+-    // just copying it uncompressed, try zlib compression at least.
+-    //
+-
+-    if (*unknownUncompressedSize > 0)
+-    {
+-        size_t outSize;
+-
+-        rv = exr_compress_buffer (
+-            me->_encode->context,
+-            9, // TODO: use default??? the old call to zlib had 9 hardcoded
+-            me->_planarUncBuffer[UNKNOWN],
+-            *unknownUncompressedSize,
+-            outDataPtr,
+-            exr_compress_max_buffer_size (*unknownUncompressedSize),
+-            &outSize);
+-        if (rv != EXR_ERR_SUCCESS) return rv;
+-
+-        outDataPtr += outSize;
+-        *unknownCompressedSize = outSize;
+-        nWritten += outSize;
+-    }
+-
+-    //
+-    // Now, pack all the Lossy DCT coefficients into our output
+-    // buffer, with Huffman encoding.
+-    //
+-    // Also, record the compressed size and the number of
+-    // uncompressed componentns we have.
+-    //
+-
+-    if (*totalAcUncompressedCount > 0)
+-    {
+-        switch (me->_acCompression)
+-        {
+-            case STATIC_HUFFMAN: {
+-                size_t outDataSize =
+-                    outBufferSize -
+-                    (size_t) ((uintptr_t) outDataPtr - (uintptr_t) sizes);
+-
+-                rv = internal_huf_compress (
+-                    acCompressedSize,
+-                    outDataPtr,
+-                    outDataSize,
+-                    (const uint16_t*) me->_packedAcBuffer,
+-                    *totalAcUncompressedCount,
+-                    me->_encode->scratch_buffer_1,
+-                    me->_encode->scratch_alloc_size_1);
+-                if (rv != EXR_ERR_SUCCESS)
+-                {
+-                    if (rv == EXR_ERR_ARGUMENT_OUT_OF_RANGE)
+-                    {
+-                        memcpy (
+-                            me->_encode->compressed_buffer,
+-                            me->_encode->packed_buffer,
+-                            me->_encode->packed_alloc_size);
+-                        me->_encode->compressed_bytes =
+-                            me->_encode->packed_alloc_size;
+-                        return EXR_ERR_SUCCESS;
+-                    }
+-                    return rv;
+-                }
+-                break;
+-            }
+-
+-            case DEFLATE: {
+-                size_t sourceLen =
+-                    *totalAcUncompressedCount * sizeof (uint16_t);
+-                size_t destLen;
+-
+-                rv = exr_compress_buffer (
+-                    me->_encode->context,
+-                    9, // TODO: use default??? the old call to zlib had 9 hardcoded
+-                    me->_packedAcBuffer,
+-                    sourceLen,
+-                    outDataPtr,
+-                    exr_compress_max_buffer_size (sourceLen),
+-                    &destLen);
+-                if (rv != EXR_ERR_SUCCESS) return rv;
+-
+-                *acCompressedSize = destLen;
+-                break;
+-            }
+-
+-            default:
+-                return EXR_ERR_INVALID_ARGUMENT;
+-                //assert (false);
+-        }
+-
+-        outDataPtr += *acCompressedSize;
+-        nWritten += *acCompressedSize;
+-    }
+-
+-    //
+-    // Handle the DC components separately
+-    //
+-
+-    if (*totalDcUncompressedCount > 0)
+-    {
+-        size_t compBytes;
+-        size_t uncompBytes = *totalDcUncompressedCount * sizeof (uint16_t);
+-
+-        rv = internal_encode_alloc_buffer (
+-            me->_encode,
+-            EXR_TRANSCODE_BUFFER_SCRATCH1,
+-            &(me->_encode->scratch_buffer_1),
+-            &(me->_encode->scratch_alloc_size_1),
+-            uncompBytes);
+-
+-        if (rv != EXR_ERR_SUCCESS) return rv;
+-
+-        internal_zip_deconstruct_bytes (
+-            me->_encode->scratch_buffer_1, me->_packedDcBuffer, uncompBytes);
+-
+-        rv = exr_compress_buffer (
+-            me->_encode->context,
+-            me->_zipLevel,
+-            me->_encode->scratch_buffer_1,
+-            uncompBytes,
+-            outDataPtr,
+-            exr_compress_max_buffer_size (uncompBytes),
+-            &compBytes);
+-
+-        if (rv != EXR_ERR_SUCCESS) return rv;
+-
+-        *dcCompressedSize = compBytes;
+-        outDataPtr += compBytes;
+-        nWritten += compBytes;
+-    }
+-
+-    //
+-    // If we have RLE data, first RLE encode it and set the uncompressed
+-    // size. Then, deflate the results and set the compressed size.
+-    //
+-
+-    if (*rleRawSize > 0)
+-    {
+-        size_t compBytes;
+-        *rleUncompressedSize = internal_rle_compress (
+-            me->_rleBuffer,
+-            me->_rleBufferSize,
+-            me->_planarUncBuffer[RLE],
+-            *rleRawSize);
+-
+-        rv = exr_compress_buffer (
+-            me->_encode->context,
+-            9, // TODO: use default??? the old call to zlib had 9 hardcoded
+-            me->_rleBuffer,
+-            *rleUncompressedSize,
+-            outDataPtr,
+-            exr_compress_max_buffer_size (*rleUncompressedSize),
+-            &compBytes);
+-
+-        if (rv != EXR_ERR_SUCCESS) return rv;
+-
+-        *rleCompressedSize = compBytes;
+-        outDataPtr += compBytes;
+-        nWritten += compBytes;
+-    }
+-
+-    //
+-    // Flip the counters to XDR format
+-    //
+-    priv_from_native64 (sizes, NUM_SIZES_SINGLE);
+-
+-    dataBytes =
+-        (uintptr_t) outDataPtr - (uintptr_t) me->_encode->compressed_buffer;
+-    if (nWritten != dataBytes) { return EXR_ERR_CORRUPT_CHUNK; }
+-
+-    if (nWritten >= me->_encode->packed_bytes)
+-    {
+-        memcpy (
+-            me->_encode->compressed_buffer,
+-            me->_encode->packed_buffer,
+-            me->_encode->packed_bytes);
+-        me->_encode->compressed_bytes = me->_encode->packed_bytes;
+-    }
+-    else { me->_encode->compressed_bytes = nWritten; }
+-    return rv;
+ }
+ 
+ /**************************************/
+@@ -1535,51 +1015,6 @@
+ /**************************************/
+ 
+ exr_result_t
+-DwaCompressor_writeRelevantChannelRules (
+-    DwaCompressor* me, uint8_t** outPtr, uint64_t nAvail, uint64_t* nWritten)
+-{
+-    uint64_t nOut = sizeof (uint16_t);
+-
+-    uint8_t* curp = *outPtr;
+-
+-    uint16_t* ruleSize = (uint16_t*) curp;
+-    curp += sizeof (uint16_t);
+-
+-    if (nAvail < (*nWritten + nOut)) return EXR_ERR_OUT_OF_MEMORY;
+-
+-    for (size_t i = 0; i < me->_channelRuleCount; ++i)
+-    {
+-        for (int c = 0; c < me->_numChannels; ++c)
+-        {
+-            const exr_coding_channel_info_t* curc = me->_channelData[c].chan;
+-            const char* suffix = Classifier_find_suffix (curc->channel_name);
+-
+-            if (Classifier_match (
+-                    &(me->_channelRules[i]),
+-                    suffix,
+-                    (exr_pixel_type_t) curc->data_type))
+-            {
+-                if (nAvail < (*nWritten + nOut +
+-                              Classifier_size (&(me->_channelRules[i]))))
+-                    return EXR_ERR_OUT_OF_MEMORY;
+-
+-                nOut += Classifier_write (&(me->_channelRules[i]), &curp);
+-                break;
+-            }
+-        }
+-    }
+-
+-    if (nOut > 65535) return EXR_ERR_OUT_OF_MEMORY;
+-    *ruleSize = one_from_native16 ((uint16_t) nOut);
+-    *nWritten += nOut;
+-
+-    *outPtr = curp;
+-    return EXR_ERR_SUCCESS;
+-}
+-
+-/**************************************/
+-
+-exr_result_t
+ DwaCompressor_readChannelRules (
+     DwaCompressor*  me,
+     const uint8_t** inPtr,
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/internal_dwa_helpers.h
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/internal_dwa_helpers.h
+@@ -7,7 +7,6 @@
+ #define IMF_INTERNAL_DWA_HELPERS_H_HAS_BEEN_INCLUDED
+ 
+ extern uint16_t* exrcore_dwaToLinearTable;
+-extern uint16_t* exrcore_dwaToNonLinearTable;
+ extern void      exrcore_ensure_dwa_tables ();
+ 
+ /**************************************/
+@@ -63,7 +62,6 @@
+ #include "internal_dwa_channeldata.h"
+ #include "internal_dwa_classifier.h"
+ #include "internal_dwa_decoder.h"
+-#include "internal_dwa_encoder.h"
+ #include "internal_dwa_compressor.h"
+ 
+ #endif /* IMF_INTERNAL_DWA_HELPERS_H_HAS_BEEN_INCLUDED */
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/internal_dwa_simd.h
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/internal_dwa_simd.h
+@@ -187,23 +187,6 @@
+ // Simple FPU color space conversion. Based on the 709
+ // primary chromaticies, with no scaling or offsets.
+ //
+-
+-static inline void
+-csc709Forward64 (float* comp0, float* comp1, float* comp2)
+-{
+-    float src[3];
+-
+-    for (int i = 0; i < 64; ++i)
+-    {
+-        src[0] = comp0[i];
+-        src[1] = comp1[i];
+-        src[2] = comp2[i];
+-
+-        comp0[i] = 0.2126f * src[0] + 0.7152f * src[1] + 0.0722f * src[2];
+-        comp1[i] = -0.1146f * src[0] - 0.3854f * src[1] + 0.5000f * src[2];
+-        comp2[i] = 0.5000f * src[0] - 0.4542f * src[1] - 0.0458f * src[2];
+-    }
+-}
+ 
+ //
+ // Byte interleaving of 2 byte arrays:
+@@ -1881,432 +1864,6 @@
+ #undef IDCT_AVX_BODY
+ #undef IDCT_AVX_OIC
+ 
+-//
+-// Full 8x8 Forward DCT:
+-//
+-// Base forward 8x8 DCT implementation. Works on the data in-place
+-//
+-// The implementation describedin Pennebaker + Mitchell,
+-//  section 4.3.2, and illustrated in figure 4-7
+-//
+-// The basic idea is that the 1D DCT math reduces to:
+-//
+-//   2*out_0            = c_4 [(s_07 + s_34) + (s_12 + s_56)]
+-//   2*out_4            = c_4 [(s_07 + s_34) - (s_12 + s_56)]
+-//
+-//   {2*out_2, 2*out_6} = rot_6 ((d_12 - d_56), (s_07 - s_34))
+-//
+-//   {2*out_3, 2*out_5} = rot_-3 (d_07 - c_4 (s_12 - s_56),
+-//                                d_34 - c_4 (d_12 + d_56))
+-//
+-//   {2*out_1, 2*out_7} = rot_-1 (d_07 + c_4 (s_12 - s_56),
+-//                               -d_34 - c_4 (d_12 + d_56))
+-//
+-// where:
+-//
+-//    c_i  = cos(i*pi/16)
+-//    s_i  = sin(i*pi/16)
+-//
+-//    s_ij = in_i + in_j
+-//    d_ij = in_i - in_j
+-//
+-//    rot_i(x, y) = {c_i*x + s_i*y, -s_i*x + c_i*y}
+-//
+-// We'll run the DCT in two passes. First, run the 1D DCT on
+-// the rows, in-place. Then, run over the columns in-place,
+-// and be done with it.
+-//
+-
+-#ifndef IMF_HAVE_SSE2
+-
+-//
+-// Default implementation
+-//
+-
+-static void
+-dctForward8x8 (float* data)
+-{
+-    float A0, A1, A2, A3, A4, A5, A6, A7;
+-    float K0, K1, rot_x, rot_y;
+-
+-    float* srcPtr = data;
+-    float* dstPtr = data;
+-
+-    const float c1 = cosf (3.14159f * 1.0f / 16.0f);
+-    const float c2 = cosf (3.14159f * 2.0f / 16.0f);
+-    const float c3 = cosf (3.14159f * 3.0f / 16.0f);
+-    const float c4 = cosf (3.14159f * 4.0f / 16.0f);
+-    const float c5 = cosf (3.14159f * 5.0f / 16.0f);
+-    const float c6 = cosf (3.14159f * 6.0f / 16.0f);
+-    const float c7 = cosf (3.14159f * 7.0f / 16.0f);
+-
+-    const float c1Half = .5f * c1;
+-    const float c2Half = .5f * c2;
+-    const float c3Half = .5f * c3;
+-    const float c5Half = .5f * c5;
+-    const float c6Half = .5f * c6;
+-    const float c7Half = .5f * c7;
+-
+-    //
+-    // First pass - do a 1D DCT over the rows and write the
+-    //              results back in place
+-    //
+-
+-    for (int row = 0; row < 8; ++row)
+-    {
+-        float* srcRowPtr = srcPtr + 8 * row;
+-        float* dstRowPtr = dstPtr + 8 * row;
+-
+-        A0 = srcRowPtr[0] + srcRowPtr[7];
+-        A1 = srcRowPtr[1] + srcRowPtr[2];
+-        A2 = srcRowPtr[1] - srcRowPtr[2];
+-        A3 = srcRowPtr[3] + srcRowPtr[4];
+-        A4 = srcRowPtr[3] - srcRowPtr[4];
+-        A5 = srcRowPtr[5] + srcRowPtr[6];
+-        A6 = srcRowPtr[5] - srcRowPtr[6];
+-        A7 = srcRowPtr[0] - srcRowPtr[7];
+-
+-        K0 = c4 * (A0 + A3);
+-        K1 = c4 * (A1 + A5);
+-
+-        dstRowPtr[0] = .5f * (K0 + K1);
+-        dstRowPtr[4] = .5f * (K0 - K1);
+-
+-        //
+-        // (2*dst2, 2*dst6) = rot 6 (d12 - d56,  s07 - s34)
+-        //
+-
+-        rot_x = A2 - A6;
+-        rot_y = A0 - A3;
+-
+-        dstRowPtr[2] = c6Half * rot_x + c2Half * rot_y;
+-        dstRowPtr[6] = c6Half * rot_y - c2Half * rot_x;
+-
+-        //
+-        // K0, K1 are active until after dst[1],dst[7]
+-        //  as well as dst[3], dst[5] are computed.
+-        //
+-
+-        K0 = c4 * (A1 - A5);
+-        K1 = -1 * c4 * (A2 + A6);
+-
+-        //
+-        // Two ways to do a rotation:
+-        //
+-        //  rot i (x, y) =
+-        //           X =  c_i*x + s_i*y
+-        //           Y = -s_i*x + c_i*y
+-        //
+-        //        OR
+-        //
+-        //           X = c_i*(x+y) + (s_i-c_i)*y
+-        //           Y = c_i*y     - (s_i+c_i)*x
+-        //
+-        // the first case has 4 multiplies, but fewer constants,
+-        // while the 2nd case has fewer multiplies but takes more space.
+-
+-        //
+-        // (2*dst3, 2*dst5) = rot -3 ( d07 - K0,  d34 + K1 )
+-        //
+-
+-        rot_x = A7 - K0;
+-        rot_y = A4 + K1;
+-
+-        dstRowPtr[3] = c3Half * rot_x - c5Half * rot_y;
+-        dstRowPtr[5] = c5Half * rot_x + c3Half * rot_y;
+-
+-        //
+-        // (2*dst1, 2*dst7) = rot -1 ( d07 + K0,  K1  - d34 )
+-        //
+-
+-        rot_x = A7 + K0;
+-        rot_y = K1 - A4;
+-
+-        //
+-        // A: 4, 7 are inactive. All A's are inactive
+-        //
+-
+-        dstRowPtr[1] = c1Half * rot_x - c7Half * rot_y;
+-        dstRowPtr[7] = c7Half * rot_x + c1Half * rot_y;
+-    }
+-
+-    //
+-    // Second pass - do the same, but on the columns
+-    //
+-
+-    for (int column = 0; column < 8; ++column)
+-    {
+-
+-        A0 = srcPtr[column] + srcPtr[56 + column];
+-        A7 = srcPtr[column] - srcPtr[56 + column];
+-
+-        A1 = srcPtr[8 + column] + srcPtr[16 + column];
+-        A2 = srcPtr[8 + column] - srcPtr[16 + column];
+-
+-        A3 = srcPtr[24 + column] + srcPtr[32 + column];
+-        A4 = srcPtr[24 + column] - srcPtr[32 + column];
+-
+-        A5 = srcPtr[40 + column] + srcPtr[48 + column];
+-        A6 = srcPtr[40 + column] - srcPtr[48 + column];
+-
+-        K0 = c4 * (A0 + A3);
+-        K1 = c4 * (A1 + A5);
+-
+-        dstPtr[column]      = .5f * (K0 + K1);
+-        dstPtr[32 + column] = .5f * (K0 - K1);
+-
+-        //
+-        // (2*dst2, 2*dst6) = rot 6 ( d12 - d56,  s07 - s34 )
+-        //
+-
+-        rot_x = A2 - A6;
+-        rot_y = A0 - A3;
+-
+-        dstPtr[16 + column] = .5f * (c6 * rot_x + c2 * rot_y);
+-        dstPtr[48 + column] = .5f * (c6 * rot_y - c2 * rot_x);
+-
+-        //
+-        // K0, K1 are active until after dst[1],dst[7]
+-        //  as well as dst[3], dst[5] are computed.
+-        //
+-
+-        K0 = c4 * (A1 - A5);
+-        K1 = -1 * c4 * (A2 + A6);
+-
+-        //
+-        // (2*dst3, 2*dst5) = rot -3 ( d07 - K0,  d34 + K1 )
+-        //
+-
+-        rot_x = A7 - K0;
+-        rot_y = A4 + K1;
+-
+-        dstPtr[24 + column] = .5f * (c3 * rot_x - c5 * rot_y);
+-        dstPtr[40 + column] = .5f * (c5 * rot_x + c3 * rot_y);
+-
+-        //
+-        // (2*dst1, 2*dst7) = rot -1 ( d07 + K0,  K1  - d34 )
+-        //
+-
+-        rot_x = A7 + K0;
+-        rot_y = K1 - A4;
+-
+-        dstPtr[8 + column]  = .5f * (c1 * rot_x - c7 * rot_y);
+-        dstPtr[56 + column] = .5f * (c7 * rot_x + c1 * rot_y);
+-    }
+-}
+-
+-#else /* IMF_HAVE_SSE2 */
+-
+-//
+-// SSE2 implementation
+-//
+-// Here, we're always doing a column-wise operation
+-// plus transposes. This might be faster to do differently
+-// between rows-wise and column-wise
+-//
+-
+-static void
+-dctForward8x8 (float* data)
+-{
+-    __m128* srcVec = (__m128*) data;
+-    __m128  a0Vec, a1Vec, a2Vec, a3Vec, a4Vec, a5Vec, a6Vec, a7Vec;
+-    __m128  k0Vec, k1Vec, rotXVec, rotYVec;
+-    __m128  transTmp[4], transTmp2[4];
+-
+-    __m128 c4Vec    = {.70710678f, .70710678f, .70710678f, .70710678f};
+-    __m128 c4NegVec = {-.70710678f, -.70710678f, -.70710678f, -.70710678f};
+-
+-    __m128 c1HalfVec = {.490392640f, .490392640f, .490392640f, .490392640f};
+-    __m128 c2HalfVec = {.461939770f, .461939770f, .461939770f, .461939770f};
+-    __m128 c3HalfVec = {.415734810f, .415734810f, .415734810f, .415734810f};
+-    __m128 c5HalfVec = {.277785120f, .277785120f, .277785120f, .277785120f};
+-    __m128 c6HalfVec = {.191341720f, .191341720f, .191341720f, .191341720f};
+-    __m128 c7HalfVec = {.097545161f, .097545161f, .097545161f, .097545161f};
+-
+-    __m128 halfVec = {.5f, .5f, .5f, .5f};
+-
+-    for (int iter = 0; iter < 2; ++iter)
+-    {
+-        //
+-        //  Operate on 4 columns at a time. The
+-        //    offsets into our row-major array are:
+-        //                  0:  0      1
+-        //                  1:  2      3
+-        //                  2:  4      5
+-        //                  3:  6      7
+-        //                  4:  8      9
+-        //                  5: 10     11
+-        //                  6: 12     13
+-        //                  7: 14     15
+-        //
+-
+-        for (int pass = 0; pass < 2; ++pass)
+-        {
+-            a0Vec = _mm_add_ps (srcVec[0 + pass], srcVec[14 + pass]);
+-            a1Vec = _mm_add_ps (srcVec[2 + pass], srcVec[4 + pass]);
+-            a3Vec = _mm_add_ps (srcVec[6 + pass], srcVec[8 + pass]);
+-            a5Vec = _mm_add_ps (srcVec[10 + pass], srcVec[12 + pass]);
+-
+-            a7Vec = _mm_sub_ps (srcVec[0 + pass], srcVec[14 + pass]);
+-            a2Vec = _mm_sub_ps (srcVec[2 + pass], srcVec[4 + pass]);
+-            a4Vec = _mm_sub_ps (srcVec[6 + pass], srcVec[8 + pass]);
+-            a6Vec = _mm_sub_ps (srcVec[10 + pass], srcVec[12 + pass]);
+-
+-            //
+-            // First stage; Compute out_0 and out_4
+-            //
+-
+-            k0Vec = _mm_add_ps (a0Vec, a3Vec);
+-            k1Vec = _mm_add_ps (a1Vec, a5Vec);
+-
+-            k0Vec = _mm_mul_ps (c4Vec, k0Vec);
+-            k1Vec = _mm_mul_ps (c4Vec, k1Vec);
+-
+-            srcVec[0 + pass] = _mm_add_ps (k0Vec, k1Vec);
+-            srcVec[8 + pass] = _mm_sub_ps (k0Vec, k1Vec);
+-
+-            srcVec[0 + pass] = _mm_mul_ps (srcVec[0 + pass], halfVec);
+-            srcVec[8 + pass] = _mm_mul_ps (srcVec[8 + pass], halfVec);
+-
+-            //
+-            // Second stage; Compute out_2 and out_6
+-            //
+-
+-            k0Vec = _mm_sub_ps (a2Vec, a6Vec);
+-            k1Vec = _mm_sub_ps (a0Vec, a3Vec);
+-
+-            srcVec[4 + pass] = _mm_add_ps (
+-                _mm_mul_ps (c6HalfVec, k0Vec), _mm_mul_ps (c2HalfVec, k1Vec));
+-
+-            srcVec[12 + pass] = _mm_sub_ps (
+-                _mm_mul_ps (c6HalfVec, k1Vec), _mm_mul_ps (c2HalfVec, k0Vec));
+-
+-            //
+-            // Precompute K0 and K1 for the remaining stages
+-            //
+-
+-            k0Vec = _mm_mul_ps (_mm_sub_ps (a1Vec, a5Vec), c4Vec);
+-            k1Vec = _mm_mul_ps (_mm_add_ps (a2Vec, a6Vec), c4NegVec);
+-
+-            //
+-            // Third Stage, compute out_3 and out_5
+-            //
+-
+-            rotXVec = _mm_sub_ps (a7Vec, k0Vec);
+-            rotYVec = _mm_add_ps (a4Vec, k1Vec);
+-
+-            srcVec[6 + pass] = _mm_sub_ps (
+-                _mm_mul_ps (c3HalfVec, rotXVec),
+-                _mm_mul_ps (c5HalfVec, rotYVec));
+-
+-            srcVec[10 + pass] = _mm_add_ps (
+-                _mm_mul_ps (c5HalfVec, rotXVec),
+-                _mm_mul_ps (c3HalfVec, rotYVec));
+-
+-            //
+-            // Fourth Stage, compute out_1 and out_7
+-            //
+-
+-            rotXVec = _mm_add_ps (a7Vec, k0Vec);
+-            rotYVec = _mm_sub_ps (k1Vec, a4Vec);
+-
+-            srcVec[2 + pass] = _mm_sub_ps (
+-                _mm_mul_ps (c1HalfVec, rotXVec),
+-                _mm_mul_ps (c7HalfVec, rotYVec));
+-
+-            srcVec[14 + pass] = _mm_add_ps (
+-                _mm_mul_ps (c7HalfVec, rotXVec),
+-                _mm_mul_ps (c1HalfVec, rotYVec));
+-        }
+-
+-        //
+-        // Transpose the matrix, in 4x4 blocks. So, if we have our
+-        // 8x8 matrix divied into 4x4 blocks:
+-        //
+-        //         M0 | M1         M0t | M2t
+-        //        ----+---   -->  -----+------
+-        //         M2 | M3         M1t | M3t
+-        //
+-
+-        //
+-        // M0t, done in place, the first half.
+-        //
+-
+-        transTmp[0] = _mm_shuffle_ps (srcVec[0], srcVec[2], 0x44);
+-        transTmp[1] = _mm_shuffle_ps (srcVec[4], srcVec[6], 0x44);
+-        transTmp[3] = _mm_shuffle_ps (srcVec[4], srcVec[6], 0xEE);
+-        transTmp[2] = _mm_shuffle_ps (srcVec[0], srcVec[2], 0xEE);
+-
+-        //
+-        // M3t, also done in place, the first half.
+-        //
+-
+-        transTmp2[0] = _mm_shuffle_ps (srcVec[9], srcVec[11], 0x44);
+-        transTmp2[1] = _mm_shuffle_ps (srcVec[13], srcVec[15], 0x44);
+-        transTmp2[2] = _mm_shuffle_ps (srcVec[9], srcVec[11], 0xEE);
+-        transTmp2[3] = _mm_shuffle_ps (srcVec[13], srcVec[15], 0xEE);
+-
+-        //
+-        // M0t, the second half.
+-        //
+-
+-        srcVec[0] = _mm_shuffle_ps (transTmp[0], transTmp[1], 0x88);
+-        srcVec[4] = _mm_shuffle_ps (transTmp[2], transTmp[3], 0x88);
+-        srcVec[2] = _mm_shuffle_ps (transTmp[0], transTmp[1], 0xDD);
+-        srcVec[6] = _mm_shuffle_ps (transTmp[2], transTmp[3], 0xDD);
+-
+-        //
+-        // M3t, the second half.
+-        //
+-
+-        srcVec[9]  = _mm_shuffle_ps (transTmp2[0], transTmp2[1], 0x88);
+-        srcVec[13] = _mm_shuffle_ps (transTmp2[2], transTmp2[3], 0x88);
+-        srcVec[11] = _mm_shuffle_ps (transTmp2[0], transTmp2[1], 0xDD);
+-        srcVec[15] = _mm_shuffle_ps (transTmp2[2], transTmp2[3], 0xDD);
+-
+-        //
+-        // M1 and M2 need to be done at the same time, because we're
+-        //  swapping.
+-        //
+-        // First, the first half of M1t
+-        //
+-
+-        transTmp[0] = _mm_shuffle_ps (srcVec[1], srcVec[3], 0x44);
+-        transTmp[1] = _mm_shuffle_ps (srcVec[5], srcVec[7], 0x44);
+-        transTmp[2] = _mm_shuffle_ps (srcVec[1], srcVec[3], 0xEE);
+-        transTmp[3] = _mm_shuffle_ps (srcVec[5], srcVec[7], 0xEE);
+-
+-        //
+-        // And the first half of M2t
+-        //
+-
+-        transTmp2[0] = _mm_shuffle_ps (srcVec[8], srcVec[10], 0x44);
+-        transTmp2[1] = _mm_shuffle_ps (srcVec[12], srcVec[14], 0x44);
+-        transTmp2[2] = _mm_shuffle_ps (srcVec[8], srcVec[10], 0xEE);
+-        transTmp2[3] = _mm_shuffle_ps (srcVec[12], srcVec[14], 0xEE);
+-
+-        //
+-        // Second half of M1t
+-        //
+-
+-        srcVec[8]  = _mm_shuffle_ps (transTmp[0], transTmp[1], 0x88);
+-        srcVec[12] = _mm_shuffle_ps (transTmp[2], transTmp[3], 0x88);
+-        srcVec[10] = _mm_shuffle_ps (transTmp[0], transTmp[1], 0xDD);
+-        srcVec[14] = _mm_shuffle_ps (transTmp[2], transTmp[3], 0xDD);
+-
+-        //
+-        // Second half of M2
+-        //
+-
+-        srcVec[1] = _mm_shuffle_ps (transTmp2[0], transTmp2[1], 0x88);
+-        srcVec[5] = _mm_shuffle_ps (transTmp2[2], transTmp2[3], 0x88);
+-        srcVec[3] = _mm_shuffle_ps (transTmp2[0], transTmp2[1], 0xDD);
+-        srcVec[7] = _mm_shuffle_ps (transTmp2[2], transTmp2[3], 0xDD);
+-    }
+-}
+-
+-#endif /* IMF_HAVE_SSE2 */
+-
+ /**************************************/
+ 
+ //
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/internal_dwa_table.c
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/internal_dwa_table.c
+@@ -6,10 +6,7 @@
+ #include <stdint.h>
+ 
+ extern uint16_t* exrcore_dwaToLinearTable;
+-extern uint16_t* exrcore_dwaToNonLinearTable;
+ 
+ static uint16_t exrcore_dwaToLinearTable_data[65536];
+ uint16_t* exrcore_dwaToLinearTable = exrcore_dwaToLinearTable_data;
+ 
+-static uint16_t exrcore_dwaToNonLinearTable_data[65536];
+-uint16_t* exrcore_dwaToNonLinearTable = exrcore_dwaToNonLinearTable_data;
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/internal_dwa_table_init.c
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/internal_dwa_table_init.c
+@@ -9,7 +9,6 @@
+ #include "internal_thread.h"
+ 
+ extern uint16_t* exrcore_dwaToLinearTable;
+-extern uint16_t* exrcore_dwaToNonLinearTable;
+ 
+ static once_flag dwa_tables_once = ONCE_FLAG_INIT;
+ 
+@@ -66,38 +65,12 @@
+     return float_to_half(z);
+ }
+ 
+-static inline uint16_t
+-dwa_convertToNonLinear (uint16_t x)
+-{
+-    if (x == 0)
+-        return 0;
+-    if ((x & 0x7c00) == 0x7c00) // infinity/nan?
+-        return 0;
+-    
+-    float f = half_to_float(x);
+-    float sign = f < 0.0f ? -1.0f : 1.0f;
+-    f = fabsf(f);
+-    
+-    float z;
+-    if (f <= 1.0f)
+-    {
+-        z = powf(f, 1.0f / 2.2f);
+-    }
+-    else
+-    {
+-        z = logf (f) / 2.2f + 1.0f;
+-    }
+-    return float_to_half(sign * z);
+-}
+-
+-
+ static void
+ init_dwa_tables(void)
+ {
+     for (int i = 0; i < 65536; i++)
+     {
+         exrcore_dwaToLinearTable[i] = dwa_convertToLinear (i);
+-        exrcore_dwaToNonLinearTable[i] = dwa_convertToNonLinear (i);
+     }
+ }
+ 
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/internal_pxr24.c
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/internal_pxr24.c
+@@ -11,249 +11,6 @@
+ 
+ #include <string.h>
+ #include "openexr_compression.h"
+-
+-/**************************************/
+-
+-static inline uint32_t
+-float_to_float24 (float f)
+-{
+-    union
+-    {
+-        float    f;
+-        uint32_t i;
+-    } u;
+-    uint32_t s, e, m, i;
+-
+-    u.f = f;
+-
+-    //
+-    // Disassemble the 32-bit floating point number, f,
+-    // into sign, s, exponent, e, and significand, m.
+-    //
+-
+-    s = u.i & 0x80000000;
+-    e = u.i & 0x7f800000;
+-    m = u.i & 0x007fffff;
+-
+-    if (e == 0x7f800000)
+-    {
+-        if (m)
+-        {
+-            //
+-            // F is a NAN; we preserve the sign bit and
+-            // the 15 leftmost bits of the significand,
+-            // with one exception: If the 15 leftmost
+-            // bits are all zero, the NAN would turn
+-            // into an infinity, so we have to set at
+-            // least one bit in the significand.
+-            //
+-
+-            m >>= 8;
+-            i = (e >> 8) | m | (m == 0);
+-        }
+-        else
+-        {
+-            //
+-            // F is an infinity.
+-            //
+-
+-            i = e >> 8;
+-        }
+-    }
+-    else
+-    {
+-        //
+-        // F is finite, round the significand to 15 bits.
+-        //
+-
+-        i = ((e | m) + (m & 0x00000080)) >> 8;
+-
+-        if (i >= 0x7f8000)
+-        {
+-            //
+-            // F was close to FLT_MAX, and the significand was
+-            // rounded up, resulting in an exponent overflow.
+-            // Avoid the overflow by truncating the significand
+-            // instead of rounding it.
+-            //
+-
+-            i = (e | m) >> 8;
+-        }
+-    }
+-
+-    return (s >> 8) | i;
+-}
+-
+-/**************************************/
+-
+-static exr_result_t
+-apply_pxr24_impl (exr_encode_pipeline_t* encode)
+-{
+-    uint8_t*       out    = encode->scratch_buffer_1;
+-    uint64_t       nOut   = 0;
+-    const uint8_t* lastIn = encode->packed_buffer;
+-    size_t         compbufsz;
+-    exr_result_t   rv;
+-
+-    for (int y = 0; y < encode->chunk.height; ++y)
+-    {
+-        int cury = y + encode->chunk.start_y;
+-
+-        for (int c = 0; c < encode->channel_count; ++c)
+-        {
+-            const exr_coding_channel_info_t* curc   = encode->channels + c;
+-            int                              w      = curc->width;
+-            uint64_t                         nBytes = (uint64_t) (w);
+-
+-            if (curc->height == 0 ||
+-                (curc->y_samples > 1 && (cury % curc->y_samples) != 0))
+-                continue;
+-
+-            switch (curc->data_type)
+-            {
+-                case EXR_PIXEL_UINT: {
+-                    uint8_t*        ptr[4];
+-                    uint32_t        prevPixel = 0;
+-                    const uint32_t* din       = (const uint32_t*) (lastIn);
+-
+-                    nBytes *= sizeof (uint32_t);
+-                    if (nOut + nBytes > encode->scratch_alloc_size_1)
+-                        return EXR_ERR_OUT_OF_MEMORY;
+-                    nOut += nBytes;
+-                    lastIn += nBytes;
+-
+-                    ptr[0] = out;
+-                    out += w;
+-                    ptr[1] = out;
+-                    out += w;
+-                    ptr[2] = out;
+-                    out += w;
+-                    ptr[3] = out;
+-                    out += w;
+-
+-                    for (int x = 0; x < w; ++x)
+-                    {
+-                        uint32_t pixel = unaligned_load32 (din);
+-                        uint32_t diff  = pixel - prevPixel;
+-                        prevPixel      = pixel;
+-
+-                        ++din;
+-                        *(ptr[0]++) = (uint8_t) (diff >> 24);
+-                        *(ptr[1]++) = (uint8_t) (diff >> 16);
+-                        *(ptr[2]++) = (uint8_t) (diff >> 8);
+-                        *(ptr[3]++) = (uint8_t) (diff);
+-                    }
+-                    break;
+-                }
+-                case EXR_PIXEL_HALF: {
+-                    uint8_t*        ptr[2];
+-                    uint32_t        prevPixel = 0;
+-                    const uint16_t* din       = (const uint16_t*) (lastIn);
+-
+-                    nBytes *= sizeof (uint16_t);
+-                    if (nOut + nBytes > encode->scratch_alloc_size_1)
+-                        return EXR_ERR_OUT_OF_MEMORY;
+-                    nOut += nBytes;
+-                    lastIn += nBytes;
+-
+-                    ptr[0] = out;
+-                    out += w;
+-                    ptr[1] = out;
+-                    out += w;
+-
+-                    for (int x = 0; x < w; ++x)
+-                    {
+-                        uint32_t pixel = (uint32_t) unaligned_load16 (din);
+-                        uint32_t diff  = pixel - prevPixel;
+-                        prevPixel      = pixel;
+-
+-                        ++din;
+-                        *(ptr[0]++) = (uint8_t) (diff >> 8);
+-                        *(ptr[1]++) = (uint8_t) (diff);
+-                    }
+-                    break;
+-                }
+-                case EXR_PIXEL_FLOAT: {
+-                    uint8_t*     ptr[3];
+-                    uint32_t     prevPixel = 0;
+-                    const float* din       = (const float*) (lastIn);
+-
+-                    nBytes *= 3;
+-                    if (nOut + nBytes > encode->scratch_alloc_size_1)
+-                        return EXR_ERR_OUT_OF_MEMORY;
+-                    nOut += nBytes;
+-                    lastIn += (uint64_t) w * 4;
+-
+-                    ptr[0] = out;
+-                    out += w;
+-                    ptr[1] = out;
+-                    out += w;
+-                    ptr[2] = out;
+-                    out += w;
+-
+-                    for (int x = 0; x < w; ++x)
+-                    {
+-                        union
+-                        {
+-                            uint32_t i;
+-                            float    f;
+-                        } v;
+-                        uint32_t pixel24, diff;
+-                        v.i       = unaligned_load32 (din);
+-                        pixel24   = float_to_float24 (v.f);
+-                        diff      = pixel24 - prevPixel;
+-                        prevPixel = pixel24;
+-
+-                        ++din;
+-                        *(ptr[0]++) = (uint8_t) (diff >> 16);
+-                        *(ptr[1]++) = (uint8_t) (diff >> 8);
+-                        *(ptr[2]++) = (uint8_t) (diff);
+-                    }
+-                    break;
+-                }
+-                default: return EXR_ERR_INVALID_ARGUMENT;
+-            }
+-        }
+-    }
+-
+-    rv = exr_compress_buffer (
+-        encode->context,
+-        -1,
+-        encode->scratch_buffer_1,
+-        nOut,
+-        encode->compressed_buffer,
+-        encode->compressed_alloc_size,
+-        &compbufsz);
+-
+-    if (rv == EXR_ERR_SUCCESS)
+-    {
+-        if (compbufsz > encode->packed_bytes)
+-        {
+-            memcpy (
+-                encode->compressed_buffer,
+-                encode->packed_buffer,
+-                encode->packed_bytes);
+-            compbufsz = encode->packed_bytes;
+-        }
+-        encode->compressed_bytes = compbufsz;
+-    }
+-    return rv;
+-}
+-
+-exr_result_t
+-internal_exr_apply_pxr24 (exr_encode_pipeline_t* encode)
+-{
+-    exr_result_t rv;
+-    rv = internal_encode_alloc_buffer (
+-        encode,
+-        EXR_TRANSCODE_BUFFER_SCRATCH1,
+-        &(encode->scratch_buffer_1),
+-        &(encode->scratch_alloc_size_1),
+-        encode->packed_bytes);
+-    if (rv != EXR_ERR_SUCCESS) return rv;
+-
+-    return apply_pxr24_impl (encode);
+-}
+ 
+ /**************************************/
+ 
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/internal_rle.c
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/internal_rle.c
+@@ -63,65 +63,6 @@
+ }
+ 
+ /**************************************/
+-
+-static void
+-reorder_and_predict (void* scratch, const void* packed, uint64_t packedbytes)
+-{
+-    int8_t*       t1   = scratch;
+-    int8_t*       t2   = t1 + (packedbytes + 1) / 2;
+-    const int8_t* in   = packed;
+-    const int8_t* stop = in + packedbytes;
+-    int           d, p;
+-
+-    while (in < stop)
+-    {
+-        *(t1++) = *(in++);
+-        if (in < stop) *(t2++) = *(in++);
+-    }
+-
+-    t1   = scratch;
+-    stop = t1 + packedbytes;
+-    p    = *(t1++);
+-    while (t1 < stop)
+-    {
+-        d     = (int) (*t1) - p + (128 + 256);
+-        p     = *t1;
+-        *t1++ = (int8_t) (d);
+-    }
+-}
+-
+-exr_result_t
+-internal_exr_apply_rle (exr_encode_pipeline_t* encode)
+-{
+-    exr_result_t rv;
+-    uint64_t     outb, srcb;
+-
+-    srcb = encode->packed_bytes;
+-
+-    rv = internal_encode_alloc_buffer (
+-        encode,
+-        EXR_TRANSCODE_BUFFER_SCRATCH1,
+-        &(encode->scratch_buffer_1),
+-        &(encode->scratch_alloc_size_1),
+-        srcb);
+-    if (rv != EXR_ERR_SUCCESS) return rv;
+-
+-    reorder_and_predict (encode->scratch_buffer_1, encode->packed_buffer, srcb);
+-
+-    outb = internal_rle_compress (
+-        encode->compressed_buffer,
+-        encode->compressed_alloc_size,
+-        encode->scratch_buffer_1,
+-        srcb);
+-
+-    if (outb >= srcb)
+-    {
+-        memcpy (encode->compressed_buffer, encode->packed_buffer, srcb);
+-        outb = srcb;
+-    }
+-    encode->compressed_bytes = outb;
+-    return EXR_ERR_SUCCESS;
+-}
+ 
+ /**************************************/
+ 
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/internal_zip.c
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/internal_zip.c
+@@ -253,37 +253,6 @@
+ }
+ 
+ /**************************************/
+-
+-void
+-internal_zip_deconstruct_bytes (
+-    uint8_t* scratch, const uint8_t* source, const uint64_t count)
+-{
+-    int            p;
+-    uint8_t*       t1   = scratch;
+-    uint8_t*       t2   = t1 + (count + 1) / 2;
+-    const uint8_t* raw  = source;
+-    const uint8_t* const stop = raw + count;
+-
+-    /* reorder */
+-    while (raw < stop)
+-    {
+-        *(t1++) = *(raw++);
+-        if (raw < stop) *(t2++) = *(raw++);
+-    }
+-
+-    /* reorder */
+-    t1 = scratch;
+-    t2 = t1 + count;
+-    t1++;
+-    p = (int) t1[-1];
+-    while (t1 < t2)
+-    {
+-        int d = (int) (t1[0]) - p + (128 + 256);
+-        p     = (int) t1[0];
+-        t1[0] = (uint8_t) d;
+-        ++t1;
+-    }
+-}
+ 
+ /**************************************/
+ 
+@@ -364,81 +333,3 @@
+ 
+ /**************************************/
+ 
+-static exr_result_t
+-apply_zip_impl (exr_encode_pipeline_t* encode)
+-{
+-    int          level;
+-    size_t       compbufsz;
+-    exr_result_t rv;
+-
+-    rv = exr_get_zip_compression_level (
+-        encode->context, encode->part_index, &level);
+-    if (rv != EXR_ERR_SUCCESS) return rv;
+-
+-    internal_zip_deconstruct_bytes (
+-        encode->scratch_buffer_1, encode->packed_buffer, encode->packed_bytes);
+-
+-    rv = exr_compress_buffer (
+-        encode->context,
+-        level,
+-        encode->scratch_buffer_1,
+-        encode->packed_bytes,
+-        encode->compressed_buffer,
+-        encode->compressed_alloc_size,
+-        &compbufsz);
+-
+-    if (rv == EXR_ERR_SUCCESS)
+-    {
+-        if (compbufsz >= encode->packed_bytes)
+-        {
+-            memcpy (
+-                encode->compressed_buffer,
+-                encode->packed_buffer,
+-                encode->packed_bytes);
+-            compbufsz = encode->packed_bytes;
+-        }
+-        encode->compressed_bytes = compbufsz;
+-    }
+-    else
+-    {
+-        exr_const_context_t pctxt = encode->context;
+-        if (pctxt)
+-            pctxt->print_error (
+-                pctxt,
+-                rv,
+-                "Unable to compress buffer %" PRIu64 " -> %" PRIu64
+-                " @ level %d",
+-                encode->packed_bytes,
+-                (uint64_t) encode->compressed_alloc_size,
+-                level);
+-    }
+-
+-    return rv;
+-}
+-
+-exr_result_t
+-internal_exr_apply_zip (exr_encode_pipeline_t* encode)
+-{
+-    exr_result_t rv;
+-
+-    rv = internal_encode_alloc_buffer (
+-        encode,
+-        EXR_TRANSCODE_BUFFER_SCRATCH1,
+-        &(encode->scratch_buffer_1),
+-        &(encode->scratch_alloc_size_1),
+-        encode->packed_bytes);
+-    if (rv != EXR_ERR_SUCCESS)
+-    {
+-        exr_const_context_t pctxt = encode->context;
+-        if (pctxt)
+-            pctxt->print_error (
+-                pctxt,
+-                rv,
+-                "Unable to allocate scratch buffer for deflate of %" PRIu64
+-                " bytes",
+-                encode->packed_bytes);
+-        return rv;
+-    }
+-
+-    return apply_zip_impl (encode);
+-}
+--- a/thirdparty/openexr/src/lib/OpenEXRCore/openexr.h
++++ b/thirdparty/openexr/src/lib/OpenEXRCore/openexr.h
+@@ -16,7 +16,6 @@
+ 
+ #include "openexr_part.h"
+ 
+-#include "openexr_std_attr.h"
+ 
+ #include "openexr_chunkio.h"
+ 
+@@ -25,6 +24,5 @@
+ #include "openexr_decode.h"
+ #include "openexr_encode.h"
+ 
+-#include "openexr_debug.h"
+ 
+ #endif /* OPENEXR_CORE_H */

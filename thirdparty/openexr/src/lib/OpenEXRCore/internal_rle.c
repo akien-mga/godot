@@ -64,65 +64,6 @@ internal_rle_compress (
 
 /**************************************/
 
-static void
-reorder_and_predict (void* scratch, const void* packed, uint64_t packedbytes)
-{
-    int8_t*       t1   = scratch;
-    int8_t*       t2   = t1 + (packedbytes + 1) / 2;
-    const int8_t* in   = packed;
-    const int8_t* stop = in + packedbytes;
-    int           d, p;
-
-    while (in < stop)
-    {
-        *(t1++) = *(in++);
-        if (in < stop) *(t2++) = *(in++);
-    }
-
-    t1   = scratch;
-    stop = t1 + packedbytes;
-    p    = *(t1++);
-    while (t1 < stop)
-    {
-        d     = (int) (*t1) - p + (128 + 256);
-        p     = *t1;
-        *t1++ = (int8_t) (d);
-    }
-}
-
-exr_result_t
-internal_exr_apply_rle (exr_encode_pipeline_t* encode)
-{
-    exr_result_t rv;
-    uint64_t     outb, srcb;
-
-    srcb = encode->packed_bytes;
-
-    rv = internal_encode_alloc_buffer (
-        encode,
-        EXR_TRANSCODE_BUFFER_SCRATCH1,
-        &(encode->scratch_buffer_1),
-        &(encode->scratch_alloc_size_1),
-        srcb);
-    if (rv != EXR_ERR_SUCCESS) return rv;
-
-    reorder_and_predict (encode->scratch_buffer_1, encode->packed_buffer, srcb);
-
-    outb = internal_rle_compress (
-        encode->compressed_buffer,
-        encode->compressed_alloc_size,
-        encode->scratch_buffer_1,
-        srcb);
-
-    if (outb >= srcb)
-    {
-        memcpy (encode->compressed_buffer, encode->packed_buffer, srcb);
-        outb = srcb;
-    }
-    encode->compressed_bytes = outb;
-    return EXR_ERR_SUCCESS;
-}
-
 /**************************************/
 
 uint64_t

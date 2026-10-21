@@ -9,7 +9,6 @@
 #include "internal_thread.h"
 
 extern uint16_t* exrcore_dwaToLinearTable;
-extern uint16_t* exrcore_dwaToNonLinearTable;
 
 static once_flag dwa_tables_once = ONCE_FLAG_INIT;
 
@@ -66,38 +65,12 @@ dwa_convertToLinear (uint16_t x)
     return float_to_half(z);
 }
 
-static inline uint16_t
-dwa_convertToNonLinear (uint16_t x)
-{
-    if (x == 0)
-        return 0;
-    if ((x & 0x7c00) == 0x7c00) // infinity/nan?
-        return 0;
-    
-    float f = half_to_float(x);
-    float sign = f < 0.0f ? -1.0f : 1.0f;
-    f = fabsf(f);
-    
-    float z;
-    if (f <= 1.0f)
-    {
-        z = powf(f, 1.0f / 2.2f);
-    }
-    else
-    {
-        z = logf (f) / 2.2f + 1.0f;
-    }
-    return float_to_half(sign * z);
-}
-
-
 static void
 init_dwa_tables(void)
 {
     for (int i = 0; i < 65536; i++)
     {
         exrcore_dwaToLinearTable[i] = dwa_convertToLinear (i);
-        exrcore_dwaToNonLinearTable[i] = dwa_convertToNonLinear (i);
     }
 }
 
