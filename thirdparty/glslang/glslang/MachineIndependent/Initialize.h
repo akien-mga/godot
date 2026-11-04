@@ -99,6 +99,7 @@ protected:
     void addImageFunctions(TSampler, const TString& typeName, int version, EProfile profile);
     void addSamplingFunctions(TSampler, const TString& typeName, int version, EProfile profile);
     void addGatherFunctions(TSampler, const TString& typeName, int version, EProfile profile);
+    void addGatherFunctionsQCOM();
 
     // Helpers for making textual representations of the permutations
     // of texturing/imaging functions.
@@ -110,6 +111,9 @@ protected:
 // change this back to false if depending on textual spellings of texturing calls when consuming the AST
 // Using PureOperatorBuiltins=false is deprecated.
 constexpr bool PureOperatorBuiltins = true;
+
+bool IsSupportedLongVectorBuiltin(const TFunction* fnCandidate, TType* resultType, TIntermNode* arguments);
+
 } // end namespace glslang
 
 #endif // _INITIALIZE_INCLUDED_

@@ -632,12 +632,12 @@ License: BSD-3-clause
 
 Files: thirdparty/volk/*
 Comment: volk
-Copyright: 2018-2025, Arseny Kapoulkine
+Copyright: 2018-2026, Arseny Kapoulkine
 License: Expat
 
 Files: thirdparty/vulkan/*
 Comment: Vulkan Headers
-Copyright: 2015-2025, The Khronos Group Inc.
+Copyright: 2015-2026, The Khronos Group Inc.
  2015-2025, Valve Corporation
  2015-2025, LunarG, Inc.
 License: Apache-2.0

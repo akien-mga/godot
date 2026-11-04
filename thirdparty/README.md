@@ -418,7 +418,7 @@ Patches:
 ## glslang
 
 - Upstream: https://github.com/KhronosGroup/glslang
-- Version: vulkan-sdk-1.4.335.0 (b5782e52ee2f7b3e40bb9c80d15b47016e008bc9, 2025)
+- Version: vulkan-sdk-1.4.363.0 (e1b562a8bed273a02f30b59b66a5d499793cede5, 2026)
 - License: glslang
 
 Version should be kept in sync with the one of the used Vulkan SDK (see `vulkan`
@@ -438,9 +438,8 @@ Files extracted from upstream source:
 
 Patches:
 
-- `0001-apple-disable-absolute-paths.patch` ([GH-92010](https://github.com/godotengine/godot/pull/92010))
-- `0002-apple-m1-msaa-fix.patch` ([GH-116225](https://github.com/godotengine/godot/pull/116225))
-- `0003-preprocessor-token-name-memcpy.patch` ([GH-123319](https://github.com/godotengine/godot/pull/123319))
+- `0001-apple-m1-msaa-fix.patch` ([GH-116225](https://github.com/godotengine/godot/pull/116225))
+- `0002-preprocessor-token-name-memcpy.patch` ([GH-123319](https://github.com/godotengine/godot/pull/123319))
 
 
 ## graphite
@@ -1101,7 +1100,7 @@ Files extracted from upstream source:
 ## spirv-cross
 
 - Upstream: https://github.com/KhronosGroup/SPIRV-Cross
-- Version: vulkan-sdk-1.4.335.0 (fb0c1a307cca4b4a9d891837bf4c44d17fe2d324, 2025)
+- Version: vulkan-sdk-1.4.363.0 (f11ba9f0b21ba8fc15153d50a2a1ae31ab1cf8f7, 2026)
 - License: Apache 2.0
 
 Files extracted from upstream source:
@@ -1117,7 +1116,7 @@ to generate Metal source from Vulkan SPIR-V.
 ## spirv-headers
 
 - Upstream: https://github.com/KhronosGroup/SPIRV-Headers
-- Version: vulkan-sdk-1.4.335.0 (b824a462d4256d720bebb40e78b9eb8f78bbb305, 2025)
+- Version: vulkan-sdk-1.4.363.0 (496543121ce6419f23d6fa5d7194ba66c36212d2, 2026)
 - License: MIT
 
 Files extracted from upstream source:
@@ -1129,7 +1128,7 @@ Files extracted from upstream source:
 ## spirv-reflect
 
 - Upstream: https://github.com/KhronosGroup/SPIRV-Reflect
-- Version: vulkan-sdk-1.4.335.0 (ef913b3ab3da1becca3cf46b15a10667c67bebe5, 2025)
+- Version: vulkan-sdk-1.4.363.0 (f3e261fda74ca81b44d1941931c6b7b5fe236d0e, 2026)
 - License: Apache 2.0
 
 Version should be kept in sync with the one of the used Vulkan SDK (see `vulkan`
@@ -1144,7 +1143,6 @@ Patches:
 
 - `0001-zero-size-for-sc-sized-arrays.patch` ([GH-94985](https://github.com/godotengine/godot/pull/94985))
 - `0002-spirv-headers.patch` ([GH-111452](https://github.com/godotengine/godot/pull/111452))
-- `0003-findnode-id-lookup-table.patch` ([GH-121835](https://github.com/godotengine/godot/pull/121835))
 
 
 ## swappy-frame-pacing
@@ -1230,7 +1228,7 @@ Patches:
 ## volk
 
 - Upstream: https://github.com/zeux/volk
-- Version: vulkan-sdk-1.4.335.0 (4f3bcee79618a9abe79f4c717c50379197c77512, 2025)
+- Version: vulkan-sdk-1.4.363.0 (54fc0d7a72887cbfc5b030d26897b2b40ac53fb8, 2026)
 - License: MIT
 
 Version should be kept in sync with the one of the used Vulkan SDK (see `vulkan`
@@ -1245,7 +1243,7 @@ Files extracted from upstream source:
 ## vulkan
 
 - Upstream: https://github.com/KhronosGroup/Vulkan-Headers
-- Version: vulkan-sdk-1.4.335.0 (2fa203425eb4af9dfc6b03f97ef72b0b5bcb8350, 2025)
+- Version: vulkan-sdk-1.4.363.0 (6802bb4733b63ed5efd3adb308a6c885ef180ea1, 2026)
 - License: Apache 2.0
 
 Unless there is a specific reason to package a more recent version, please stick

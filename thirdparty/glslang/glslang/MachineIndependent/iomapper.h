@@ -37,6 +37,7 @@
 #define _IOMAPPER_INCLUDED
 
 #include <cstdint>
+#include <array>
 #include <unordered_map>
 #include <unordered_set>
 //
@@ -55,6 +56,7 @@ public:
     TDefaultIoResolverBase(const TIntermediate& intermediate);
     typedef std::vector<int> TSlotSet;
     typedef std::unordered_map<int, TSlotSet> TSlotSetMap;
+    typedef std::array<TSlotSetMap, EResCount> TSlotSetMapResourceArray;
 
     // grow the reflection stage by stage
     void notifyBinding(EShLanguage, TVarEntryInfo& /*ent*/) override {}
@@ -72,25 +74,25 @@ public:
     virtual TResourceType getResourceType(const glslang::TType& type) = 0;
     bool doAutoBindingMapping() const;
     bool doAutoLocationMapping() const;
-    TSlotSet::iterator findSlot(int set, int slot);
-    bool checkEmpty(int set, int slot);
+    TSlotSet::iterator findSlot(int resource, int set, int slot);
+    bool checkEmpty(int resource, int set, int slot);
     bool validateInOut(EShLanguage /*stage*/, TVarEntryInfo& /*ent*/) override { return true; }
-    int reserveSlot(int set, int slot, int size = 1);
-    int getFreeSlot(int set, int base, int size = 1);
+    int reserveSlot(int resource, int set, int slot, int size = 1);
+    int getFreeSlot(int resource, int set, int base, int size = 1);
     int resolveSet(EShLanguage /*stage*/, TVarEntryInfo& ent) override;
     int resolveUniformLocation(EShLanguage /*stage*/, TVarEntryInfo& ent) override;
     int resolveInOutLocation(EShLanguage stage, TVarEntryInfo& ent) override;
     int resolveInOutComponent(EShLanguage /*stage*/, TVarEntryInfo& ent) override;
     int resolveInOutIndex(EShLanguage /*stage*/, TVarEntryInfo& ent) override;
     void addStage(EShLanguage stage, TIntermediate& stageIntermediate) override {
-        if (stage < EShLangCount) {
-            stageMask[stage] = true;
-            stageIntermediates[stage] = &stageIntermediate;
+        if ((unsigned)stage < EShLangCount) {
+            stageMask[(unsigned)stage] = true;
+            stageIntermediates[(unsigned)stage] = &stageIntermediate;
         }
     }
     uint32_t computeTypeLocationSize(const TType& type, EShLanguage stage);
 
-    TSlotSetMap slots;
+    TSlotSetMapResourceArray slots;
     bool hasError = false;
 
 protected:
@@ -173,6 +175,7 @@ struct TDefaultGlslIoResolver : public TDefaultIoResolverBase {
 public:
     typedef std::map<TString, int> TVarSlotMap;  // <resourceName, location/binding>
     typedef std::map<int, TVarSlotMap> TSlotMap; // <resourceKey, TVarSlotMap>
+    typedef std::array<TSlotMap, EResCount> TResourceSlotMap;
     TDefaultGlslIoResolver(const TIntermediate& intermediate);
     bool validateBinding(EShLanguage /*stage*/, TVarEntryInfo& /*ent*/) override { return true; }
     TResourceType getResourceType(const glslang::TType& type) override;
@@ -200,7 +203,7 @@ protected:
     // Use for mark current shader stage for resolver
     EShLanguage currentStage;
     // Slot map for storage resource(location of uniform and interface symbol) It's a program share slot
-    TSlotMap resourceSlotMap;
+    TResourceSlotMap resourceSlotMap;
     // Slot map for other resource(image, ubo, ssbo), It's a program share slot.
     TSlotMap storageSlotMap;
 };
@@ -225,6 +228,7 @@ public:
     bool doMap(TIoMapResolver*, TInfoSink&) override;
     TIntermediate* intermediates[EShLangCount];
     bool hadError = false;
+    bool relaxSetBindingLimits = false;
     EProfile profile;
     int version;
 

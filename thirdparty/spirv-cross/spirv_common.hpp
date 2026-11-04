@@ -377,6 +377,7 @@ enum Types
 	TypeAccessChain,
 	TypeUndef,
 	TypeString,
+	TypeDebugLocalVariable,
 	TypeCount
 };
 
@@ -506,6 +507,18 @@ struct SPIRString : IVariant
 	SPIRV_CROSS_DECLARE_CLONE(SPIRString)
 };
 
+struct SPIRDebugLocalVariable : IVariant
+{
+	enum
+	{
+		type = TypeDebugLocalVariable
+	};
+
+	uint32_t name_id;
+
+	SPIRV_CROSS_DECLARE_CLONE(SPIRDebugLocalVariable)
+};
+
 // This type is only used by backends which need to access the combined image and sampler IDs separately after
 // the OpSampledImage opcode.
 struct SPIRCombinedImageSampler : IVariant
@@ -595,7 +608,8 @@ struct SPIRType : IVariant
 		FloatE4M3,
 		FloatE5M2,
 
-		Tensor
+		Tensor,
+		DescriptorHeapBuffer
 	};
 
 	// Scalar/vector/matrix support.
@@ -642,6 +656,11 @@ struct SPIRType : IVariant
 			uint32_t rank;
 			uint32_t shape;
 		} tensor;
+
+		struct
+		{
+			spv::StorageClass storage;
+		} descriptor_heap_buffer;
 	} ext;
 
 	spv::StorageClass storage = spv::StorageClassGeneric;
@@ -794,6 +813,13 @@ struct SPIRExpression : IVariant
 
 	// Whether or not gl_MeshVerticesEXT[].gl_Position (as a whole or .y) is referenced
 	bool access_meshlet_position_y = false;
+
+	// If this expression represents a OpBufferPointerEXT cast.
+	bool buffer_pointer = false;
+
+	// Temporaries which can remain forwarded as long as this variable is not modified.
+	// Only used for buffer pointers.
+	SmallVector<ID> buffer_pointer_dependees;
 
 	// A list of expressions which this expression depends on.
 	SmallVector<ID> expression_dependencies;
@@ -1163,6 +1189,9 @@ struct SPIRVariable : IVariant
 	// Temporaries which can remain forwarded as long as this variable is not modified.
 	SmallVector<ID> dependees;
 
+	// ShaderDebugInfo local variables attached to this variable via DebugDeclare
+	SmallVector<ID> debug_local_variables;
+
 	bool deferred_declaration = false;
 	bool phi_variable = false;
 
@@ -1183,6 +1212,12 @@ struct SPIRVariable : IVariant
 
 	// Used to find global LUTs
 	bool is_written_to = false;
+
+	// Untyped pointer. The pointer of the variable is effectively void.
+	// The underlying payload for allocation is in alloca_type, but may be 0 too.
+	// This is mostly here to support descriptor heap proxy.
+	bool untyped = false;
+	ID untyped_alloca_type = 0;
 
 	SPIRFunction::Parameter *parameter = nullptr;
 
@@ -1302,36 +1337,50 @@ struct SPIRConstant : IVariant
 
 	inline uint32_t specialization_constant_id(uint32_t col, uint32_t row) const
 	{
+		if (col >= 4 || row >= 4)
+			SPIRV_CROSS_THROW("Out of bounds col/row. Long vector bug.");
 		return m.c[col].id[row];
 	}
 
 	inline uint32_t specialization_constant_id(uint32_t col) const
 	{
+		if (col >= 4)
+			SPIRV_CROSS_THROW("Out of bounds col/row. Long vector bug.");
 		return m.id[col];
 	}
 
 	inline uint32_t scalar(uint32_t col = 0, uint32_t row = 0) const
 	{
+		if (col >= 4 || row >= 4)
+			SPIRV_CROSS_THROW("Out of bounds col/row. Long vector bug.");
 		return m.c[col].r[row].u32;
 	}
 
 	inline int16_t scalar_i16(uint32_t col = 0, uint32_t row = 0) const
 	{
+		if (col >= 4 || row >= 4)
+			SPIRV_CROSS_THROW("Out of bounds col/row. Long vector bug.");
 		return int16_t(m.c[col].r[row].u32 & 0xffffu);
 	}
 
 	inline uint16_t scalar_u16(uint32_t col = 0, uint32_t row = 0) const
 	{
+		if (col >= 4 || row >= 4)
+			SPIRV_CROSS_THROW("Out of bounds col/row. Long vector bug.");
 		return uint16_t(m.c[col].r[row].u32 & 0xffffu);
 	}
 
 	inline int8_t scalar_i8(uint32_t col = 0, uint32_t row = 0) const
 	{
+		if (col >= 4 || row >= 4)
+			SPIRV_CROSS_THROW("Out of bounds col/row. Long vector bug.");
 		return int8_t(m.c[col].r[row].u32 & 0xffu);
 	}
 
 	inline uint8_t scalar_u8(uint32_t col = 0, uint32_t row = 0) const
 	{
+		if (col >= 4 || row >= 4)
+			SPIRV_CROSS_THROW("Out of bounds col/row. Long vector bug.");
 		return uint8_t(m.c[col].r[row].u32 & 0xffu);
 	}
 
@@ -1355,31 +1404,41 @@ struct SPIRConstant : IVariant
 
 	inline float scalar_bf8(uint32_t col = 0, uint32_t row = 0) const
 	{
-		return f16_to_f32(scalar_u8(col, row) << 8);
+		return f16_to_f32(uint16_t(scalar_u8(col, row) << 8));
 	}
 
 	inline float scalar_f32(uint32_t col = 0, uint32_t row = 0) const
 	{
+		if (col >= 4 || row >= 4)
+			SPIRV_CROSS_THROW("Out of bounds col/row. Long vector bug.");
 		return m.c[col].r[row].f32;
 	}
 
 	inline int32_t scalar_i32(uint32_t col = 0, uint32_t row = 0) const
 	{
+		if (col >= 4 || row >= 4)
+			SPIRV_CROSS_THROW("Out of bounds col/row. Long vector bug.");
 		return m.c[col].r[row].i32;
 	}
 
 	inline double scalar_f64(uint32_t col = 0, uint32_t row = 0) const
 	{
+		if (col >= 4 || row >= 4)
+			SPIRV_CROSS_THROW("Out of bounds col/row. Long vector bug.");
 		return m.c[col].r[row].f64;
 	}
 
 	inline int64_t scalar_i64(uint32_t col = 0, uint32_t row = 0) const
 	{
+		if (col >= 4 || row >= 4)
+			SPIRV_CROSS_THROW("Out of bounds col/row. Long vector bug.");
 		return m.c[col].r[row].i64;
 	}
 
 	inline uint64_t scalar_u64(uint32_t col = 0, uint32_t row = 0) const
 	{
+		if (col >= 4 || row >= 4)
+			SPIRV_CROSS_THROW("Out of bounds col/row. Long vector bug.");
 		return m.c[col].r[row].u64;
 	}
 
@@ -1412,6 +1471,9 @@ struct SPIRConstant : IVariant
 			return false;
 		if (!subconstants.empty())
 			return false;
+
+		// Only used in contexts where we consume normal vectors.
+		// Don't need to consider long vector or composites.
 
 		for (uint32_t col = 0; col < columns(); col++)
 			for (uint32_t row = 0; row < vector_size(); row++)
@@ -1467,6 +1529,9 @@ struct SPIRConstant : IVariant
 	{
 		bool matrix = vector_elements[0]->m.c[0].vecsize > 1;
 
+		if (num_elements > 4)
+			SPIRV_CROSS_THROW("Invalid constant. Long vector bug.");
+
 		if (matrix)
 		{
 			m.columns = num_elements;
@@ -1508,6 +1573,7 @@ struct SPIRConstant : IVariant
 	bool is_null_array_specialized_length = false;
 
 	// For composites which are constant arrays, etc.
+	// Also used by long vectors where N > 4 or N is unknown.
 	SmallVector<ConstantID> subconstants;
 
 	// Whether the subconstants are intended to be replicated (e.g. OpConstantCompositeReplicateEXT)
@@ -1518,6 +1584,9 @@ struct SPIRConstant : IVariant
 	// to still be able to specialize the value by supplying corresponding
 	// preprocessor directives before compiling the shader.
 	std::string specialization_constant_macro_name;
+
+	// ConstantSizeOfEXT.
+	ID size_of_type = 0;
 
 	SPIRV_CROSS_DECLARE_CLONE(SPIRConstant)
 };
@@ -1790,7 +1859,7 @@ struct Meta
 	{
 		std::string alias;
 		std::string qualified_alias;
-		std::string hlsl_semantic;
+		std::string user_semantic;
 		std::string user_type;
 		Bitset decoration_flags;
 		spv::BuiltIn builtin_type = spv::BuiltInMax;
@@ -1799,10 +1868,12 @@ struct Meta
 		uint32_t set = 0;
 		uint32_t binding = 0;
 		uint32_t offset = 0;
+		uint32_t offset_id = 0;
 		uint32_t xfb_buffer = 0;
 		uint32_t xfb_stride = 0;
 		uint32_t stream = 0;
 		uint32_t array_stride = 0;
+		uint32_t array_stride_id = 0;
 		uint32_t matrix_stride = 0;
 		uint32_t input_attachment = 0;
 		uint32_t spec_id = 0;

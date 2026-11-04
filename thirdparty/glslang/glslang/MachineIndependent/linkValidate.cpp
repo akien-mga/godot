@@ -451,7 +451,7 @@ void TIntermediate::optimizeStageIO(TInfoSink&, TIntermediate& unit)
 
         // determine if the input/output pair should be demoted
         // do the faster (and more likely) loose-loose check first
-        if (std::none_of(unitLiveInputs.begin(), unitLiveInputs.end(), isMatchingInput) && 
+        if (std::none_of(unitLiveInputs.begin(), unitLiveInputs.end(), isMatchingInput) &&
             std::none_of(unitAllInputs.begin(), unitAllInputs.end(), isMatchingInputBlockMember)) {
             // demote any input matching the output
             auto demoteMatchingInputs = [output](TIntermNode* input) {
@@ -524,7 +524,8 @@ void TIntermediate::mergeModes(TInfoSink& infoSink, TIntermediate& unit)
     numErrors += unit.getNumErrors();
     // Only one push_constant is allowed, mergeLinkerObjects() will ensure the push_constant
     // is the same for all units.
-    if (numPushConstants > 1 || unit.numPushConstants > 1)
+    if (!IsRequestedExtension(glslang::E_GL_NV_push_constant_bank) &&
+        (numPushConstants > 1 || unit.numPushConstants > 1))
         error(infoSink, "Only one push_constant block is allowed per stage");
     numPushConstants = std::min(numPushConstants + unit.numPushConstants, 1);
 
@@ -1125,7 +1126,8 @@ void TIntermediate::mergeLinkerObjects(TInfoSink& infoSink, TIntermSequence& lin
                 mergeErrorCheck(infoSink, *symbol, *unitSymbol);
             }
             // If different symbols, verify they arn't push_constant since there can only be one per stage
-            else if (symbol->getQualifier().isPushConstant() && unitSymbol->getQualifier().isPushConstant() && getStage() == unitStage)
+            else if (!IsRequestedExtension(glslang::E_GL_NV_push_constant_bank) &&
+                (symbol->getQualifier().isPushConstant() && unitSymbol->getQualifier().isPushConstant() && getStage() == unitStage))
                 error(infoSink, "Only one push_constant block is allowed per stage");
         }
 
@@ -1590,7 +1592,7 @@ void TIntermediate::finalCheck(TInfoSink& infoSink, bool keepUncalled)
     // overlap/alias/missing I/O, etc.
     inOutLocationCheck(infoSink);
 
-    if (getNumPushConstants() > 1)
+    if (!IsRequestedExtension(glslang::E_GL_NV_push_constant_bank) && (getNumPushConstants() > 1))
         error(infoSink, "Only one push_constant block is allowed per stage");
 
     // invocations
@@ -2417,6 +2419,8 @@ int TIntermediate::getBaseAlignmentScalar(const TType& type, int& size)
     case EbtBFloat16: size = 2; return 2;
     case EbtFloatE5M2:
     case EbtFloatE4M3:
+    case EbtFloatUE8M0:
+    case EbtFloatMXINT8:
     case EbtInt8:
     case EbtUint8:   size = 1; return 1;
     case EbtInt16:
@@ -2573,6 +2577,22 @@ int TIntermediate::getBaseAlignment(const TType& type, int& size, int& stride, T
         }
     }
 
+    // rules 2 and 3
+    if (type.isLongVector()) {
+        int scalarAlign = getBaseAlignmentScalar(type, size);
+        uint32_t vectorSize = type.getTypeParameters()->arraySizes->getDimSize(0);
+        switch (vectorSize) {
+        case 1: // HLSL has this, GLSL does not
+            return scalarAlign;
+        case 2:
+            size *= 2;
+            return 2 * scalarAlign;
+        default:
+            size *= vectorSize;
+            return 4 * scalarAlign;
+        }
+    }
+
     // rules 5 and 7
     if (type.isMatrix()) {
         // rule 5: deref to row, not to column, meaning the size of vector is num columns instead of num rows
@@ -2653,6 +2673,14 @@ int TIntermediate::getScalarAlignment(const TType& type, int& size, int& stride,
         return scalarAlign;
     }
 
+    if (type.isLongVector()) {
+        int scalarAlign = getBaseAlignmentScalar(type, size);
+
+        uint32_t vectorSize = type.getTypeParameters()->arraySizes->getDimSize(0);
+        size *= vectorSize;
+        return scalarAlign;
+    }
+
     if (type.isMatrix()) {
         TType derefType(type, 0, rowMajor);
 
@@ -2726,6 +2754,8 @@ int TIntermediate::getBlockSize(const TType& blockType)
 {
     const TTypeList& memberList = *blockType.getStruct();
     int lastIndex = (int)memberList.size() - 1;
+    if (lastIndex < 0)
+        return 0;
     int lastOffset = getOffset(blockType, lastIndex);
 
     int lastMemberSize;
