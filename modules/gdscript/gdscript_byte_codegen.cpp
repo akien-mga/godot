@@ -1263,9 +1263,7 @@ void GDScriptByteCodeGenerator::write_call_builtin_type_static(const Address &p_
 	write_call_builtin_type(p_target, Address(), p_type, p_method, true, p_arguments);
 }
 
-void GDScriptByteCodeGenerator::write_call_native_static(const Address &p_target, const StringName &p_class, const StringName &p_method, const Vector<Address> &p_arguments) {
-	const MethodBind *method = ClassDB::get_method(p_class, p_method);
-
+void GDScriptByteCodeGenerator::write_call_native_static(const Address &p_target, const MethodBind *p_method, const Vector<Address> &p_arguments) {
 	// Perform regular call.
 	append_opcode_and_argcount(GDScriptFunction::OPCODE_CALL_NATIVE_STATIC, p_arguments.size() + 1);
 	for (int i = 0; i < p_arguments.size(); i++) {
@@ -1273,7 +1271,7 @@ void GDScriptByteCodeGenerator::write_call_native_static(const Address &p_target
 	}
 	CallTarget ct = get_call_target(p_target);
 	append(ct.target);
-	append(method);
+	append(p_method);
 	append(p_arguments.size());
 	ct.cleanup();
 	return;

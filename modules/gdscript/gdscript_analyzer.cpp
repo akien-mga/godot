@@ -6159,8 +6159,7 @@ bool GDScriptAnalyzer::call_fits_signature(const GDScriptParser::CallNode *p_cal
 // When a native method's signature changes, the engine keeps the older one as a compatibility method.
 // A call that doesn't fit the current signature but fits an older one is compiled against that one.
 void GDScriptAnalyzer::resolve_compatibility_method(const StringName &p_native_class, GDScriptParser::CallNode *p_call, GDScriptParser::DataType &r_return_type, List<GDScriptParser::DataType> &r_par_types, int &r_default_arg_count, BitField<MethodFlags> &r_method_flags) {
-	// Static methods, which include those of singletons here, are left out: no real change needs them so far.
-	if (r_method_flags.has_flag(METHOD_FLAG_STATIC) || call_fits_signature(p_call, r_par_types, r_default_arg_count, r_method_flags.has_flag(METHOD_FLAG_VARARG))) {
+	if (call_fits_signature(p_call, r_par_types, r_default_arg_count, r_method_flags.has_flag(METHOD_FLAG_VARARG))) {
 		return;
 	}
 
@@ -6170,7 +6169,7 @@ void GDScriptAnalyzer::resolve_compatibility_method(const StringName &p_native_c
 	const MethodBind *found = nullptr;
 	for (uint32_t hash : ClassDB::get_method_compatibility_hashes(p_native_class, p_call->function_name)) {
 		const MethodBind *method = ClassDB::get_method_with_compatibility(p_native_class, p_call->function_name, hash);
-		if (method == nullptr || method->is_static() || (found != nullptr && method->get_argument_count() > found->get_argument_count())) {
+		if (method == nullptr || (found != nullptr && method->get_argument_count() > found->get_argument_count())) {
 			continue;
 		}
 		List<GDScriptParser::DataType> par_types;
@@ -6190,6 +6189,9 @@ void GDScriptAnalyzer::resolve_compatibility_method(const StringName &p_native_c
 	r_default_arg_count = found->get_default_argument_count();
 	r_return_type = type_from_property(found->get_return_info(), false, p_call);
 	r_method_flags = found->get_hint_flags();
+	if (Engine::get_singleton()->has_singleton(p_native_class)) {
+		r_method_flags.set_flag(METHOD_FLAG_STATIC);
+	}
 #ifdef DEBUG_ENABLED
 	parser->push_warning(p_call, GDScriptWarning::DEPRECATED_METHOD_SIGNATURE, p_call->function_name);
 #endif // DEBUG_ENABLED

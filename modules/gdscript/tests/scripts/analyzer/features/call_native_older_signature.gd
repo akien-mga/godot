@@ -57,6 +57,10 @@ func test():
 			awaited_inferred = NotEdit.new()
 	print(awaited_inferred.called)
 
+	# Static method.
+	var mode: float = FileAccess.WRITE_READ
+	print(FileAccess.create_temp(mode) != null)
+
 
 class ExplicitSelf extends TextEdit:
 	func explicit_self():

@@ -7,7 +7,10 @@ GDTEST_OK
 ~~ WARNING at line 48: (REDUNDANT_AWAIT) "await" keyword is unnecessary because the expression isn't a coroutine nor a signal.
 ~~ WARNING at line 53: (DEPRECATED_METHOD_SIGNATURE) The arguments of this "set_selection_mode()" call only fit an older signature of the method, kept for compatibility. Please update the call to the current signature.
 ~~ WARNING at line 53: (REDUNDANT_AWAIT) "await" keyword is unnecessary because the expression isn't a coroutine nor a signal.
-~~ WARNING at line 63: (DEPRECATED_METHOD_SIGNATURE) The arguments of this "set_selection_mode()" call only fit an older signature of the method, kept for compatibility. Please update the call to the current signature.
+~~ WARNING at line 62: (DEPRECATED_METHOD_SIGNATURE) The arguments of this "create_temp()" call only fit an older signature of the method, kept for compatibility. Please update the call to the current signature.
+~~ WARNING at line 62: (NARROWING_CONVERSION) Narrowing conversion (float is converted to int and loses precision).
+~~ WARNING at line 67: (DEPRECATED_METHOD_SIGNATURE) The arguments of this "set_selection_mode()" call only fit an older signature of the method, kept for compatibility. Please update the call to the current signature.
+true
 true
 true
 true
