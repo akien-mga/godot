@@ -142,6 +142,9 @@ String GDScriptWarning::get_message() const {
 		case DEPRECATED_KEYWORD:
 			CHECK_SYMBOLS(2);
 			return vformat(R"(The "%s" keyword is deprecated and will be removed in a future release. Please replace it with "%s".)", symbols[0], symbols[1]);
+		case DEPRECATED_VIRTUAL_SIGNATURE:
+			CHECK_SYMBOLS(1);
+			return vformat(R"*(The function "%s()" overrides an older signature of the virtual method, kept for compatibility. Please update it to the current signature.)*", symbols[0]);
 		case CONFUSABLE_IDENTIFIER:
 			CHECK_SYMBOLS(1);
 			return vformat(R"(The identifier "%s" has misleading characters and might be confused with something else.)", symbols[0]);
@@ -242,6 +245,7 @@ String GDScriptWarning::get_name_from_code(Code p_code) {
 		PNAME("ENUM_VARIABLE_WITHOUT_DEFAULT"),
 		PNAME("EMPTY_FILE"),
 		PNAME("DEPRECATED_KEYWORD"),
+		PNAME("DEPRECATED_VIRTUAL_SIGNATURE"),
 		PNAME("CONFUSABLE_IDENTIFIER"),
 		PNAME("CONFUSABLE_LOCAL_DECLARATION"),
 		PNAME("CONFUSABLE_LOCAL_USAGE"),

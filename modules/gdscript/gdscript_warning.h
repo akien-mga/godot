@@ -83,6 +83,7 @@ public:
 		ENUM_VARIABLE_WITHOUT_DEFAULT, // A variable with an enum type does not have a default value. The default will be set to `0` instead of the first enum value.
 		EMPTY_FILE, // A script file is empty.
 		DEPRECATED_KEYWORD, // The keyword is deprecated and should be replaced.
+		DEPRECATED_VIRTUAL_SIGNATURE, // The function overrides an older signature of a native virtual method, kept for compatibility.
 		CONFUSABLE_IDENTIFIER, // The identifier contains misleading characters that can be confused. E.g. "usеr" (has Cyrillic "е" instead of Latin "e").
 		CONFUSABLE_LOCAL_DECLARATION, // The parent block declares an identifier with the same name below.
 		CONFUSABLE_LOCAL_USAGE, // The identifier will be shadowed below in the block.
@@ -143,6 +144,7 @@ public:
 		WARN, // ENUM_VARIABLE_WITHOUT_DEFAULT
 		WARN, // EMPTY_FILE
 		WARN, // DEPRECATED_KEYWORD
+		WARN, // DEPRECATED_VIRTUAL_SIGNATURE
 		WARN, // CONFUSABLE_IDENTIFIER
 		WARN, // CONFUSABLE_LOCAL_DECLARATION
 		WARN, // CONFUSABLE_LOCAL_USAGE

@@ -1,0 +1,7 @@
+GDTEST_OK
+~~ WARNING at line 6: (DEPRECATED_VIRTUAL_SIGNATURE) The function "_font_draw_glyph()" overrides an older signature of the virtual method, kept for compatibility. Please update it to the current signature.
+~~ WARNING at line 13: (DEPRECATED_VIRTUAL_SIGNATURE) The function "_font_draw_glyph()" overrides an older signature of the virtual method, kept for compatibility. Please update it to the current signature.
+[[16, 3]]
+[[16, 3]]
+[[16, 3, 2.0]]
+[[16, 3, 2.0]]

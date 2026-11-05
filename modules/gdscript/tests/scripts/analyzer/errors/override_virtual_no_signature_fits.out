@@ -1,0 +1,2 @@
+GDTEST_ANALYZER_ERROR
+>> ERROR at line 3: The function signature doesn't match the parent. Parent signature is "_font_draw_glyph(RID, RID, int, Vector2, int, Color, float) -> void".

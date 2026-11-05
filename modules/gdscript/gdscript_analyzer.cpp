@@ -1884,8 +1884,6 @@ void GDScriptAnalyzer::resolve_function_signature(GDScriptParser::FunctionNode *
 		BitField<MethodFlags> method_flags = {};
 		StringName native_base;
 		if (!p_is_lambda && get_function_signature(p_function, false, base_type, function_name, parent_return_type, parameters_types, default_par_count, method_flags, &native_base)) {
-			bool valid = p_function->is_static == method_flags.has_flag(METHOD_FLAG_STATIC);
-
 			if (p_function->return_type == nullptr) {
 				// GH-118877. We decided to make an exception to maintain compatibility, since the problem can only be detected at runtime.
 #ifdef DISABLE_DEPRECATED
@@ -1902,50 +1900,14 @@ void GDScriptAnalyzer::resolve_function_signature(GDScriptParser::FunctionNode *
 					p_function->return_type_constraint = parent_return_type;
 				}
 #endif // DISABLE_DEPRECATED
-			} else {
-				// Check return type covariance.
-				GDScriptParser::DataType return_type = p_function->return_type_constraint;
-				if (return_type.is_variant()) {
-					// `is_type_compatible()` returns `true` if one of the types is `Variant`.
-					// Don't allow an explicitly specified `Variant` if the parent return type is narrower.
-					valid = valid && parent_return_type.is_variant();
-				} else if (return_type.kind == GDScriptParser::DataType::BUILTIN && return_type.builtin_type == Variant::NIL) {
-					// `is_type_compatible()` returns `true` if target is an `Object` and source is `null`.
-					// Don't allow `void` if the parent return type is a hard non-`void` type.
-					if (parent_return_type.is_hard_type() && !(parent_return_type.kind == GDScriptParser::DataType::BUILTIN && parent_return_type.builtin_type == Variant::NIL)) {
-						valid = false;
-					}
-				} else {
-					valid = valid && is_type_compatible(parent_return_type, return_type);
-				}
 			}
 
-			int parent_min_argc = parameters_types.size() - default_par_count;
-			int parent_max_argc = (method_flags & METHOD_FLAG_VARARG) ? INT_MAX : parameters_types.size();
-			int current_min_argc = p_function->parameters.size() - default_value_count;
-			int current_max_argc = p_function->is_vararg() ? INT_MAX : p_function->parameters.size();
-
-			// `[current_min_argc..current_max_argc]` must include `[parent_min_argc..parent_max_argc]`.
-			valid = valid && current_min_argc <= parent_min_argc && parent_max_argc <= current_max_argc;
-
-			if (valid) {
-				uint32_t i = 0;
-				for (const GDScriptParser::DataType &parent_par_type : parameters_types) {
-					if (i >= p_function->parameters.size()) {
-						break;
-					}
-					const GDScriptParser::DataType &current_par_type = p_function->parameters[i]->type_constraint;
-					i++;
-					// Check parameter type contravariance.
-					if (parent_par_type.is_variant() && parent_par_type.is_hard_type()) {
-						// `is_type_compatible()` returns `true` if one of the types is `Variant`.
-						// Don't allow narrowing a hard `Variant`.
-						valid = valid && current_par_type.is_variant();
-					} else {
-						valid = valid && is_type_compatible(current_par_type, parent_par_type);
-					}
-				}
+			bool valid = function_fits_signature(p_function, default_value_count, parent_return_type, parameters_types, default_par_count, method_flags);
+#ifndef DISABLE_DEPRECATED
+			if (!valid && method_flags.has_flag(METHOD_FLAG_VIRTUAL)) {
+				valid = function_fits_older_virtual(p_function, base_type.native_type, function_name, default_value_count);
 			}
+#endif // DISABLE_DEPRECATED
 
 			if (!valid) {
 				// Compute parent signature as a string to show in the error message.
@@ -6121,6 +6083,80 @@ bool GDScriptAnalyzer::function_signature_from_info(const MethodInfo &p_info, GD
 	}
 	return true;
 }
+
+bool GDScriptAnalyzer::function_fits_signature(const GDScriptParser::FunctionNode *p_function, int p_default_value_count, const GDScriptParser::DataType &p_parent_return_type, const List<GDScriptParser::DataType> &p_parent_par_types, int p_parent_default_arg_count, BitField<MethodFlags> p_parent_flags) {
+	bool valid = p_function->is_static == p_parent_flags.has_flag(METHOD_FLAG_STATIC);
+
+	if (p_function->return_type != nullptr) {
+		// Check return type covariance.
+		const GDScriptParser::DataType return_type = p_function->return_type_constraint;
+		if (return_type.is_variant()) {
+			// `is_type_compatible()` returns `true` if one of the types is `Variant`.
+			// Don't allow an explicitly specified `Variant` if the parent return type is narrower.
+			valid = valid && p_parent_return_type.is_variant();
+		} else if (return_type.kind == GDScriptParser::DataType::BUILTIN && return_type.builtin_type == Variant::NIL) {
+			// `is_type_compatible()` returns `true` if target is an `Object` and source is `null`.
+			// Don't allow `void` if the parent return type is a hard non-`void` type.
+			if (p_parent_return_type.is_hard_type() && !(p_parent_return_type.kind == GDScriptParser::DataType::BUILTIN && p_parent_return_type.builtin_type == Variant::NIL)) {
+				valid = false;
+			}
+		} else {
+			valid = valid && is_type_compatible(p_parent_return_type, return_type);
+		}
+	}
+
+	int parent_min_argc = p_parent_par_types.size() - p_parent_default_arg_count;
+	int parent_max_argc = (p_parent_flags & METHOD_FLAG_VARARG) ? INT_MAX : p_parent_par_types.size();
+	int current_min_argc = p_function->parameters.size() - p_default_value_count;
+	int current_max_argc = p_function->is_vararg() ? INT_MAX : p_function->parameters.size();
+
+	// `[current_min_argc..current_max_argc]` must include `[parent_min_argc..parent_max_argc]`.
+	valid = valid && current_min_argc <= parent_min_argc && parent_max_argc <= current_max_argc;
+
+	if (valid) {
+		uint32_t i = 0;
+		for (const GDScriptParser::DataType &parent_par_type : p_parent_par_types) {
+			if (i >= p_function->parameters.size()) {
+				break;
+			}
+			const GDScriptParser::DataType &current_par_type = p_function->parameters[i]->type_constraint;
+			i++;
+			// Check parameter type contravariance.
+			if (parent_par_type.is_variant() && parent_par_type.is_hard_type()) {
+				// `is_type_compatible()` returns `true` if one of the types is `Variant`.
+				// Don't allow narrowing a hard `Variant`.
+				valid = valid && current_par_type.is_variant();
+			} else {
+				valid = valid && is_type_compatible(current_par_type, parent_par_type);
+			}
+		}
+	}
+	return valid;
+}
+
+#ifndef DISABLE_DEPRECATED
+// When a native virtual method's signature changes, the engine can keep calling overrides of the older one,
+// which it tries when calling the current signature fails. Those are valid overrides.
+bool GDScriptAnalyzer::function_fits_older_virtual(GDScriptParser::FunctionNode *p_function, const StringName &p_native_class, const StringName &p_name, int p_default_value_count) {
+	for (const MethodInfo &info : ClassDB::get_virtual_method_compatibility_infos(p_native_class, p_name)) {
+		GDScriptParser::DataType return_type;
+		List<GDScriptParser::DataType> par_types;
+		int default_arg_count = 0;
+		BitField<MethodFlags> flags = {};
+		function_signature_from_info(info, return_type, par_types, default_arg_count, flags, p_function);
+		if (function_fits_signature(p_function, p_default_value_count, return_type, par_types, default_arg_count, flags)) {
+			if (p_function->return_type == nullptr) {
+				p_function->return_type_constraint = return_type;
+			}
+#ifdef DEBUG_ENABLED
+			parser->push_warning(p_function, GDScriptWarning::DEPRECATED_VIRTUAL_SIGNATURE, p_name);
+#endif // DEBUG_ENABLED
+			return true;
+		}
+	}
+	return false;
+}
+#endif // DISABLE_DEPRECATED
 
 void GDScriptAnalyzer::validate_call_arg(const MethodInfo &p_method, const GDScriptParser::CallNode *p_call) {
 	List<GDScriptParser::DataType> arg_types;

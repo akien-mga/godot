@@ -1712,6 +1712,7 @@ void ClassDB::add_virtual_compatibility_method(const StringName &p_class, const 
 	}
 
 	compat_hashes->push_back(p_method.get_compatibility_hash());
+	classes[p_class].virtual_methods_compat_info[p_method.name].push_back(p_method);
 }
 
 void ClassDB::get_virtual_methods(const StringName &p_class, List<MethodInfo> *p_methods, bool p_no_inheritance) {
@@ -1752,6 +1753,22 @@ Vector<uint32_t> ClassDB::get_virtual_method_compatibility_hashes(const StringNa
 	}
 
 	return Vector<uint32_t>();
+}
+
+Vector<MethodInfo> ClassDB::get_virtual_method_compatibility_infos(const StringName &p_class, const StringName &p_name) {
+	Locker::Lock lock(Locker::STATE_READ);
+
+	ClassInfo *type = classes.getptr(p_class);
+
+	while (type) {
+		const Vector<MethodInfo> *infos = type->virtual_methods_compat_info.getptr(p_name);
+		if (infos) {
+			return *infos;
+		}
+		type = type->inherits_ptr;
+	}
+
+	return Vector<MethodInfo>();
 }
 
 void ClassDB::add_extension_class_virtual_method(const StringName &p_class, const GDExtensionClassVirtualMethodInfo *p_method_info) {
