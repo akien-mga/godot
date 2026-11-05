@@ -134,6 +134,16 @@ bool PhysicsServer2DExtension::body_test_motion_is_excluding_object(ObjectID p_o
 	return exclude_objects && exclude_objects->has(p_object);
 }
 
+void PhysicsServer2DExtension::body_set_shape_as_one_way_collision(RID p_body, int p_shape_idx, bool p_enable, real_t p_margin, const Vector2 &p_direction) {
+	if (GDVIRTUAL_CALL(_body_set_shape_as_one_way_collision, p_body, p_shape_idx, p_enable, p_margin, p_direction)) {
+		return;
+	}
+
+#ifndef DISABLE_DEPRECATED
+	GDVIRTUAL_CALL(_body_set_shape_as_one_way_collision_bind_compat_104736, p_body, p_shape_idx, p_enable, p_margin);
+#endif
+}
+
 void PhysicsServer2DExtension::_bind_methods() {
 	/* SHAPE API */
 
