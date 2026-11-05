@@ -108,12 +108,12 @@ protected:
 	void _notification(int p_what);
 	static void _bind_methods();
 
-	GDVIRTUAL2(_update_layout_and_slot, int, int)
+	GDVIRTUAL2(_update_layout, int, int)
 	GDVIRTUAL2C(_save_layout_to_config, Ref<ConfigFile>, const String &)
 	GDVIRTUAL2(_load_layout_from_config, Ref<ConfigFile>, const String &)
 
 #ifndef DISABLE_DEPRECATED
-	GDVIRTUAL1(_update_layout, int)
+	GDVIRTUAL1_COMPAT(_update_layout_bind_compat_117080, _update_layout, int)
 #endif
 
 public:
