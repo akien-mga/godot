@@ -694,6 +694,26 @@ GDScriptCodeGenerator::Address GDScriptCompiler::_parse_expression(CodeGen &code
 								}
 								if (is_awaited) {
 									gen->write_call_async(result, base, call->function_name, arguments);
+								} else if (call->compatibility_method && base.type.kind == GDScriptDataType::VARIANT) {
+									// The analyzer inferred the base's class but nothing enforces it: by now the
+									// variable can hold another class, whose method has to be called by name.
+									GDScriptDataType native_type;
+									native_type.kind = GDScriptDataType::NATIVE;
+									native_type.builtin_type = Variant::OBJECT;
+									native_type.native_type = call->compatibility_method->get_instance_class();
+
+									GDScriptDataType bool_type;
+									bool_type.kind = GDScriptDataType::BUILTIN;
+									bool_type.builtin_type = Variant::BOOL;
+
+									GDScriptCodeGenerator::Address is_instance = codegen.add_temporary(bool_type);
+									gen->write_type_test(is_instance, base, native_type);
+									gen->write_if(is_instance);
+									gen->write_call_method_bind(result, base, call->compatibility_method, arguments);
+									gen->write_else();
+									gen->write_call(result, base, call->function_name, arguments);
+									gen->write_endif();
+									gen->pop_temporary();
 								} else if (base.type.kind != GDScriptDataType::VARIANT && base.type.kind != GDScriptDataType::BUILTIN) {
 									// Native method, use faster path.
 									StringName class_name;
