@@ -1,4 +1,7 @@
 GDTEST_OK
+~~ WARNING at line 5: (DEPRECATED_METHOD_SIGNATURE) The arguments of this "set_selection_mode()" call only fit an older signature of the method, kept for compatibility. Please update the call to the current signature.
+~~ WARNING at line 8: (DEPRECATED_METHOD_SIGNATURE) The arguments of this "set_selection_mode()" call only fit an older signature of the method, kept for compatibility. Please update the call to the current signature.
+~~ WARNING at line 20: (DEPRECATED_METHOD_SIGNATURE) The arguments of this "set_selection_mode()" call only fit an older signature of the method, kept for compatibility. Please update the call to the current signature.
 true
 true
 true

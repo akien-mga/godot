@@ -6189,6 +6189,9 @@ void GDScriptAnalyzer::resolve_compatibility_method(const StringName &p_native_c
 	r_default_arg_count = found->get_default_argument_count();
 	r_return_type = type_from_property(found->get_return_info(), false, p_call);
 	r_method_flags = found->get_hint_flags();
+#ifdef DEBUG_ENABLED
+	parser->push_warning(p_call, GDScriptWarning::DEPRECATED_METHOD_SIGNATURE, p_call->function_name);
+#endif // DEBUG_ENABLED
 }
 #endif // DISABLE_DEPRECATED
 
