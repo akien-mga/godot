@@ -1085,14 +1085,18 @@ void TextServerExtension::font_render_glyph(const RID &p_font_rid, const Vector2
 }
 
 void TextServerExtension::font_draw_glyph(const RID &p_font_rid, const RID &p_canvas, int64_t p_size, const Vector2 &p_pos, int64_t p_index, const Color &p_color, float p_oversampling) const {
-	GDVIRTUAL_CALL(_font_draw_glyph, p_font_rid, p_canvas, p_size, p_pos, p_index, p_color, p_oversampling);
+	if (GDVIRTUAL_CALL(_font_draw_glyph, p_font_rid, p_canvas, p_size, p_pos, p_index, p_color, p_oversampling)) {
+		return;
+	}
 #ifndef DISABLE_DEPRECATED
 	GDVIRTUAL_CALL(_font_draw_glyph_bind_compat_104872, p_font_rid, p_canvas, p_size, p_pos, p_index, p_color);
 #endif
 }
 
 void TextServerExtension::font_draw_glyph_outline(const RID &p_font_rid, const RID &p_canvas, int64_t p_size, int64_t p_outline_size, const Vector2 &p_pos, int64_t p_index, const Color &p_color, float p_oversampling) const {
-	GDVIRTUAL_CALL(_font_draw_glyph_outline, p_font_rid, p_canvas, p_size, p_outline_size, p_pos, p_index, p_color, p_oversampling);
+	if (GDVIRTUAL_CALL(_font_draw_glyph_outline, p_font_rid, p_canvas, p_size, p_outline_size, p_pos, p_index, p_color, p_oversampling)) {
+		return;
+	}
 #ifndef DISABLE_DEPRECATED
 	GDVIRTUAL_CALL(_font_draw_glyph_outline_bind_compat_104872, p_font_rid, p_canvas, p_size, p_outline_size, p_pos, p_index, p_color);
 #endif

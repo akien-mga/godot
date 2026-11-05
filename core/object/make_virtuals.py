@@ -66,12 +66,8 @@ proto = """#define GDVIRTUAL$VER($ALIAS $RET m_name $ARG)\\
 
 def generate_version(argcount, const=False, returns=False, required=False, compat=False):
     s = proto
-    if compat:
-        s = s.replace("$SCRIPTCALL", "")
-        s = s.replace("$SCRIPTHASMETHOD", "")
-    else:
-        s = s.replace("$SCRIPTCALL", script_call)
-        s = s.replace("$SCRIPTHASMETHOD", script_has_method)
+    s = s.replace("$SCRIPTCALL", script_call)
+    s = s.replace("$SCRIPTHASMETHOD", script_has_method)
 
     sproto = str(argcount)
     method_info = ""
@@ -214,6 +210,11 @@ _NO_INLINE_ void _gdvirtual_set_method_info_args(MethodInfo &p_method_info) {
 _NO_INLINE_ inline void _gdvirtual_print_required_error(const Object *p_object, const StringName &p_method_name, bool &r_error_shown) {
 	// Like ERR_PRINT_ONCE but outlined, to save on binary space.
 	if (!r_error_shown) {
+		// A script that defines the method can be overriding an older signature, which is tried next.
+		const ScriptInstance *script_instance = p_object->get_script_instance();
+		if (script_instance && script_instance->has_method(p_method_name)) {
+			return;
+		}
 		r_error_shown = true;
 		ERR_PRINT(vformat("Required virtual method %s::%s must be overridden before calling.", p_object->get_class_name(), p_method_name));
 	}
