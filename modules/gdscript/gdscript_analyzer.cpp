@@ -6165,10 +6165,13 @@ void GDScriptAnalyzer::resolve_compatibility_method(const StringName &p_native_c
 		return;
 	}
 
+	// Older signatures often only differ by added optional arguments, so several can fit, and the call doesn't
+	// say which engine version it was written for. As a best guess, prefer the signature that leaves the fewest
+	// arguments to their defaults and, if tied, the last one registered, which is usually the most recent.
 	const MethodBind *found = nullptr;
 	for (uint32_t hash : ClassDB::get_method_compatibility_hashes(p_native_class, p_call->function_name)) {
 		const MethodBind *method = ClassDB::get_method_with_compatibility(p_native_class, p_call->function_name, hash);
-		if (method == nullptr || method->is_static()) {
+		if (method == nullptr || method->is_static() || (found != nullptr && method->get_argument_count() > found->get_argument_count())) {
 			continue;
 		}
 		List<GDScriptParser::DataType> par_types;
@@ -6178,7 +6181,6 @@ void GDScriptAnalyzer::resolve_compatibility_method(const StringName &p_native_c
 		if (call_fits_signature(p_call, par_types, method->get_default_argument_count(), method->is_vararg())) {
 			found = method;
 			r_par_types = par_types;
-			break;
 		}
 	}
 	if (found == nullptr) {
