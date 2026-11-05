@@ -692,7 +692,7 @@ GDScriptCodeGenerator::Address GDScriptCompiler::_parse_expression(CodeGen &code
 								if (r_error) {
 									return GDScriptCodeGenerator::Address();
 								}
-								if (is_awaited) {
+								if (is_awaited && !call->compatibility_method) {
 									gen->write_call_async(result, base, call->function_name, arguments);
 								} else if (call->compatibility_method && base.type.kind == GDScriptDataType::VARIANT) {
 									// The analyzer inferred the base's class but nothing enforces it: by now the
@@ -711,7 +711,11 @@ GDScriptCodeGenerator::Address GDScriptCompiler::_parse_expression(CodeGen &code
 									gen->write_if(is_instance);
 									gen->write_call_method_bind(result, base, call->compatibility_method, arguments);
 									gen->write_else();
-									gen->write_call(result, base, call->function_name, arguments);
+									if (is_awaited) {
+										gen->write_call_async(result, base, call->function_name, arguments);
+									} else {
+										gen->write_call(result, base, call->function_name, arguments);
+									}
 									gen->write_endif();
 									gen->pop_temporary();
 								} else if (base.type.kind != GDScriptDataType::VARIANT && base.type.kind != GDScriptDataType::BUILTIN) {

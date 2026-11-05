@@ -43,6 +43,20 @@ func test():
 	print(explicit.get_selection_mode() == TextEdit.SELECTION_MODE_WORD)
 	explicit.free()
 
+	# Awaited, on a typed base and on an inferred one.
+	var awaited := TextEdit.new()
+	await awaited.set_selection_mode(TextEdit.SELECTION_MODE_WORD, 1, 2, 0)
+	print(awaited.get_selection_mode() == TextEdit.SELECTION_MODE_WORD)
+	awaited.free()
+	var awaited_inferred = TextEdit.new()
+	for i in 2:
+		await awaited_inferred.set_selection_mode(TextEdit.SELECTION_MODE_WORD, 1, 2, 0)
+		if i == 0:
+			print(awaited_inferred.get_selection_mode() == TextEdit.SELECTION_MODE_WORD)
+			awaited_inferred.free()
+			awaited_inferred = NotEdit.new()
+	print(awaited_inferred.called)
+
 
 class ExplicitSelf extends TextEdit:
 	func explicit_self():

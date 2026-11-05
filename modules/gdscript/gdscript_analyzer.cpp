@@ -3693,9 +3693,8 @@ void GDScriptAnalyzer::reduce_call(GDScriptParser::CallNode *p_call, bool p_is_a
 	StringName native_class;
 	if (get_function_signature(p_call, is_constructor, base_type, p_call->function_name, return_type, par_types, default_arg_count, method_flags, &native_class)) {
 #ifndef DISABLE_DEPRECATED
-		// These are compiled by name, which only reaches the current signature.
-		bool compiled_by_name = p_call->is_super || p_is_await;
-		if (native_class != StringName() && !compiled_by_name) {
+		// `super` calls are compiled by name, which only reaches the current signature.
+		if (native_class != StringName() && !p_call->is_super) {
 			resolve_compatibility_method(base_type.native_type, p_call, return_type, par_types, default_arg_count, method_flags);
 		}
 #endif // DISABLE_DEPRECATED
