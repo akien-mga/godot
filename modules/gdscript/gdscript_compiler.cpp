@@ -242,10 +242,8 @@ static bool _can_use_validate_call(const MethodBind *p_method, const Vector<GDSc
 		// Validated call won't work with default arguments.
 		return false;
 	}
-	MethodInfo info;
-	ClassDB::get_method_info(p_method->get_instance_class(), p_method->get_name(), &info);
-	for (int64_t i = 0; i < info.arguments.size(); ++i) {
-		if (!_is_exact_type(info.arguments[i], p_arguments[i].type)) {
+	for (int i = 0; i < p_arguments.size(); ++i) {
+		if (!_is_exact_type(p_method->get_argument_info(i), p_arguments[i].type)) {
 			return false;
 		}
 	}
