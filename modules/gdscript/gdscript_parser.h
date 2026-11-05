@@ -520,6 +520,8 @@ public:
 		StringName function_name;
 		bool is_super = false;
 		bool is_static = false;
+		// An older signature of a native method that fits the arguments when the current one doesn't.
+		const MethodBind *compatibility_method = nullptr;
 
 		CallNode() {
 			type = CALL;

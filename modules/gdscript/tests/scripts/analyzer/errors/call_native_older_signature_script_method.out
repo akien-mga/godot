@@ -1,0 +1,2 @@
+GDTEST_ANALYZER_ERROR
+>> ERROR at line 8: Too many arguments for "set_selection_mode()" call. Expected at most 1 but received 4.

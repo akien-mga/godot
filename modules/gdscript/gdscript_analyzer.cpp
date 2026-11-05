@@ -3690,7 +3690,16 @@ void GDScriptAnalyzer::reduce_call(GDScriptParser::CallNode *p_call, bool p_is_a
 		}
 	}
 
-	if (get_function_signature(p_call, is_constructor, base_type, p_call->function_name, return_type, par_types, default_arg_count, method_flags)) {
+	StringName native_class;
+	if (get_function_signature(p_call, is_constructor, base_type, p_call->function_name, return_type, par_types, default_arg_count, method_flags, &native_class)) {
+#ifndef DISABLE_DEPRECATED
+		// These are compiled by name, which only reaches the current signature.
+		bool compiled_by_name = p_call->is_super || p_is_await || (callee_type == GDScriptParser::Node::SUBSCRIPT && (is_self || !base_type.is_hard_type()));
+		if (native_class != StringName() && !compiled_by_name) {
+			resolve_compatibility_method(base_type.native_type, p_call, return_type, par_types, default_arg_count, method_flags);
+		}
+#endif // DISABLE_DEPRECATED
+
 		p_call->is_static = method_flags.has_flag(METHOD_FLAG_STATIC);
 		// If the method is implemented in the class hierarchy, the virtual/abstract flag will not be set for that `MethodInfo` and the search stops there.
 		// Virtual/abstract check only possible for super calls because class hierarchy is known. Objects may have scripts attached we don't know of at compile-time.
@@ -6099,12 +6108,12 @@ bool GDScriptAnalyzer::get_function_signature(GDScriptParser::Node *p_source, bo
 		if (valid && Engine::get_singleton()->has_singleton(base_native)) {
 			r_method_flags.set_flag(METHOD_FLAG_STATIC);
 		}
-#ifdef DEBUG_ENABLED
-		const MethodBind *native_method = ClassDB::get_method(base_native, function_name);
-		if (native_method && r_native_class) {
-			*r_native_class = native_method->get_instance_class();
+		if (r_native_class) {
+			const MethodBind *native_method = ClassDB::get_method(base_native, function_name);
+			if (native_method) {
+				*r_native_class = native_method->get_instance_class();
+			}
 		}
-#endif // DEBUG_ENABLED
 		return valid;
 	}
 
@@ -6121,6 +6130,67 @@ bool GDScriptAnalyzer::function_signature_from_info(const MethodInfo &p_info, GD
 	}
 	return true;
 }
+
+#ifndef DISABLE_DEPRECATED
+// Whether `validate_call_arg()` would accept the call. This one reports nothing and changes nothing.
+bool GDScriptAnalyzer::call_fits_signature(const GDScriptParser::CallNode *p_call, const List<GDScriptParser::DataType> &p_par_types, int p_default_args_count, bool p_is_vararg) {
+	if (p_call->arguments.size() < (uint32_t)(p_par_types.size() - p_default_args_count)) {
+		return false;
+	}
+	if (!p_is_vararg && p_call->arguments.size() > (uint32_t)p_par_types.size()) {
+		return false;
+	}
+
+	uint32_t i = 0;
+	for (const GDScriptParser::DataType &par_type : p_par_types) {
+		if (i >= p_call->arguments.size()) {
+			break;
+		}
+		const GDScriptParser::DataType &arg_type = p_call->arguments[i++]->type_constraint;
+		if (arg_type.is_variant() || !arg_type.is_hard_type() || !par_type.is_hard_type()) {
+			continue;
+		}
+		if (!is_type_compatible(par_type, arg_type, true) && !is_type_compatible(arg_type, par_type)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+// When a native method's signature changes, the engine keeps the older one as a compatibility method.
+// A call that doesn't fit the current signature but fits an older one is compiled against that one.
+void GDScriptAnalyzer::resolve_compatibility_method(const StringName &p_native_class, GDScriptParser::CallNode *p_call, GDScriptParser::DataType &r_return_type, List<GDScriptParser::DataType> &r_par_types, int &r_default_arg_count, BitField<MethodFlags> &r_method_flags) {
+	// Static methods, which include those of singletons here, are left out: no real change needs them so far.
+	if (r_method_flags.has_flag(METHOD_FLAG_STATIC) || call_fits_signature(p_call, r_par_types, r_default_arg_count, r_method_flags.has_flag(METHOD_FLAG_VARARG))) {
+		return;
+	}
+
+	const MethodBind *found = nullptr;
+	for (uint32_t hash : ClassDB::get_method_compatibility_hashes(p_native_class, p_call->function_name)) {
+		const MethodBind *method = ClassDB::get_method_with_compatibility(p_native_class, p_call->function_name, hash);
+		if (method == nullptr || method->is_static()) {
+			continue;
+		}
+		List<GDScriptParser::DataType> par_types;
+		for (int i = 0; i < method->get_argument_count(); i++) {
+			par_types.push_back(type_from_property(method->get_argument_info(i), true, p_call));
+		}
+		if (call_fits_signature(p_call, par_types, method->get_default_argument_count(), method->is_vararg())) {
+			found = method;
+			r_par_types = par_types;
+			break;
+		}
+	}
+	if (found == nullptr) {
+		return;
+	}
+
+	p_call->compatibility_method = found;
+	r_default_arg_count = found->get_default_argument_count();
+	r_return_type = type_from_property(found->get_return_info(), false, p_call);
+	r_method_flags = found->get_hint_flags();
+}
+#endif // DISABLE_DEPRECATED
 
 void GDScriptAnalyzer::validate_call_arg(const MethodInfo &p_method, const GDScriptParser::CallNode *p_call) {
 	List<GDScriptParser::DataType> arg_types;
